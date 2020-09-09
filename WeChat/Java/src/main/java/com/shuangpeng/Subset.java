@@ -9,9 +9,9 @@ public class Subset {
 //        System.out.println("data2: " + checkSubsetByBackTrack(data2));
 //        System.out.println("coin1: " + getMinCoinCount(new int[]{1, 2, 5}, 11));
 //        System.out.println("coin2: " + getMinCoinCount(new int[]{2}, 3));
-        System.out.println("coin1: " + coinConbineCount(new int[]{1, 2, 5}, 5));
-        System.out.println("coin2: " + coinConbineCount(new int[]{2}, 3));
-        System.out.println("coin3: " + coinConbineCount(new int[]{10}, 10));
+        System.out.println("coin1: " + coinCombineCount(new int[]{1, 2, 5}, 5));
+        System.out.println("coin2: " + coinCombineCount(new int[]{2}, 3));
+        System.out.println("coin3: " + coinCombineCount(new int[]{10}, 10));
     }
 
     public static boolean checkSubset(int[] data) {
@@ -91,7 +91,7 @@ public class Subset {
         return dp[amount];
     }
 
-    public static int coinConbineCount(int[] coins, int amount) {
+    public static int coinCombineCount(int[] coins, int amount) {
         if (coins == null || coins.length == 0) {
             return 0;
         }
@@ -103,5 +103,22 @@ public class Subset {
             }
         }
         return dp[amount];
+    }
+
+    public static int getKCombineCount(int[] data, int k, int target) {
+        if (data == null || data.length == 0 || k <= 0) {
+            return 0;
+        }
+        int n = data.length;
+        int[][] dp = new int[target + 1][k + 1];
+        dp[0][0] = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = target; j >= data[i]; j--) {
+                for (int m = 0; m < k; m++) {
+                    dp[j][m + 1] = dp[j][m + 1] + dp[j - data[i]][m];
+                }
+            }
+        }
+        return dp[target][k];
     }
 }

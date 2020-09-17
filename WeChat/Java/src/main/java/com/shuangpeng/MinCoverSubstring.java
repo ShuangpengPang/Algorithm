@@ -33,11 +33,11 @@ public class MinCoverSubstring {
             return "";
         }
 
-        Map<Character, Integer> needs = new HashMap<>();
-        Map<Character, Integer> windows = new HashMap<>();
+        Map<Character, Integer> need = new HashMap<>();
+        Map<Character, Integer> window = new HashMap<>();
         for (int i = 0; i < cn; i++) {
             char c = t.charAt(i);
-            needs.compute(c, (k, v) -> v == null ? 1 : v + 1);
+            need.compute(c, (k, v) -> v == null ? 1 : v + 1);
         }
         int matches = 0;
         int left = 0;
@@ -46,20 +46,20 @@ public class MinCoverSubstring {
         int length = Integer.MAX_VALUE;
         for (int right = 0; right < n; right++) {
             char c = s.charAt(right);
-            if (needs.containsKey(c)) {
-                windows.compute(c, (k, v) -> v == null ? 1 : v + 1);
-                if (needs.get(c) == windows.get(c)) {
+            if (need.containsKey(c)) {
+                window.compute(c, (k, v) -> v == null ? 1 : v + 1);
+                if (need.get(c) == window.get(c)) {
                     matches++;
-                    while (matches == needs.size()) {
+                    while (matches == need.size()) {
                         if (right - left < length) {
                             start = left;
                             end = right;
                             length = end - start;
                         }
                         char leftChar = s.charAt(left);
-                        if (windows.containsKey(leftChar)) {
-                            windows.put(leftChar, windows.get(leftChar) - 1);
-                            if (windows.get(leftChar) < needs.get(leftChar)) {
+                        if (window.containsKey(leftChar)) {
+                            window.put(leftChar, window.get(leftChar) - 1);
+                            if (window.get(leftChar) < need.get(leftChar)) {
                                 matches--;
                             }
                         }

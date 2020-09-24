@@ -1,62 +1,53 @@
 package com.shuangpeng;
 
+import java.util.Stack;
+
 public class LongestValidParentheses {
 
     // "(()(((()"
-
-    public int longestValidParentheses(String s) {
+    public int longestValidParentheses0(String s) {
         if (s == null || s.length() == 0) {
             return 0;
         }
         char[] chars = s.toCharArray();
-        int start = 0;
-        int end = chars.length - 1;
-        int left = start;
-        int leftCount = 0;
-        int rightCount = 0;
-        int right = end;
+        int left = 0;
+        int right = 0;
         int max = 0;
-        while (left <= right) {
-            char leftChar = chars[left];
-            char rightChar = chars[right];
-            if (leftChar == '(' && rightChar == ')') {
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '(') {
                 left++;
-                right--;
-                leftCount++;
-                rightCount++;
-            } else if (leftCount == ')') {
-                if (leftCount == 0) {
-                    max = Math.max(max, left - start);
-                    left++;
-                    start = left;
-
-                    right = end;
-                    rightCount = 0;
-                } else {
-                    left++;
-                    leftCount--;
-                }
             } else {
-                if (rightCount == 0) {
-                    max = Math.max(max, end - right);
-                    right--;
-                    end = right;
-
-                    left = start;
-                    leftCount = 0;
-                } else {
-                    right--;
-                    rightCount--;
-                }
+                right++;
+            }
+            if (left == right) {
+                max = Math.max(max, left * 2);
+            }
+            if (right > left) {
+                left = 0;
+                right = 0;
             }
         }
-        if (leftCount == rightCount && left != right) {
-            max = Math.max(max, end - start + 1);
+
+        left = 0;
+        right = 0;
+        for (int i = chars.length - 1; i >= 0; i--) {
+            if (chars[i] == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                max = Math.max(max, left * 2);
+            }
+            if (left > right) {
+                left = 0;
+                right = 0;
+            }
         }
         return max;
     }
 
-    public int longestValidParentheses0(String s) {
+    public int longestValidParentheses1(String s) {
         if (s == null || s.length() == 0) {
             return 0;
         }
@@ -82,6 +73,70 @@ public class LongestValidParentheses {
             } else {
                 previousLength = 0;
             }
+        }
+        return max;
+    }
+
+    // ")()())"
+    public int longestValidParentheses2(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        char[] chars = s.toCharArray();
+        int max = 0;
+        int[] dp = new int[chars.length + 1];
+        for (int i = 2; i < chars.length + 1; i++) {
+            char c = chars[i - 1];
+            if (c == ')') {
+                int index = i - dp[i - 1] - 1;
+                if (index >= 1 && (chars[index - 1] == '(')) {
+                    dp[i] = i - index + 1 + dp[index - 1];
+                }
+            }
+            max = Math.max(max, dp[i]);
+        }
+        return max;
+    }
+
+    public int longestValidParentheses3(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        int n = s.length();
+
+        char[] sArr = s.toCharArray();
+        Stack<Integer> stack = new Stack<>();
+
+        int result = 0;
+
+        // -1 入栈用于处理边界条件
+        stack.push(-1);
+
+        for (int i = 0; i < n; ++i) {
+            // stack.size() > 1 表示栈不为空，而且我们必须保证栈顶元素是 '('
+            if (sArr[i] == ')' && stack.size() > 1 && sArr[stack.peek()] == '(') {
+                // 配对的 '(' 出栈
+                stack.pop();
+                // 记录长度
+                result = Math.max(result, i - stack.peek());
+            } else { // 其他情况，直接将当前位置入栈
+                stack.push(i);
+            }
+        }
+
+        return result;
+    }
+
+    public int longestValidParentheses(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        char[] chars = s.toCharArray();
+        int max = 0;
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+
         }
         return max;
     }

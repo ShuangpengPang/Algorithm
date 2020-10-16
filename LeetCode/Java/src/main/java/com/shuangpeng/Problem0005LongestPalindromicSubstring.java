@@ -85,6 +85,61 @@ public class Problem0005LongestPalindromicSubstring {
         return builder.toString();
     }
 
+    // 马拉车算法（简化）
+    public String longestPalindrome3(String s) {
+        if (s == null) {
+            return null;
+        }
+        if (s.length() == 0) {
+            return "";
+        }
+        int length = s.length();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            stringBuilder.append('#').append(s.charAt(i));
+        }
+        stringBuilder.append('#');
+        char[] chars = stringBuilder.toString().toCharArray();
+        int[] array = new int[chars.length];
+        array[0] = 1;
+        int center = 0;
+        int left = 0;
+        int right = 0;
+        int max = 1;
+        int start = 1;
+        for (int i = 1; i < array.length; i++) {
+            if (i < right) {
+                int mirror = 2 * center - i;
+                int len = right - i + 1;
+                array[i] = Math.min(len, array[mirror]);
+                if ((array[i] < len) || (array[mirror] > len)) {
+                    continue;
+                }
+            }
+            int r = i + array[i];
+            int l = 2 * i - r;
+            while (l >= 0 && r < chars.length && chars[l] == chars[r]) {
+                array[i]++;
+                r++;
+                l--;
+            }
+            center = i;
+            left = l + 1;
+            right = r - 1;
+            if (right - left + 1 > max) {
+                max = right - left + 1;
+                start = left;
+            }
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = start; i < start + max; i++) {
+            if (chars[i] != '#') {
+                builder.append(chars[i]);
+            }
+        }
+        return builder.toString();
+    }
+
     // 动态规划
     public String longestPalindrome1(String s) {
         if (s == null) {
@@ -125,7 +180,7 @@ public class Problem0005LongestPalindromicSubstring {
     }
 
     // 中心扩展法
-    public String longestPalindrome(String s) {
+    public String longestPalindrome2(String s) {
         if (s == null) {
             return null;
         }
@@ -161,6 +216,38 @@ public class Problem0005LongestPalindromicSubstring {
             }
         }
         return s.substring(index, index + max);
+    }
+
+    // 中心扩展法
+    public String longestPalindrome(String s) {
+        if (s == null) {
+            return null;
+        }
+        if (s.length() == 0) {
+            return "";
+        }
+        char[] chars = s.toCharArray();
+        int length = chars.length;
+        int max = 1;
+        int index = 0;
+        for (int i = 0; i < length; i++) {
+            int length1 = expandAroundCenter(chars, i, i);
+            int length2 = expandAroundCenter(chars, i, i + 1);
+            int len = Math.max(length1, length2);
+            if (len > max) {
+                max = len;
+                index = i - (len + 1) / 2 + 1;
+            }
+        }
+        return s.substring(index, index + max);
+    }
+
+    public int expandAroundCenter(char[] chars, int left, int right) {
+        while (left >= 0 && right < chars.length && chars[left] == chars[right]) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
     }
 
 

@@ -50,4 +50,67 @@ public class Problem0015ThreeSum {
         }
         return result;
     }
+
+    public void quickSort(int[] array, int start, int end) {
+        if (array == null || array.length <= 1 || start >= end) {
+            return;
+        }
+
+        int p = partition(array, start, end);
+        quickSort(array, start,  p- 1);
+        quickSort(array, p + 1, end);
+    }
+
+    public int partition0(int[] array, int start, int end) {
+        int pivot = array[end];
+
+        // location为当前扫描过的数当中
+        int location = -1;
+        for (int i = start; i < end; i++) {
+            if (array[i] <= pivot) {
+                location++;
+                if (location < i) {
+                    swap(array, location, i);
+                }
+            }
+        }
+        int p = location + 1;
+        swap(array, p, array.length - 1);
+        return p;
+    }
+
+    public int partition(int[] array, int start, int end) {
+        int pivot = array[end];
+        int i = start;
+        int j = end;
+
+
+        while (i < j) {
+            while (array[i] <= pivot) {
+                i++;
+            }
+            // 此处array[i] > pivot
+            while (array[j] >= pivot) {
+                j--;
+            }
+            // 此处array[j] < pivot
+            if (i < j) {
+                swap(array, i, j);
+                // 此处 array[i] < pivot, array[j] > pivot
+            }
+        }
+        // 此处array[i] > pivot
+        // 此处array[j] < pivot
+        // j <= i;
+        swap(array, i, end);
+        return i;
+    }
+
+    public void swap(int[] array, int i, int j) {
+        if (i != j) {
+            array[i] = array[j] - array[i];
+            array[j] = array[j] - array[i];
+            array[i] = array[j] + array[i];
+        }
+    }
 }

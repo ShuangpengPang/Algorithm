@@ -75,9 +75,9 @@ public class Problem0001TwoSum {
         return null;
     }
 
-    public static void main(String[] args) {
-        Problem0001TwoSum problem0001TwoSum = new Problem0001TwoSum();
-        int[] nums = {3, 3};
-        problem0001TwoSum.twoSum(nums, 6);
-    }
+//    public static void main(String[] args) {
+//        Problem0001TwoSum problem0001TwoSum = new Problem0001TwoSum();
+//        int[] nums = {3, 3};
+//        problem0001TwoSum.twoSum(nums, 6);
+//    }
 }

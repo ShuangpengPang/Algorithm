@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class Problem0010RegularExpressionMatching {
 
-    public static void main(String[] args) {
-        Problem0010RegularExpressionMatching a = new Problem0010RegularExpressionMatching();
-        String s = "mississippi", p = "mis*is*p*.";
-        System.err.println("result is: " + a.isMatch(s, p));
-    }
+//    public static void main(String[] args) {
+//        Problem0010RegularExpressionMatching a = new Problem0010RegularExpressionMatching();
+//        String s = "aa", p = "a*";
+//        System.err.println("result is: " + a.isMatch(s, p));
+//    }
 
     Map<String, Boolean> map;
 
-    public boolean isMatch(String s, String p) {
+    public boolean isMatch0(String s, String p) {
         if (s == null || p == null) {
             return false;
         }
@@ -94,5 +94,47 @@ public class Problem0010RegularExpressionMatching {
                 return result;
             }
         }
+    }
+
+    // 动态规划
+    public boolean isMatch(String s, String p) {
+        if (s == null || p == null) {
+            return false;
+        }
+        int sLength = s.length();
+        int pLength = p.length();
+        boolean[][] dp = new boolean[sLength + 1][pLength + 1];
+        dp[0][0] = true;
+        for (int j = 1; j <= pLength; j++) {
+            if (j % 2 == 0 && p.charAt(j - 1) == '*') {
+                dp[0][j] = dp[0][j - 2];
+            }
+        }
+        for (int i = 1; i <= sLength; i++) {
+            for (int j = 1; j <= pLength; j++) {
+                int sIndex = i - 1;
+                int pIndex = j - 1;
+                char sc = s.charAt(sIndex);
+                char pc = p.charAt(pIndex);
+                if (pc == '*') {
+                    if (pIndex <= 0) {
+                        return false;
+                    }
+                    char pp = p.charAt(pIndex - 1);
+                    if (pp == '.' || pp == sc) {
+                        dp[i][j] = dp[i][j - 2] || dp[i - 1][j];
+                    } else {
+                        dp[i][j] = dp[i][j - 2];
+                    }
+                } else {
+                    if (pc == '.' || sc == pc) {
+                        dp[i][j] = dp[i - 1][j - 1];
+                    } else {
+                        dp[i][j] = false;
+                    }
+                }
+            }
+        }
+        return dp[sLength][pLength];
     }
 }

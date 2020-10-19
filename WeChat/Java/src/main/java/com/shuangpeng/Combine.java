@@ -20,27 +20,27 @@ public class Combine {
         backtrack1(n, k, new ArrayList<>());
     }
 
-    public static void main(String[] args) {
-        Combine combine = new Combine();
-        combine.combine(4, 2);
-        System.err.print('[');
-        for (int i = 0; i < combine.result.size(); i++) {
-            List<Integer> set = combine.result.get(i);
-            if (i != 0) {
-                System.err.print(", ");
-            }
-            System.err.print('[');
-            for (int j = 0; j < set.size(); j++) {
-                if (j != 0) {
-                    System.err.print(", ");
-                }
-                System.err.print(set.get(j));
-            }
-            System.err.print(']');
-        }
-        System.err.print(']');
-        System.err.println();
-    }
+//    public static void main(String[] args) {
+//        Combine combine = new Combine();
+//        combine.combine(4, 2);
+//        System.err.print('[');
+//        for (int i = 0; i < combine.result.size(); i++) {
+//            List<Integer> set = combine.result.get(i);
+//            if (i != 0) {
+//                System.err.print(", ");
+//            }
+//            System.err.print('[');
+//            for (int j = 0; j < set.size(); j++) {
+//                if (j != 0) {
+//                    System.err.print(", ");
+//                }
+//                System.err.print(set.get(j));
+//            }
+//            System.err.print(']');
+//        }
+//        System.err.print(']');
+//        System.err.println();
+//    }
 
     public void backtrack0(int n, int k, List<Integer> set) {
         if (k > n) {

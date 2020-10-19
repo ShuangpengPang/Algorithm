@@ -31,28 +31,28 @@ public class Permute {
         backtrack(array, new ArrayList<>());
     }
 
-    public static void main(String[] args) {
-        Permute permute = new Permute();
-        int[] array = {1, 2};
-        permute.permute(array);
-        System.err.print('[');
-        for (int i = 0; i < permute.result.size(); i++) {
-            List<Integer> set = permute.result.get(i);
-            if (i != 0) {
-                System.err.print(", ");
-            }
-            System.err.print('[');
-            for (int j = 0; j < set.size(); j++) {
-                if (j != 0) {
-                    System.err.print(", ");
-                }
-                System.err.print(set.get(j));
-            }
-            System.err.print(']');
-        }
-        System.err.print(']');
-        System.err.println();
-    }
+//    public static void main(String[] args) {
+//        Permute permute = new Permute();
+//        int[] array = {1, 2};
+//        permute.permute(array);
+//        System.err.print('[');
+//        for (int i = 0; i < permute.result.size(); i++) {
+//            List<Integer> set = permute.result.get(i);
+//            if (i != 0) {
+//                System.err.print(", ");
+//            }
+//            System.err.print('[');
+//            for (int j = 0; j < set.size(); j++) {
+//                if (j != 0) {
+//                    System.err.print(", ");
+//                }
+//                System.err.print(set.get(j));
+//            }
+//            System.err.print(']');
+//        }
+//        System.err.print(']');
+//        System.err.println();
+//    }
 
     public void backtrack(int[] array, List<Integer> list) {
         if (list.size() == array.length) {

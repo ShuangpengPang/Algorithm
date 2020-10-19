@@ -20,8 +20,8 @@ public class Problem0650TwoKeysKeyboard {
         return sum;
     }
 
-    public static void main(String[] args) {
-        Problem0650TwoKeysKeyboard a = new Problem0650TwoKeysKeyboard();
-        a.minSteps(12);
-    }
+//    public static void main(String[] args) {
+//        Problem0650TwoKeysKeyboard a = new Problem0650TwoKeysKeyboard();
+//        a.minSteps(12);
+//    }
 }

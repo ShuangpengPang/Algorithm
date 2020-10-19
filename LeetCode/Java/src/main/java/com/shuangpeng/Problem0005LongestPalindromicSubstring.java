@@ -251,19 +251,19 @@ public class Problem0005LongestPalindromicSubstring {
     }
 
 
-    public static void main(String[] args) {
-        Problem0005LongestPalindromicSubstring a = new Problem0005LongestPalindromicSubstring();
-        a.longestPalindrome("ccc");
-
+//    public static void main(String[] args) {
 //        Problem0005LongestPalindromicSubstring a = new Problem0005LongestPalindromicSubstring();
-//        int[][] array = {
-//                {1, 3, 4, 8, 10},
-//                {12, 15, 17, 20, 23}
-//        };
-//        long start = System.currentTimeMillis();
-//        System.err.println("result is: " + a.findElement(array, 25));
-//        System.err.println("用时： " + (System.currentTimeMillis() - start));
-    }
+//        a.longestPalindrome("ccc");
+//
+////        Problem0005LongestPalindromicSubstring a = new Problem0005LongestPalindromicSubstring();
+////        int[][] array = {
+////                {1, 3, 4, 8, 10},
+////                {12, 15, 17, 20, 23}
+////        };
+////        long start = System.currentTimeMillis();
+////        System.err.println("result is: " + a.findElement(array, 25));
+////        System.err.println("用时： " + (System.currentTimeMillis() - start));
+//    }
 
     public boolean findElement(int[][] array, int target) {
         if (array == null || array.length == 0) {

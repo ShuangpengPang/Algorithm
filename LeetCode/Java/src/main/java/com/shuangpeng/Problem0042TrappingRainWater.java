@@ -91,21 +91,85 @@ public class Problem0042TrappingRainWater {
     }
 
     // 动态编程
-    public int trap(int[] height) {
+    public int trap2(int[] height) {
 //        int[] array = {0,1,0,2,1,0,1,3,2,1,2,1};
         if (height.length <= 2) {
             return 0;
         }
-        int maxLeft = Integer.MIN_VALUE;
-        int maxRight = Integer.MIN_VALUE;
-        for (int i = 1; i < height.length; i++) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (height[j] > maxLeft) {
-                    maxLeft = height[j];
+        int maxLeft = height[0];
+        int maxRight = height[0];
+        int right = 0;
+        int sum = 0;
+        for (int i = 1; i < height.length - 1; i++) {
+            if (i > right) {
+                maxRight = height[i + 1];
+                right = i + 1;
+                for (int j = i + 2; j < height.length; j++) {
+                    if (height[j] > maxRight) {
+                        maxRight = height[j];
+                        right = j;
+                    }
                 }
             }
-            for () {
+            int h = Math.min(maxLeft, maxRight);
+            if (height[i] < h) {
+                sum += h - height[i];
+            }
+            maxLeft = Math.max(maxLeft, height[i]);
+        }
+        return sum;
+    }
+
+    // 栈
+    public int trap3(int[] height) {
+        if (height.length <= 2) {
+            return 0;
+        }
+        int[] stack = new int[height.length];
+        int count = 0;
+        int sum = 0;
+        for (int i = 0; i < height.length; i++) {
+            while (count > 0 && height[stack[count - 1]] < height[i]) {
+                int top = stack[count - 1];
+                count--;
+                if (count > 0) {
+                    int index = stack[count - 1];
+                    int distance = i - index - 1;
+                    sum += distance * (Math.min(height[index], height[i]) - height[top]);
+                }
+            }
+            stack[count++] = i;
+        }
+        return sum;
+    }
+
+    // 双指针
+    public int trap(int[] height) {
+        if (height.length <= 2) {
+            return 0;
+        }
+        int left = 0;
+        int right = height.length - 1;
+        int leftMax = 0;
+        int rightMax = 0;
+        int sum = 0;
+        while (left < right) {
+            if (height[left] <= height[right]) {
+                if (height[left] > leftMax) {
+                    leftMax = height[left];
+                } else {
+                    sum += leftMax - height[left];
+                }
+                left++;
+            } else {
+                if (height[right] > rightMax) {
+                    rightMax = height[right];
+                } else {
+                    sum += rightMax - height[right];
+                }
+                right--;
             }
         }
+        return sum;
     }
 }

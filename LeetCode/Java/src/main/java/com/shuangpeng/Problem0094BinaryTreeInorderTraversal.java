@@ -85,13 +85,8 @@ public class Problem0094BinaryTreeInorderTraversal {
         return root;
     }
 
-    public List<Integer> inorderTraversal(TreeNode root) {
-//        return traversal(root, new ArrayList<>());
-        return traversalStack(root);
-    }
-
     // 栈
-    public List<Integer> traversalStack(TreeNode root) {
+    public List<Integer> traversalStack0(TreeNode root) {
         if (root == null) {
             return new ArrayList<>();
         }
@@ -136,6 +131,58 @@ public class Problem0094BinaryTreeInorderTraversal {
                         stack[count++] = parent.right;
                         isDown = true;
                     }
+                }
+            }
+        }
+        return result;
+    }
+
+    // 栈（优化）
+    public List<Integer> traversalStack1(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        TreeNode[] stack = new TreeNode[100];
+        List<Integer> result = new ArrayList<>();
+        int count = 0;
+        while (count > 0 || root != null) {
+            while (root != null) {
+                stack[count++] = root;
+                root = root.left;
+            }
+            root = stack[--count];
+            result.add(root.val);
+            root = root.right;
+        }
+        return result;
+    }
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+//        return traversal(root, new ArrayList<>());
+        return traversalStack(root);
+    }
+
+    // morris算法
+    public List<Integer> traversalStack(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<Integer> result = new ArrayList<>();
+        while (root != null) {
+            if (root.left == null) {
+                result.add(root.val);
+                root = root.right;
+            } else {
+                TreeNode current = root.left;
+                while (current.right != null && current.right != root) {
+                    current = current.right;
+                }
+                if (current.right == null) {
+                    current.right = root;
+                    root = root.left;
+                } else {
+                    result.add(root.val);
+                    root = root.right;
                 }
             }
         }

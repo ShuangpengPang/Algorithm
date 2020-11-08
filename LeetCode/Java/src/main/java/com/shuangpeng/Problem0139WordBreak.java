@@ -36,6 +36,15 @@ public class Problem0139WordBreak {
         return false;
     }
 
+    public static void main(String[] args) {
+        Problem0139WordBreak a = new Problem0139WordBreak();
+        String s = "leetcode";
+        List<String> wordDict = new ArrayList<>();
+        wordDict.add("leet");
+        wordDict.add("code");
+        a.wordBreak(s, wordDict);
+    }
+
     public boolean wordBreak(String s, List<String> wordDict) {
         int length = s.length();
         boolean[] dp = new boolean[length + 1];
@@ -46,12 +55,12 @@ public class Problem0139WordBreak {
         }
         for (int i = 0; i < s.length(); i++) {
             for (int j = 1; i - j >= -1; j++) {
-                if (dp[i - j + 1] && set.contains(s.substring(i - j + 1))) {
-                    dp[i] = true;
+                if (dp[i - j + 1] && set.contains(s.substring(i - j + 1, i + 1))) {
+                    dp[i + 1] = true;
                     break;
                 }
             }
         }
-        return dp[s.length() - 1];
+        return dp[s.length()];
     }
 }

@@ -6,11 +6,11 @@ import java.util.List;
 
 public class Problem0039CombinationSum {
 
-    public static void main(String[] args) {
-        int[] array = {2, 3, 5};
-        Problem0039CombinationSum a = new Problem0039CombinationSum();
-        a.combinationSum(array, 8);
-    }
+//    public static void main(String[] args) {
+//        int[] array = {2, 3, 5};
+//        Problem0039CombinationSum a = new Problem0039CombinationSum();
+//        a.combinationSum(array, 8);
+//    }
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();

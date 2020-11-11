@@ -36,14 +36,14 @@ public class Problem0139WordBreak {
         return false;
     }
 
-    public static void main(String[] args) {
-        Problem0139WordBreak a = new Problem0139WordBreak();
-        String s = "leetcode";
-        List<String> wordDict = new ArrayList<>();
-        wordDict.add("leet");
-        wordDict.add("code");
-        a.wordBreak(s, wordDict);
-    }
+//    public static void main(String[] args) {
+//        Problem0139WordBreak a = new Problem0139WordBreak();
+//        String s = "leetcode";
+//        List<String> wordDict = new ArrayList<>();
+//        wordDict.add("leet");
+//        wordDict.add("code");
+//        a.wordBreak(s, wordDict);
+//    }
 
     public boolean wordBreak(String s, List<String> wordDict) {
         int length = s.length();

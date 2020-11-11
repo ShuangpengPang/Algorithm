@@ -12,19 +12,19 @@ public class Problem0148SortList {
         }
     }
 
-    public static void main(String[] args) {
-        Problem0148SortList a = new Problem0148SortList();
-        ListNode head = new ListNode(3);
-//        int[] array = {2, 1, 3};
-        int[] array = {2, 4};
-        ListNode current = head;
-        for (int i = 0; i < array.length; i++) {
-            ListNode node = new ListNode(array[i]);
-            current.next = node;
-            current = node;
-        }
-        a.sortList(head);
-    }
+//    public static void main(String[] args) {
+//        Problem0148SortList a = new Problem0148SortList();
+//        ListNode head = new ListNode(3);
+////        int[] array = {2, 1, 3};
+//        int[] array = {2, 4};
+//        ListNode current = head;
+//        for (int i = 0; i < array.length; i++) {
+//            ListNode node = new ListNode(array[i]);
+//            current.next = node;
+//            current = node;
+//        }
+//        a.sortList(head);
+//    }
 
     public ListNode sortList0(ListNode head) {
         return mergeSortList(head);

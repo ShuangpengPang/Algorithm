@@ -47,18 +47,18 @@ public class Problem0105ConstructBinaryTreeFromPreorderAndInorderTraversal {
         return root;
     }
 
-    public static void main(String[] args) {
-//        [3,9,20,15,7]
-//        [9,3,15,20,7]
-
-//        [1,2,3]
-//        [2,3,1]
-
-        int[] preorder = {3,9,20,15,7};
-        int[] inorder = {9,3,15,20,7};
-        Problem0105ConstructBinaryTreeFromPreorderAndInorderTraversal a = new Problem0105ConstructBinaryTreeFromPreorderAndInorderTraversal();
-        a.buildTree(preorder, inorder);
-    }
+//    public static void main(String[] args) {
+////        [3,9,20,15,7]
+////        [9,3,15,20,7]
+//
+////        [1,2,3]
+////        [2,3,1]
+//
+//        int[] preorder = {3,9,20,15,7};
+//        int[] inorder = {9,3,15,20,7};
+//        Problem0105ConstructBinaryTreeFromPreorderAndInorderTraversal a = new Problem0105ConstructBinaryTreeFromPreorderAndInorderTraversal();
+//        a.buildTree(preorder, inorder);
+//    }
 
     // 迭代
     public TreeNode buildTree1(int[] preorder, int[] inorder) {

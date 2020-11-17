@@ -3,7 +3,7 @@ package com.shuangpeng;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Problem141LinkedListCycle {
+public class Problem0141LinkedListCycle {
 
     class ListNode {
         int val;

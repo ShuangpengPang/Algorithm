@@ -1,6 +1,6 @@
 package com.shuangpeng;
 
-public class Problem142LinkedListCycle2 {
+public class Problem0142LinkedListCycle2 {
 
     class ListNode {
         int val;

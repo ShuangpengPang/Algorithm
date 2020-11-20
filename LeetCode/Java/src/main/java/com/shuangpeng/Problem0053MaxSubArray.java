@@ -28,11 +28,11 @@ public class Problem0053MaxSubArray {
 //        if (nums.length == 1) {
 //            return nums[0];
 //        }
-//        return partition(nums, 0, nums.length - 1)[0];
+//        return partition0(nums, 0, nums.length - 1)[0];
 //    }
 
     // 分治
-//    public int[] partition(int[] nums, int left, int right) {
+//    public int[] partition0(int[] nums, int left, int right) {
 ////        if (left > right) {
 ////            return 0;
 ////        }
@@ -40,8 +40,8 @@ public class Problem0053MaxSubArray {
 //            return new int[]{nums[left], left, left};
 //        }
 //        int mid = left + (right - left) / 2;
-//        int[] resultLeft = partition(nums, left, mid);
-//        int[] resultRight = partition(nums, mid + 1, right);
+//        int[] resultLeft = partition0(nums, left, mid);
+//        int[] resultRight = partition0(nums, mid + 1, right);
 //        int sumLeft = resultLeft[0];
 //        int sumRight = resultRight[0];
 //        int max = Math.max(Math.max(sumLeft, sumRight), sumLeft + sumRight);

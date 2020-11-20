@@ -1,7 +1,6 @@
 package com.shuangpeng;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Problem0236LowestCommonAncesterOfABinaryTree {
 
@@ -24,7 +23,7 @@ public class Problem0236LowestCommonAncesterOfABinaryTree {
         }
     }
 
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    public TreeNode lowestCommonAncestor0(TreeNode root, TreeNode p, TreeNode q) {
         Map<String, TreeNode> map = new HashMap<>();
         return findCommonAncestor(root, p, q, map);
     }
@@ -76,5 +75,55 @@ public class Problem0236LowestCommonAncesterOfABinaryTree {
         TreeNode right = checkNode(root.right, node, map);
         map.put(key, right);
         return right;
+    }
+
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+        dfs(root, p, q);
+        return result;
+    }
+
+    TreeNode result;
+    public boolean dfs(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return false;
+        }
+        boolean left = dfs(root.left, p, q);
+        boolean right = dfs(root.right, p, q);
+        if ((left && right) || ((root == p || root == q) && (left || right))) {
+            result = root;
+        }
+        return left || right || root == p || root == q;
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == p || root == q) {
+            return root;
+        }
+        Map<TreeNode, TreeNode> map = new HashMap<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node.left != null) {
+                map.put(node.left, node);
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                map.put(node.right, node);
+                queue.offer(node.right);
+            }
+        }
+        Set<TreeNode> visited = new HashSet<>();
+        visited.add(p);
+        TreeNode parent = map.get(p);
+        while (parent != null) {
+            visited.add(parent);
+            parent = map.get(parent);
+        }
+        TreeNode current = q;
+        while (!visited.contains(current)) {
+            current = map.get(current);
+        }
+        return current;
     }
 }

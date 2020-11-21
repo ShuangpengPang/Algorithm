@@ -23,7 +23,8 @@ public class Problem0287FindTheDuplicateNumber {
         return left;
     }
 
-    public int findDuplicate(int[] nums) {
+    // 二进制
+    public int findDuplicate1(int[] nums) {
         int bitMax = 31;
         int n = nums.length;
         while ((n - 1) >> bitMax == 0) {
@@ -46,5 +47,20 @@ public class Problem0287FindTheDuplicateNumber {
             }
         }
         return result;
+    }
+
+    public int findDuplicate(int[] nums) {
+        int slow = 0;
+        int fast = nums[0];
+        while (nums[slow] != nums[fast]) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        }
+        int i = 0;
+        while (nums[i] != nums[slow]) {
+            slow = nums[slow];
+            i = nums[i];
+        }
+        return nums[i];
     }
 }

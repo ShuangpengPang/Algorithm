@@ -1,5 +1,7 @@
 package com.shuangpeng;
 
+import java.util.Stack;
+
 public class Problem0394DecodeString {
 
 //    public static void main(String[] args) {
@@ -8,7 +10,7 @@ public class Problem0394DecodeString {
 //        a.decodeString(s);
 //    }
 
-    public String decodeString(String s) {
+    public String decodeString0(String s) {
         return recurse(s, 0, s.length());
     }
 
@@ -44,6 +46,54 @@ public class Problem0394DecodeString {
                 }
                 i++;
             }
+        }
+        return builder.toString();
+    }
+
+    public String decodeString1(String s) {
+        Stack<String> stack = new Stack<>();
+        int length = s.length();
+        int i = 0;
+        while (i < length) {
+            String str = "";
+            char ch = s.charAt(i);
+            if ((ch < '0' || ch > '9') && ch != '[' && ch != ']') {
+                while ((ch < '0' || ch > '9') && ch != '[' && ch != ']') {
+                    str += ch;
+                    i++;
+                    if (i >= length) {
+                        break;
+                    }
+                    ch = s.charAt(i);
+                }
+                stack.push(str);
+            } else if (ch >= '0' && ch <= '9') {
+                while (ch >= '0' && ch <= '9') {
+                    str += ch;
+                    i++;
+                    ch = s.charAt(i);
+                }
+                stack.push(str);
+            } else if (ch == '[') {
+                stack.push("[");
+                i++;
+            } else {
+                while (!stack.peek().equals("[")) {
+                    str = stack.pop() + str;
+                }
+                stack.pop();
+                int repeat = Integer.parseInt(stack.pop());
+                StringBuilder builder = new StringBuilder();
+                for (int c = 0; c < repeat; c++) {
+                    builder.append(str);
+                }
+                stack.push(builder.toString());
+                i++;
+            }
+        }
+        StringBuilder builder = new StringBuilder();
+        while (!stack.isEmpty()) {
+            builder.insert(0, stack.pop());
         }
         return builder.toString();
     }

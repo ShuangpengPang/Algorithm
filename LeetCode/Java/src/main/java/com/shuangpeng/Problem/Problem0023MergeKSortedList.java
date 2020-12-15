@@ -1,28 +1,12 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.ListNode;
 import javafx.util.Pair;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class Problem0023MergeKSortedList {
-
-    public class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode() {
-        }
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
 
     public ListNode mergeKLists0(ListNode[] lists) {
         return recursive(lists, lists.length);

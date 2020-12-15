@@ -1,29 +1,12 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
 public class Problem0101SymmetricTree {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     // 递归
     public boolean isSymmetricRecursively(TreeNode node1, TreeNode node2) {

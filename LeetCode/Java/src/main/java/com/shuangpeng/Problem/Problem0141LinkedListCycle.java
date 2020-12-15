@@ -1,19 +1,11 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.ListNode;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class Problem0141LinkedListCycle {
-
-    class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-            next = null;
-        }
-    }
 
     public boolean hasCycle0(ListNode head) {
         Set<ListNode> set = new HashSet<>();

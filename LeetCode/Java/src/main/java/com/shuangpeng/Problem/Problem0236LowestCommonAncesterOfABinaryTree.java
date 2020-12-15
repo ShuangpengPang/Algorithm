@@ -1,27 +1,10 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 import java.util.*;
 
 public class Problem0236LowestCommonAncesterOfABinaryTree {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     public TreeNode lowestCommonAncestor0(TreeNode root, TreeNode p, TreeNode q) {
         Map<String, TreeNode> map = new HashMap<>();

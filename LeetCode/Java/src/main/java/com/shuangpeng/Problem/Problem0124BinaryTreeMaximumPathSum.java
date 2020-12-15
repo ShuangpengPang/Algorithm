@@ -1,25 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 public class Problem0124BinaryTreeMaximumPathSum {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     int maxSum = 0;
     public int maxPathSum(TreeNode root) {

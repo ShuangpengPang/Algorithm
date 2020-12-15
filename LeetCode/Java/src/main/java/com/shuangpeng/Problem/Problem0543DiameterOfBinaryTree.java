@@ -1,25 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 public class Problem0543DiameterOfBinaryTree {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     int max = 0;
     public int diameterOfBinaryTree0(TreeNode root) {

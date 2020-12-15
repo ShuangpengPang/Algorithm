@@ -1,22 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.ListNode;
+
 public class Problem0019RemoveNthNodeOfList {
-    class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode() {
-        }
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
 
     public ListNode removeNthFromEnd(ListNode head, int n) {
         int start = 0;

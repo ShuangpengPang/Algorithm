@@ -1,16 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.ListNode;
+
 public class Problem0206ReverseLinkedList {
-
-    class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-            next = null;
-        }
-    }
 
     // 递归
     public ListNode reverseList0(ListNode head) {

@@ -1,28 +1,11 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Problem0437PathSumIII {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val){
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     // 递归
     public int pathSum0(TreeNode root, int sum) {

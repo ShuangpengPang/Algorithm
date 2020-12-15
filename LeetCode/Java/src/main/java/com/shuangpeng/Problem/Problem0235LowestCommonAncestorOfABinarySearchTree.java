@@ -1,25 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 public class Problem0235LowestCommonAncestorOfABinarySearchTree {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     TreeNode answer = null;
     public TreeNode lowestCommonAncestor0(TreeNode root, TreeNode p, TreeNode q) {

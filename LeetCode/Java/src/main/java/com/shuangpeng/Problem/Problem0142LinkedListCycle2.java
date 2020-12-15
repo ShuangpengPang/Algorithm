@@ -1,16 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.ListNode;
+
 public class Problem0142LinkedListCycle2 {
-
-    class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-            next = null;
-        }
-    }
 
     public ListNode detectCycle(ListNode head) {
         if (head == null || head.next == null) {

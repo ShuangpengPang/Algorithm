@@ -1,16 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.ListNode;
+
 public class Problem0148SortList {
-
-    static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-            next = null;
-        }
-    }
 
 //    public static void main(String[] args) {
 //        Problem0148SortList a = new Problem0148SortList();

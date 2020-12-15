@@ -1,22 +1,8 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.ListNode;
+
 public class Problem0021MergeTwoSortedList {
-    class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode() {
-        }
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
 
     // 递归解法
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {

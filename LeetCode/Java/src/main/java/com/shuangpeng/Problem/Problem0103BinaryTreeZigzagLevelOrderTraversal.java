@@ -1,27 +1,10 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 import java.util.*;
 
 public class Problem0103BinaryTreeZigzagLevelOrderTraversal {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     public List<List<Integer>> zigzagLevelOrder0(TreeNode root) {
         List<List<Integer>> answer = new ArrayList<>();

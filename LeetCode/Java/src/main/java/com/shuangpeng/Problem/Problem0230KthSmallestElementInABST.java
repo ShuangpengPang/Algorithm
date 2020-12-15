@@ -1,29 +1,12 @@
 package com.shuangpeng.Problem;
 
+import com.shuangpeng.common.TreeNode;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Stack;
 
 public class Problem0230KthSmallestElementInABST {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     public int kthSmallest0(TreeNode root, int k) {
         if (root == null || k == 0) {

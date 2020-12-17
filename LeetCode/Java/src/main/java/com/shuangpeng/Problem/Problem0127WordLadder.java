@@ -70,10 +70,6 @@ public class Problem0127WordLadder {
     }
 
 
-    Map<String, Integer> wordId = new HashMap<String, Integer>();
-    List<List<Integer>> edge = new ArrayList<List<Integer>>();
-    int nodeNum = 0;
-
     public int ladderLength1(String beginWord, String endWord, List<String> wordList) {
         for (String word : wordList) {
             addEdge(word);
@@ -104,6 +100,65 @@ public class Problem0127WordLadder {
         return 0;
     }
 
+    Map<String, Integer> wordId = new HashMap<String, Integer>();
+    List<List<Integer>> edge = new ArrayList<List<Integer>>();
+    int nodeNum = 0;
+
+    public int ladderLength3(String beginWord, String endWord, List<String> wordList) {
+        for (String word : wordList) {
+            addEdge(word);
+        }
+        addEdge(beginWord);
+        if (!wordId.containsKey(endWord)) {
+            return 0;
+        }
+
+        int[] disBegin = new int[nodeNum];
+        Arrays.fill(disBegin, Integer.MAX_VALUE);
+        int beginId = wordId.get(beginWord);
+        disBegin[beginId] = 0;
+        Queue<Integer> queBegin = new LinkedList<Integer>();
+        queBegin.offer(beginId);
+
+        int[] disEnd = new int[nodeNum];
+        Arrays.fill(disEnd, Integer.MAX_VALUE);
+        int endId = wordId.get(endWord);
+        disEnd[endId] = 0;
+        Queue<Integer> queEnd = new LinkedList<Integer>();
+        queEnd.offer(endId);
+
+        while (!queBegin.isEmpty() && !queEnd.isEmpty()) {
+            int queBeginSize = queBegin.size();
+            for (int i = 0; i < queBeginSize; ++i) {
+                int nodeBegin = queBegin.poll();
+                if (disEnd[nodeBegin] != Integer.MAX_VALUE) {
+                    return (disBegin[nodeBegin] + disEnd[nodeBegin]) / 2 + 1;
+                }
+                for (int it : edge.get(nodeBegin)) {
+                    if (disBegin[it] == Integer.MAX_VALUE) {
+                        disBegin[it] = disBegin[nodeBegin] + 1;
+                        queBegin.offer(it);
+                    }
+                }
+            }
+
+            int queEndSize = queEnd.size();
+            for (int i = 0; i < queEndSize; ++i) {
+                int nodeEnd = queEnd.poll();
+                if (disBegin[nodeEnd] != Integer.MAX_VALUE) {
+                    return (disBegin[nodeEnd] + disEnd[nodeEnd]) / 2 + 1;
+                }
+                for (int it : edge.get(nodeEnd)) {
+                    if (disEnd[it] == Integer.MAX_VALUE) {
+                        disEnd[it] = disEnd[nodeEnd] + 1;
+                        queEnd.offer(it);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
     public void addEdge(String word) {
         addWord(word);
         int id1 = wordId.get(word);
@@ -128,7 +183,7 @@ public class Problem0127WordLadder {
         }
     }
 
-    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+    public int ladderLength2(String beginWord, String endWord, List<String> wordList) {
         if (beginWord == null || endWord == null || wordList == null || wordList.size() == 0) {
             return 0;
         }
@@ -188,5 +243,62 @@ public class Problem0127WordLadder {
                 chars[i] = temp;
             }
         }
+    }
+
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (beginWord == null || endWord == null || wordList == null
+                || wordList.isEmpty() || beginWord.length() != endWord.length()) {
+            return 0;
+        }
+        if (beginWord.equals(endWord)) {
+            return 1;
+        }
+        int size = wordList.size();
+        Map<String, Integer> map = new HashMap<>(size + 1);
+        List<List<Integer>> edges = new ArrayList<>(size + 1);
+        addWord(beginWord, map, edges);
+        for (int i = 0; i < size; i++) {
+            addWord(wordList.get(i), map, edges);
+        }
+        if (!map.containsKey(endWord)) {
+            return 0;
+        }
+        Queue<Integer> queue1 = new LinkedList<>();
+        Queue<Integer> queue2 = new LinkedList<>();
+        Set<Integer> set1 = new HashSet<>();
+        Set<Integer> set2 = new HashSet<>();
+        queue1.offer(map.get(beginWord));
+        queue2.offer(map.get(endWord));
+        set1.add(map.get(beginWord));
+        set2.add(map.get(endWord));
+        int count = 2;
+        boolean flag = false;
+        while (!queue1.isEmpty() && !queue2.isEmpty()) {
+            Queue<Integer> queue = queue1;
+            Set<Integer> set = set1;
+            Set<Integer> compareSet = set2;
+            if (flag) {
+                queue = queue2;
+                set = set2;
+                compareSet = set1;
+            }
+            int length = queue.size();
+            for (int i = 0; i < length; i++) {
+                int id = queue.poll();
+                if (compareSet.contains(id)) {
+                    return (count - 1) / 2 + 1;
+                }
+                List<Integer> list = edges.get(id);
+                for (int newId : list) {
+                    if (!set.contains(newId)) {
+                        set.add(newId);
+                        queue.offer(newId);
+                    }
+                }
+            }
+            count++;
+            flag = !flag;
+        }
+        return 0;
     }
 }

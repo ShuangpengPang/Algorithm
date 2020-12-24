@@ -46,17 +46,23 @@ public class Problem0179LargestNumber {
         return builder.toString();
     }
 
-//    public String largestNumber(int[] nums) {
-//        if (nums == null || nums.length == 0) {
-//            return "";
-//        }
-//        int length = nums.length;
-//        String[] strings = new String[length];
-//        for (int i = 0; i < length; i++) {
-//            strings[i] = String.valueOf(nums[i]);
-//        }
-//        Arrays.sort(strings, (a, b) -> {
-//
-//        });
-//    }
+    public String largestNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return "";
+        }
+        int length = nums.length;
+        String[] strings = new String[length];
+        for (int i = 0; i < length; i++) {
+            strings[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(strings, (a, b) -> (b + a).compareTo(a + b));
+        if (strings[0].equals("0")) {
+            return "0";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < strings.length; i++) {
+            builder.append(strings[i]);
+        }
+        return builder.toString();
+    }
 }

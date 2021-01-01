@@ -48,23 +48,27 @@ public class Problem0210CourseScheduleII {
         }
     }
 
-//    public int[] findOrder(int numCourses, int[][] prerequisites) {
-//        List<List<Integer>> edges = new ArrayList<>(numCourses);
-//        int[] visited = new int[numCourses];
-//        for (int i = 0; i < numCourses; i++) {
-//            edges.add(new ArrayList<>());
-//        }
-//        for (int i = 0; i < prerequisites.length; i++) {
-//            edges.get(prerequisites[i][1]).add(prerequisites[i][0]);
-//        }
-//        int[] answer = new int[numCourses];
-//        index = numCourses - 1;
-//        for (int i = 0; i < numCourses; i++) {
-//            if (visited[i] == 0) {
-//
-//            }
-//        }
-//    }
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> edges = new ArrayList<>(numCourses);
+        int[] visited = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            edges.add(new ArrayList<>());
+        }
+        for (int i = 0; i < prerequisites.length; i++) {
+            edges.get(prerequisites[i][1]).add(prerequisites[i][0]);
+        }
+        int[] answer = new int[numCourses];
+        index = numCourses - 1;
+        for (int i = 0; i < numCourses; i++) {
+            if (visited[i] == 0) {
+                dfs(i, visited, edges, answer);
+            }
+        }
+        if (valid) {
+            return answer;
+        }
+        return new int[0];
+    }
 
     boolean valid = true;
     int index = 0;
@@ -72,14 +76,20 @@ public class Problem0210CourseScheduleII {
         visited[u] = 1;
         List<Integer> neighbors = edges.get(u);
         int size = neighbors.size();
-        if (size == 0) {
-            answer[index--] = u;
-            visited[u] = 2;
-            return;
+        for (int i = 0; i < size; i++) {
+            if (!valid) {
+                return;
+            }
+            int v = neighbors.get(i);
+            if (visited[v] == 1) {
+                valid = false;
+                return;
+            }
+            if (visited[v] == 0) {
+                dfs(v, visited, edges, answer);
+            }
         }
-//        for (int i = 0; i < size; i++) {
-//            if () {
-//            }
-//        }
+        answer[index--] = u;
+        visited[u] = 2;
     }
 }

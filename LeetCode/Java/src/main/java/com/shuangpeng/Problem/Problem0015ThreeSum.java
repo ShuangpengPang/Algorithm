@@ -57,7 +57,7 @@ public class Problem0015ThreeSum {
         }
 
         int p = partition(array, start, end);
-        quickSort(array, start,  p- 1);
+        quickSort(array, start, p - 1);
         quickSort(array, p + 1, end);
     }
 

@@ -5,12 +5,12 @@ import java.util.LinkedList;
 
 public class Problem0227BasicCalculatorII {
 
-//    public static void main(String[] args) {
-//        Problem0227BasicCalculatorII a = new Problem0227BasicCalculatorII();
-//        a.calculate(" 3+5 / 2 ");
-//    }
+    public static void main(String[] args) {
+        Problem0227BasicCalculatorII a = new Problem0227BasicCalculatorII();
+        a.calculate("42");
+    }
 
-    public int calculate(String s) {
+    public int calculate0(String s) {
         if (s == null || s.length() == 0) {
             return 0;
         }
@@ -58,5 +58,43 @@ public class Problem0227BasicCalculatorII {
             }
         }
         return dataStack.pollLast();
+    }
+
+    public int calculate(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        Deque<Integer> stack = new LinkedList<>();
+        char[] chars = s.toCharArray();
+        int num = 0;
+        char sign = '+';
+        for (int i = 0; i < chars.length; i++) {
+            char ch = chars[i];
+            if (ch >= '0' && ch <= '9') {
+                num = num * 10 + (ch - '0');
+            }
+            if (ch == '+' || ch == '-'
+                    || ch == '*' || ch == '/'
+                    || i == chars.length - 1) {
+                if (sign == '+') {
+                    stack.offer(num);
+                } else if (sign == '-') {
+                    stack.offer(-num);
+                } else if (sign == '*') {
+                    int data = stack.pollLast();
+                    stack.offer(data * num);
+                } else if (sign == '/') {
+                    int data = stack.pollLast();
+                    stack.offer(data / num);
+                }
+                sign = ch;
+                num = 0;
+            }
+        }
+        int answer = 0;
+        while (!stack.isEmpty()) {
+            answer += stack.poll();
+        }
+        return answer;
     }
 }

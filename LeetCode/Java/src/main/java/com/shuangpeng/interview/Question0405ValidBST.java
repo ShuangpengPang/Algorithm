@@ -60,6 +60,8 @@ public class Question0405ValidBST {
             } else if (root.val > value) {
                 value = root.val;
                 root = root.right;
+            } else {
+                return false;
             }
         }
         return true;

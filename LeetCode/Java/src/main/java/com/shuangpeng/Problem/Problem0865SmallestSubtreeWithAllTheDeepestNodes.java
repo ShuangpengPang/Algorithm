@@ -115,9 +115,11 @@ public class Problem0865SmallestSubtreeWithAllTheDeepestNodes {
         if (leftInfo.depth == rightInfo.depth) {
             return new Result(node, leftInfo.depth + 1);
         } else if (leftInfo.depth > rightInfo.depth) {
-            return new Result(leftInfo.node, leftInfo.depth + 1);
+            leftInfo.depth += 1;
+            return leftInfo;
         } else {
-            return new Result(rightInfo.node, rightInfo.depth + 1);
+            rightInfo.depth += 1;
+            return rightInfo;
         }
     }
 
@@ -130,16 +132,6 @@ public class Problem0865SmallestSubtreeWithAllTheDeepestNodes {
             this.depth = depth;
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 //    // Return the result of the subtree at this node.
 //    public Result dfs(TreeNode node) {

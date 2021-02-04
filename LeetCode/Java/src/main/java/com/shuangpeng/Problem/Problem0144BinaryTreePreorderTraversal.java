@@ -41,7 +41,7 @@ public class Problem0144BinaryTreePreorderTraversal {
         return answer;
     }
 
-    public List<Integer> preorderTraversal(TreeNode root) {
+    public List<Integer> preorderTraversal3(TreeNode root) {
         List<Integer> answer = new ArrayList<>();
         if (root == null) {
             return answer;
@@ -65,6 +65,24 @@ public class Problem0144BinaryTreePreorderTraversal {
         return answer;
     }
 
+    public List<Integer> preorderTraversal4(TreeNode root) {
+        List<Integer> answer = new ArrayList<>();
+        if (root == null) {
+            return answer;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode node = root;
+        while (!stack.isEmpty() || node != null) {
+            while (node != null) {
+                answer.add(node.val);
+                stack.offerLast(node);
+                node = node.left;
+            }
+            node = stack.pollLast().right;
+        }
+        return answer;
+    }
+
     public List<Integer> preorderTraversal2(TreeNode root) {
         List<Integer> res = new ArrayList<Integer>();
         if (root == null) {
@@ -83,5 +101,30 @@ public class Problem0144BinaryTreePreorderTraversal {
             node = node.right;
         }
         return res;
+    }
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> answer = new ArrayList<>();
+        TreeNode current = root;
+        while (current != null) {
+            TreeNode node = current.left;
+            if (node != null) {
+                while (node.right != null && node.right != current) {
+                    node = node.right;
+                }
+                if (node.right == null) {
+                    node.right = current;
+                    answer.add(current.val);
+                    current = current.left;
+                } else {
+                    node.right = null;
+                    current = current.right;
+                }
+            } else {
+                answer.add(current.val);
+                current = current.right;
+            }
+        }
+        return answer;
     }
 }

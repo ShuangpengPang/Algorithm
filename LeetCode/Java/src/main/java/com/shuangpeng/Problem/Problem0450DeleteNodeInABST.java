@@ -80,12 +80,15 @@ public class Problem0450DeleteNodeInABST {
         return new TreeNode[]{parent, treeNode};
     }
 
-    public TreeNode deleteNode(TreeNode root, int key) {
+    public TreeNode deleteNode1(TreeNode root, int key) {
+        TreeNode parent = null;
         TreeNode node = root;
         while (node != null) {
             if (node.val < key) {
+                parent = node;
                 node = node.right;
             } else if (node.val > key) {
+                parent = node;
                 node = node.left;
             } else {
                 break;
@@ -97,38 +100,94 @@ public class Problem0450DeleteNodeInABST {
         if (node == root) {
             return deleteNodeRecurse(node);
         }
-        deleteNodeRecurse(node);
+        TreeNode treeNode = deleteNodeRecurse(node);
+        if (parent.left == node) {
+            parent.left = treeNode;
+        } else {
+            parent.right = treeNode;
+        }
         return root;
     }
 
     private TreeNode deleteNodeRecurse(TreeNode node) {
         if (node.left == null && node.right == null) {
-            node = null;
             return null;
-        } else if (node.right != null) {
-            TreeNode treeNode = successor(node);
-            node.val = treeNode.val;
-            return deleteNodeRecurse(treeNode);
-        } else {
-            TreeNode treeNode = predeccessor(node);
-            node.val = treeNode.val;
-            return deleteNodeRecurse(treeNode);
         }
+        TreeNode[] nodes;
+        if (node.right != null) {
+            nodes = successor(node);
+        } else {
+            nodes = predeccessor(node);
+        }
+        node.val = nodes[1].val;
+        if (nodes[0].left == nodes[1]) {
+            nodes[0].left = deleteNodeRecurse(nodes[1]);
+        } else {
+            nodes[0].right = deleteNodeRecurse(nodes[1]);
+        }
+        return node;
     }
 
-    private TreeNode successor(TreeNode node) {
+    private TreeNode[] successor(TreeNode node) {
+        TreeNode parent = node;
+        TreeNode treeNode = node.right;
+        while (treeNode.left != null) {
+            parent = treeNode;
+            treeNode = treeNode.left;
+        }
+        return new TreeNode[]{parent, treeNode};
+    }
+
+    private TreeNode[] predeccessor(TreeNode node) {
+        TreeNode parent = node;
+        TreeNode treeNode = node.left;
+        while (treeNode.right != null) {
+            parent = treeNode;
+            treeNode = treeNode.right;
+        }
+        return new TreeNode[]{parent, treeNode};
+    }
+
+    public TreeNode deleteNode(TreeNode root, int key) {
+        return recurse(root, key);
+    }
+
+    private TreeNode recurse(TreeNode node, int key) {
+        if (node == null) {
+            return null;
+        }
+        if (node.val > key) {
+            node.left = recurse(node.left, key);
+        } else if (node.val < key) {
+            node.right = recurse(node.right, key);
+        } else {
+            if (node.left == null && node.right == null) {
+                return null;
+            }
+            if (node.right != null) {
+                node.val = getSuccessorValue(node);
+                node.right = recurse(node.right, node.val);
+            } else {
+                node.val = getPredeccessorValue(node);
+                node.left = recurse(node.left, node.val);
+            }
+        }
+        return node;
+    }
+
+    private int getSuccessorValue(TreeNode node) {
         TreeNode treeNode = node.right;
         while (treeNode.left != null) {
             treeNode = treeNode.left;
         }
-        return treeNode;
+        return treeNode.val;
     }
 
-    private TreeNode predeccessor(TreeNode node) {
+    private int getPredeccessorValue(TreeNode node) {
         TreeNode treeNode = node.left;
         while (treeNode.right != null) {
             treeNode = treeNode.right;
         }
-        return treeNode;
+        return treeNode.val;
     }
 }

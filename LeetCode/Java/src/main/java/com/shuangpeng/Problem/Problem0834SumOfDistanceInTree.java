@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Problem0834SumOfDistanceInTree {
 
-    public int[] sumOfDistancesInTree(int N, int[][] edges) {
+    public int[] sumOfDistancesInTree0(int N, int[][] edges) {
         if (N <= 1) {
             return new int[]{0};
         }
@@ -52,6 +52,67 @@ public class Problem0834SumOfDistanceInTree {
                         distances.get(vDistance[0]).add(new int[]{distance[0], distance[1] + vDistance[1] + 1});
                     }
                 }
+            }
+        }
+    }
+
+    private int[] answer;
+    private int[] size;
+    private int[] dp;
+    private List<List<Integer>> graph;
+
+    public int[] sumOfDistancesInTree(int N, int[][] edges) {
+        if (N <= 1) {
+            return new int[]{0};
+        }
+        answer = new int[N];
+        size = new int[N];
+        dp = new int[N];
+        graph = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+        dfs(0, -1);
+        dfs1(0, -1);
+        return answer;
+    }
+
+    private void dfs(int u, int f) {
+        size[u] = 1;
+        dp[u] = 0;
+        for (int v : graph.get(u)) {
+            if (v != f) {
+                dfs(v, u);
+                dp[u] += dp[v] + size[v];
+                size[u] += size[v];
+            }
+        }
+    }
+
+    private void dfs1(int u, int f) {
+        answer[u] = dp[u];
+        for (int v : graph.get(u)) {
+            if (v != f) {
+                int du = dp[u], su = size[u];
+                int dv = dp[v], sv = size[v];
+
+                dp[u] -= dp[v] + size[v];
+                size[u] -= size[v];
+                dp[v] += dp[u] + size[u];
+                size[v] += size[u];
+
+                dfs1(v, u);
+
+                dp[u] = du;
+                size[u] = su;
+                dp[v] = dv;
+                size[v] = sv;
             }
         }
     }

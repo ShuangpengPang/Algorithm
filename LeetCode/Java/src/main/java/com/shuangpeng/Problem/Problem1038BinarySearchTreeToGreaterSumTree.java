@@ -4,7 +4,7 @@ import com.shuangpeng.common.TreeNode;
 
 public class Problem1038BinarySearchTreeToGreaterSumTree {
 
-    public TreeNode bstToGst(TreeNode root) {
+    public TreeNode bstToGst0(TreeNode root) {
         dfs(root, sumDfs(root, 0));
         return root;
     }
@@ -29,6 +29,72 @@ public class Problem1038BinarySearchTreeToGreaterSumTree {
         int rightSum = sumDfs(node.right, sum);
         return leftSum + rightSum + value;
     }
+
+    private int answer = 0;
+
+    public TreeNode bstToGst1(TreeNode root) {
+        antiInorder(root);
+        return root;
+    }
+
+    private void antiInorder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        antiInorder(node.right);
+        answer += node.val;
+        node.val = answer;
+        antiInorder(node.left);
+    }
+
+    public TreeNode bstToGst2(TreeNode root) {
+        reverseInorder(root, 0);
+        return root;
+    }
+
+    private int reverseInorder(TreeNode node, int sum) {
+        if (node == null) {
+            return 0;
+        }
+        int rightSum = reverseInorder(node.right, sum);
+        int value = node.val;
+        sum += (rightSum + value);
+        node.val = sum;
+        int leftSum = reverseInorder(node.left, sum);
+        return leftSum + rightSum + value;
+    }
+
+    public TreeNode bstToGst(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        int sum = 0;
+        TreeNode node = root;
+        while (node != null) {
+            if (node.right != null) {
+                TreeNode leftMost = node.right;
+                while (leftMost.left != null && leftMost.left != node) {
+                    leftMost = leftMost.left;
+                }
+                if (leftMost.left == null) {
+                    leftMost.left = node;
+                    node = node.right;
+                } else {
+                    sum += node.val;
+                    node.val = sum;
+                    leftMost.left = null;
+                    node = node.left;
+                }
+            } else {
+                sum += node.val;
+                node.val = sum;
+                node = node.left;
+            }
+        }
+        return root;
+    }
+
+
 
 //    public static void main(String[] args) {
 //        System.err.println(MergeString("abcd", "123"));

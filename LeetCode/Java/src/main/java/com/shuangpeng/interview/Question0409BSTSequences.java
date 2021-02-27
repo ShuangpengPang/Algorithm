@@ -3,11 +3,13 @@ package com.shuangpeng.interview;
 import com.shuangpeng.common.TreeNode;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Question0409BSTSequences {
 
-    public List<List<Integer>> BSTSequences(TreeNode root) {
+    public List<List<Integer>> BSTSequences0(TreeNode root) {
         return dfs(root);
     }
 
@@ -56,5 +58,41 @@ public class Question0409BSTSequences {
         list.add(right.get(pRight));
         backtrack(left, right, pLeft, pRight + 1, list, answer);
         list.remove(list.size() - 1);
+    }
+
+    public List<List<Integer>> BSTSequences(TreeNode root) {
+        List<List<Integer>> answer = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        if (root != null) {
+            queue.offer(root);
+        }
+        backtrack(queue, new ArrayList<>(), answer);
+        return answer;
+    }
+
+    private void backtrack(Queue<TreeNode> queue, List<Integer> list, List<List<Integer>> answer) {
+        if (queue.isEmpty()) {
+            answer.add(new ArrayList<>(list));
+            return;
+        }
+        for (int i = queue.size(); i > 0; i--) {
+            TreeNode node = queue.poll();
+            list.add(node.val);
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+            backtrack(queue, list, answer);
+            if (node.right != null) {
+                queue.remove(node.right);
+            }
+            if (node.left != null) {
+                queue.remove(node.left);
+            }
+            list.remove(list.size() - 1);
+            queue.offer(node);
+        }
     }
 }

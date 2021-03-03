@@ -42,6 +42,25 @@ public class Problem0338CountingBits {
         return result;
     }
 
+    public int[] countBits4(int num) {
+        if (num < 0) {
+            return new int[0];
+        }
+        int[] answer = new int[num + 1];
+        int j = 0;
+        int k = 0;
+        for (int i = 1; i <= num; i++) {
+            if (i == (1 << j)) {
+                answer[i] = 1;
+                j++;
+                k = 0;
+            } else {
+                answer[i] = 1 + answer[++k];
+            }
+        }
+        return answer;
+    }
+
     public int[] countBits2(int num) {
         int[] result = new int[num + 1];
         int i = 0;

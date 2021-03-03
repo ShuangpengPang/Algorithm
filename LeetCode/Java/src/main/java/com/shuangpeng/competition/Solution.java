@@ -1,18 +1,32 @@
 package com.shuangpeng.competition;
 
+import java.util.List;
+
 public class Solution {
 
     public static void main(String[] args) {
         Solution a = new Solution();
+        int[] b = a.a(8);
         int i = 1;
     }
 
-    public int longestPalindrome(String word1, String word2) {
-        if (word1.equals("cacb") && word2.equals("cbba")) {
-            return 5;
-        } else if (word1.equals("ab") && word2.equals("ab")) {
-            return 3;
+    public int[] a(int num) {
+        if (num < 0) {
+            return new int[0];
         }
-        return 10;
+        int[] answer = new int[num + 1];
+        int j = 0;
+        int k = 0;
+        for (int i = 1; i <= num; i++) {
+            if (i == (1 << j)) {
+                answer[i] = 1;
+                j++;
+                k = 0;
+            } else {
+                answer[i] = 1 + answer[++k];
+            }
+        }
+        return answer;
     }
+
 }

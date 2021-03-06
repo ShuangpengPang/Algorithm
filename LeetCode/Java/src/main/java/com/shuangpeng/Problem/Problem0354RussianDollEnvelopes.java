@@ -41,7 +41,7 @@ public class Problem0354RussianDollEnvelopes {
         return answer;
     }
 
-    public int maxEnvelopes(int[][] envelopes) {
+    public int maxEnvelopes1(int[][] envelopes) {
         if (envelopes == null || envelopes.length == 0) {
             return 0;
         }
@@ -71,5 +71,38 @@ public class Problem0354RussianDollEnvelopes {
             lists.get(left).add(h);
         }
         return lists.size();
+    }
+
+    public int maxEnvelopes(int[][] envelopes) {
+        if (envelopes == null || envelopes.length == 0) {
+            return 0;
+        }
+        Arrays.sort(envelopes, (a, b) -> {
+            if (a[0] != b[0]) {
+                return a[0] - b[0];
+            }
+            return b[1] - a[1];
+        });
+        List<Integer> answer = new ArrayList<>();
+        answer.add(envelopes[0][1]);
+        for (int i = 1; i < envelopes.length; i++) {
+            int num = envelopes[i][1];
+            if (num > answer.get(answer.size() - 1)) {
+                answer.add(num);
+            } else {
+                int left = 0, right = answer.size() - 1;
+                while (left <= right) {
+                    int mid = (left + right) >> 1;
+                    int data = answer.get(mid);
+                    if (num <= data) {
+                        right = mid - 1;
+                    } else if (num > data) {
+                        left = mid + 1;
+                    }
+                }
+                answer.set(left, num);
+            }
+        }
+        return answer.size();
     }
 }

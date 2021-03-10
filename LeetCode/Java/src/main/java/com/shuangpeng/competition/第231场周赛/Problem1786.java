@@ -138,5 +138,55 @@ public class Problem1786 {
             return 1;
         }
         List<List<int[]>> graph = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            int u = edge[0] - 1;
+            int v = edge[1] - 1;
+            int w = edge[2];
+            graph.get(u).add(new int[]{v, w});
+            graph.get(v).add(new int[]{u, w});
+        }
+        int[] distance = new int[n];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[n - 1] = 0;
+        PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        queue.offer(new int[]{n - 1, 0});
+        while (!queue.isEmpty()) {
+            int[] array = queue.poll();
+            int u = array[0];
+            if (array[1] > distance[u]) {
+                continue;
+            }
+            for (int[] edge : graph.get(u)) {
+                int v = edge[0];
+                int d = array[1] + edge[1];
+                if (d < distance[v]) {
+                    distance[v] = d;
+                    queue.offer(new int[]{v, d});
+                }
+            }
+        }
+        return findLimitPath(distance, 0, n - 1, new int[n], graph);
+    }
+
+    private int findLimitPath(int[] distance, int u, int n, int[] map, List<List<int[]>> graph) {
+        if (u == n) {
+            return 1;
+        }
+        if (map[u] > 0) {
+            return map[u];
+        }
+        int paths = 0;
+        for (int[] edge : graph.get(u)) {
+            int v = edge[0];
+            if (distance[v] < distance[u]) {
+                paths += findLimitPath(distance, v, n, map, graph);
+                paths %= 1000000007;
+            }
+        }
+        map[u] = paths;
+        return paths;
     }
 }

@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem;
 
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -60,7 +61,7 @@ public class Problem0227BasicCalculatorII {
         return dataStack.pollLast();
     }
 
-    public int calculate(String s) {
+    public int calculate1(String s) {
         if (s == null || s.length() == 0) {
             return 0;
         }
@@ -94,6 +95,51 @@ public class Problem0227BasicCalculatorII {
         int answer = 0;
         while (!stack.isEmpty()) {
             answer += stack.poll();
+        }
+        return answer;
+    }
+
+    public int calculate(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int n = s.length();
+        Deque<Integer> stack = new LinkedList<>();
+        char sign = '+';
+        int num = 0;
+        for (int i = 0; i <= n; i++) {
+            char c = '+';
+            if (i < n) {
+                c = s.charAt(i);
+                if (c == ' ') {
+                    continue;
+                }
+                if (Character.isDigit(c)) {
+                    while (i < n && Character.isDigit(s.charAt(i))) {
+                        num = num * 10 + s.charAt(i) - '0';
+                        i++;
+                    }
+                    i--;
+                    continue;
+                }
+            }
+            if (sign == '*') {
+                num = stack.pollLast() * num;
+                stack.offerLast(num);
+            } else if (sign == '/') {
+                num = stack.pollLast() / num;
+                stack.offerLast(num);
+            } else if (sign == '+') {
+                stack.offerLast(num);
+            } else if (sign == '-') {
+                stack.offerLast(-num);
+            }
+            num = 0;
+            sign = c;
+        }
+        int answer = 0;
+        while (!stack.isEmpty()) {
+            answer += stack.pollLast();
         }
         return answer;
     }

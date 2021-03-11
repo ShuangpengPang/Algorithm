@@ -34,7 +34,7 @@ public class Problem0132PalindromePartitioningII {
         return true;
     }
 
-    public int minCut(String s) {
+    public int minCut1(String s) {
         int n = s.length();
         boolean[][] g = new boolean[n][n];
         for (int i = 0; i < n; ++i) {
@@ -62,5 +62,35 @@ public class Problem0132PalindromePartitioningII {
         }
 
         return f[n - 1];
+    }
+
+    public int minCut(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int n = s.length();
+        boolean[][] p = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(p[i], true);
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                p[i][j] = s.charAt(i) == s.charAt(j) && p[i + 1][j - 1];
+            }
+        }
+        int[] dp = new int[n];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        for (int i = 0; i < n; i++) {
+            if (p[0][i]) {
+                dp[i] = 0;
+            } else {
+                for (int j = 1; j <= i; j++) {
+                    if (p[j][i]) {
+                        dp[i] = Math.min(dp[i], dp[j - 1] + 1);
+                    }
+                }
+            }
+        }
+        return dp[n - 1];
     }
 }

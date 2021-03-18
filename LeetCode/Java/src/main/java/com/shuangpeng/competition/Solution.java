@@ -6,7 +6,8 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution a = new Solution();
-        System.err.println(a.checkPowersOfThree(21));
+        int[][] classes = {{1,2},{3,5},{2,2}};
+        a.maxAverageRatio(classes, 2);
     }
 
     public int nearestValidPoint(int x, int y, int[][] points) {
@@ -123,6 +124,72 @@ public class Solution {
         }
         return left;
     }
+
+
+
+
+    public int maximumScore(int[] nums, int k) {
+        int n = nums.length;
+        int answer = nums[k];
+        int i = k, j = k, minLeft = nums[k], minRight = nums[k];
+        while (i > 0 || j < n - 1) {
+            answer = Math.max(answer, Math.min(minLeft, minRight) * (j - i + 1));
+            if (i == 0) {
+                j++;
+                minRight = Math.min(minRight, nums[j]);
+                continue;
+            }
+            if (j == n - 1) {
+                i--;
+                minLeft = Math.min(minLeft, nums[i]);
+                continue;
+            }
+            if (minLeft > minRight) {
+                i--;
+                minLeft = Math.min(minLeft, nums[i]);
+            } else if (minLeft < minRight) {
+                j++;
+                minRight = Math.min(minRight, nums[j]);
+            } else {
+                while (i >= 0) {
+                    if (i > 0 && nums[i - 1] >= minLeft) {
+                        i--;
+                    } else {
+                        break;
+                    }
+                }
+                while (j < n) {
+                    if (j < n - 1 && nums[j + 1] >= minRight) {
+                        j++;
+                    } else {
+                        break;
+                    }
+                }
+                answer = Math.max(answer, minLeft * (j - i + 1));
+                if (i == 0 && j == n - 1) {
+                    break;
+                }
+                if (i == 0) {
+                    j++;
+                    minRight = nums[j];
+                } else if (j == n - 1) {
+                    i--;
+                    minLeft = nums[i];
+                } else if (nums[i - 1] >= nums[j + 1]) {
+                    i--;
+                    minLeft = nums[i];
+                } else {
+                    j++;
+                    minRight = nums[j];
+                }
+            }
+        }
+        return answer;
+    }
+
+
+
+
 
 
 }

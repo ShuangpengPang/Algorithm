@@ -7,7 +7,7 @@ public class Solution {
     public static void main(String[] args) {
         Solution a = new Solution();
         int[][] classes = {{1,2},{3,5},{2,2}};
-        a.maxAverageRatio(classes, 2);
+//        a.maxAverageRatio(classes, 2);
     }
 
     public int nearestValidPoint(int x, int y, int[][] points) {

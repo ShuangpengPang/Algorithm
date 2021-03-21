@@ -191,5 +191,195 @@ public class Solution {
 
 
 
+    public int secondHighest(String s) {
+        if (s == null || s.length() <= 1) {
+            return -1;
+        }
+        int max = Integer.MIN_VALUE, secondMax = Integer.MIN_VALUE;
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            int d = s.charAt(i) - '0';
+            if (d >= 0 && d <= 9) {
+                if (d > max) {
+                    secondMax = max;
+                    max = d;
+                } else if (d < max && d > secondMax) {
+                    secondMax = d;
+                }
+            }
+        }
+        return secondMax == Integer.MIN_VALUE ? -1 : secondMax;
+    }
+
+
+
+
+
+
+    class AuthenticationManager {
+
+        int timeToLive = 0;
+        Map<String, Integer> map;
+
+        public AuthenticationManager(int timeToLive) {
+            this.timeToLive = timeToLive;
+            map = new HashMap<>();
+        }
+
+        public void generate(String tokenId, int currentTime) {
+            map.put(tokenId, currentTime);
+        }
+
+        public void renew(String tokenId, int currentTime) {
+            int time = map.getOrDefault(tokenId, -2);
+            if (time == -2) {
+                return;
+            }
+            if (time + timeToLive <= currentTime) {
+                map.remove(tokenId);
+                return;
+            }
+            map.put(tokenId, currentTime);
+        }
+
+        public int countUnexpiredTokens(int currentTime) {
+            Set<Map.Entry<String, Integer>> entrySet = map.entrySet();
+            int count = 0;
+            for (Map.Entry<String, Integer> entry : entrySet) {
+                int value = entry.getValue();
+                if (value + timeToLive <= currentTime) {
+                    entry.setValue(-1);
+                } else {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }
+
+
+
+
+
+
+
+    public int getMaximumConsecutive(int[] coins) {
+        if (coins == null || coins.length == 0) {
+            return 0;
+        }
+        Arrays.sort(coins);
+        int i = 1;
+        int j = 0;
+        int sum = 0;
+        while (j < coins.length) {
+            if (i > sum) {
+                int num = coins[j];
+                if (num - sum > i) {
+                    break;
+                }
+                j++;
+                sum += num;
+            }
+            i++;
+        }
+        return i;
+    }
+
+
+
+
+
+
+
+
+
+
+    public int maxAscendingSum(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int right = 1, answer = nums[0], sum = nums[0];
+        while (right < nums.length) {
+            if (nums[right] > nums[right - 1]) {
+                sum += nums[right];
+            } else {
+                sum = nums[right];
+            }
+            answer = Math.max(answer, sum);
+            right++;
+        }
+        return answer;
+    }
+
+
+    public int getNumberOfBacklogOrders(int[][] orders) {
+        if (orders == null || orders.length == 0) {
+            return 0;
+        }
+        // sell 最小
+        PriorityQueue<int[]> sellQueue = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        // bug 最大
+        PriorityQueue<int[]> buyQueue = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+        for (int[] order : orders) {
+            if (order[2] == 0) {
+                while (!sellQueue.isEmpty() && sellQueue.peek()[0] <= order[0] && order[1] > 0) {
+                    int count1 = order[1];
+                    int count2 = sellQueue.peek()[1];
+                    order[1] -= count2;
+                    if (count1 >= count2) {
+                        sellQueue.poll();
+                    } else {
+                        sellQueue.peek()[1] = count2 - count1;
+                    }
+                }
+                if (order[1] > 0) {
+                    buyQueue.offer(order);
+                }
+            } else {
+                while (!buyQueue.isEmpty() && buyQueue.peek()[0] >= order[0] && order[1] > 0) {
+                    int count1 = order[1];
+                    int count2 = buyQueue.peek()[1];
+                    order[1] -= count2;
+                    if (count1 >= count2) {
+                        buyQueue.poll();
+                    } else {
+                        buyQueue.peek()[1] = count2 - count1;
+                    }
+                }
+                if (order[1] > 0) {
+                    sellQueue.offer(order);
+                }
+            }
+        }
+        int answer = 0;
+        int mod = 1000000007;
+        while (!sellQueue.isEmpty()) {
+            answer += sellQueue.poll()[1];
+            answer %= mod;
+        }
+        while (!buyQueue.isEmpty()) {
+            answer += buyQueue.poll()[1];
+            answer %= mod;
+        }
+        return answer;
+    }
+
+
+
+
+    public int maxValue(int n, int index, int maxSum) {
+        if (n <= 0) {
+            return 0;
+        }
+        int left = index;
+        int right = n - 1 - index;
+        int min = Math.min(left, right);
+//        int count = n - 2 * min - 1;
+        // (x - min)
+        // (x - min + x - 1) * min + x + (x - min - 1 + x - min - (n - 2 * min - 1)) * (
+//        return (2 * maxSum + count * count + count + 2 * min * count + 2 * min + 2 * min * min)
+//                / 2 - 2 * min - count;
+        return Math.floor((2 * maxSum + left + left * left + right + right * right) / (2 * left + 2 * right + 2));
+    }
 
 }

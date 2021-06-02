@@ -38,7 +38,7 @@ public class Problem0059SpiralMatrixII {
         return answer;
     }
 
-    public int[][] generateMatrix(int n) {
+    public int[][] generateMatrix1(int n) {
         if (n <= 0) {
             return null;
         }
@@ -67,6 +67,74 @@ public class Problem0059SpiralMatrixII {
                 answer[row][col] = number++;
             }
             minCol++;
+        }
+        return answer;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public int[][] generateMatrix(int n) {
+        if (n <= 0) {
+            return new int[0][0];
+        }
+        int r = 0, c = 0, minRow = 0, maxRow = n - 1, minCol = 0, maxCol = n - 1;
+        int i = 1;
+        int[][] answer = new int[n][n];
+        while (minRow <= maxRow && minCol <= maxCol) {
+            for (r = minRow, c = minCol; c <= maxCol; c++) {
+                answer[r][c] = i++;
+            }
+            minRow++;
+            for (r = minRow, c = maxCol; r <= maxRow; r++) {
+                answer[r][c] = i++;
+            }
+            maxCol--;
+            if (minRow <= maxRow && minCol <= maxCol) {
+                for (r = maxRow, c = maxCol; c >= minCol; c--) {
+                    answer[r][c] = i++;
+                }
+                maxRow--;
+                for (r = maxRow, c = minCol; r >= minRow; r--) {
+                    answer[r][c] = i++;
+                }
+                minCol++;
+            }
         }
         return answer;
     }

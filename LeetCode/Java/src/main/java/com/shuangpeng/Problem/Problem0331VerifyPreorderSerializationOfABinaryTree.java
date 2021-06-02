@@ -1,8 +1,5 @@
 package com.shuangpeng.Problem;
 
-import java.util.Deque;
-import java.util.LinkedList;
-
 public class Problem0331VerifyPreorderSerializationOfABinaryTree {
 
     public boolean isValidSerialization0(String preorder) {

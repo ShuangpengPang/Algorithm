@@ -119,7 +119,7 @@ public class Problem0054SpiralMatrix {
         return answer;
     }
 
-    public List<Integer> spiralOrder(int[][] matrix) {
+    public List<Integer> spiralOrder3(int[][] matrix) {
         if (matrix == null || matrix.length == 0
                 || matrix[0] == null || matrix[0].length == 0) {
             return new ArrayList<>();
@@ -152,6 +152,52 @@ public class Problem0054SpiralMatrix {
                 }
                 minCol++;
             }
+        }
+        return answer;
+    }
+
+    public List<Integer> spiralOrder(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return new ArrayList<>();
+        }
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int minRow = 0, maxRow = m - 1, minCol = 0, maxCol = n - 1;
+        List<Integer> answer = new ArrayList<>(m * n);
+        while (minRow <= maxRow && minCol <= maxCol) {
+            int r = minRow;
+            int c = minCol;
+            for (; c <= maxCol; c++) {
+                answer.add(matrix[r][c]);
+            }
+            minRow++;
+            c = maxCol;
+            r = minRow;
+            if (minRow > maxRow) {
+                break;
+            }
+            for (; r <= maxRow; r++) {
+                answer.add(matrix[r][c]);
+            }
+            maxCol--;
+            c = maxCol;
+            r = maxRow;
+            if (minCol > maxCol) {
+                break;
+            }
+            for (; c >= minCol; c--) {
+                answer.add(matrix[r][c]);
+            }
+            maxRow--;
+            c = minCol;
+            r = maxRow;
+            if (minRow > maxRow) {
+                break;
+            }
+            for (; r >= minRow; r--) {
+                answer.add(matrix[r][c]);
+            }
+            minCol++;
         }
         return answer;
     }

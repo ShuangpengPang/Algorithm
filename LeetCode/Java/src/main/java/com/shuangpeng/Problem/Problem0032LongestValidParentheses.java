@@ -61,7 +61,7 @@ public class Problem0032LongestValidParentheses {
         return maxans;
     }
 
-    public int longestValidParentheses(String s) {
+    public int longestValidParentheses3(String s) {
         int maxans = 0;
         Deque<Integer> stack = new LinkedList<>();
         stack.push(-1);
@@ -78,5 +78,43 @@ public class Problem0032LongestValidParentheses {
             }
         }
         return maxans;
+    }
+
+    public int longestValidParentheses(String s) {
+        if (s == null || s.isEmpty()) {
+            return 0;
+        }
+        int left = 0, right = 0;
+        int max = 0;
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (right > left) {
+                left = 0;
+                right = 0;
+            } else if (left == right) {
+                max = Math.max(max, 2 * left);
+            }
+        }
+        left = 0;
+        right = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left > right) {
+                left = 0;
+                right = 0;
+            } else if (left == right) {
+                max = Math.max(max, 2 * left);
+            }
+        }
+        return max;
     }
 }

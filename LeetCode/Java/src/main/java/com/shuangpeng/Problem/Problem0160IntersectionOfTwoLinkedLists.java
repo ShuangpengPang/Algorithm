@@ -2,6 +2,9 @@ package com.shuangpeng.Problem;
 
 import com.shuangpeng.common.ListNode;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Problem0160IntersectionOfTwoLinkedLists {
 
     public ListNode getIntersectionNode0(ListNode headA, ListNode headB) {
@@ -37,7 +40,7 @@ public class Problem0160IntersectionOfTwoLinkedLists {
         return longList;
     }
 
-    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    public ListNode getIntersectionNode1(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) {
             return null;
         }
@@ -52,6 +55,48 @@ public class Problem0160IntersectionOfTwoLinkedLists {
                 pA = pA.next;
                 pB = pB.next;
             }
+        }
+        return pA;
+    }
+
+    public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        Set<ListNode> set = new HashSet<>();
+        ListNode node = headA;
+        while (node != null) {
+            set.add(node);
+            node = node.next;
+        }
+        node = headB;
+        while (node != null) {
+            if (set.contains(node)) {
+                return node;
+            }
+            node = node.next;
+        }
+        return null;
+    }
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        ListNode pA = headA;
+        ListNode pB = headB;
+        while (pA != pB || pA != null || pB != null) {
+            if (pA == null) {
+                pA = headB;
+            }
+            if (pB == null) {
+                pB = headA;
+            }
+            if (pA == pB) {
+                return pA;
+            }
+            pA = pA.next;
+            pB = pB.next;
         }
         return pA;
     }

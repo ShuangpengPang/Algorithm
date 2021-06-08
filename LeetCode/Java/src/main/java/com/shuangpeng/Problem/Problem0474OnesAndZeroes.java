@@ -18,7 +18,7 @@ public class Problem0474OnesAndZeroes {
         }
     }
 
-    public int findMaxForm(String[] strs, int m, int n) {
+    public int findMaxForm0(String[] strs, int m, int n) {
         if (strs == null || strs.length == 0) {
             return 0;
         }
@@ -56,4 +56,37 @@ public class Problem0474OnesAndZeroes {
         }
         return new int[]{m, n};
     }
+
+    public int findMaxForm(String[] strs, int m, int n) {
+        int length = strs.length;
+        int[][] array = new int[length][2];
+        for (int i = 0; i < length; i++) {
+            String str = strs[i];
+            int len = str.length();
+            for (int j = 0; j < len; j++) {
+                if (str.charAt(j) == '0') {
+                    array[i][0]++;
+                } else {
+                    array[i][1]++;
+                }
+            }
+        }
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i < array.length; i++) {
+            for (int j = m; j >= 0; j--) {
+                for (int k = n; k >= 0; k--) {
+                    if (j >= array[i][0] && k >= array[i][1]) {
+                        dp[j][k] = Math.max(dp[j][k], dp[j - array[i][0]][k - array[i][1]] + 1);
+                    }
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+//    public static void main(String[] args) {
+//        Problem0474OnesAndZeroes a = new Problem0474OnesAndZeroes();
+//        String[] strs = {"11111","100","1101","1101","11000"};
+//        a.findMaxForm(strs, 5, 7);
+//    }
 }

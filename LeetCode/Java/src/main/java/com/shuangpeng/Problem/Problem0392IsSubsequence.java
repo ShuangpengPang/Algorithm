@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Problem0392IsSubsequence {
@@ -71,7 +72,7 @@ public class Problem0392IsSubsequence {
         return left < size ? list.get(left) : -1;
     }
 
-    public boolean isSubsequence(String s, String t) {
+    public boolean isSubsequence2(String s, String t) {
         int n1 = s.length(), n2 = t.length();
         if (n1 == 0) {
             return true;
@@ -87,5 +88,63 @@ public class Problem0392IsSubsequence {
             j++;
         }
         return i == n1;
+    }
+
+    public boolean isSubsequence3(String s, String t) {
+        int n1 = s.length(), n2 = t.length();
+        if (n1 == 0) {
+            return true;
+        }
+        if (n1 > n2) {
+            return false;
+        }
+        int count = 26;
+        int[][] dp = new int[count][n2 + 1];
+        for (int i = 0; i < count; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        for (int i = 0; i < n2; i++) {
+            int c = t.charAt(i) - 'a';
+            for (int j = i; j >= 0; j--) {
+                if (dp[c][j] >= 0) {
+                    break;
+                }
+                dp[c][j] = i;
+            }
+        }
+        int j = 0;
+        for (int i = 0; i < n1; i++) {
+            j = dp[s.charAt(i) - 'a'][j] + 1;
+            if (j <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isSubsequence(String s, String t) {
+        int n = s.length(), m = t.length();
+
+        int[][] f = new int[m + 1][26];
+        for (int i = 0; i < 26; i++) {
+            f[m][i] = m;
+        }
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = 0; j < 26; j++) {
+                if (t.charAt(i) == j + 'a')
+                    f[i][j] = i;
+                else
+                    f[i][j] = f[i + 1][j];
+            }
+        }
+        int add = 0;
+        for (int i = 0; i < n; i++) {
+            if (f[add][s.charAt(i) - 'a'] == m) {
+                return false;
+            }
+            add = f[add][s.charAt(i) - 'a'] + 1;
+        }
+        return true;
     }
 }

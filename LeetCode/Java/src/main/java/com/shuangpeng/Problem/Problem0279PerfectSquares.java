@@ -126,7 +126,7 @@ public class Problem0279PerfectSquares {
         return n;
     }
 
-    public int numSquares(int n) {
+    public int numSquares4(int n) {
         if (n == 0 || n == 1) {
             return n;
         }
@@ -151,5 +151,20 @@ public class Problem0279PerfectSquares {
             }
         }
         return 3;
+    }
+
+    public int numSquares(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int min = Integer.MAX_VALUE;
+            for (int j = 1; j * j <= i; j++) {
+                min = Math.min(min, dp[i - j * j]);
+            }
+            dp[i] = min + 1;
+        }
+        return dp[n];
     }
 }

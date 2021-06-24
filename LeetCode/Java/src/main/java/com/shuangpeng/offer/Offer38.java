@@ -73,7 +73,7 @@ public class Offer38 {
         }
     }
 
-    public String[] permutation(String s) {
+    public String[] permutation2(String s) {
         char[] chars = s.toCharArray();
         Arrays.sort(chars);
         int n = chars.length;
@@ -103,5 +103,138 @@ public class Offer38 {
             builder.deleteCharAt(builder.length() - 1);
             visited[i] = false;
         }
+    }
+
+    public String[] permutation3(String s) {
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+        List<String> list = new ArrayList<>();
+        list.add(new String(chars));
+        while (getNext(chars) != null) {
+            list.add(new String(chars));
+        }
+        int n = list.size();
+        String[] answer = new String[n];
+        for (int i = 0; i < n; i++) {
+            answer[i] = list.get(i);
+        }
+        return answer;
+    }
+
+    private char[] getNext(char[] chars) {
+        int n = chars.length;
+        int i = n - 2;
+        while (i >= 0 && chars[i] >= chars[i + 1]) {
+            i--;
+        }
+        if (i < 0) {
+            return null;
+        }
+        int j = n - 1;
+        while (j >= i + 1 && chars[i] >= chars[j]) {
+            j--;
+        }
+        char t = chars[i];
+        chars[i] = chars[j];
+        chars[j] = t;
+        int left = i + 1, right = n - 1;
+        while (left < right) {
+            char c = chars[left];
+            chars[left] = chars[right];
+            chars[right] = c;
+            left++;
+            right--;
+        }
+        return chars;
+    }
+
+    public String[] permutation4(String s) {
+        List<String> ret = new ArrayList<String>();
+        char[] arr = s.toCharArray();
+        Arrays.sort(arr);
+        do {
+            ret.add(new String(arr));
+        } while (nextPermutation(arr));
+        int size = ret.size();
+        String[] retArr = new String[size];
+        for (int i = 0; i < size; i++) {
+            retArr[i] = ret.get(i);
+        }
+        return retArr;
+    }
+
+    public boolean nextPermutation(char[] arr) {
+        int i = arr.length - 2;
+        while (i >= 0 && arr[i] >= arr[i + 1]) {
+            i--;
+        }
+        if (i < 0) {
+            return false;
+        }
+        int j = arr.length - 1;
+        while (j >= 0 && arr[i] >= arr[j]) {
+            j--;
+        }
+        swap(arr, i, j);
+        reverse(arr, i + 1);
+        return true;
+    }
+
+    public void swap(char[] arr, int i, int j) {
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public void reverse(char[] arr, int start) {
+        int left = start, right = arr.length - 1;
+        while (left < right) {
+            swap(arr, left, right);
+            left++;
+            right--;
+        }
+    }
+
+    public String[] permutation(String s) {
+        int n = s.length();
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+        List<String> list = new ArrayList<>();
+        do {
+            list.add(new String(chars));
+        } while (checkNextPermutation(chars));
+        int size = list.size();
+        String[] answer = new String[size];
+        for (int i = 0; i < size; i++) {
+            answer[i] = list.get(i);
+        }
+        return answer;
+    }
+
+    private boolean checkNextPermutation(char[] chars) {
+        int n = chars.length;
+        int i = n - 2;
+        while (i >= 0 && chars[i] >= chars[i + 1]) {
+            i--;
+        }
+        if (i < 0) {
+            return false;
+        }
+        int j = n - 1;
+        while (j >= i + 1 && chars[i] >= chars[j]) {
+            j--;
+        }
+        char t = chars[i];
+        chars[i] = chars[j];
+        chars[j] = t;
+        int left = i + 1, right = n - 1;
+        while (left < right) {
+            char c = chars[left];
+            chars[left] = chars[right];
+            chars[right] = c;
+            left++;
+            right--;
+        }
+        return true;
     }
 }

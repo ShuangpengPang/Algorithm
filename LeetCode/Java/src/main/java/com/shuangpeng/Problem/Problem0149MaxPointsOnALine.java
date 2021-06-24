@@ -20,7 +20,7 @@ public class Problem0149MaxPointsOnALine {
 //        a.maxPoints(points);
 //    }
 
-    public int maxPoints(int[][] points) {
+    public int maxPoints1(int[][] points) {
         if (points == null) {
             return 0;
         }
@@ -74,7 +74,6 @@ public class Problem0149MaxPointsOnALine {
         }
         return max;
     }
-
 
 
     int[][] points;
@@ -154,4 +153,121 @@ public class Problem0149MaxPointsOnALine {
             max_count = Math.max(max_points_on_a_line_containing_point_i(i), max_count);
         return max_count;
     }
+
+
+    public int maxPoints12(int[][] points) {
+        int n = points.length;
+        if (n <= 2) {
+            return n;
+        }
+        int answer = 0;
+        for (int i = 0; i < n; i++) {
+            int c = 1;
+            Map<Double, Integer> map = new HashMap<>();
+            for (int j = i + 1; j < n; j++) {
+                if (points[i][0] == points[j][0]) {
+                    c++;
+                    answer = Math.max(answer, c);
+                } else {
+                    double slope = 0;
+                    if (points[i][1] != points[j][1]) {
+                        slope = (double) (points[i][1] - points[j][1]) / (double) (points[i][0] - points[j][0]);
+                    }
+                    int count = map.getOrDefault(slope, 1) + 1;
+                    map.put(slope, count);
+                    answer = Math.max(answer, count);
+                }
+            }
+        }
+        return answer;
+    }
+
+    public int maxPoints3(int[][] points) {
+        int n = points.length;
+        if (n <= 2) {
+            return n;
+        }
+        int ret = 0;
+        for (int i = 0; i < n; i++) {
+            if (ret >= n - i || ret > n / 2) {
+                break;
+            }
+            Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+            for (int j = i + 1; j < n; j++) {
+                int x = points[i][0] - points[j][0];
+                int y = points[i][1] - points[j][1];
+                if (x == 0) {
+                    y = 1;
+                } else if (y == 0) {
+                    x = 1;
+                } else {
+                    if (y < 0) {
+                        x = -x;
+                        y = -y;
+                    }
+                    int gcdXY = gcd(Math.abs(x), Math.abs(y));
+                    x /= gcdXY;
+                    y /= gcdXY;
+                }
+                int key = y + x * 20001;
+                map.put(key, map.getOrDefault(key, 0) + 1);
+            }
+            int maxn = 0;
+            for (Map.Entry<Integer, Integer> entry: map.entrySet()) {
+                int num = entry.getValue();
+                maxn = Math.max(maxn, num + 1);
+            }
+            ret = Math.max(ret, maxn);
+        }
+        return ret;
+    }
+
+    public int gcd(int a, int b) {
+        return b != 0 ? gcd(b, a % b) : a;
+    }
+
+    public int maxPoints(int[][] points) {
+        int n = points.length;
+        if (n <= 2) {
+            return n;
+        }
+        int answer = 0;
+        for (int i = 0; i < n; i++) {
+            if (answer > n / 2 || answer >= n - i) {
+                break;
+            }
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int j = i + 1; j < n; j++) {
+                int x = points[i][0] - points[j][0];
+                int y = points[i][1] - points[j][1];
+                x = y == 0 ? 1 : x;
+                y = x == 0 ? 1 : y;
+                if (y < 0) {
+                    y = -y;
+                    x = -x;
+                }
+                int gcdXY = getGcd(Math.abs(x), Math.abs(y));
+                x /= gcdXY;
+                y /= gcdXY;
+                int key = x * 20001 + y;
+                int value = map.getOrDefault(key, 1) + 1;
+                map.put(key, value);
+                answer = Math.max(answer, value);
+            }
+        }
+        return answer;
+    }
+
+    private int getGcd(int x, int y) {
+        return y == 0 ? x : getGcd(y, x % y);
+    }
+
+//    public static void main(String[] args) {
+//        Problem0149MaxPointsOnALine a = new Problem0149MaxPointsOnALine();
+//        a.maxPoints(new int[][]{{2, 3}, {3, 3}, {-5, 3}});
+//    }
+
+    // (y2 - y1) / (x2 - x1) = (y3 - y1) / (x3 - x1)
+    // (y2 - y1) * (x3 - x1) = (y3 - y1) * (x2 - x1)
+    //
 }

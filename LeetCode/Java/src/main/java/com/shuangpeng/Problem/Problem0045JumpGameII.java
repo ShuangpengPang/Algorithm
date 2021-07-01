@@ -35,7 +35,7 @@ public class Problem0045JumpGameII {
         return dp[n - 1];
     }
 
-    public int jump(int[] nums) {
+    public int jump2(int[] nums) {
         int n = nums.length;
         int step = 0;
         int i = 0;
@@ -49,6 +49,35 @@ public class Problem0045JumpGameII {
             if ((j - i == nums[i]) || (j == n - 1)) {
                 step++;
                 i = s;
+            }
+        }
+        return step;
+    }
+
+    public int jump3(int[] nums) {
+        int length = nums.length;
+        int end = 0;
+        int maxPosition = 0;
+        int steps = 0;
+        for (int i = 0; i < length - 1; i++) {
+            maxPosition = Math.max(maxPosition, i + nums[i]);
+            if (i == end) {
+                end = maxPosition;
+                steps++;
+            }
+        }
+        return steps;
+    }
+
+    public int jump(int[] nums) {
+        int maxPosition = 0;
+        int end = 0;
+        int step = 0;
+        for (int i = 0; i < nums.length - 1; i++) {
+            maxPosition = Math.max(maxPosition, i + nums[i]);
+            if (i == end) {
+                step++;
+                end = maxPosition;
             }
         }
         return step;

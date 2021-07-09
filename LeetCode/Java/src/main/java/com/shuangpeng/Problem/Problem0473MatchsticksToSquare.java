@@ -2,10 +2,7 @@ package com.shuangpeng.Problem;
 
 import javafx.util.Pair;
 
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Problem0473MatchsticksToSquare {
 
@@ -179,27 +176,29 @@ public class Problem0473MatchsticksToSquare {
         if ((sum & 3) != 0) {
             return false;
         }
-        int sideSum = sum >> 2;
-        return dfs(nums, (1 << n) - 1, sideSum, sideSum, 0);
+        return dfs(nums, (1 << n) - 1, 0, sum >> 2, new HashMap<>());
     }
 
-    private boolean dfs(int[] nums, int mask, int sum, int sideSum) {
+    private boolean dfs(int[] nums, int mask, int sum, int sideSum, Map<Pair<Integer, Integer>, Boolean> memo) {
         int sideDone = sum / sideSum;
         if (sideDone == 3) {
             return true;
         }
-        
-        if (remain == 0) {
-            return dfs(nums, mask, sideSum, sideSum, sideDone + 1);
-        }
+        int remain = sideSum - sum % sideSum;
         int n = nums.length;
+        Pair<Integer, Integer> pair = new Pair<>(mask, sum);
+        if (memo.containsKey(pair)) {
+            return memo.get(pair);
+        }
         for (int i = 0; i < n; i++) {
             if ((mask & (1 << i)) > 0 && nums[n - i - 1] <= remain) {
-                if (dfs(nums, mask ^ (1 << i), remain - nums[n - i - 1], sideSum, sideDone)) {
+                if (dfs(nums, mask ^ (1 << i), sum + nums[n - i - 1], sideSum, memo)) {
+                    memo.put(pair, true);
                     return true;
                 }
             }
         }
+        memo.put(pair, false);
         return false;
     }
 

@@ -108,7 +108,7 @@ public class Problem0218TheSkylineProblem {
     }
 
 
-    public List<List<Integer>> getSkyline(int[][] buildings) {
+    public List<List<Integer>> getSkyline1(int[][] buildings) {
         if (buildings == null || buildings.length == 0) {
             return new ArrayList<>();
         }
@@ -146,7 +146,7 @@ public class Problem0218TheSkylineProblem {
         return answer;
     }
 
-    public List<List<Integer>> getSkyline1(int[][] buildings) {
+    public List<List<Integer>> getSkyline2(int[][] buildings) {
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
         for (int[] building : buildings) {
             pq.offer(new int[]{building[0], -building[2]});
@@ -296,5 +296,169 @@ public class Problem0218TheSkylineProblem {
                 }
             }
         }
+    }
+
+    public List<List<Integer>> getSkyline3(int[][] buildings) {
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> {
+            if (a[0] != b[0]) {
+                return a[0] - b[0];
+            }
+            if (a[2] != b[2]) {
+                return b[2] - a[2];
+            }
+            return b[1] - a[1];
+        });
+        int n = buildings.length;
+        for (int i = 0; i < n; i++) {
+            queue.offer(buildings[i]);
+        }
+        List<List<Integer>> answer = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            if (size == 1) {
+                int[] building = queue.poll();
+                answer.add(new ArrayList<Integer>() {{
+                    add(building[0]);
+                    add(building[2]);
+                }});
+                answer.add(new ArrayList<Integer>() {{
+                    add(building[1]);
+                    add(0);
+                }});
+                break;
+            }
+            int[] building1 = queue.poll();
+            int[] building2 = queue.poll();
+            int left1 = building1[0];
+            int right1 = building1[1];
+            int height1 = building1[2];
+            int left2 = building2[0];
+            int right2 = building2[1];
+            int height2 = building2[2];
+            if (height1 >= height2 && right1 >= right2) {
+                queue.offer(building1);
+            } else if (left1 == left2 && height2 >= height1 && right2 >= right1) {
+                queue.offer(building2);
+            } else if (left1 == left2 && height2 > height1 && right2 < right1) {
+                queue.offer(building2);
+                queue.offer(new int[]{right2, right1, height1});
+            } else if (left1 < left2 && right2 < right1 && height1 < height2) {
+                queue.offer(new int[]{left1, left2, height1});
+                queue.offer(building2);
+                queue.offer(new int[]{right2, right1, height1});
+            } else if (left2 < right1 && right1 <= right2 && height1 < height2) {
+                queue.offer(new int[]{left1, left2, height1});
+                queue.offer(building2);
+            } else if (left2 <= right1 && height1 == height2) {
+                queue.offer(new int[]{left1, right2, height1});
+            } else if (left2 < right1) {
+                queue.offer(building1);
+                queue.offer(new int[]{right1, right2, height2});
+            } else {
+                answer.add(new ArrayList<Integer>() {{
+                    add(left1);
+                    add(height1);
+                }});
+                if (left2 > right1) {
+                    answer.add(new ArrayList<Integer>() {{
+                        add(right1);
+                        add(0);
+                    }});
+                }
+                queue.offer(building2);
+            }
+        }
+        return answer;
+    }
+
+    public List<List<Integer>> getSkyline4(int[][] buildings) {
+        int n = buildings.length;
+        int[] array = new int[2 * n];
+        for (int i = 0; i < n; i++) {
+            array[2 * i] = buildings[i][0];
+            array[2 * i + 1] = buildings[i][1];
+        }
+        Arrays.sort(array);
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> b[1] - a[1]);
+        queue.offer(new int[]{buildings[0][1], buildings[0][2]});
+        List<List<Integer>> answer = new ArrayList<>();
+        int previousHeight = -1;
+        int previousLeft = -1;
+        int maxRight = buildings[0][1];
+        int j = 0;
+        for (int i = 0; i < array.length; i++) {
+            int left = array[i];
+            if (left == previousLeft) {
+                continue;
+            }
+            previousLeft = left;
+            while (!queue.isEmpty() && queue.peek()[0] <= left) {
+                maxRight = Math.max(maxRight, queue.poll()[0]);
+            }
+            if (queue.isEmpty() && maxRight < left) {
+                int finalMaxRight = maxRight;
+                answer.add(new ArrayList<Integer>() {{
+                    add(finalMaxRight);
+                    add(0);
+                }});
+                previousHeight = 0;
+            }
+            while (j < n) {
+                if (buildings[j][0] == left) {
+                    queue.offer(new int[]{buildings[j][1], buildings[j][2]});
+                } else {
+                    break;
+                }
+                j++;
+            }
+            if (!queue.isEmpty()) {
+                int height = queue.peek()[1];
+                if (height != previousHeight) {
+                    answer.add(new ArrayList<Integer>() {{
+                        add(left);
+                        add(height);
+                    }});
+                    previousHeight = height;
+                }
+            }
+        }
+        while (!queue.isEmpty()) {
+            maxRight = Math.max(maxRight, queue.poll()[0]);
+        }
+        int finalMaxRight = maxRight;
+        answer.add(new ArrayList<Integer>() {{
+            add(finalMaxRight);
+            add(0);
+        }});
+        return answer;
+    }
+
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        int n = buildings.length;
+        int[] boundaries = new int[2 * n];
+        for (int i = 0; i < n; i++) {
+            boundaries[2 * i] = buildings[i][0];
+            boundaries[2 * i + 1] = buildings[i][1];
+        }
+        Arrays.sort(boundaries);
+        List<List<Integer>> answer = new ArrayList<>();
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> b[1] - a[1]);
+        int idx = 0;
+        int previousHeight = -1;
+        for (int boundary : boundaries) {
+            while (idx < n && buildings[idx][0] == boundary) {
+                queue.offer(new int[]{buildings[idx][1], buildings[idx][2]});
+                idx++;
+            }
+            while (!queue.isEmpty() && queue.peek()[0] <= boundary) {
+                queue.poll();
+            }
+            int height = queue.isEmpty() ? 0 : queue.peek()[1];
+            if (previousHeight != height) {
+                previousHeight = height;
+                answer.add(Arrays.asList(boundary, height));
+            }
+        }
+        return answer;
     }
 }

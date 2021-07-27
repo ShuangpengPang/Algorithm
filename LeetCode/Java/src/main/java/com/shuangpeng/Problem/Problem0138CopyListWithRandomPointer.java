@@ -133,7 +133,7 @@ public class Problem0138CopyListWithRandomPointer {
         return cloneHead;
     }
 
-    public Node copyRandomList(Node head) {
+    public Node copyRandomList3(Node head) {
 
         if (head == null) {
             return null;
@@ -176,5 +176,62 @@ public class Problem0138CopyListWithRandomPointer {
             ptr_new_list = ptr_new_list.next;
         }
         return head_old;
+    }
+
+    public Node copyRandomList4(Node head) {
+        Map<Node, Integer> indexMap = new HashMap<>();
+        Map<Integer, Node> nodeMap = new HashMap<>();
+        int i = 0;
+        Node node = head;
+        Node dummy = new Node(0);
+        Node copyNode = dummy;
+        while (node != null) {
+            Node copy = new Node(node.val);
+            indexMap.put(node, i);
+            nodeMap.put(i, copy);
+            i++;
+            copyNode.next = copy;
+            node = node.next;
+            copyNode = copy;
+        }
+        node = head;
+        copyNode = dummy.next;
+        while (node != null) {
+            if (node.random != null) {
+                int index = indexMap.get(node.random);
+                copyNode.random = nodeMap.get(index);
+            }
+            node = node.next;
+            copyNode = copyNode.next;
+        }
+        return dummy.next;
+    }
+
+    public Node copyRandomList(Node head) {
+        Node node = head;
+        while (node != null) {
+            Node copy = new Node(node.val);
+            copy.next = node.next;
+            node.next = copy;
+            node = copy.next;
+        }
+        node = head;
+        while (node != null) {
+            Node copy = node.next;
+            if (node.random != null) {
+                copy.random = node.random.next;
+            }
+            node = copy.next;
+        }
+        Node dummy = new Node(0);
+        node = head;
+        Node previous = dummy;
+        while (node != null) {
+            previous.next = node.next;
+            previous = node.next;
+            node.next = previous.next;
+            node = node.next;
+        }
+        return dummy.next;
     }
 }

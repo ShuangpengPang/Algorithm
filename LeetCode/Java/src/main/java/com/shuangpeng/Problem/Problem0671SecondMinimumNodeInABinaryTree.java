@@ -7,7 +7,7 @@ public class Problem0671SecondMinimumNodeInABinaryTree {
     private long min = Long.MAX_VALUE;
     private long secondMin = Long.MAX_VALUE;
 
-    public int findSecondMinimumValue(TreeNode root) {
+    public int findSecondMinimumValue0(TreeNode root) {
         dfs(root);
         return secondMin == Long.MAX_VALUE ? -1 : (int) secondMin;
     }
@@ -24,5 +24,48 @@ public class Problem0671SecondMinimumNodeInABinaryTree {
         }
         dfs(node.left);
         dfs(node.right);
+    }
+
+    public int findSecondMinimumValue1(TreeNode root) {
+        if (root.left == null) {
+            return -1;
+        }
+        int leftValue = root.left.val;
+        int rightValue = root.right.val;
+        if (leftValue == rightValue) {
+            leftValue = findSecondMinimumValue1(root.left);
+            rightValue = findSecondMinimumValue1(root.right);
+        } else if (leftValue > root.val) {
+            rightValue = findSecondMinimumValue1(root.right);
+        } else if (rightValue > root.val) {
+            leftValue = findSecondMinimumValue1(root.left);
+        }
+        if (leftValue == -1) {
+            return rightValue;
+        }
+        if (rightValue == -1) {
+            return leftValue;
+        }
+        return Math.min(leftValue, rightValue);
+    }
+
+    public int findSecondMinimumValue(TreeNode root) {
+        int[] p = new int[]{root.val, -1};
+        dfs(root, p);
+        return p[1];
+    }
+
+    private void dfs(TreeNode root, int[] p) {
+        if (root == null) {
+            return;
+        }
+        if (p[1] != -1 && root.val >= p[1]) {
+            return;
+        }
+        if (root.val > p[0] && (p[1] == -1 || root.val < p[1])) {
+            p[1] = root.val;
+        }
+        dfs(root.left, p);
+        dfs(root.right, p);
     }
 }

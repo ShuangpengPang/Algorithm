@@ -127,7 +127,7 @@ public class Problem0863AllNodesDistanceKInBinaryTree {
     }
 
 
-    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+    public List<Integer> distanceK2(TreeNode root, TreeNode target, int K) {
         List<Integer> answer = new ArrayList<>();
         dfs(root, target, K, answer);
         return answer;
@@ -179,8 +179,6 @@ public class Problem0863AllNodesDistanceKInBinaryTree {
         }
     }
 
-
-
     class Solution {
         List<Integer> ans;
         TreeNode target;
@@ -228,4 +226,95 @@ public class Problem0863AllNodesDistanceKInBinaryTree {
             }
         }
     }
+
+    public List<Integer> distanceK3(TreeNode root, TreeNode target, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        dfs(root, target, -1, map);
+        List<Integer> answer = new ArrayList<>();
+        for (int key : map.keySet()) {
+            if (map.get(key).equals(k)) {
+                answer.add(key);
+            }
+        }
+        return answer;
+    }
+
+    private int dfs(TreeNode root, TreeNode target, int distance, Map<Integer, Integer> map) {
+        if (root == null) {
+            return distance;
+        }
+        if (distance != -1) {
+            distance++;
+            map.put(root.val, distance);
+        }
+        if (root == target) {
+            distance = 0;
+            map.put(root.val, 0);
+        }
+        int leftDistance = dfs(root.left, target, distance, map);
+        int rightDistance = dfs(root.right, target, distance, map);
+        if (distance != -1 || (leftDistance == -1 && rightDistance == -1)) {
+            return distance;
+        }
+        if (leftDistance != -1) {
+            distance = leftDistance + 1;
+            dfs(root.right, target, distance, map);
+        } else {
+            distance = rightDistance + 1;
+            dfs(root.left, target, distance, map);
+        }
+        map.put(root.val, distance);
+        return distance;
+    }
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        Map<Integer, TreeNode> parents = new HashMap<>();
+        findParent(root, parents);
+        List<Integer> answer = new ArrayList<>();
+        findNodes(target, 0, k, null, parents, answer);
+        return answer;
+    }
+
+    private void findParent(TreeNode root, Map<Integer, TreeNode> parents) {
+        if (root == null) {
+            return;
+        }
+        if (root.left != null) {
+            parents.put(root.left.val, root);
+            findParent(root.left, parents);
+        }
+        if (root.right != null) {
+            parents.put(root.right.val, root);
+            findParent(root.right, parents);
+        }
+    }
+
+    private void findNodes(TreeNode root, int distance, int k, TreeNode from,
+                           Map<Integer, TreeNode> parents, List<Integer> answer) {
+        if (root == null) {
+            return;
+        }
+        if (distance == k) {
+            answer.add(root.val);
+            return;
+        }
+        if (root.left != from) {
+            findNodes(root.left, distance + 1, k, root, parents, answer);
+        }
+        if (root.right != from) {
+            findNodes(root.right, distance + 1, k, root, parents, answer);
+        }
+        if (parents.get(root.val) != from) {
+            findNodes(parents.get(root.val), distance + 1, k, root, parents, answer);
+        }
+    }
+
+//    public static void main(String[] args) {
+//        Problem0863AllNodesDistanceKInBinaryTree a = new Problem0863AllNodesDistanceKInBinaryTree();
+//        TreeNode root = new TreeNode(0);
+//        root.left = new TreeNode(1);
+//        root.left.left = new TreeNode(3);
+//        root.left.right = new TreeNode(2);
+//        a.distanceK(root, root.left.right, 1);
+//    }
 }

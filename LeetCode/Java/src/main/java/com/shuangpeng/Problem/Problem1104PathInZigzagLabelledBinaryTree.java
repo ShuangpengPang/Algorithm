@@ -1,11 +1,12 @@
 package com.shuangpeng.Problem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Problem1104PathInZigzagLabelledBinaryTree {
 
-    public List<Integer> pathInZigZagTree(int label) {
+    public List<Integer> pathInZigZagTree0(int label) {
         if (label < 1) {
             return new ArrayList<>();
         }
@@ -35,5 +36,18 @@ public class Problem1104PathInZigzagLabelledBinaryTree {
             n >>= 1;
         }
         return level;
+    }
+
+    public List<Integer> pathInZigZagTree(int label) {
+        int level = (int) Math.ceil(Math.log(label + 1) / Math.log(2));
+        List<Integer> answer = new ArrayList<>(level);
+        answer.add(label);
+        while (level > 1) {
+            label = (1 << (level - 2)) + (1 << (level - 1)) - (label >> 1) - 1;
+            answer.add(label);
+            level--;
+        }
+        Collections.reverse(answer);
+        return answer;
     }
 }

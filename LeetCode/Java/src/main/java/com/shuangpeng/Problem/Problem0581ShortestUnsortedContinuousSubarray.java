@@ -146,7 +146,7 @@ public class Problem0581ShortestUnsortedContinuousSubarray {
         return right - left + 1 < 0 ? 0 : right - left + 1;
     }
 
-    public int findUnsortedSubarray(int[] nums) {
+    public int findUnsortedSubarray5(int[] nums) {
         int length = nums.length;
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
@@ -173,5 +173,58 @@ public class Problem0581ShortestUnsortedContinuousSubarray {
             }
         }
         return right - left + 1 < 0 ? 0 : right - left + 1;
+    }
+
+    public int findUnsortedSubarray6(int[] nums) {
+        int n = nums.length;
+        if (n == 1) {
+            return 0;
+        }
+        int left = 0;
+        for (int i = 1; i < n; i++) {
+            if (left == i - 1 && nums[left] <= nums[i]) {
+                left++;
+                continue;
+            }
+            while (left >= 0 && nums[i] < nums[left]) {
+                left--;
+            }
+            if (left == -1) {
+                break;
+            }
+        }
+        int right = n - 1;
+        for (int i = n - 2; i >= 0; i--) {
+            if (i + 1 == right && nums[i] <= nums[right]) {
+                right--;
+                continue;
+            }
+            while (right < n && nums[i] > nums[right]) {
+                right++;
+            }
+            if (right == n) {
+                break;
+            }
+        }
+        return Math.max(0, right - left - 1);
+    }
+
+    public int findUnsortedSubarray(int[] nums) {
+        int n = nums.length;
+        int right = -1, maxn = Integer.MIN_VALUE;
+        int left = n, minn = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            if (maxn > nums[i]) {
+                right = i;
+            } else {
+                maxn = nums[i];
+            }
+            if (nums[n - i - 1] > minn) {
+                left = n - i - 1;
+            } else {
+                minn = nums[n - i - 1];
+            }
+        }
+        return Math.max(0, right - left + 1);
     }
 }

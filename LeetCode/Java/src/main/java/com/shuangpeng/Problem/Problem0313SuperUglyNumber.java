@@ -1,9 +1,6 @@
 package com.shuangpeng.Problem;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Problem0313SuperUglyNumber {
 
@@ -61,7 +58,7 @@ public class Problem0313SuperUglyNumber {
         }
     }
 
-    public int nthSuperUglyNumber(int n, int[] primes) {
+    public int nthSuperUglyNumber3(int n, int[] primes) {
         if (n == 1) {
             return 1;
         }
@@ -122,14 +119,70 @@ public class Problem0313SuperUglyNumber {
         return dp[n - 1];
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public int nthSuperUglyNumber2(int n, int[] primes) {
+        Set<Long> seen = new HashSet<>();
+        PriorityQueue<Long> queue = new PriorityQueue<>();
+        seen.add(1L);
+        queue.offer(1L);
+        int ugly = 1;
+        for (int i = 0; i < n; ++i) {
+            long curr = queue.poll();
+            ugly = (int) curr;
+            for (int p : primes) {
+                long next = curr * p;
+                if (seen.add(next)) {
+                    queue.offer(next);
+                }
+            }
+        }
+        return ugly;
+    }
+
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        int m = primes.length;
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        int[] pointers = new int[m];
+        Arrays.fill(pointers, 1);
+        for (int i = 2; i <= n; ++i) {
+            int minValue = Integer.MAX_VALUE;
+            for (int j = 0; j < m; ++j) {
+                if (primes[j] * dp[pointers[j]] < minValue) {
+                    minValue = primes[j] * dp[pointers[j]];
+                }
+            }
+            for (int j = 0; j < m; ++j) {
+                if (primes[j] * dp[pointers[j]] == minValue) {
+                    pointers[j]++;
+                }
+            }
+            dp[i] = minValue;
+        }
+        return dp[n];
+    }
+
     // [1,2,4,7,8,13,14,16,19,26,28,32]
 
 //    public static void main(String[] args) {
 //        Problem0313SuperUglyNumber a = new Problem0313SuperUglyNumber();
-//        /*
-//        12
-//[2,7,13,19]
-//         */
 //        a.nthSuperUglyNumber(12, new int[]{2, 7, 13, 19});
 //    }
 }

@@ -62,7 +62,7 @@ public class Problem0446ArithmeticSlicesII {
         return (int) ans;
     }
 
-    public int numberOfArithmeticSlices(int[] nums) {
+    public int numberOfArithmeticSlices2(int[] nums) {
         int n = nums.length;
         Map<Integer, Integer>[] dp = new Map[n];
         int answer = 0;
@@ -81,6 +81,53 @@ public class Problem0446ArithmeticSlicesII {
             }
         }
         return answer;
+    }
+
+    public int numberOfArithmeticSlices3(int[] nums) {
+        int n = nums.length;
+        Map<Long, Integer>[] diffMaps = new Map[n];
+        for (int i = 0; i < n; ++i) {
+            diffMaps[i] = new HashMap<>();
+        }
+        for (int i = 1; i < n; ++i) {
+            for (int j = i - 1; j >= 0; --j) {
+                long d = (long) nums[i] - nums[j];
+                diffMaps[i].put(d, diffMaps[i].getOrDefault(d, 0) + 1);
+            }
+        }
+        Map<Long, Integer>[] countMaps = new Map[n];
+        for (int i = 0; i < n; ++i) {
+            countMaps[i] = new HashMap<>();
+        }
+        int total = 0;
+        for (int i = 2; i < n; ++i) {
+            for (int j = i - 1; j > 0; j--) {
+                long d = (long) nums[i] - nums[j];
+                int count = countMaps[j].getOrDefault(d, 0);
+                count += diffMaps[j].getOrDefault(d, 0);
+                countMaps[i].put(d, countMaps[i].getOrDefault(d, 0) + count);
+                total += count;
+            }
+        }
+        return total;
+    }
+
+    public int numberOfArithmeticSlices(int[] nums) {
+        int n = nums.length;
+        Map<Long, Integer>[] dp = new Map[n];
+        for (int i = 0; i < n; ++i) {
+            dp[i] = new HashMap<>();
+        }
+        int ans = 0;
+        for (int i = 1; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                long d = (long) nums[i] - nums[j];
+                int count = dp[j].getOrDefault(d, 0);
+                ans += count;
+                dp[i].put(d, dp[i].getOrDefault(d, 0) + count + 1);
+            }
+        }
+        return ans;
     }
 
 //    public static void main(String[] args) {

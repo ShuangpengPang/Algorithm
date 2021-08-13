@@ -58,7 +58,7 @@ public class Problem0233NumberOfDigitOne {
         return countr;
     }
 
-    public int countDigitOne(int n) {
+    public int countDigitOne2(int n) {
         int count = 0;
         for (int i = 1; i <= n; i *= 10) {
             int divider = i * 10;
@@ -67,8 +67,45 @@ public class Problem0233NumberOfDigitOne {
         return count;
     }
 
+    public int countDigitOne3(int n) {
+        long[] dp = new long[10];
+        int base = 1;
+        for (int i = 1; i < dp.length; ++i) {
+            dp[i] = dp[i - 1] * 10 + base;
+            base *= 10;
+        }
+        int digits = 0;
+        long b = 1;
+        while (n >= b) {
+            b *= 10;
+            digits++;
+        }
+        b /= 10;
+        int count = 0;
+        while (n > 0) {
+            while (n < b) {
+                b /= 10;
+                digits--;
+            }
+            count += Math.min(n - b + 1, b);
+            count += (n / b % 10) * dp[digits - 1];
+            n %= b;
+            b /= 10;
+            digits--;
+        }
+        return count;
+    }
+
+    public int countDigitOne(int n) {
+        int count = 0;
+        for (int k = 1; k <= n; k *= 10) {
+            count += n / (k * 10) * k + Math.min(Math.max(n % (k * 10) - k + 1, 0), k);
+        }
+        return count;
+    }
+
 //    public static void main(String[] args) {
 //        Problem0233NumberOfDigitOne a = new Problem0233NumberOfDigitOne();
-//        a.countDigitOne(13);
+//        a.countDigitOne(101);
 //    }
 }

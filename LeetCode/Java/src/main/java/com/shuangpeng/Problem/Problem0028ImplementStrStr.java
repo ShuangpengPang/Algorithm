@@ -104,7 +104,7 @@ public class Problem0028ImplementStrStr {
         return (int)s.charAt(idx) - (int)'a';
     }
 
-    public int strStr(String haystack, String needle) {
+    public int strStr2(String haystack, String needle) {
         int L = needle.length(), n = haystack.length();
         if (L > n) return -1;
 
@@ -130,6 +130,71 @@ public class Problem0028ImplementStrStr {
             h = (h * a - charToInt(start - 1, haystack) * aL
                     + charToInt(start + L - 1, haystack)) % modulus;
             if (h == ref_h) return start;
+        }
+        return -1;
+    }
+
+    public int strStr3(String haystack, String needle) {
+        if (needle.isEmpty()) {
+            return 0;
+        }
+        int n = needle.length();
+        int[] next = new int[n];
+        next[0] = -1;
+        for (int i = 1; i < n; ++i) {
+            char c = needle.charAt(i - 1);
+            int j = i - 1;
+            while (j > 0 && needle.charAt(next[j]) != c) {
+                j = next[j];
+            }
+            next[i] = next[j] + 1;
+        }
+        int j = 0;
+        for (int i = 0; i < haystack.length(); ++i) {
+            char c = haystack.charAt(i);
+            if (c == needle.charAt(j)) {
+                j++;
+            } else {
+                while (j > 0 && needle.charAt(next[j]) != c) {
+                    j = next[j];
+                }
+                j = next[j] + 1;
+            }
+            if (j == n) {
+                return i - n + 1;
+            }
+        }
+        return -1;
+    }
+
+    public int strStr(String haystack, String needle) {
+        if (needle.isEmpty()) {
+            return 0;
+        }
+        int n = needle.length();
+        int[] p = new int[n];
+        for (int i = 1, j = 0; i < n; ++i) {
+            char c = needle.charAt(i);
+            while (j > 0 && needle.charAt(j) != c) {
+                j = p[j - 1];
+            }
+            if (needle.charAt(j) == c) {
+                j++;
+            }
+            p[i] = j;
+        }
+        int length = haystack.length();
+        for (int i = 0, j = 0; i < length; ++i) {
+            char c = haystack.charAt(i);
+            while (j > 0 && needle.charAt(j) != c) {
+                j = p[j - 1];
+            }
+            if (needle.charAt(j) == c) {
+                j++;
+                if (j == n) {
+                    return i - n + 1;
+                }
+            }
         }
         return -1;
     }

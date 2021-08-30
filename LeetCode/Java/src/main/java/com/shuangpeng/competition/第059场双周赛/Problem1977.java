@@ -82,19 +82,17 @@ public class Problem1977 {
             if (num.charAt(i) == '0') {
                 continue;
             }
-            int sum = 0;
+            int preSum = 0;
             for (int j = i; j < n; ++j) {
                 int k = (i << 1) - j - 1;
-                if (k + 1 >= 0) {
-                    sum = add(sum, dp[k + 1][i - 1]);
-                }
-                dp[i][j] = sum;
+                dp[i][j] = preSum;
                 if (k >= 0) {
                     int x = k + lcp[k][i];
                     int y = i + lcp[k][i];
                     if (x > i - 1 || num.charAt(x) < num.charAt(y)) {
                         dp[i][j] = add(dp[i][j], dp[k][i - 1]);
                     }
+                    preSum = add(preSum, dp[k][i - 1]);
                 }
             }
         }
@@ -113,7 +111,4 @@ public class Problem1977 {
         }
         return a;
     }
-
-    // 1234 1234
-    // dp[i][d]
 }

@@ -64,7 +64,7 @@ public class Problem0600NonNegativeIntegersWithoutConsectiveOnes {
         return answer;
     }
 
-    public int findIntegers(int n) {
+    public int findIntegers2(int n) {
         if (n <= 2) {
             return n + 1;
         }
@@ -94,6 +94,63 @@ public class Problem0600NonNegativeIntegersWithoutConsectiveOnes {
             i--;
         }
         return count + 1;
+    }
+
+    public int findIntegers3(int n) {
+        if (n == 1) {
+            return 2;
+        }
+        int bits = 32 - Integer.numberOfLeadingZeros(n);
+        int[] dp = new int[bits];
+        dp[0] = 1;
+        dp[1] = 2;
+        for (int i = 2; i < bits; ++i) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        int ans = 0;
+        int preBit = 33;
+        int i = bits - 1;
+        for (; i >= 0; --i) {
+            if ((n & (1 << i)) != 0) {
+                ans += dp[i];
+                if (preBit == i + 1) {
+                    break;
+                }
+                preBit = i;
+            }
+        }
+        if (((1 << preBit) == (((n ^ (n - 1)) + 1) >> 1)) && ((n & (1 << (preBit + 1))) == 0)) {
+            ans++;
+        }
+        return ans;
+    }
+
+    public int findIntegers(int n) {
+        int[] dp = new int[31];
+        dp[0] = dp[1] = 1;
+        for (int i = 2; i < 31; ++i) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        int pre = 0, res = 0;
+        for (int i = 29; i >= 0; --i) {
+            int val = 1 << i;
+            if ((n & val) != 0) {
+                res += dp[i + 1];
+                if (pre == 1) {
+                    break;
+                }
+                pre = 1;
+            } else {
+                pre = 0;
+            }
+
+            if (i == 0) {
+                ++res;
+            }
+        }
+
+        return res;
     }
 
 //    public static void main(String[] args) {

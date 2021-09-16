@@ -1,9 +1,6 @@
 package com.shuangpeng.Problem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Problem0212WordSearchII {
 
@@ -83,7 +80,7 @@ public class Problem0212WordSearchII {
         String word = null;
     }
 
-    public List<String> findWords(char[][] board, String[] words) {
+    public List<String> findWords1(char[][] board, String[] words) {
         if (board == null || board.length == 0
                 || words == null || words.length == 0) {
             return new ArrayList<>();
@@ -137,98 +134,72 @@ public class Problem0212WordSearchII {
         }
     }
 
+    class Trie {
+        boolean isWord;
+        Trie[] tries;
+        int count;
 
+        Trie() {
+            tries = new Trie[26];
+            isWord = false;
+            count = 0;
+        }
+    }
 
+    public List<String> findWords(char[][] board, String[] words) {
+        Trie root = new Trie();
+        for (String word : words) {
+            Trie trie = root;
+            int length = word.length();
+            for (int i = 0; i < length; ++i) {
+                int j = word.charAt(i) - 'a';
+                Trie[] tries = trie.tries;
+                if (tries[j] == null) {
+                    tries[j] = new Trie();
+                    ++trie.count;
+                }
+                trie = tries[j];
+            }
+            trie.isWord = true;
+        }
+        int m = board.length, n = board[0].length;
+        StringBuilder sb = new StringBuilder();
+        List<String> ans = new ArrayList<>();
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                backtrack(board, i, j, root, sb, ans);
+            }
+        }
+        return ans;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-//    class TrieNode {
-//        HashMap<Character, TrieNode> children = new HashMap<Character, TrieNode>();
-//        String word = null;
-//        public TrieNode() {}
-//    }
-//
-//    class Solution {
-//        char[][] _board = null;
-//        ArrayList<String> _result = new ArrayList<String>();
-//
-//        public List<String> findWords(char[][] board, String[] words) {
-//
-//            // Step 1). Construct the Trie
-//            TrieNode root = new TrieNode();
-//            for (String word : words) {
-//                TrieNode node = root;
-//
-//                for (Character letter : word.toCharArray()) {
-//                    if (node.children.containsKey(letter)) {
-//                        node = node.children.get(letter);
-//                    } else {
-//                        TrieNode newNode = new TrieNode();
-//                        node.children.put(letter, newNode);
-//                        node = newNode;
-//                    }
-//                }
-//                node.word = word;  // store words in Trie
-//            }
-//
-//            this._board = board;
-//            // Step 2). Backtracking starting for each cell in the board
-//            for (int row = 0; row < board.length; ++row) {
-//                for (int col = 0; col < board[row].length; ++col) {
-//                    if (root.children.containsKey(board[row][col])) {
-//                        backtracking(row, col, root);
-//                    }
-//                }
-//            }
-//
-//            return this._result;
-//        }
-//
-//        private void backtracking(int row, int col, TrieNode parent) {
-//            Character letter = this._board[row][col];
-//            TrieNode currNode = parent.children.get(letter);
-//
-//            // check if there is any match
-//            if (currNode.word != null) {
-//                this._result.add(currNode.word);
-//                currNode.word = null;
-//            }
-//
-//            // mark the current letter before the EXPLORATION
-//            this._board[row][col] = '#';
-//
-//            // explore neighbor cells in around-clock directions: up, right, down, left
-//            int[] rowOffset = {-1, 0, 1, 0};
-//            int[] colOffset = {0, 1, 0, -1};
-//            for (int i = 0; i < 4; ++i) {
-//                int newRow = row + rowOffset[i];
-//                int newCol = col + colOffset[i];
-//                if (newRow < 0 || newRow >= this._board.length || newCol < 0
-//                        || newCol >= this._board[0].length) {
-//                    continue;
-//                }
-//                if (currNode.children.containsKey(this._board[newRow][newCol])) {
-//                    backtracking(newRow, newCol, currNode);
-//                }
-//            }
-//
-//            // End of EXPLORATION, restore the original letter in the board.
-//            this._board[row][col] = letter;
-//
-//            // Optimization: incrementally remove the leaf nodes
-//            if (currNode.children.isEmpty()) {
-//                parent.children.remove(letter);
-//            }
-//        }
-//    }
+    private void backtrack(char[][] board, int i, int j, Trie root, StringBuilder sb, List<String> list) {
+        int m = board.length, n = board[0].length;
+        int k = board[i][j] - 'a';
+        if (root.tries[k] == null) {
+            return;
+        }
+        sb.append(board[i][j]);
+        if (root.tries[k].isWord) {
+            list.add(sb.toString());
+            root.tries[k].isWord = false;
+        }
+        final int[][] dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+        char c = board[i][j];
+        board[i][j] = '#';
+        for (int[] dir : dirs) {
+            int x = i + dir[0], y = j + dir[1];
+            if (x < 0 || x >= m || y < 0 || y >= n || board[x][y] == '#') {
+                continue;
+            }
+            backtrack(board, x, y, root.tries[k], sb, list);
+            if (root.tries[k].count == 0) {
+                root.tries[k] = null;
+                --root.count;
+                break;
+            }
+        }
+        board[i][j] = c;
+        sb.deleteCharAt(sb.length() - 1);
+    }
 }

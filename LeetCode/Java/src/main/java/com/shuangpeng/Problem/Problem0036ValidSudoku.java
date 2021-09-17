@@ -56,7 +56,7 @@ public class Problem0036ValidSudoku {
 //        a.isValidSudoku(board);
 //    }
 
-    public boolean isValidSudoku(char[][] board) {
+    public boolean isValidSudoku1(char[][] board) {
         if (board == null || board.length != 9
                 || board[0] == null || board[0].length != 9) {
             return false;
@@ -87,6 +87,27 @@ public class Problem0036ValidSudoku {
                     row.get(i)[digit] = true;
                     col.get(j)[digit] = true;
                     sub.get(index)[digit] = true;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isValidSudoku(char[][] board) {
+        final int N = 9;
+        boolean[][] rows = new boolean[N][N];
+        boolean[][] columns = new boolean[N][N];
+        boolean[][][] subBoxes = new boolean[N / 3][N / 3][N];
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < N; ++j) {
+                if (board[i][j] != '.') {
+                    int idx = board[i][j] - '1';
+                    if (rows[i][idx] || columns[j][idx] || subBoxes[i / 3][j / 3][idx]) {
+                        return false;
+                    }
+                    rows[i][idx] = true;
+                    columns[j][idx] = true;
+                    subBoxes[i / 3][j / 3][idx] = true;
                 }
             }
         }

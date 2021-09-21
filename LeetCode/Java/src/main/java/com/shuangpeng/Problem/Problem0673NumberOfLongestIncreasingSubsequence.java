@@ -1,5 +1,8 @@
 package com.shuangpeng.Problem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Problem0673NumberOfLongestIncreasingSubsequence {
 
     public int findNumberOfLIS0(int[] nums) {
@@ -33,7 +36,7 @@ public class Problem0673NumberOfLongestIncreasingSubsequence {
         return maxCount;
     }
 
-    public int findNumberOfLIS(int[] nums) {
+    public int findNumberOfLIS1(int[] nums) {
         int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (int num : nums) {
             min = Math.min(min, num);
@@ -114,6 +117,90 @@ public class Problem0673NumberOfLongestIncreasingSubsequence {
             this.length = length;
             this.count = count;
         }
+    }
+
+    public int findNumberOfLIS2(int[] nums) {
+        int n = nums.length;
+        int maxLength = 0;
+        int[][] dp = new int[n][2];
+        for (int i = 0; i < n; ++i) {
+            int length = 0;
+            for (int j = i - 1; j >= 0; --j) {
+                if (nums[i] > nums[j]) {
+                    if (dp[j][0] > length) {
+                        length = dp[j][0];
+                        dp[i][1] = dp[j][1];
+                    } else if (dp[j][0] == length) {
+                        dp[i][1] += dp[j][1];
+                    }
+                }
+            }
+            dp[i][0] = length + 1;
+            dp[i][1] = dp[i][1] == 0 ? 1 : dp[i][1];
+            maxLength = Math.max(maxLength, dp[i][0]);
+        }
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            if (maxLength == dp[i][0]) {
+                ans += dp[i][1];
+            }
+        }
+        return ans;
+    }
+
+    public int findNumberOfLIS(int[] nums) {
+        int n = nums.length;
+        List<List<Integer>> dp = new ArrayList<>();
+        List<List<Integer>> count = new ArrayList<>();
+        dp.add(new ArrayList<>(1));
+        count.add(new ArrayList<>(1));
+        dp.get(0).add(Integer.MIN_VALUE);
+        count.get(0).add(1);
+        for (int i = 0; i < n; ++i) {
+            int idx = binarySearch(dp, nums[i]);
+            if (idx == dp.size()) {
+                dp.add(new ArrayList<>());
+                count.add(new ArrayList<>());
+            }
+            dp.get(idx).add(nums[i]);
+            List<Integer> countList = count.get(idx);
+            int c = countList.size() > 0 ? countList.get(countList.size() - 1) : 0;
+            int j = binarySearch2(dp.get(idx - 1), nums[i]);
+            List<Integer> list = count.get(idx - 1);
+            c += list.get(list.size() - 1) - (j >= 0 ? list.get(j) : 0);
+            countList.add(c);
+        }
+        List<Integer> list = count.get(count.size() - 1);
+        return list.get(list.size() - 1);
+    }
+
+    private int binarySearch(List<List<Integer>> lists, int num) {
+        int left = 0, right = lists.size() - 1;
+        while (left <= right) {
+            int mid = left + ((right - left) >> 1);
+            List<Integer> list = lists.get(mid);
+            int data = list.get(list.size() - 1);
+            if (num > data) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+
+    private int binarySearch2(List<Integer> list, int num) {
+        int left = 0, right = list.size() - 1;
+        while (left <= right) {
+            int mid = left + ((right - left) >> 1);
+            int data = list.get(mid);
+            if (num > data) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return right;
     }
 
 //    public static void main(String[] args) {

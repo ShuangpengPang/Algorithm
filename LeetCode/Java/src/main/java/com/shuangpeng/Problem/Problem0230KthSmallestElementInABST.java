@@ -4,7 +4,6 @@ import com.shuangpeng.common.TreeNode;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Stack;
 
 public class Problem0230KthSmallestElementInABST {
 
@@ -31,7 +30,7 @@ public class Problem0230KthSmallestElementInABST {
         return new int[]{left[0] + right[0] + 1, right[1]};
     }
 
-    public int kthSmallest(TreeNode root, int k) {
+    public int kthSmallest1(TreeNode root, int k) {
         if (root == null || k == 0) {
             return 0;
         }
@@ -47,5 +46,26 @@ public class Problem0230KthSmallestElementInABST {
             }
             root = node.right;
         }
+    }
+
+    public int kthSmallest(TreeNode root, int k) {
+        int[] ans = new int[1];
+        ans[0] = -1;
+        dfs(root, k, ans);
+        return ans[0];
+    }
+
+    private int dfs(TreeNode root, int k, int[] ans) {
+        if (root == null) {
+            return 0;
+        }
+        int left = dfs(root.left, k, ans);
+        if (ans[0] == -1 && k == left + 1) {
+            ans[0] = root.val;
+        }
+        if (ans[0] != -1) {
+            return 0;
+        }
+        return left + dfs(root.right, k - left - 1, ans) + 1;
     }
 }

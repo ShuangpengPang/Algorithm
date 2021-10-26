@@ -133,7 +133,7 @@ public class Problem0240SearchA2DMatrixTreeII {
         return false;
     }
 
-    public boolean searchMatrix(int[][] matrix, int target) {
+    public boolean searchMatrix2(int[][] matrix, int target) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
             return false;
         }
@@ -147,6 +147,21 @@ public class Problem0240SearchA2DMatrixTreeII {
             } else if (target > matrix[i][j]) {
                 j++;
             } else if (target == matrix[i][j]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+        int r = 0, c = n - 1;
+        while (r < m && c >= 0) {
+            if (target > matrix[r][c]) {
+                ++r;
+            } else if (target < matrix[r][c]) {
+                --c;
+            } else {
                 return true;
             }
         }

@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p0501_0600;
 
 public class Problem0509FibonacciNumber {
 

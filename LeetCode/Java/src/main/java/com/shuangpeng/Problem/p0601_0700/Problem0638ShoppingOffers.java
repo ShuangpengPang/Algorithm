@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p0601_0700;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class Problem0638ShoppingOffers {
         return newState;
     }
 
-    public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+    public int shoppingOffers1(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
         return dfs(price, special, needs, new HashMap<>());
     }
 
@@ -98,5 +98,47 @@ public class Problem0638ShoppingOffers {
         }
         memo.put(needs, cost);
         return cost;
+    }
+
+    public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+        int n = price.size();
+        List<List<Integer>> filterSpecial = new ArrayList<>();
+        for (List<Integer> sp : special) {
+            int count = 0, totalPrice = 0;
+            for (int i = 0; i < n; ++i) {
+                count += sp.get(i);
+                totalPrice += sp.get(i) * price.get(i);
+            }
+            if (count > 0 && sp.get(n) < totalPrice) {
+                filterSpecial.add(sp);
+            }
+        }
+        return dp(price, filterSpecial, needs, new HashMap<>());
+    }
+
+    private int dp(List<Integer> price, List<List<Integer>> special, List<Integer> needs, Map<List<Integer>, Integer> memo) {
+        int totalPrice = memo.getOrDefault(needs, -1);
+        if (totalPrice != -1) {
+            return totalPrice;
+        }
+        int n = price.size();
+        int minCost = 0;
+        for (int i = 0; i < n; ++i) {
+            minCost += price.get(i) * needs.get(i);
+        }
+        for (List<Integer> sp : special) {
+            List<Integer> next = new ArrayList<>();
+            for (int i = 0; i < n; ++i) {
+                if (sp.get(i) > needs.get(i)) {
+                    break;
+                }
+                next.add(needs.get(i) - sp.get(i));
+            }
+            if (next.size() == n) {
+                minCost = Math.min(minCost, sp.get(n) + dp(price, special, next, memo));
+            }
+        }
+        memo.put(needs, minCost);
+        return minCost;
     }
 }

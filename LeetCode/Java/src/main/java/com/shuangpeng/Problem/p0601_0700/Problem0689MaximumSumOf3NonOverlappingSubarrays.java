@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p0601_0700;
 
 public class Problem0689MaximumSumOf3NonOverlappingSubarrays {
 

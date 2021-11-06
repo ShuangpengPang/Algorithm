@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p0701_0800;
 
 public class Problem0712MinimumASCIIDeleteSumForTwoStrings {
 

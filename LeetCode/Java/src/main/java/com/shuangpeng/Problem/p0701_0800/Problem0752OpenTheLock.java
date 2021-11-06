@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p0701_0800;
 
 import java.util.*;
 import java.util.concurrent.locks.Lock;

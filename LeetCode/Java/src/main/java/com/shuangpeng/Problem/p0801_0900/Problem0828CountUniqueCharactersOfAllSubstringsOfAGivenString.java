@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p0801_0900;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1101_1200;
 
 public class Problem1130MinimumCostTreeFromLeafValues {
 

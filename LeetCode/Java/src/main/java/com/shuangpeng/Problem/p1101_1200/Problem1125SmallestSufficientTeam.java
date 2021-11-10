@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1101_1200;
 
 import java.util.Arrays;
 import java.util.List;

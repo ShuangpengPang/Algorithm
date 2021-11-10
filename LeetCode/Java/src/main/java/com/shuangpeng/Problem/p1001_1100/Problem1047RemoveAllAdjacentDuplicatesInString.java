@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1001_1100;
 
 import java.util.Deque;
 import java.util.LinkedList;

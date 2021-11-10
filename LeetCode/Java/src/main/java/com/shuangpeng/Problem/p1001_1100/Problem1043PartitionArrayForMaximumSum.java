@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1001_1100;
 
 public class Problem1043PartitionArrayForMaximumSum {
 

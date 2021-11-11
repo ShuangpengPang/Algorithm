@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1701_1800;
 
 public class Problem1736LatestTimeByReplacingHiddenDigits {
 

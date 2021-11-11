@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1701_1800;
 
 import java.util.HashMap;
 import java.util.HashSet;

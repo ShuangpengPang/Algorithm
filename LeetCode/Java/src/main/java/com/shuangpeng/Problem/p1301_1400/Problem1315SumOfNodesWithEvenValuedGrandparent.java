@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1301_1400;
 
 import com.shuangpeng.common.TreeNode;
 

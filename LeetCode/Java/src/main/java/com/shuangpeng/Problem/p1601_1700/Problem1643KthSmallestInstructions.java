@@ -1,4 +1,4 @@
-package com.shuangpeng.Problem;
+package com.shuangpeng.Problem.p1601_1700;
 
 public class Problem1643KthSmallestInstructions {
 

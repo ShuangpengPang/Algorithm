@@ -118,9 +118,47 @@ public class Problem0629KInversePairsArray {
         return dp[k];
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // f[i][j] = f[i - 1][j] + f[i - 1][j - 1] + f[i - 1][j - 2] + ... + f[i - 1][j - min((i - 1), j)]
+    public int kInversePairs5(int n, int k) {
+        int[][] dp = new int[2][k + 1];
+        final int M = (int) 1e9 + 7;
+        dp[0][0] = 1;
+        dp[1][0] = 1;
+        for (int i = 2; i <= n; ++i) {
+            int idx = i % 2;
+            for (int j = 1; j <= k; ++j) {
+                dp[idx][j] = dp[idx][j - 1] + dp[1 - idx][j];
+                if (j >= i) {
+                    dp[idx][j] -= dp[1 - idx][j - i];
+                }
+                if (dp[idx][j] >= M) {
+                    dp[idx][j] -= M;
+                } else if (dp[idx][j] < 0) {
+                    dp[idx][j] += M;
+                }
+            }
+        }
+        return dp[n % 2][k];
+    }
+
 //    public static void main(String[] args) {
 //        Problem0629KInversePairsArray a = new Problem0629KInversePairsArray();
-//        a.kInversePairs(3, 2);
+//        a.kInversePairs5(2, 2);
 //    }
 
     // (2, 1)

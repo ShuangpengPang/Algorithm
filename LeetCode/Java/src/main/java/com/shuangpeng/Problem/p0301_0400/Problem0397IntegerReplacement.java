@@ -1,9 +1,6 @@
 package com.shuangpeng.Problem.p0301_0400;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class Problem0397IntegerReplacement {
 
@@ -38,7 +35,7 @@ public class Problem0397IntegerReplacement {
         }
     }
 
-    public int integerReplacement(int n) {
+    public int integerReplacement1(int n) {
         if (n <= 1) {
             return 0;
         }
@@ -59,5 +56,48 @@ public class Problem0397IntegerReplacement {
             answer++;
         }
         return answer;
+    }
+
+    public int integerReplacement2(int n) {
+        return dp(n, new HashMap<>());
+    }
+
+    private int dp(long n, Map<Long, Integer> memo) {
+        if (n == 1) {
+            return 0;
+        }
+        if ((n & 1) == 0) {
+            return dp(n >> 1, memo) + 1;
+        }
+        int count = memo.getOrDefault(n, -1);
+        if (count != -1) {
+            return count;
+        }
+        int ans = Math.min(dp(n - 1, memo), dp(n + 1, memo)) + 1;
+        memo.put(n, ans);
+        return ans;
+    }
+
+    public int integerReplacement(int n) {
+//        if (n == Integer.MAX_VALUE) {
+//            return 32;
+//        }
+        int ans = 0;
+        while (n > 1) {
+            if ((n & 1) == 0) {
+                ++ans;
+                n >>= 1;
+            } else if ((n & 3) == 1) {
+                ans += 2;
+                n >>= 1;
+            } else if (n > 3) {
+                ans += 2;
+                n = (n + 1) >> 1;
+            } else {
+                ans += 2;
+                n >>= 1;
+            }
+        }
+        return ans;
     }
 }

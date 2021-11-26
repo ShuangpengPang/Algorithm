@@ -29,8 +29,38 @@ public class Problem0458PoorPigs {
 //        return 0;
 //    }
 
-    public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+    public int poorPigs0(int buckets, int minutesToDie, int minutesToTest) {
         return (int) Math.ceil(Math.log(buckets) / Math.log(minutesToTest / minutesToDie + 1));
+    }
+
+    public int poorPigs1(int buckets, int minutesToDie, int minutesToTest) {
+        return buckets > 1 ? (int) (Math.log(buckets - 1) / Math.log(minutesToTest / minutesToDie + 1)) + 1 : 0;
+    }
+
+    public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+        int n = minutesToTest / minutesToDie;
+        int[][] dp = new int[buckets][n + 1];
+        for (int i = 0; i <= n; ++i) {
+            dp[0][i] = 1;
+        }
+        for (int i = 0; i < buckets; ++i) {
+            dp[i][0] = 1;
+        }
+        int[] counts = new int[buckets];
+        counts[0] = 1;
+        int i = 0;
+        while (dp[i][n] < buckets) {
+            ++i;
+            for (int j = i; j > 0; --j) {
+                counts[j] += counts[j - 1];
+            }
+            for (int j = 1; j <= n; ++j) {
+                for (int k = 0; k <= i; ++k) {
+                    dp[i][j] += counts[k] * dp[k][j - 1];
+                }
+            }
+        }
+        return i;
     }
 
 //    public static void main(String[] args) {

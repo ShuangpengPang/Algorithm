@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Problem0438FindAllAnagramsInAString {
 
-    public List<Integer> findAnagrams(String s, String p) {
+    public List<Integer> findAnagrams0(String s, String p) {
         if (s == null || p == null || s.length() * p.length() == 0 || p.length() > s.length()) {
             return new ArrayList<>();
         }
@@ -44,5 +44,105 @@ public class Problem0438FindAllAnagramsInAString {
             }
         }
         return answer;
+    }
+
+    public List<Integer> findAnagrams1(String s, String p) {
+        int n1 = s.length(), n2 = p.length();
+        List<Integer> ans = new ArrayList<>();
+        if (n1 < n2) {
+            return ans;
+        }
+        final int N = 26;
+        int[] counts = new int[N];
+        for (int i = 0; i < n2; ++i) {
+            ++counts[p.charAt(i) - 'a'];
+        }
+        for (int i = 0; i < n1; ++i) {
+            --counts[s.charAt(i) - 'a'];
+            if (i >= n2) {
+                ++counts[s.charAt(i - n2) - 'a'];
+            }
+            if (i >= n2 - 1 && check(counts)) {
+                ans.add(i - n2 + 1);
+            }
+        }
+        return ans;
+    }
+
+    private boolean check(int[] counts) {
+        int n = counts.length;
+        for (int i = 0; i < n; ++i) {
+            if (counts[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<Integer> findAnagrams2(String s, String p) {
+        int n1 = s.length(), n2 = p.length();
+        List<Integer> ans = new ArrayList<>();
+        if (n1 < n2) {
+            return ans;
+        }
+        final int N = 26;
+        int[] counts = new int[N];
+        int differ = 0;
+        for (int i = 0; i < n2; ++i) {
+            int j = p.charAt(i) - 'a';
+            if (counts[j] == 0) {
+                ++differ;
+            }
+            ++counts[j];
+        }
+        for (int i = 0; i < n1; ++i) {
+            int j = s.charAt(i) - 'a';
+            if (counts[j] == 1) {
+                --differ;
+            } else if (counts[j] == 0) {
+                ++differ;
+            }
+            --counts[j];
+            if (i >= n2) {
+                int k = s.charAt(i - n2) - 'a';
+                if (counts[k] == -1) {
+                    --differ;
+                } else if (counts[k] == 0) {
+                    ++differ;
+                }
+                ++counts[k];
+            }
+            if (differ == 0) {
+                ans.add(i - n2 + 1);
+            }
+        }
+        return ans;
+    }
+
+    public List<Integer> findAnagrams(String s, String p) {
+        int n1 = s.length(), n2 = p.length();
+        List<Integer> ans = new ArrayList<>();
+        if (n1 < n2) {
+            return ans;
+        }
+        final int N = 26;
+        int[] counts = new int[N];
+        for (int i = 0; i < n2; ++i) {
+            ++counts[p.charAt(i) - 'a'];
+        }
+        int l = 0, r = 0;
+        while (r < n1) {
+            int i = s.charAt(r) - 'a';
+            if (counts[i] > 0) {
+                ++r;
+                --counts[i];
+                if (r - l == n2) {
+                    ans.add(l);
+                }
+            } else {
+                ++counts[s.charAt(l++) - 'a'];
+            }
+        }
+        return ans;
     }
 }

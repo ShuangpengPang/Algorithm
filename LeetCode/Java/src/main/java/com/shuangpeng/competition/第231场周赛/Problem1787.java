@@ -1,5 +1,9 @@
 package com.shuangpeng.competition.第231场周赛;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Problem1787 {
 
 //    public int minChanges0(int[] nums, int k) {
@@ -82,7 +86,7 @@ public class Problem1787 {
         }
         return new int[]{min_cost,mass_cnt};
     }
-    public int minChanges(int[] nums, int k) {
+    public int minChanges0(int[] nums, int k) {
         this.nums = nums;
         this.k = k;
         int n = nums.length;
@@ -122,5 +126,31 @@ public class Problem1787 {
         //本来的cost_i = sz[i]-mass_cnt 变成 sz[i]
         res = Math.min(sum_cost+mass_cnt,res);
         return res;
+    }
+
+    public int minChanges(int[] nums, int k) {
+        int n = nums.length;
+        final int N = 1 << 10;
+        final int INF = Integer.MAX_VALUE >> 1;
+        int[][] dp = new int[2][N];
+        Arrays.fill(dp[0], INF);
+        dp[0][0] = 0;
+        for (int i = 0; i < k; ++i) {
+            int idx = 1 - i % 2;
+            Map<Integer, Integer> map = new HashMap<>();
+            int size = 0;
+            for (int j = i; j < n; j += k) {
+                map.put(nums[j], map.getOrDefault(nums[j], 0) + 1);
+                ++size;
+            }
+            int minValue = Arrays.stream(dp[1 - idx]).min().getAsInt();
+            Arrays.fill(dp[idx], size + minValue);
+            for (int j = 0; j < N; ++j) {
+                for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                    dp[idx][j] = Math.min(dp[idx][j], dp[1 - idx][j ^ entry.getKey()] + size - entry.getValue());
+                }
+            }
+        }
+        return dp[k % 2][0];
     }
 }

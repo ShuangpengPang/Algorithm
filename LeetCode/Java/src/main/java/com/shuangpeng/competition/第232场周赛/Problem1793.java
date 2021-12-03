@@ -2,7 +2,7 @@ package com.shuangpeng.competition.第232场周赛;
 
 public class Problem1793 {
 
-    public int maximumScore(int[] nums, int k) {
+    public int maximumScore0(int[] nums, int k) {
         int n = nums.length;
         int[] dp = new int[n];
         dp[k] = nums[k];
@@ -23,5 +23,32 @@ public class Problem1793 {
             }
         }
         return answer;
+    }
+
+    public int maximumScore(int[] nums, int k) {
+        int n = nums.length;
+        int minValue = nums[k];
+        int i = k, j = k;
+        int ans = 0;
+        while (i >= 0 || j < n) {
+            while (i >= 0 && nums[i] >= minValue) {
+                --i;
+            }
+            while (j < n && nums[j] >= minValue) {
+                ++j;
+            }
+            ans = Math.max(ans, minValue * (j - i - 1));
+            if (i < 0 && j >= n) {
+                break;
+            }
+            if (i < 0) {
+                minValue = nums[j];
+            } else if (j >= n) {
+                minValue = nums[i];
+            } else {
+                minValue = Math.max(nums[i], nums[j]);
+            }
+        }
+        return ans;
     }
 }

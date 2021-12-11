@@ -18,7 +18,7 @@ public class Problem0700SearchInABinarySearchTree {
         return null;
     }
 
-    public TreeNode searchBST(TreeNode root, int val) {
+    public TreeNode searchBST1(TreeNode root, int val) {
         if (root == null || root.val == val) {
             return root;
         }
@@ -26,5 +26,13 @@ public class Problem0700SearchInABinarySearchTree {
             return searchBST(root.left, val);
         }
         return searchBST(root.right, val);
+    }
+
+    public TreeNode searchBST(TreeNode root, int val) {
+        TreeNode node = root;
+        while (node != null && node.val != val) {
+            node = node.val > val ? node.left : node.right;
+        }
+        return node;
     }
 }

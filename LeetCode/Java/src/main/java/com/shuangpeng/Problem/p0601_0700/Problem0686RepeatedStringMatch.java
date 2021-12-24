@@ -1,7 +1,5 @@
 package com.shuangpeng.Problem.p0601_0700;
 
-import com.shuangpeng.competition.Solution;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -143,7 +141,7 @@ public class Problem0686RepeatedStringMatch {
         return (i - 1) / n1 + 1;
     }
 
-    public int repeatedStringMatch(String a, String b) {
+    public int repeatedStringMatch2(String a, String b) {
         int an = a.length(), bn = b.length();
         int index = strStr(a, b);
         if (index == -1) {

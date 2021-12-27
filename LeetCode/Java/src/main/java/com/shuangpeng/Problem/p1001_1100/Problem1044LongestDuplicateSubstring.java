@@ -150,4 +150,9 @@ public class Problem1044LongestDuplicateSubstring {
 //        }
 //        return "";
 //    }
+
+    //   a b c d e f g h i
+    //   a   c   e   g
+    //   a b e f
+    //   c d g h
 }

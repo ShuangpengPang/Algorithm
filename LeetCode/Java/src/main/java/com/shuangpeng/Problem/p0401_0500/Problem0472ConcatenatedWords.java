@@ -65,3 +65,172 @@ public class Problem0472ConcatenatedWords {
 //        a.findAllConcatenatedWordsInADict(new String[]{"q", ""});
 //    }
 }
+
+class Problem0472ConcatenatedWords0 {
+    class Trie {
+
+        final int N = 26;
+        boolean isWord;
+        Trie[] tries;
+
+        Trie() {
+            isWord = false;
+            tries = new Trie[N];
+        }
+    }
+
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        Trie root = new Trie();
+        Set<String> set = new HashSet<>();
+        for (String w : words) {
+            set.add(w);
+            Trie trie = root;
+            int n = w.length();
+            for (int i = 0; i < n; ++i) {
+                int j = w.charAt(i) - 'a';
+                if (trie.tries[j] == null) {
+                    trie.tries[j] = new Trie();
+                }
+                trie = trie.tries[j];
+            }
+            trie.isWord = true;
+        }
+        List<String> ans = new ArrayList<>();
+        Map<String, Boolean> memo = new HashMap<>();
+        for (String w : words) {
+            if (check(w, set, root, memo)) {
+                ans.add(w);
+            }
+        }
+        return ans;
+    }
+
+    private boolean check(String w, Set<String> set, Trie root, Map<String, Boolean> memo) {
+        Boolean result = memo.get(w);
+        if (result != null) {
+            return result;
+        }
+        int n = w.length();
+        Trie trie = root;
+        for (int i = 0; i < n - 1; ++i) {
+            int j = w.charAt(i) - 'a';
+            trie = trie.tries[j];
+            if (trie == null) {
+                memo.put(w, false);
+                return false;
+            }
+            if (trie.isWord) {
+                String s = w.substring(i + 1);
+                if (set.contains(s) || check(s, set, root, memo)) {
+                    memo.put(w, true);
+                    return true;
+                }
+            }
+        }
+        memo.put(w, false);
+        return false;
+    }
+}
+
+class Problem0472ConcatenatedWords1 {
+    class Trie {
+
+        final int N = 26;
+        boolean isWord;
+        Trie[] tries;
+
+        Trie() {
+            isWord = false;
+            tries = new Trie[N];
+        }
+    }
+
+    public List<String> findAllConcatenatedWordsInADict0(String[] words) {
+        Trie root = new Trie();
+        Arrays.sort(words, Comparator.comparingInt(a -> a.length()));
+        List<String> ans = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        for (String w : words) {
+            if (check(w, set, root)) {
+                ans.add(w);
+            } else {
+                set.add(w);
+                insert(w, root);
+            }
+        }
+        return ans;
+    }
+
+    private void insert(String w, Trie trie) {
+        int n = w.length();
+        for (int i = 0; i < n; ++i) {
+            int j = w.charAt(i) - 'a';
+            if (trie.tries[j] == null) {
+                trie.tries[j] = new Trie();
+            }
+            trie = trie.tries[j];
+        }
+        trie.isWord = true;
+    }
+
+    private boolean check(String w, Set<String> set, Trie root) {
+        int n = w.length();
+        Trie trie = root;
+        for (int i = 0; i < n - 1; ++i) {
+            int j = w.charAt(i) - 'a';
+            trie = trie.tries[j];
+            if (trie == null) {
+                return false;
+            }
+            if (trie.isWord) {
+                String s = w.substring(i + 1);
+                if (set.contains(s) || check(s, set, root)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // 动态规划
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        final int M = 331, K = 131;
+        Set<Long> set = new HashSet<>();
+        for (String w : words) {
+            long hash = 0;
+            int n = w.length();
+            for (int i = 0; i < n; ++i) {
+                hash = hash * M + w.charAt(i) + K;
+            }
+            set.add(hash);
+        }
+        List<String> ans = new ArrayList<>();
+        for (String w : words) {
+            if (check(w, set)) {
+                ans.add(w);
+            }
+        }
+        return ans;
+    }
+
+    boolean check(String s, Set<Long> set) {
+        final int M = 331, K = 131;
+        int n = s.length();
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+        dp[0] = 0;
+        for (int i = 0; i < n; ++i) {
+            if (dp[i] == -1) {
+                continue;
+            }
+            long hash = 0;
+            for (int j = i; j < n; ++j) {
+                hash = hash * M + s.charAt(j) + K;
+                if (set.contains(hash)) {
+                    dp[j + 1] = Math.max(dp[j + 1], dp[i] + 1);
+                }
+            }
+        }
+        return dp[n] > 1;
+    }
+}

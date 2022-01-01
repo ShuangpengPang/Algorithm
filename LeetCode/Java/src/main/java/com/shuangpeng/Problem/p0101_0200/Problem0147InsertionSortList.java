@@ -62,18 +62,48 @@ public class Problem0147InsertionSortList {
         return prev;
     }
 
-//    public ListNode insertionSortList(ListNode head) {
-//        ListNode dummy = new ListNode();
-//        dummy.next = head;
-//        ListNode node = head;
-//        while (node != null) {
-//            ListNode prev = dummy;
-//            while (prev.next != node && prev.next.val >= node.val) {
-//                prev = prev.next;
-//            }
-//            if (prev.next != node) {
-//
-//            }
-//        }
-//    }
+    public ListNode insertionSortList2(ListNode head) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode prev = dummy;
+        ListNode node = prev.next;
+        while (node != null) {
+            ListNode curr = dummy;
+            while (curr.next != node && curr.next.val <= node.val) {
+                curr = curr.next;
+            }
+            if (curr.next != node) {
+                prev.next = node.next;
+                node.next = curr.next;
+                curr.next = node;
+                node = prev.next;
+            } else {
+                prev = node;
+                node = node.next;
+            }
+        }
+        return dummy.next;
+    }
+
+    public ListNode insertionSortList(ListNode head) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode lastSorted = head;
+        ListNode node = head.next;
+        while (node != null) {
+            if (lastSorted.val <= node.val) {
+                lastSorted = node;
+            } else {
+                ListNode curr = dummy;
+                while (curr.next.val <= node.val) {
+                    curr = curr.next;
+                }
+                lastSorted.next = node.next;
+                node.next = curr.next;
+                curr.next = node;
+            }
+            node = lastSorted.next;
+        }
+        return dummy.next;
+    }
 }

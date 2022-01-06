@@ -1,9 +1,6 @@
 package com.shuangpeng.Problem.p0001_0100;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 public class Problem0071SimplifyPath {
 
@@ -59,7 +56,7 @@ public class Problem0071SimplifyPath {
         return ret.length() == 0 ? "/" : ret.toString();
     }
 
-    public String simplifyPath(String path) {
+    public String simplifyPath2(String path) {
         int n = path.length();
         StringBuilder sb = new StringBuilder();
         Deque<String> stack = new LinkedList<>();
@@ -91,6 +88,41 @@ public class Problem0071SimplifyPath {
             ans.append('/').append(stack.pollFirst());
         }
         return ans.length() == 0 ? "/" : ans.toString();
+    }
+
+    public String simplifyPath(String path) {
+        List<String> stack = new ArrayList<>();
+        int n = path.length();
+        int l = 0;
+        while (l < n) {
+            while (l < n && path.charAt(l) == '/') {
+                ++l;
+            }
+            if (l == n) {
+                break;
+            }
+            int r = l;
+            while (r < n && path.charAt(r) != '/') {
+                ++r;
+            }
+            String s = path.substring(l, r);
+            if (s.equals("..") && stack.size() > 0) {
+                stack.remove(stack.size() - 1);
+            } else if (!s.equals("..") && !s.equals(".")) {
+                stack.add(s);
+            }
+            l = r;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append('/');
+        int size = stack.size();
+        for (int i = 0; i < size; ++i) {
+            if (i > 0) {
+                sb.append('/');
+            }
+            sb.append(stack.get(i));
+        }
+        return sb.toString();
     }
 
 //    public static void main(String[] args) {

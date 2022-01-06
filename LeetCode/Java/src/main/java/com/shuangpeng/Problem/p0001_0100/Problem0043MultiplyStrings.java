@@ -93,7 +93,7 @@ public class Problem0043MultiplyStrings {
 //        String answer = a.multiply("123", "456");
 //    }
 
-    public String multiply(String num1, String num2) {
+    public String multiply1(String num1, String num2) {
         if (num1 == null || num2 == null) {
             return "0";
         }

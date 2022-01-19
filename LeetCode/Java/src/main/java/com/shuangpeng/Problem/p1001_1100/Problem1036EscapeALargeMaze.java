@@ -113,7 +113,7 @@ public class Problem1036EscapeALargeMaze {
         }
     }
 
-    public boolean isEscapePossible(int[][] blocked, int[] source, int[] target) {
+    public boolean isEscapePossible2(int[][] blocked, int[] source, int[] target) {
         List<int[]> list = new ArrayList<>(blocked.length + 4);
         final int M = (int) 1e6;
         list.add(source);

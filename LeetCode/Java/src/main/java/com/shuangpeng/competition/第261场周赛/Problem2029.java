@@ -75,4 +75,54 @@ public class Problem2029 {
 //        Problem2029 a = new Problem2029();
 //        a.stoneGameIX(new int[]{2, 1});
 //    }
+
+
+    public boolean stoneGameIX1(int[] stones) {
+        int[] count = new int[3];
+        for (int stone : stones) {
+            ++count[stone % 3];
+        }
+        int m = Math.min(count[1] >> 1, count[2] >> 1);
+//        count[1] -= m << 1;
+//        count[2] -= m << 1;
+//        count[0] %= 2;
+        return dfs(count[0], count[1], count[2], 0, 0);
+    }
+
+    private boolean dfs(int a, int b, int c, int turn, int num) {
+        final int ALICE = 0, BOB = 1;
+        if (a == 0 && b == 0 && c == 0) {
+            return false;
+        }
+        int next = 1 - turn;
+        if (num == 0) {
+            if (b == 0 && c == 0) {
+                return false;
+            }
+            if (b > 0 && dfs(a, b - 1, c, next, 1)) {
+                return true;
+            }
+            return c > 0 && dfs(a, b, c - 1, next, 2);
+        }
+        if (num == 1) {
+            if (b == 0) {
+                if (a == 0) {
+                    return turn == BOB;
+                }
+                return dfs(a - 1, b, c, next, num);
+            }
+            return dfs(a, b - 1, c, next, 2);
+        }
+        if (c == 0) {
+            if (a == 0) {
+                return turn == BOB;
+            }
+            return dfs(a - 1, b, c, next, num);
+        }
+        return dfs(a, b, c - 1, next, 1);
+    }
+
+    public static void main(String[] args) {
+        Problem2029 a = new Problem2029();
+    }
 }

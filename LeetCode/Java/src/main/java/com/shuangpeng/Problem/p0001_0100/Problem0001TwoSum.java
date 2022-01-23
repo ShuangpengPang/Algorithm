@@ -1,5 +1,8 @@
 package com.shuangpeng.Problem.p0001_0100;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Problem0001TwoSum {
 
     public static void quickSort(int[] array, int start, int end) {
@@ -38,7 +41,7 @@ public class Problem0001TwoSum {
         }
     }
 
-    public int[] twoSum(int[] nums, int target) {
+    public int[] twoSum0(int[] nums, int target) {
         if (nums == null || nums.length < 2) {
             return null;
         }
@@ -73,6 +76,22 @@ public class Problem0001TwoSum {
             }
         }
         return null;
+    }
+
+    public int[] twoSum(int[] nums, int target) {
+        int n = nums.length;
+        Map<Integer, Integer> map = new HashMap<>(n);
+        int[] ans = new int[2];
+        for (int i = 0; i < n; ++i) {
+            int j = map.getOrDefault(target - nums[i], -1);
+            if (j != -1) {
+                ans[0] = j;
+                ans[1] = i;
+                break;
+            }
+            map.put(nums[i], i);
+        }
+        return ans;
     }
 
 //    public static void main(String[] args) {

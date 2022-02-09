@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1401_1500;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class Problem1405LongestHappyString {
 
@@ -48,7 +49,7 @@ public class Problem1405LongestHappyString {
         return sb.toString();
     }
 
-    public String longestDiverseString(int a, int b, int c) {
+    public String longestDiverseString1(int a, int b, int c) {
         Pair[] pairs = {new Pair(a, 'a'), new Pair(b, 'b'), new Pair(c, 'c')};
         StringBuilder sb = new StringBuilder();
         boolean hasNext = true;
@@ -82,26 +83,66 @@ public class Problem1405LongestHappyString {
         }
     }
 
-//    public String longestDiverseString(int a, int b, int c) {
-//        PriorityQueue<int[]> q = new PriorityQueue<>((x, y)->y[1]-x[1]);
-//        if (a > 0) q.add(new int[]{0, a});
-//        if (b > 0) q.add(new int[]{1, b});
-//        if (c > 0) q.add(new int[]{2, c});
-//        StringBuilder sb = new StringBuilder();
-//        while (!q.isEmpty()) {
-//            int[] cur = q.poll();
-//            int n = sb.length();
-//            if (n >= 2 && sb.charAt(n - 1) - 'a' == cur[0] && sb.charAt(n - 2) - 'a' == cur[0]) {
-//                if (q.isEmpty()) break;
-//                int[] next = q.poll();
-//                sb.append((char)(next[0] + 'a'));
-//                if (--next[1] != 0) q.add(next);
-//                q.add(cur);
-//            } else {
-//                sb.append((char)(cur[0] + 'a'));
-//                if (--cur[1] != 0) q.add(cur);
-//            }
-//        }
-//        return sb.toString();
-//    }
+    public String longestDiverseString2(int a, int b, int c) {
+        PriorityQueue<int[]> q = new PriorityQueue<>((x, y)->y[1]-x[1]);
+        if (a > 0) q.add(new int[]{0, a});
+        if (b > 0) q.add(new int[]{1, b});
+        if (c > 0) q.add(new int[]{2, c});
+        StringBuilder sb = new StringBuilder();
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int n = sb.length();
+            if (n >= 2 && sb.charAt(n - 1) - 'a' == cur[0] && sb.charAt(n - 2) - 'a' == cur[0]) {
+                if (q.isEmpty()) break;
+                int[] next = q.poll();
+                sb.append((char)(next[0] + 'a'));
+                if (--next[1] != 0) q.add(next);
+                q.add(cur);
+            } else {
+                sb.append((char)(cur[0] + 'a'));
+                if (--cur[1] != 0) q.add(cur);
+            }
+        }
+        return sb.toString();
+    }
+
+    private static int[] char2num;
+    public static String longestDiverseString(int a, int b, int c) {
+        char2num = new int[] {a, b, c};
+        char[] result = new char[a + b + c];
+        int idx = 0;
+        while (char2num[0] != 0 || char2num[1] != 0 || char2num[2] != 0) {
+            char next;
+            if (idx < 2 || result[idx - 1] != result[idx - 2]) {
+                next = nextChar(' ');
+            }
+            else {
+                next = nextChar(result[idx - 1]);
+            }
+            if (char2num[next - 'a'] <= 0) {
+                break;
+            }
+            --char2num[next - 'a'];
+            result[idx++] = next;
+        }
+        return new String(result, 0, idx);
+    }
+
+    private static char nextChar(char exclude) {
+        char next;
+        if (exclude == 'a') {
+            next = char2num[1] > char2num[2] ? 'b' : 'c';
+        }
+        else if (exclude == 'b') {
+            next = char2num[0] > char2num[2] ? 'a' : 'c';
+        }
+        else if (exclude == 'c') {
+            next = char2num[0] > char2num[1] ? 'a' : 'b';
+        }
+        else {
+            next = char2num[0] > char2num[1] ? 'a' : 'b';
+            next = char2num[next - 'a'] > char2num[2] ? next : 'c';
+        }
+        return next;
+    }
 }

@@ -5,10 +5,10 @@ import java.util.List;
 
 public class Problem0017LetterCombinations {
 
-    public static void main(String[] args) {
-        Problem0017LetterCombinations a = new Problem0017LetterCombinations();
-        a.letterCombinations("23");
-    }
+//    public static void main(String[] args) {
+//        Problem0017LetterCombinations a = new Problem0017LetterCombinations();
+//        a.letterCombinations("23");
+//    }
 
     public List<String> letterCombinations0(String digits) {
         if (digits == null) {

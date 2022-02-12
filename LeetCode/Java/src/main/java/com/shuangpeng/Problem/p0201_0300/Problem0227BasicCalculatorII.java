@@ -5,10 +5,10 @@ import java.util.LinkedList;
 
 public class Problem0227BasicCalculatorII {
 
-    public static void main(String[] args) {
-        Problem0227BasicCalculatorII a = new Problem0227BasicCalculatorII();
-        a.calculate("42");
-    }
+//    public static void main(String[] args) {
+//        Problem0227BasicCalculatorII a = new Problem0227BasicCalculatorII();
+//        a.calculate("42");
+//    }
 
     public int calculate0(String s) {
         if (s == null || s.length() == 0) {

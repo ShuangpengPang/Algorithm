@@ -26,7 +26,6 @@ public class Problem0899OrderlyQueue {
         } else {
             Arrays.sort(chars);
         }
-        Arrays.equals()
         return new String(chars);
     }
 

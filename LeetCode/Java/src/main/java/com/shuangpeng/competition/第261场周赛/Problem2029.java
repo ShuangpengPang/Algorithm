@@ -125,6 +125,6 @@ public class Problem2029 {
     public static void main(String[] args) {
         Problem2029 a = new Problem2029();
         int[] stones = {19,2,17,20,7,17};
-        a.stoneGameIX1()
+//        a.stoneGameIX1()
     }
 }

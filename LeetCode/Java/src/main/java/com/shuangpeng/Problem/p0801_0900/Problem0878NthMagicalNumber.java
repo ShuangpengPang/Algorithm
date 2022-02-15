@@ -1,8 +1,5 @@
 package com.shuangpeng.Problem.p0801_0900;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
-
 public class Problem0878NthMagicalNumber {
 
     public int nthMagicalNumber(int n, int a, int b) {
@@ -63,24 +60,24 @@ public class Problem0878NthMagicalNumber {
 
     }
 
-    public long maxRunTime(int n, int[] batteries) {
-        int m = batteries.length;
-        if (m < n) {
-            return 0;
-        }
-        Long[] copy = new Long[m];
-        for (int i = 0; i < m; ++i) {
-            copy[i] = (long) batteries[i];
-        }
-        Arrays.sort(copy, (a, b) -> b - a);
-        PriorityQueue<Long> pq = new PriorityQueue<>();
-        for (int i = 0; i < n; ++i) {
-            pq.offer(copy[i]);
-        }
-        for (int i = n; i < m; ++i) {
-            long num = pq.poll();
-            pq.offer(num + copy[i]);
-        }
-        return pq.peek();
-    }
+//    public long maxRunTime(int n, int[] batteries) {
+//        int m = batteries.length;
+//        if (m < n) {
+//            return 0;
+//        }
+//        Long[] copy = new Long[m];
+//        for (int i = 0; i < m; ++i) {
+//            copy[i] = (long) batteries[i];
+//        }
+//        Arrays.sort(copy, (a, b) -> b - a);
+//        PriorityQueue<Long> pq = new PriorityQueue<>();
+//        for (int i = 0; i < n; ++i) {
+//            pq.offer(copy[i]);
+//        }
+//        for (int i = n; i < m; ++i) {
+//            long num = pq.poll();
+//            pq.offer(num + copy[i]);
+//        }
+//        return pq.peek();
+//    }
 }

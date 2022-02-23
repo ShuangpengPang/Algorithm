@@ -117,4 +117,8 @@ public class Problem0838PushDominoes {
         }
         return new String(chars);
     }
+
+    public String pushDominoes(String dominoes) {
+
+    }
 }

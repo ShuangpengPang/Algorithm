@@ -2,9 +2,7 @@ package com.shuangpeng.Problem.p0601_0700;
 
 import com.shuangpeng.common.TreeNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class Problem0653TwoSumIVInputIsABST {
 
@@ -35,7 +33,7 @@ public class Problem0653TwoSumIVInputIsABST {
         dfs(node.right, list);
     }
 
-    public boolean findTarget(TreeNode root, int k) {
+    public boolean findTarget1(TreeNode root, int k) {
         return preorder(root, k, new HashSet<>());
     }
 
@@ -48,5 +46,68 @@ public class Problem0653TwoSumIVInputIsABST {
         }
         set.add(node.val);
         return preorder(node.left, k, set) || preorder(node.right, k, set);
+    }
+
+    public boolean findTarget2(TreeNode root, int k) {
+        return dfs(root, new HashSet<>(), k);
+    }
+
+    private boolean dfs(TreeNode root, Set<Integer> set, int k) {
+        if (root == null) {
+            return false;
+        }
+        if (dfs(root.left, set, k)) {
+            return true;
+        }
+        if (set.contains(k - root.val)) {
+            return true;
+        }
+        set.add(root.val);
+        return dfs(root.right, set, k);
+    }
+
+    public boolean findTarget(TreeNode root, int k) {
+        Deque<TreeNode> leftStack = new ArrayDeque<>();
+        Deque<TreeNode> rightStack = new ArrayDeque<>();
+        TreeNode node = root;
+        while (node != null) {
+            leftStack.addLast(node);
+            node = node.left;
+        }
+        node = root;
+        while (node != null) {
+            rightStack.addLast(node);
+            node = node.right;
+        }
+        TreeNode left = leftStack.peekLast(), right = rightStack.peekLast();
+        while (left != right) {
+            int sum = left.val + right.val;
+            if (sum < k) {
+                left = getLeft(leftStack);
+            } else if (sum > k) {
+                right = getRight(rightStack);
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private TreeNode getLeft(Deque<TreeNode> deque) {
+        TreeNode node = deque.pollLast().right;
+        while (node != null) {
+            deque.addLast(node);
+            node = node.left;
+        }
+        return deque.peekLast();
+    }
+
+    private TreeNode getRight(Deque<TreeNode> deque) {
+        TreeNode node = deque.pollLast().left;
+        while (node != null) {
+            deque.addLast(node);
+            node = node.right;
+        }
+        return deque.peekLast();
     }
 }

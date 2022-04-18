@@ -34,22 +34,5 @@ public class Problem2028 {
         return ans;
     }
 
-    public int[] missingRolls(int[] rolls, int mean, int n) {
-        int m = rolls.length;
-        int sum = mean * (m + n);
-        for (int roll : rolls) {
-            sum -= roll;
-        }
-        if (sum < n || sum > 6 * n) {
-            return new int[0];
-        }
-        sum -= n;
-        int[] ans = new int[n];
-        for (int i = 0; i < n; ++i) {
-            int j = Math.min(5, sum);
-            ans[i] = 1 + j;
-            sum -= j;
-        }
-        return ans;
-    }
+
 }

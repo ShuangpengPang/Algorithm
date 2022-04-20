@@ -126,24 +126,34 @@ public class Problem0388LongestAbsoluteFilePath {
     }
 
     public int lengthLongestPath(String s) {
-        Map<Integer, String> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
         int n = s.length();
-        String ans = null;
-        for (int i = 0; i < n; ) {
-            int level = 0;
-            while (i < n && s.charAt(i) == '\t' && ++level >= 0) i++;
-            int j = i;
-            boolean isDir = true;
-            while (j < n && s.charAt(j) != '\n') {
-                if (s.charAt(j++) == '.') isDir = false;
+        int pos = 0;
+        int ans = 0;
+        while (pos < n) {
+            int depth = 0;
+            while (s.charAt(pos) == '\t') {
+                ++depth;
+                ++pos;
             }
-            String cur = s.substring(i, j);
-            String prev = map.getOrDefault(level - 1, null);
-            String path = prev == null ? cur : prev + "/" + cur;
-            if (isDir) map.put(level, path);
-            else if (ans == null || path.length() > ans.length()) ans = path;
-            i = j + 1;
+            int len = 0;
+            boolean isFile = false;
+            while (pos < n && s.charAt(pos) != '\n') {
+                if (s.charAt(pos) == '.') {
+                    isFile = true;
+                }
+                ++len;
+                ++pos;
+            }
+            ++pos;
+            int previousLength = map.getOrDefault(depth - 1, 0);
+            len += previousLength == 0 ? 0 : previousLength + 1;
+            if (isFile) {
+                ans = Math.max(ans, len);
+            } else {
+                map.put(depth, len);
+            }
         }
-        return ans == null ? 0 : ans.length();
+        return ans;
     }
 }

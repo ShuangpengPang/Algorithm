@@ -47,4 +47,8 @@ public class Problem0396RotateFunction {
         }
         return ans;
     }
+
+    public static void main(String[] args) {
+
+    }
 }

@@ -183,4 +183,8 @@ public class Problem0587ErectTheFence {
         }
         return ans;
     }
+
+//    public int[][] outerTrees(int[][] trees) {
+//
+//    }
 }

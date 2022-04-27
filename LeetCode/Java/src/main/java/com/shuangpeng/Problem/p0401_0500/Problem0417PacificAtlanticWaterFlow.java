@@ -1,7 +1,6 @@
 package com.shuangpeng.Problem.p0401_0500;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description: Problem0417PacificAtlanticWaterFlow
@@ -57,7 +56,7 @@ public class Problem0417PacificAtlanticWaterFlow {
         return result[r][c];
     }
 
-    public List<List<Integer>> pacificAtlantic1(int[][] heights) {
+    public List<List<Integer>> pacificAtlantic2(int[][] heights) {
         int m = heights.length, n = heights[0].length;
         int[][] result = new int[m][n];
         for (int i = 0; i < n; ++i) {
@@ -94,51 +93,49 @@ public class Problem0417PacificAtlanticWaterFlow {
         }
     }
 
-    static int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    int[][] heights;
-    int m, n;
-
     public List<List<Integer>> pacificAtlantic(int[][] heights) {
-        this.heights = heights;
-        this.m = heights.length;
-        this.n = heights[0].length;
-        boolean[][] pacific = new boolean[m][n];
-        boolean[][] atlantic = new boolean[m][n];
-        for (int i = 0; i < m; i++) {
-            dfs(i, 0, pacific);
+        int m = heights.length, n = heights[0].length;
+        int[][] result = new int[m][n];
+        for (int i = 0; i < m; ++i) {
+            bfs(heights, result, i, 0, 1);
+            bfs(heights, result, i, n - 1, 2);
         }
-        for (int j = 1; j < n; j++) {
-            dfs(0, j, pacific);
+        for (int i = 0; i < n; ++i) {
+            bfs(heights, result, 0, i, 1);
+            bfs(heights, result, m - 1, i, 2);
         }
-        for (int i = 0; i < m; i++) {
-            dfs(i, n - 1, atlantic);
-        }
-        for (int j = 0; j < n - 1; j++) {
-            dfs(m - 1, j, atlantic);
-        }
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (pacific[i][j] && atlantic[i][j]) {
-                    List<Integer> cell = new ArrayList<Integer>();
-                    cell.add(i);
-                    cell.add(j);
-                    result.add(cell);
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (result[i][j] == 3) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(i);
+                    list.add(j);
+                    ans.add(list);
                 }
             }
         }
-        return result;
+        return ans;
     }
 
-    public void dfs(int row, int col, boolean[][] ocean) {
-        if (ocean[row][col]) {
+    private void bfs(int[][] heights, int[][] result, int r, int c, int v) {
+        int m = heights.length, n = heights[0].length;
+        if ((result[r][c] & v) == v) {
             return;
         }
-        ocean[row][col] = true;
-        for (int[] dir : dirs) {
-            int newRow = row + dir[0], newCol = col + dir[1];
-            if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n && heights[newRow][newCol] >= heights[row][col]) {
-                dfs(newRow, newCol, ocean);
+        int[][] dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+        Queue<int[]> queue = new LinkedList<>();
+        result[r][c] |= v;
+        queue.add(new int[]{r, c});
+        while (!queue.isEmpty()) {
+            int[] pair = queue.poll();
+            int a = pair[0], b = pair[1];
+            for (int[] dir : dirs) {
+                int x = a + dir[0], y = b + dir[1];
+                if (x >= 0 && x < m && y >= 0 && y < n && heights[x][y] >= heights[a][b] && (result[x][y] & v) == 0) {
+                    result[x][y] |= v;
+                    queue.add(new int[]{x, y});
+                }
             }
         }
     }

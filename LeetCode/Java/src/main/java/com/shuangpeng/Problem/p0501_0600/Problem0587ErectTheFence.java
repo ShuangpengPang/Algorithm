@@ -184,7 +184,117 @@ public class Problem0587ErectTheFence {
         return ans;
     }
 
-//    public int[][] outerTrees(int[][] trees) {
-//
-//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    class Pair {
+        int x, y;
+
+        Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public int hashCode() {
+            return x * 500 + y;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Pair)) {
+                return false;
+            }
+            Pair other = (Pair) obj;
+            return this.x == other.x && this.y == other.y;
+        }
+    }
+
+    public int[][] outerTrees(int[][] trees) {
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int[] tree : trees) {
+            int x = tree[0], y = tree[1];
+            map.putIfAbsent(x, new ArrayList<>());
+            map.get(x).add(y);
+        }
+        List<Integer> list = new ArrayList<>(map.keySet());
+        for (int key : list) {
+            map.get(key).sort((Comparator.comparingInt(a -> a)));
+        }
+        list.sort(Comparator.comparingInt(a -> a));
+        Set<Pair> result = new HashSet<>();
+        int first = list.get(0);
+        for (int y : map.get(first)) {
+            result.add(new Pair(first, y));
+        }
+        List<int[]> temp = new ArrayList<>();
+        temp.add(new int[]{first, map.get(first).get(0)});
+        int n = list.size();
+        for (int i = 1; i < n; ++i) {
+            int x = list.get(i), y = map.get(x).get(0);
+            while (temp.size() >= 2) {
+                int[] last = temp.get(temp.size() - 1);
+                int[] prev = temp.get(temp.size() - 2);
+                if (!isValid(last[0] - prev[0], last[1] - prev[1], x - last[0], y - last[1])) {
+                    temp.remove(temp.size() - 1);
+                } else {
+                    break;
+                }
+            }
+            temp.add(new int[]{x, y});
+        }
+        for (int i = 1; i < temp.size(); ++i) {
+            result.add(new Pair(temp.get(i)[0], temp.get(i)[1]));
+        }
+        int last = list.get(list.size() - 1);
+        List<Integer> lastList = map.get(last);
+        for (int i = 1; i < lastList.size(); ++i) {
+            result.add(new Pair(last, lastList.get(i)));
+        }
+        temp.clear();
+        temp.add(new int[]{last, lastList.get(lastList.size() - 1)});
+        for (int i = n - 2; i >= 0; --i) {
+            int x = list.get(i);
+            int y = map.get(x).get(map.get(x).size() - 1);
+            while (temp.size() >= 2) {
+                int[] firstPoint = temp.get(temp.size() - 1);
+                int[] secondPoint = temp.get(temp.size() - 2);
+                if (!isValid(firstPoint[0] - secondPoint[0], firstPoint[1] - secondPoint[1], x - firstPoint[0], y - firstPoint[1])) {
+                    temp.remove(temp.size() - 1);
+                } else {
+                    break;
+                }
+            }
+            temp.add(new int[]{x, y});
+        }
+        for (int i = 1; i < temp.size() - 1; ++i) {
+            result.add(new Pair(temp.get(i)[0], temp.get(i)[1]));
+        }
+        int size = result.size();
+        int[][] ans = new int[size][2];
+        int i = 0;
+        for (Pair pair : result) {
+            ans[i][0] = pair.x;
+            ans[i][1] = pair.y;
+            ++i;
+        }
+        return ans;
+    }
+
+    private boolean isValid(int a, int b, int x, int y) {
+        return a * y - b * x >= 0;
+    }
 }

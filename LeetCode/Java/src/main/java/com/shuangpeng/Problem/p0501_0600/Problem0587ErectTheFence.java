@@ -145,7 +145,7 @@ public class Problem0587ErectTheFence {
         return -((r[0] - p[0]) * (q[1] - r[1]) - (r[1] - p[1]) * (q[0] - r[0]));
     }
 
-    public int[][] outerTrees(int[][] trees) {
+    public int[][] outerTrees2(int[][] trees) {
         int n = trees.length;
         if (n < 4) {
             return trees;
@@ -183,22 +183,6 @@ public class Problem0587ErectTheFence {
         }
         return ans;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     class Pair {
         int x, y;

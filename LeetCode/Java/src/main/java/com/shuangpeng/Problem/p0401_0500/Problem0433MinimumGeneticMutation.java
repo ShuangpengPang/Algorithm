@@ -122,7 +122,7 @@ public class Problem0433MinimumGeneticMutation {
         return -1;
     }
 
-    public int minMutation(String start, String end, String[] bank) {
+    public int minMutation2(String start, String end, String[] bank) {
         if (start.equals(end)) {
             return 0;
         }
@@ -192,6 +192,117 @@ public class Problem0433MinimumGeneticMutation {
                 }
             }
             ++step;
+        }
+        return -1;
+    }
+
+    public int minMutation3(String start, String end, String[] bank) {
+        if (start.equals(end)) {
+            return 0;
+        }
+        Queue<String> q1 = new LinkedList<>(), q2 = new LinkedList<>();
+        Map<String, Integer> map1 = new HashMap<>(), map2 = new HashMap<>();
+        map1.put(start, 0);
+        map2.put(end, 0);
+        q1.offer(start);
+        q2.offer(end);
+        Set<String> set = new HashSet<>();
+        char[] keys = {'A', 'C', 'G', 'T'};
+        for (String s : bank) {
+            set.add(s);
+        }
+        while (!q1.isEmpty() && !q2.isEmpty()) {
+            int result = -1;
+            if (q1.size() <= q2.size()) {
+                result = find(q1, map1, map2, keys, set);
+            } else {
+                result = find(q2, map2, map1, keys, set);
+            }
+            if (result != -1) {
+                return result;
+            }
+        }
+        return -1;
+    }
+
+    private int find(Queue<String> queue, Map<String, Integer> cur, Map<String, Integer> other, char[] keys, Set<String> set) {
+        for (int i = queue.size() - 1; i >= 0; --i) {
+            String s = queue.poll();
+            char[] chars = s.toCharArray();
+            int m = chars.length;
+            int step = cur.get(s);
+            for (int j = 0; j < m; ++j) {
+                char c = chars[j];
+                for (char k : keys) {
+                    if (c != k) {
+                        chars[j] = k;
+                        String str = new String(chars);
+                        if (!cur.containsKey(str) && set.contains(str)) {
+                            if (other.containsKey(str)) {
+                                return other.get(str) + step + 1;
+                            }
+                            cur.put(str, step + 1);
+                            queue.offer(str);
+                        }
+                        chars[j] = c;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    class Node {
+        String s;
+        int val;
+
+        Node(String s, String t) {
+            this.s = s;
+            int n = s.length();
+            val = 0;
+            for (int i = 0; i < n; ++i) {
+                if (s.charAt(i) != t.charAt(i)) {
+                    ++val;
+                }
+            }
+        }
+    }
+
+    public int minMutation(String start, String end, String[] bank) {
+        if (start.equals(end)) {
+            return 0;
+        }
+        Set<String> set = new HashSet<>();
+        for (String b : bank) {
+            set.add(b);
+        }
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.val));
+        Map<String, Integer> map = new HashMap<>();
+        pq.offer(new Node(start, end));
+        map.put(start, 0);
+        char[] keys = {'A', 'C', 'G', 'T'};
+        while (!pq.isEmpty()) {
+            String str = pq.poll().s;
+            char[] chars = str.toCharArray();
+            int step = map.get(str);
+            int n = chars.length;
+            for (int i = 0; i < n; ++i) {
+                char c = chars[i];
+                for (char k : keys) {
+                    if (c != k) {
+                        chars[i] = k;
+                        String s = String.valueOf(chars);
+                        if (!map.containsKey(s) && set.contains(s)) {
+                            if (s.equals(end)) {
+                                return step + 1;
+                            }
+                            map.put(s, step + 1);
+                            pq.offer(new Node(s, end));
+                        }
+                        chars[i] = c;
+                    }
+                }
+            }
         }
         return -1;
     }

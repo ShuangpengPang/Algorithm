@@ -2,11 +2,12 @@ package com.shuangpeng.Problem.p0401_0500;
 
 import com.shuangpeng.common.TreeNode;
 
-import java.util.ArrayDeque;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
+/***
+ * @Description: 序列化和反序列化二叉搜索树（449）
+ * @Date 2022/5/11 3:47 PM
+ **/
 public class Problem0449SerializeAndDeserializeBST {
 
     public static class Codec {
@@ -239,3 +240,206 @@ public class Problem0449SerializeAndDeserializeBST {
         return helper(Integer.MIN_VALUE, Integer.MAX_VALUE, nums);
     }
 }
+
+class Problem0449SerializeAndDeserializeBST0 {
+
+    public class Codec {
+
+        // Encodes a tree to a single string.
+        public String serialize(TreeNode root) {
+            return dfs(root).toString();
+        }
+
+        // Decodes your encoded data to tree.
+        public TreeNode deserialize(String data) {
+            return parse(data.toCharArray(), 0, data.length());
+        }
+
+        private StringBuilder dfs(TreeNode root) {
+            if (root == null) {
+                return new StringBuilder();
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(root.val)
+                    .append('(').append(dfs(root.left)).append(')')
+                    .append('(').append(dfs(root.right)).append(')');
+            return sb;
+        }
+
+        private TreeNode parse(char[] chars, int s, int e) {
+            if (s == e) {
+                return null;
+            }
+            int val = 0;
+            int i = s;
+            while (chars[i] != '(') {
+                val = val * 10 + chars[i] - '0';
+                ++i;
+            }
+            int j = i;
+            int count = 1;
+            while (count != 0) {
+                ++j;
+                if (chars[j] == '(') {
+                    ++count;
+                } else if (chars[j] == ')') {
+                    --count;
+                }
+            }
+            TreeNode root = new TreeNode(val);
+            root.left = parse(chars, i + 1, j);
+            root.right = parse(chars, j + 2, e - 1);
+            return root;
+        }
+    }
+}
+
+class Problem0449SerializeAndDeserializeBST1 {
+
+    public class Codec {
+
+        // Encodes a tree to a single string.
+        public String serialize(TreeNode root) {
+            if (root == null) {
+                return "";
+            }
+            StringBuilder sb = new StringBuilder();
+            Queue<TreeNode> queue = new LinkedList<>();
+            queue.offer(root);
+            while (!queue.isEmpty()) {
+                sb.append(',');
+                TreeNode node = queue.poll();
+                if (node != null) {
+                    sb.append(node.val);
+                    queue.offer(node.left);
+                    queue.offer(node.right);
+                }
+            }
+            return sb.substring(1);
+        }
+
+        // Decodes your encoded data to tree.
+        public TreeNode deserialize(String data) {
+            if (data.isEmpty()) {
+                return null;
+            }
+            char[] chars = data.toCharArray();
+            int n = chars.length;
+            int i = 0;
+            int val = 0;
+            while (chars[i] != ',') {
+                val = val * 10 + chars[i] - '0';
+                ++i;
+            }
+            TreeNode root = new TreeNode(val);
+            Queue<TreeNode> queue = new LinkedList<>();
+            queue.offer(root);
+            while (!queue.isEmpty()) {
+                TreeNode node = queue.poll();
+                ++i;
+                if (chars[i] != ',') {
+                    int num = 0;
+                    while (chars[i] != ',') {
+                        num = num * 10 + chars[i] - '0';
+                        ++i;
+                    }
+                    node.left = new TreeNode(num);
+                    queue.offer(node.left);
+                }
+                ++i;
+                if (i < n && chars[i] != ',') {
+                    int num = 0;
+                    while (i < n && chars[i] != ',') {
+                        num = num * 10 + chars[i] - '0';
+                        ++i;
+                    }
+                    node.right = new TreeNode(num);
+                    queue.offer(node.right);
+                }
+            }
+            return root;
+        }
+    }
+}
+
+class Problem0449SerializeAndDeserializeBST2 {
+    public class Codec {
+        public String serialize(TreeNode root) {
+            List<Integer> list = new ArrayList<>();
+            postOrder(root, list);
+            String s = list.toString();
+            return s.substring(1, s.length() - 1);
+        }
+
+        private void postOrder(TreeNode root, List<Integer> list) {
+            if (root == null) {
+                return;
+            }
+            postOrder(root.left, list);
+            postOrder(root.right, list);
+            list.add(root.val);
+        }
+
+        public TreeNode deserialize(String data) {
+            if (data.isEmpty()) {
+                return null;
+            }
+            String[] strs = data.split(", ");
+            Deque<Integer> deque = new ArrayDeque<>();
+            for (String s : strs) {
+                deque.addLast(Integer.parseInt(s));
+            }
+            return construct(deque, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        }
+
+        private TreeNode construct(Deque<Integer> deque, int low, int up) {
+            if (deque.isEmpty() || deque.peekLast() < low || deque.peekLast() > up) {
+                return null;
+            }
+            int val = deque.pollLast();
+            TreeNode node = new TreeNode(val);
+            node.right = construct(deque, val, up);
+            node.left = construct(deque, low, val);
+            return node;
+        }
+    }
+}
+
+class Problem0449SerializeAndDeserializeBST3 {
+
+    public class Codec {
+
+        public String serialize(TreeNode root) {
+            StringBuilder sb = new StringBuilder();
+            postOrder(root, sb);
+            return sb.toString();
+        }
+
+        public TreeNode deserialize(String data) {
+            return construct(data.toCharArray(), new int[]{data.length() - 1}, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        }
+
+        private void postOrder(TreeNode root, StringBuilder sb) {
+            if (root == null) {
+                return;
+            }
+            postOrder(root.left, sb);
+            postOrder(root.right, sb);
+            sb.append((char) root.val);
+        }
+
+        private TreeNode construct(char[] chars, int[] idx, int low, int up) {
+            int i = idx[0];
+            if (i < 0 || chars[i] < low || chars[i] > up) {
+                return null;
+            }
+            int val = chars[i];
+            --idx[0];
+            TreeNode node = new TreeNode(val);
+            node.right = construct(chars, idx, val, up);
+            node.left = construct(chars, idx, low, val);
+            return node;
+        }
+    }
+}
+

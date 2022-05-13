@@ -14,7 +14,7 @@ public class Problem0995MinimumNumberOfKConsecutiveBitFlips {
         for (int i = 0; i < n; ++i) {
             if (i >= k) {
                 if (nums[i - k] > 1) {
-                    --count;i
+                    --count;
                     nums[i - k] -= 2;
                 }
             }

@@ -105,7 +105,7 @@ public class Question0406InorderSuccessor {
         }
     }
 
-    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+    public TreeNode inorderSuccessor3(TreeNode root, TreeNode p) {
         if (root == null || p == null) {
             return null;
         }
@@ -130,5 +130,87 @@ public class Question0406InorderSuccessor {
             return null;
         }
         return previous;
+    }
+
+    public TreeNode inorderSuccessor4(TreeNode root, TreeNode p) {
+        TreeNode[] ans = new TreeNode[1];
+        findSuccessor(root, p, new int[]{0}, ans);
+        return ans[0];
+    }
+
+    private void findSuccessor(TreeNode root, TreeNode p, int[] flag, TreeNode[] ans) {
+        if (root == null || p == null) {
+            return;
+        }
+        findSuccessor(root.left, p, flag, ans);
+        if (flag[0] == 2) {
+            return;
+        }
+        if (flag[0] == 1) {
+            ans[0] = root;
+            flag[0] = 2;
+            return;
+        }
+        if (root == p) {
+            flag[0] = 1;
+        }
+        findSuccessor(root.right, p, flag, ans);
+    }
+
+    public TreeNode inorderSuccessor5(TreeNode root, TreeNode p) {
+        if (root == null || p == null) {
+            return null;
+        }
+        TreeNode prev = null;
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        TreeNode node = root;
+        while (node != null || !deque.isEmpty()) {
+            if (node != null) {
+                deque.addLast(node);
+                node = node.left;
+            } else {
+                if (prev == p) {
+                    return deque.pollLast();
+                }
+                prev = deque.pollLast();
+                node = prev.right;
+            }
+        }
+        return null;
+    }
+
+    public TreeNode inorderSuccessor6(TreeNode root, TreeNode p) {
+        if (p == null) {
+            return null;
+        }
+        TreeNode successor = null;
+        if (p.right != null) {
+            successor = p.right;
+            while (successor.left != null) {
+                successor = successor.left;
+            }
+            return successor;
+        }
+        TreeNode node = root;
+        while (node != p && node != null) {
+            if (p.val > node.val) {
+                node = node.right;
+            } else {
+                successor = node;
+                node = node.left;
+            }
+        }
+        return node == p ? successor : null;
+    }
+
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        if (root == null) {
+            return null;
+        }
+        if (p.val >= root.val) {
+            return inorderSuccessor(root.right, p);
+        }
+        TreeNode ans = inorderSuccessor(root.left, p);
+        return ans == null ? root : ans;
     }
 }

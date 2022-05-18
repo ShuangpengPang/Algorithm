@@ -88,3 +88,66 @@ public class Problem1028RecoverATreeFromPreorderTraversal {
         return deque.peekFirst();
     }
 }
+
+class Problem1028RecoverATreeFromPreorderTraversal0 {
+
+    int pos = 0;
+    public TreeNode recoverFromPreorder(String traversal) {
+        return dfs(traversal, 0);
+    }
+
+    private TreeNode dfs(String traversal, int level) {
+        int n = traversal.length();
+        if (pos == n) {
+            return null;
+        }
+        int currLevel = 0;
+        int tempPos = pos;
+        while (traversal.charAt(tempPos) == '-') {
+            ++tempPos;
+            ++currLevel;
+        }
+        if (currLevel != level) {
+            return null;
+        }
+        pos = tempPos;
+        int value = 0;
+        while (pos < n && traversal.charAt(pos) != '-') {
+            value = value * 10 + traversal.charAt(pos) - '0';
+            ++pos;
+        }
+        TreeNode node = new TreeNode(value);
+        node.left = dfs(traversal, level + 1);
+        node.right = dfs(traversal, level + 1);
+        return node;
+    }
+}
+
+class Problem1028RecoverATreeFromPreorderTraversal1 {
+
+    int level = 0, pos = 0;
+    public TreeNode recoverFromPreorder(String traversal) {
+        return dfs(traversal.toCharArray(), 0);
+    }
+
+    private TreeNode dfs(char[] chars, int curLevel) {
+        int n = chars.length;
+        if (level < curLevel || pos == n) {
+            return null;
+        }
+        int value = 0;
+        while (pos < n && chars[pos] != '-') {
+            value = value * 10 + (chars[pos] - '0');
+            ++pos;
+        }
+        level = 0;
+        while (pos < n && chars[pos] == '-') {
+            ++level;
+            ++pos;
+        }
+        TreeNode node = new TreeNode(value);
+        node.left = dfs(chars, curLevel + 1);
+        node.right = dfs(chars, curLevel + 1);
+        return node;
+    }
+}

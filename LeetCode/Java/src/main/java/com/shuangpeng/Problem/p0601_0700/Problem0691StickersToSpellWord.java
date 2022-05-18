@@ -183,7 +183,7 @@ public class Problem0691StickersToSpellWord {
         return list;
     }
 
-    public int minStickers(String[] stickers, String target) {
+    public int minStickers3(String[] stickers, String target) {
         int n = target.length();
         int m = 1 << n;
         int[] memo = new int[m];
@@ -219,41 +219,148 @@ public class Problem0691StickersToSpellWord {
         return memo[mask];
     }
 
-    public int minStickers(String[] stickers, String target) {
+    public int minStickers4(String[] stickers, String target) {
         int N = 26;
         int m = stickers.length, n = target.length();
-        int[][] cnts = new int[m][N];
-        Set<Integer>[] indices = new Set[N];
+        int[][] counts = new int[m][N];
         for (int i = 0; i < m; ++i) {
             int len = stickers[i].length();
             for (int j = 0; j < len; ++j) {
-                int k = stickers[i].charAt(j) - 'a';
-                ++cnts[i][k];
-                indices[k].add(i);
+                ++counts[i][stickers[i].charAt(j) - 'a'];
             }
         }
-        int INF = (int) 1e9;
-        int M = 1 << n;
-        int[] dp = new int[M];
-        Arrays.fill(dp, INF);
-        dp[0] = 0;
-        char[] chars = target.toCharArray();
-        for (int i = 0; i < M; ++i) {
-            if (dp[i] == INF) {
-                continue;
-            }
-            int idx = -1;
-            for (int j = 0; j < n; ++j) {
-                if ((i & (1 << j)) == 0) {
-                    idx = j;
+        List<Integer>[] map = new List[N];
+        for (int i = 0; i < N; ++i) {
+            map[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < N; ++j) {
+                if (counts[i][j] > 0) {
+                    map[j].add(i);
                 }
             }
-            if (idx == -1) {
-                break;
-            }
-            int c = chars[idx] - 'a';
-            for (int j : )
         }
+        int M = 1 << n;
+        int INF = (int) 1e9;
+        int[] memo = new int[M];
+        Arrays.fill(memo, INF);
+        memo[0] = 0;
+        char[] chars = target.toCharArray();
+        for (int i = 0; i < M; ++i) {
+            if (memo[i] != INF) {
+                int idx = -1;
+                for (int j = 0; j < n; ++j) {
+                    if ((i & (1 << j)) == 0) {
+                        idx = j;
+                        break;
+                    }
+                }
+                if (idx == -1) {
+                    break;
+                }
+                for (int j : map[chars[idx] - 'a']) {
+                    int[] cnt = counts[j].clone();
+                    int mask = i;
+                    for (int k = 0; k < n; ++k) {
+                        if ((i & (1 << k)) == 0 && cnt[chars[k] - 'a'] > 0) {
+                            --cnt[chars[k] - 'a'];
+                            mask |= 1 << k;
+                        }
+                    }
+                    memo[mask] = Math.min(memo[mask], memo[i] + 1);
+                }
+            }
+        }
+        return memo[M - 1] == INF ? -1 : memo[M - 1];
+    }
+
+    public int minStickers(String[] stickers, String target) {
+        int N = 26;
+        int[] counts = new int[N];
+        for (char c : target.toCharArray()) {
+            ++counts[c - 'a'];
+        }
+        int n = 0;
+        int[] index = new int[N];
+        for (int i = 0; i < N; ++i) {
+            index[i] = counts[i] > 0 ? n++ : -1;
+        }
+        int[] targetCounts = new int[n];
+        int t = 0;
+        for (int i : counts) {
+            if (i > 0) {
+                targetCounts[t++] = i;
+            }
+        }
+        int m = stickers.length;
+        int[][] stickerCount = new int[m][n];
+        for (int i = 0; i < m; ++i) {
+            for (char c : stickers[i].toCharArray()) {
+                int j = index[c - 'a'];
+                if (j >= 0) {
+                    ++stickerCount[i][j];
+                }
+            }
+        }
+        int start = removeDominatedSticker(stickerCount);
+        int step = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+        queue.offer(targetCounts);
+        visited.add(toString(targetCounts));
+        while (!queue.isEmpty()) {
+            ++step;
+            for (int i = queue.size() - 1; i >= 0; --i) {
+                int[] cnt = queue.poll();
+                for (int j = start; j < m; ++j) {
+                    int[] sticker = stickerCount[j];
+                    int[] copy = cnt.clone();
+                    for (int k = 0, c = 0; k < n; ++k) {
+                        copy[k] = Math.max(0, copy[k] - sticker[k]);
+                        if (copy[k] == 0) {
+                            ++c;
+                            if (c == n) {
+                                return step;
+                            }
+                        }
+                    }
+                    if (visited.add(toString(copy))) {
+                        queue.offer(copy);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int removeDominatedSticker(int[][] stickerCount) {
+        int m = stickerCount.length, n = stickerCount[0].length;
+        int start = 0;
+        for (int i = 0; i < m; ++i) {
+            for (int j = start; j < m; ++j) {
+                if (i != j) {
+                    int k = 0;
+                    while (k < n && stickerCount[i][k] <= stickerCount[j][k]) {
+                        ++k;
+                    }
+                    if (k == n) {
+                        int[] temp = stickerCount[i];
+                        stickerCount[i] = stickerCount[start];
+                        stickerCount[start++] = temp;
+                        break;
+                    }
+                }
+            }
+        }
+        return start;
+    }
+
+    private String toString(int[] cnt) {
+        StringBuilder sb = new StringBuilder();
+        for (int c : cnt) {
+            sb.append((char) c);
+        }
+        return sb.toString();
     }
 
 //    public static void main(String[] args) {

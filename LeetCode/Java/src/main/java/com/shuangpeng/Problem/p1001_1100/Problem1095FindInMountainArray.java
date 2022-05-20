@@ -65,6 +65,44 @@ public class Problem1095FindInMountainArray {
         return -1;
     }
 
+    public int findInMountainArray(int target, MountainArray mountainArr) {
+        int n = mountainArr.length();
+        int left = 0, right = n - 1;
+        while (left < right) {
+            int mid = left + ((right - left) >> 1);
+            int num = mountainArr.get(mid);
+            if (num > mountainArr.get(mid + 1)) {
+                right = mid - 1;
+            } else {
+                if (num < target) {
+                    left = mid + 1;
+                } else if (num > target) {
+                    right = mid - 1;
+                } else {
+                    return mid;
+                }
+            }
+        }
+        if (mountainArr.get(left) == target) {
+            return left;
+        }
+        ++left;
+        right = n - 1;
+        while (left <= right) {
+            int mid = left + ((right - left) >> 1);
+            int num = mountainArr.get(mid);
+            if (num == target) {
+                return mid;
+            }
+            if (num > mountainArr.get(mid - 1) || target < num) {
+                left = mid + 1;
+            } else if (target > num) {
+                right = mid - 1;
+            }
+        }
+        return -1;
+    }
+
 //    public static void main(String[] args) {
 //        Problem1095FindInMountainArray a = new Problem1095FindInMountainArray();
 //        int[] nums = {1,2,3,4,5,3,1};
@@ -88,7 +126,8 @@ public class Problem1095FindInMountainArray {
  * // This is MountainArray's API interface.
  * // You should not implement it, or speculate about its implementation
  */
- interface MountainArray {
-      int get(int index);
-      int length();
- }
+interface MountainArray {
+    int get(int index);
+
+    int length();
+}

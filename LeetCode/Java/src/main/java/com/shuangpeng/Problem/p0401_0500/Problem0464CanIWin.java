@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p0401_0500;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,7 +95,7 @@ public class Problem0464CanIWin {
         return false;
     }
 
-    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+    public boolean canIWin2(int maxChoosableInteger, int desiredTotal) {
         int canReachTotal = (1 + maxChoosableInteger) * maxChoosableInteger / 2;
         if (canReachTotal < desiredTotal) { // 达不到
             return false;
@@ -124,6 +125,39 @@ public class Problem0464CanIWin {
 
         dp[bits] = result ? 1 : 2;
         return result;
+    }
+
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        if (desiredTotal > (maxChoosableInteger + 1) * maxChoosableInteger / 2) {
+            return false;
+        }
+        int M = 1 << maxChoosableInteger;
+        int[][] memo = new int[M][2];
+        for (int i = 0; i < M; ++i) {
+            Arrays.fill(memo[i], -1);
+        }
+        return dfs(memo, 0, 1, maxChoosableInteger, desiredTotal) == 1;
+    }
+
+    private int dfs(int[][] memo, int mask, int turn, int maxChoosableInteger, int desiredTotal) {
+        if (memo[mask][turn] == -1 && memo[0][1] == -1) {
+            for (int i = maxChoosableInteger - 1; i >= 0; --i) {
+                if ((mask & (1 << i)) == 0) {
+                    if (i + 1 >= desiredTotal) {
+                        memo[mask][turn] = turn;
+                        break;
+                    }
+                    if (dfs(memo, mask | 1 << i, 1 - turn, maxChoosableInteger, desiredTotal - i - 1) == turn) {
+                        memo[mask][turn] = turn;
+                        break;
+                    }
+                }
+            }
+            if (memo[mask][turn] == -1) {
+                memo[mask][turn] = 1 - turn;
+            }
+        }
+        return memo[mask][turn];
     }
 
     // 4 6

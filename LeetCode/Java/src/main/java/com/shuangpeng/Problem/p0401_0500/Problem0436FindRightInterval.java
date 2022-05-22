@@ -64,7 +64,7 @@ public class Problem0436FindRightInterval {
         return ans;
     }
 
-    public int[] findRightInterval(int[][] intervals) {
+    public int[] findRightInterval2(int[][] intervals) {
         int n = intervals.length;
         int[][] startMap = new int[n][2];
         for (int i = 0; i < n; ++i) {
@@ -91,5 +91,77 @@ public class Problem0436FindRightInterval {
             ans[i] = left >= n ? -1 : startMap[left][1];
         }
         return ans;
+    }
+
+    public int[] findRightInterval3(int[][] intervals) {
+        int n = intervals.length;
+        int[][] startMap = new int[n][2];
+        int[][] endMap = new int[n][2];
+        for (int i = 0; i < n; ++i) {
+            startMap[i][0] = intervals[i][0];
+            startMap[i][1] = i;
+            endMap[i][0] = intervals[i][1];
+            endMap[i][1] = i;
+        }
+        Arrays.sort(startMap, Comparator.comparingInt(a -> a[0]));
+        Arrays.sort(endMap, Comparator.comparingInt(a -> a[0]));
+        int[] ans = new int[n];
+        for (int i = 0, j = 0; i < n; ++i) {
+            while (j < n && startMap[j][0] < endMap[i][0]) {
+                ++j;
+            }
+            ans[endMap[i][1]] = j < n ? startMap[j][1] : -1;
+        }
+        return ans;
+    }
+
+    public int[] findRightInterval4(int[][] intervals) {
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int[] p : intervals) {
+            min = Math.min(min, p[0]);
+            max = Math.max(max, p[1]);
+        }
+        int n = intervals.length, m = max - min + 1, delta = -min;
+        int[] next = new int[m];
+        for (int i = 0; i < n; ++i) {
+            next[intervals[i][0] + delta] = i + 1;
+        }
+        for (int i = m - 1, t = -1; i >= 0; --i) {
+            if (next[i] > 0) {
+                t = next[i] - 1;
+            }
+            next[i] = t;
+        }
+        int[] ans = new int[n];
+        for (int i = 0; i < n; ++i) {
+            ans[i] = next[intervals[i][1] + delta];
+        }
+        return ans;
+    }
+
+    public int[] findRightInterval(int[][] intervals) {
+        int min=1_000_000,max=-1_000_000;
+        for (int[]p:intervals){
+            min = Math.min(min,p[0]);
+            max = Math.max(max,p[1]);
+        }
+
+        int delta = -min;
+        int m = max-min+2;
+        int temp;
+        int n = intervals.length;
+        int[] ret = new int[n];
+        int[] next = new int [m];
+        for (temp=0;temp<n;++temp){
+            next[intervals[temp][0]+delta] = temp+1;
+        }
+        for (temp=-1;--m>=0;){
+            if (next[m] >0) temp=next[m]-1;
+            next[m]=temp;
+        }
+        while(--n>=0){
+            ret[n] = next[intervals[n][1]+delta];
+        }
+        return ret;
     }
 }

@@ -125,40 +125,4 @@ public class Problem1096BraceExpansionII {
             sb.setLength(length);
         }
     }
-
-//    public static void main(String[] args) {
-//        Problem1096BraceExpansionII a = new Problem1096BraceExpansionII();
-//        int[] nums = {5,3,4,4,7,3,6,11,8,5,11};
-//        a.totalSteps(nums);
-//    }
-
-    public int totalSteps(int[] nums) {
-        int n = nums.length;
-        int i = 0;
-        int ans = 0;
-        while (i < n) {
-            int j = i + 1;
-            while (j < n && nums[j] < nums[i]) {
-                ++j;
-            }
-            if (j == i + 1) {
-                i = j;
-                continue;
-            }
-            int count = 1;
-            int cnt = 1;
-            for (int k = i + 1; k < j - 1; ++k) {
-                if (nums[k] <= nums[k + 1]) {
-                    ++cnt;
-                } else {
-                    count = Math.max(count, cnt);
-                    cnt = 1;
-                }
-            }
-            count = Math.max(count, cnt);
-            ans = Math.max(ans, count);
-            i = j;
-        }
-        return ans;
-    }
 }

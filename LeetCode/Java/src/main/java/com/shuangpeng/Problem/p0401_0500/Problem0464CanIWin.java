@@ -160,6 +160,22 @@ public class Problem0464CanIWin {
         return memo[mask][turn];
     }
 
+//    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+//        if ((maxChoosableInteger + 1) * maxChoosableInteger / 2 < desiredTotal) {
+//            return false;
+//        }
+//    }
+//
+//    private boolean dp(Boolean[] memo, int state, int sum, int desiredTotal) {
+//        if (memo[state] != null) {
+//            return memo[state];
+//        }
+//        int mask = state;
+//        while (mask != 0) {
+//            int num = 32 - Integer.numberOfLeadingZeros(mask & -mask);
+//        }
+//    }
+
     // 4 6
     // 6 % 5 1
     // (1, 10), (2, 9), (3, 8), (4, 7), (5, 6)

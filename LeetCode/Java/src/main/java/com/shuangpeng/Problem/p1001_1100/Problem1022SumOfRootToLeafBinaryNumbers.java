@@ -4,6 +4,8 @@ import com.shuangpeng.common.TreeNode;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Problem1022SumOfRootToLeafBinaryNumbers {
 
@@ -56,7 +58,7 @@ public class Problem1022SumOfRootToLeafBinaryNumbers {
         return sum;
     }
 
-    public int sumRootToLeaf(TreeNode root) {
+    public int sumRootToLeaf2(TreeNode root) {
         Deque<TreeNode> deque = new ArrayDeque<>();
         int ans = 0;
         int val = 0;
@@ -82,6 +84,54 @@ public class Problem1022SumOfRootToLeafBinaryNumbers {
             } else {
                 prev = node.right;
                 node = node.right;
+            }
+        }
+        return ans;
+    }
+
+    public int sumRootToLeaf3(TreeNode root) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        int ans = 0;
+        int val = 0;
+        TreeNode prev = null;
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                val = (val << 1) | root.val;
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.peek();
+            if (root.right == null || root.right == prev) {
+                if (root.left == null && root.right == null) {
+                    ans += val;
+                }
+                stack.pop();
+                val >>= 1;
+                prev = root;
+                root = null;
+            } else {
+                root = root.right;
+            }
+        }
+        return ans;
+    }
+
+    public int sumRootToLeaf(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int ans = 0;
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node.left == null && node.right == null) {
+                ans += node.val;
+            }
+            if (node.left != null) {
+                node.left.val += node.val << 1;
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                node.right.val += node.val << 1;
+                queue.offer(node.right);
             }
         }
         return ans;

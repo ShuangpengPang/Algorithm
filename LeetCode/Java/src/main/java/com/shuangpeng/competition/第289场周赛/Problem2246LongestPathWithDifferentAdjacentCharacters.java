@@ -1,7 +1,6 @@
 package com.shuangpeng.competition.第289场周赛;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description: Problem2246LongestPathWithDifferentAdjacentCharacters（相邻字符不同的最长路径）
@@ -136,5 +135,126 @@ class Problem2246LongestPathWithDifferentAdjacentCharacters0 {
         }
         deeps[u] = ans + 1;
         return deeps[u];
+    }
+}
+
+class Problem2246LongestPathWithDifferentAdjacentCharacters1 {
+
+    public int longestPath(int[] parent, String s) {
+        int n = parent.length;
+        int[] inDegree = new int[n];
+        for (int i = 0; i < n; ++i) {
+            int p = parent[i];
+            if (p != -1) {
+                ++inDegree[p];
+            }
+        }
+        int ans = 1;
+        int[][] paths = new int[n][2];
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < n; ++i) {
+            if (inDegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        while (!queue.isEmpty()) {
+            int c = queue.poll();
+            int p = parent[c];
+            if (p == -1) {
+                continue;
+            }
+            if (s.charAt(p) != s.charAt(c)) {
+                int d = Math.max(paths[c][0], paths[c][1]) + 1;
+                if (d >= paths[p][0]) {
+                    paths[p][1] = paths[p][0];
+                    paths[p][0] = d;
+                } else if (d > paths[p][1]) {
+                    paths[p][1] = d;
+                }
+            }
+            if ((--inDegree[p]) == 0) {
+                ans = Math.max(ans, paths[p][0] + paths[p][1] + 1);
+                queue.offer(p);
+            }
+        }
+        return ans;
+    }
+}
+
+class Problem2246LongestPathWithDifferentAdjacentCharacters2 {
+
+    int ans = 0;
+    List<Integer>[] graph;
+    String s;
+
+    public int longestPath(int[] parent, String s) {
+        int n = parent.length;
+        this.s = s;
+        graph = new List[n];
+        Arrays.setAll(graph, e -> new ArrayList<>());
+        for (int i = 1; i < n; ++i) {
+            graph[parent[i]].add(i);
+        }
+        ans = 0;
+        dfs(0);
+        return ans + 1;
+    }
+
+    private int dfs(int u) {
+        int maxLen = 0;
+        for (int v : graph[u]) {
+            int len = dfs(v) + 1;
+            if (s.charAt(u) != s.charAt(v)) {
+                ans = Math.max(ans, maxLen + len);
+                maxLen = Math.max(maxLen, len);
+            }
+        }
+        return maxLen;
+    }
+}
+
+class Problem2246LongestPathWithDifferentAdjacentCharacters3 {
+    private int[] par;
+    private int[] firstChild;
+    private int[] nxtChild;
+    private int[] valChild;
+    private int cntChild;
+    private char[] str;
+
+    public int longestPath(int[] parent, String s) {
+        int n = parent.length;
+        firstChild = new int[n];
+        nxtChild = new int[n];
+        valChild = new int[n];
+        cntChild = 1;
+        for (int i = 1; i < n; i++) {
+            valChild[cntChild] = i;
+            nxtChild[cntChild] = firstChild[parent[i]];
+            firstChild[parent[i]] = cntChild++;
+        }
+        par = parent;
+        str = s.toCharArray();
+        ans = 0;
+        cal(0);
+        return ans;
+    }
+
+    private int ans;
+
+    private int cal(int index) {
+        int max = 0;
+        int secMax = 0;
+        for (int curr = firstChild[index]; curr != 0; curr = nxtChild[curr]) {
+            int temp = cal(curr);
+            if (temp >= max) {
+                secMax = max;
+                max = temp;
+            }
+            else if (temp > secMax) {
+                secMax = temp;
+            }
+        }
+        ans = Math.max(ans, max + secMax + 1);
+        return par[index] >= 0 && str[par[index]] == str[index] ? 0 : max + 1;
     }
 }

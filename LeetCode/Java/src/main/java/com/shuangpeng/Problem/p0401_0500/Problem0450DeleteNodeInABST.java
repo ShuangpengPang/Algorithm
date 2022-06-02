@@ -191,3 +191,126 @@ public class Problem0450DeleteNodeInABST {
         return treeNode.val;
     }
 }
+
+class Problem0450DeleteNodeInABST0 {
+
+    public TreeNode deleteNode0(TreeNode root, int key) {
+        TreeNode parent = null;
+        TreeNode curr = root;
+        while (curr != null && curr.val != key) {
+            parent = curr;
+            if (curr.val < key) {
+                curr = curr.right;
+            } else {
+                curr = curr.left;
+            }
+        }
+        if (curr == null) {
+            return root;
+        }
+        if (curr.left == null && curr.right == null) {
+            if (parent == null) {
+                return null;
+            }
+            if (parent.left == curr) {
+                parent.left = null;
+            } else {
+                parent.right = null;
+            }
+            return root;
+        }
+        if (curr.left != null) {
+            TreeNode left = curr.left;
+            TreeNode prev = curr;
+            while (left.right != null) {
+                prev = left;
+                left = left.right;
+            }
+            if (prev != curr) {
+                prev.right = left.left;
+                left.left = curr.left;
+            }
+            left.right = curr.right;
+            if (parent == null) {
+                return left;
+            } else {
+                if (parent.left == curr) {
+                    parent.left = left;
+                } else {
+                    parent.right = left;
+                }
+                return root;
+            }
+        } else {
+            TreeNode right = curr.right;
+            TreeNode prev = curr;
+            while (right.left != null) {
+                prev = right;
+                right = right.left;
+            }
+            if (prev != curr) {
+                prev.left = right.right;
+                right.right = curr.right;
+            }
+            right.left = curr.left;
+            if (parent == null) {
+                return right;
+            } else {
+                if (parent.left == curr) {
+                    parent.left = right;
+                } else {
+                    parent.right = right;
+                }
+                return root;
+            }
+        }
+    }
+
+    public TreeNode deleteNode(TreeNode root, int key) {
+        return recurse(root, key);
+    }
+
+    private TreeNode recurse(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+        if (root.val == key) {
+            if (root.left == null && root.right == null) {
+                return null;
+            }
+            if (root.left != null) {
+                TreeNode parent = root;
+                TreeNode curr = root.left;
+                while (curr.right != null) {
+                    parent = curr;
+                    curr = curr.right;
+                }
+                if (parent != root) {
+                    parent.right = curr.left;
+                    curr.left = root.left;
+                }
+                curr.right = root.right;
+                return curr;
+            } else {
+                TreeNode parent = root;
+                TreeNode curr = root.right;
+                while (curr.left != null) {
+                    parent = curr;
+                    curr = curr.left;
+                }
+                if (parent != root) {
+                    parent.left = curr.right;
+                    curr.right = root.right;
+                }
+                curr.left = root.left;
+                return curr;
+            }
+        }
+        if (root.val > key) {
+            root.left = recurse(root.left, key);
+        } else {
+            root.right = recurse(root.right, key);
+        }
+        return root;
+    }
+}

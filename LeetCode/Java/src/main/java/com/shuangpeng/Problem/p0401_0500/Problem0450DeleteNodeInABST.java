@@ -266,7 +266,7 @@ class Problem0450DeleteNodeInABST0 {
         }
     }
 
-    public TreeNode deleteNode(TreeNode root, int key) {
+    public TreeNode deleteNode1(TreeNode root, int key) {
         return recurse(root, key);
     }
 
@@ -312,5 +312,154 @@ class Problem0450DeleteNodeInABST0 {
             root.right = recurse(root.right, key);
         }
         return root;
+    }
+
+    public TreeNode deleteNode2(TreeNode root, int key) {
+        return deleteRecurse(root, key);
+    }
+
+    private TreeNode deleteRecurse(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+        if (root.val > key) {
+            root.left = deleteRecurse(root.left, key);
+            return root;
+        } else if (root.val < key) {
+            root.right = deleteRecurse(root.right, key);
+            return root;
+        }
+        if (root.left == null) {
+            return root.right;
+        } else if (root.right == null) {
+            return root.left;
+        }
+        TreeNode curr = root.right;
+        TreeNode parent = root;
+        while (curr.left != null) {
+            parent = curr;
+            curr = curr.left;
+        }
+        if (parent != root) {
+            parent.left = curr.right;
+            curr.right = root.right;
+        }
+        curr.left = root.left;
+        return curr;
+    }
+
+    public TreeNode deleteNode3(TreeNode root, int key) {
+        TreeNode parent = null;
+        TreeNode node = root;
+        while (node != null && node.val != key) {
+            parent = node;
+            node = key < node.val ? node.left : node.right;
+        }
+        if (node == null) {
+            return root;
+        }
+        if (node.left == null || node.right == null) {
+            TreeNode successor = node.left == null ? node.right : node.left;
+            if (parent == null) {
+                return successor;
+            }
+            if (parent.left == node) {
+                parent.left = successor;
+            } else {
+                parent.right = successor;
+            }
+            return root;
+        }
+        TreeNode successor = node.right;
+        TreeNode prev = node;
+        while (successor.left != null) {
+            prev = successor;
+            successor = successor.left;
+        }
+        if (prev != node) {
+            if (prev.left == successor) {
+                prev.left = successor.right;
+            } else {
+                prev.right = successor.right;
+            }
+            successor.right = node.right;
+        }
+        successor.left = node.left;
+        if (parent == null) {
+            return successor;
+        }
+        if (parent.left == node) {
+            parent.left = successor;
+        } else {
+            parent.right = successor;
+        }
+        return root;
+    }
+
+    public TreeNode deleteNode4(TreeNode root, int key) {
+        TreeNode node = root, parent = null;
+        while (node != null && node.val != key) {
+            parent = node;
+            node = key < node.val ? node.left : node.right;
+        }
+        if (node == null) {
+            return root;
+        }
+        if (node.left == null) {
+            node = node.right;
+        } else if (node.right == null) {
+            node = node.left;
+        } else {
+            TreeNode successor = node.right, prev = node;
+            while (successor.left != null) {
+                prev = successor;
+                successor = successor.left;
+            }
+            if (prev == node) {
+                node.right = successor.right;
+            } else {
+                prev.left = successor.right;
+            }
+            successor.right = node.right;
+            successor.left = node.left;
+            node = successor;
+        }
+        if (parent == null) {
+            return node;
+        }
+        if (parent.left != null && parent.left.val == key) {
+            parent.left = node;
+        } else {
+            parent.right = node;
+        }
+        return root;
+    }
+
+    public TreeNode deleteNode(TreeNode root, int key) {
+        return deleteNodeRecurse(root, key);
+    }
+
+    private TreeNode deleteNodeRecurse(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode node = root;
+        if (key < root.val) {
+            root.left = deleteNodeRecurse(root.left, key);
+        } else if (key > root.val) {
+            root.right = deleteNodeRecurse(root.right, key);
+        } else if (root.left == null) {
+            node = root.right;
+        } else if (root.right == null) {
+            node = node.left;
+        } else {
+            node = root.left;
+            while (node.right != null) {
+                node = node.right;
+            }
+            node.right = root.right;
+            node = root.left;
+        }
+        return node;
     }
 }

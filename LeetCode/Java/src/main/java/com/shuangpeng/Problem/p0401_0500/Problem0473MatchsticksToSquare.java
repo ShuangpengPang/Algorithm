@@ -207,4 +207,94 @@ public class Problem0473MatchsticksToSquare {
 //        a.makesquare(new int[]{5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3});
 //        int i = 1;
 //    }
+
+
 }
+
+class Problem0473MatchsticksToSquare0 {
+
+    public boolean makesquare(int[] matchsticks) {
+        int sum = 0, max = 0;
+        for (int stick : matchsticks) {
+            sum += stick;
+            max = Math.max(max, stick);
+        }
+        if (sum % 4 != 0) {
+            return false;
+        }
+        int sideLength = sum >> 2;
+        if (max > sideLength) {
+            return false;
+        }
+        int target = sideLength * 3;
+        int n = matchsticks.length;
+        int M = 1 << n;
+        Integer[] memo = new Integer[M];
+        memo[0] = 0;
+        for (int i = 0; i < M; ++i) {
+            if (memo[i] != null) {
+                for (int j = 0; j < n; ++j) {
+                    if ((i & (1 << j)) == 0) {
+                        int k = i | (i << j);
+                        if (memo[k] == null) {
+                            int num = matchsticks[j];
+                            int mod = memo[i] % sideLength;
+                            if (mod + num <= sideLength) {
+                                memo[k] = memo[i] + num;
+                                if (memo[k] == target) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return false;
+    }
+
+    public int partitionArray(int[] nums, int k) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        int n = nums.length;
+        for (int i = 0; i < n; ++i) {
+            Map.Entry<Integer, Integer> floorEntry = map.floorEntry();
+            if (floorEntry == null) {
+                Map.Entry<Integer, Integer> ceilingEntry = map.ceilingEntry();
+                if (ceilingEntry == null) {
+                    map.put(nums[i], nums[i]);
+                } else {
+                    int min = ceilingEntry.getKey(), max = ceilingEntry.getValue();
+                    if (nums[i] < min && max - nums[i] <= k) {
+                        map.remove(min);
+                        map.put(nums[i], max);
+                    } else {
+                        map.put(nums[i], nums[i]);
+                    }
+                }
+            } else {
+                if (nums[i] <= floorEntry.getValue()) {
+                    continue;
+                } else if (nums[i] - floorEntry.getKey() <= k) {
+                    map.put(floorEntry.getKey(), nums[i]);
+                } else {
+                    Map.Entry<Integer, Integer> ceilingEntry = map.ceilingEntry();
+                    if (ceilingEntry == null) {
+                        map.put(nums[i], nums[i]);
+                    } else {
+                        int min = ceilingEntry.getKey(), max = ceilingEntry.getValue();
+                        if (nums[i] < min && max - nums[i] <= k) {
+                            map.remove(min);
+                            map.put(nums[i], max);
+                        } else {
+                            map.put(nums[i], nums[i]);
+                        }
+                    }
+                }
+            }
+        }
+        return map.size();
+    }
+}
+

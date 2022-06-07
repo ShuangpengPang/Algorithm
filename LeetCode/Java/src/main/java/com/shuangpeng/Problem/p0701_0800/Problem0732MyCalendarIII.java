@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p0701_0800;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -72,3 +74,192 @@ public class Problem0732MyCalendarIII {
 //        }
 //    }
 }
+
+class Problem0732MyCalendarIII0 {
+
+    class MyCalendarThree {
+
+        TreeMap<Integer, Integer> map;
+        int ans = 0;
+
+        public MyCalendarThree() {
+            map = new TreeMap<>();
+            ans = 0;
+        }
+
+        public int book(int start, int end) {
+            map.put(start, map.floorKey(start) == null ? 0 : map.get(map.floorKey(start)));
+            for (Integer key = start; key != null && key < end; key = map.higherKey(key)) {
+                int sum = map.get(key) + 1;
+                map.put(key, sum);
+                ans = Math.max(ans, sum);
+            }
+            if (!map.containsKey(end)) {
+                map.put(end, map.get(map.floorKey(end)) - 1);
+            }
+            return ans;
+        }
+    }
+}
+
+class Problem0732MyCalendarIII1 {
+
+    class Node {
+        int start, end;
+        Node left, right;
+        int max;
+        boolean cover;
+
+        Node(int s, int e, int c) {
+            this.start = s;
+            this.end = e;
+            this.max = c;
+            this.cover = true;
+        }
+
+        int add(int s, int e) {
+            if (s <= this.start && e >= this.end && this.cover) {
+                this.left = null;
+                this.right = null;
+                ++this.max;
+                return this.max;
+            }
+            int mid = this.start + ((this.end - this.start) >> 1);
+            if (this.left == null) {
+                this.left = this.cover ? new Node(this.start, mid, this.max) : new Node(this.start, mid, 0);
+            }
+            if (this.right == null) {
+                this.right = this.cover ? new Node(mid, this.end, this.max) : new Node(mid, this.end, 0);
+            }
+            if (e <= mid) {
+                this.max = Math.max(this.max, this.left.add(s, e));
+            } else if (s >= mid) {
+                this.max = Math.max(this.max, this.right.add(s, e));
+            } else {
+                int m1 = this.left.add(s, mid);
+                int m2 = this.right.add(mid, e);
+                this.max = Math.max(this.max, Math.max(m1, m2));
+            }
+            this.cover = this.left.cover && this.right.cover
+                    && this.max == this.left.max && this.max == this.right.max;
+            return this.max;
+        }
+    }
+
+    class MyCalendarThree {
+
+        Node root;
+
+        public MyCalendarThree() {
+            root = new Node(0, (int) 1e9, 0);
+        }
+
+        public int book(int start, int end) {
+            return root.add(start, end);
+        }
+    }
+}
+
+class Problem0732MyCalendarIII2 {
+
+    class MyCalendarThree {
+
+        Map<Integer, Integer> lazy, tree;
+
+        public MyCalendarThree() {
+            lazy = new HashMap<>();
+            tree = new HashMap<>();
+        }
+
+        public int book(int start, int end) {
+            update(start, end, 0, (int) 1e9, 1);
+            return tree.getOrDefault(1, 0);
+        }
+
+        private void update(int start, int end, int left, int right, int idx) {
+            if (end <= left || start >= right) {
+                return;
+            }
+            if (start <= left && end >= right) {
+                lazy.put(idx, lazy.getOrDefault(idx, 0) + 1);
+                tree.put(idx, tree.getOrDefault(idx, 0) + 1);
+            } else {
+                int mid = left + ((right - left) >> 1);
+                update(start, end, left, mid, idx << 1);
+                update(start, end, mid, right, (idx << 1) + 1);
+                tree.put(idx, lazy.getOrDefault(idx, 0) + Math.max(tree.getOrDefault(idx << 1, 0), tree.getOrDefault((idx << 1) + 1, 0)));
+            }
+        }
+    }
+}
+
+
+class Problem0732MyCalendarIII3 {
+
+    class Node {
+        int start, end;
+        Node left, right, inner;
+
+        Node(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    class MyCalendarThree {
+
+        Node root;
+        int ans;
+
+        public MyCalendarThree() {
+            root = new Node(0, 0);
+            ans = 0;
+        }
+
+        public int book(int start, int end) {
+            ans = Math.max(ans, update(root, start, end, 0, false));
+            return ans;
+        }
+
+        private int update(Node node, int s, int e, int depth, boolean isInner) {
+            if (isInner) {
+                if (node.inner == null) {
+                    node.inner = new Node(s, e);
+                    return depth + 1;
+                }
+                node = node.inner;
+            }
+            while (true) {
+                if (e <= node.start) {
+                    if (node.left == null) {
+                        node.left = new Node(s, e);
+                        return depth + 1;
+                    }
+                    node = node.left;
+                } else if (s >= node.end) {
+                    if (node.right == null) {
+                        node.right = new Node(s, e);
+                        return depth + 1;
+                    }
+                    node = node.right;
+                } else {
+                    if (s < node.start) {
+                        int count = update(node, s, node.start, depth, false);
+                        if (e <= node.end) {
+                            return Math.max(count, update(node, node.start, e, depth + 1, true));
+                        } else {
+                            return Math.max(count, Math.max(update(node, node.start, node.end, depth + 1, true), update(node, node.end, e, depth, false)));
+                        }
+                    } else {
+                        if (e <= node.end) {
+                            return update(node, s, e, depth + 1, true);
+                        } else {
+                            return Math.max(update(node, s, node.end, depth + 1, true), update(node, node.end, e, depth, false));
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

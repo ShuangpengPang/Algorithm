@@ -263,3 +263,71 @@ class Problem0732MyCalendarIII3 {
     }
 }
 
+class Problem0732MyCalendarIII4 {
+
+    class Node {
+        int left, right, lazy, max;
+    }
+
+    class MyCalendarThree {
+
+        static final int N = (int) 1e9, M = 4 * 400 * 30;
+
+        Node[] tr = new Node[M];
+        int cnt = 1;
+
+        MyCalendarThree() {
+            tr[1] = new Node();
+            cnt = 1;
+        }
+
+        public int book(int start, int end) {
+            update(1, 0, N, start, end);
+            return tr[1].max;
+        }
+
+        private void update(int u, int start, int end, int s, int e) {
+            if (s <= start && end <= e) {
+                ++tr[u].lazy;
+                ++tr[u].max;
+                return;
+            }
+            lazyCreate(u);
+            pushDown(u);
+            int mid = start + end >> 1;
+            if (s < mid) {
+                update(tr[u].left, start, mid, s, e);
+            }
+            if (e > mid) {
+                update(tr[u].right, mid, end, s, e);
+            }
+            pushUp(u);
+        }
+
+        private void lazyCreate(int u) {
+            if (tr[u].left == 0) {
+                tr[u].left = ++cnt;
+                tr[tr[u].left] = new Node();
+            }
+            if (tr[u].right == 0) {
+                tr[u].right = ++cnt;
+                tr[tr[u].right] = new Node();
+            }
+        }
+
+        private void pushDown(int u) {
+            Node left = tr[tr[u].left], right = tr[tr[u].right];
+            left.lazy += tr[u].lazy;
+            right.lazy += tr[u].lazy;
+            left.max += tr[u].lazy;
+            right.max += tr[u].lazy;
+            tr[u].lazy = 0;
+        }
+
+        private void pushUp(int u) {
+            tr[u].max = Math.max(tr[tr[u].left].max, tr[tr[u].right].max);
+        }
+    }
+}
+
+

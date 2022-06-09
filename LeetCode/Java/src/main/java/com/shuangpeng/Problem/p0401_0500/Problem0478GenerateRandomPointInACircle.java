@@ -72,3 +72,26 @@ class Problem0478GenerateRandomPointInACircle0 {
         }
     }
 }
+
+class Problem0478GenerateRandomPointInACircle1 {
+
+    class Solution {
+
+        double xCenter, yCenter, radius;
+        Random random;
+
+        public Solution(double radius, double x_center, double y_center) {
+            this.radius = radius;
+            this.xCenter = x_center;
+            this.yCenter = y_center;
+            this.random = new Random();
+        }
+
+        public double[] randPoint() {
+            double r = Math.sqrt(random.nextDouble());
+            double d = random.nextDouble() * 2 * Math.PI;
+            double x = r * Math.cos(d), y = r * Math.sin(d);
+            return new double[]{xCenter + x * radius, yCenter + y * radius};
+        }
+    }
+}

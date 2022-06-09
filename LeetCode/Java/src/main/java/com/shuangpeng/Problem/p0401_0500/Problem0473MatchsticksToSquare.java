@@ -213,13 +213,13 @@ public class Problem0473MatchsticksToSquare {
 
 class Problem0473MatchsticksToSquare0 {
 
-    public boolean makesquare(int[] matchsticks) {
+    public boolean makesquare0(int[] matchsticks) {
         int sum = 0, max = 0;
         for (int stick : matchsticks) {
             sum += stick;
             max = Math.max(max, stick);
         }
-        if (sum % 4 != 0) {
+        if ((sum & 3) != 0) {
             return false;
         }
         int sideLength = sum >> 2;
@@ -235,7 +235,7 @@ class Problem0473MatchsticksToSquare0 {
             if (memo[i] != null) {
                 for (int j = 0; j < n; ++j) {
                     if ((i & (1 << j)) == 0) {
-                        int k = i | (i << j);
+                        int k = i | (1 << j);
                         if (memo[k] == null) {
                             int num = matchsticks[j];
                             int mod = memo[i] % sideLength;
@@ -250,51 +250,99 @@ class Problem0473MatchsticksToSquare0 {
                 }
             }
         }
-
-
         return false;
     }
 
-    public int partitionArray(int[] nums, int k) {
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        int n = nums.length;
-        for (int i = 0; i < n; ++i) {
-            Map.Entry<Integer, Integer> floorEntry = map.floorEntry();
-            if (floorEntry == null) {
-                Map.Entry<Integer, Integer> ceilingEntry = map.ceilingEntry();
-                if (ceilingEntry == null) {
-                    map.put(nums[i], nums[i]);
-                } else {
-                    int min = ceilingEntry.getKey(), max = ceilingEntry.getValue();
-                    if (nums[i] < min && max - nums[i] <= k) {
-                        map.remove(min);
-                        map.put(nums[i], max);
-                    } else {
-                        map.put(nums[i], nums[i]);
-                    }
-                }
-            } else {
-                if (nums[i] <= floorEntry.getValue()) {
-                    continue;
-                } else if (nums[i] - floorEntry.getKey() <= k) {
-                    map.put(floorEntry.getKey(), nums[i]);
-                } else {
-                    Map.Entry<Integer, Integer> ceilingEntry = map.ceilingEntry();
-                    if (ceilingEntry == null) {
-                        map.put(nums[i], nums[i]);
-                    } else {
-                        int min = ceilingEntry.getKey(), max = ceilingEntry.getValue();
-                        if (nums[i] < min && max - nums[i] <= k) {
-                            map.remove(min);
-                            map.put(nums[i], max);
-                        } else {
-                            map.put(nums[i], nums[i]);
+    public boolean makesquare(int[] matchsticks) {
+        int sum = 0, max = 0;
+        for (int stick : matchsticks) {
+            sum += stick;
+            max = Math.max(max, stick);
+        }
+        if ((sum & 3) != 0) {
+            return false;
+        }
+        int sideLength = sum >> 2;
+        if (max > sideLength) {
+            return false;
+        }
+        int target = sideLength * 3;
+        int n = matchsticks.length;
+        int M = 1 << n;
+        Integer[] memo = new Integer[M];
+        memo[M - 1] = 0;
+        for (int i = M - 1; i >= 0; --i) {
+            if (memo[i] != null) {
+                int j = i;
+                while (j != 0) {
+                    int k = Integer.numberOfTrailingZeros(j);
+                    int num = matchsticks[k];
+                    int m = memo[i] % sideLength;
+                    if (m + num <= sideLength) {
+                        int idx = i ^ (1 << k);
+                        memo[idx] = memo[i] + num;
+                        if (memo[idx] == target) {
+                            return true;
                         }
                     }
+                    j &= j - 1;
                 }
             }
         }
-        return map.size();
+        return false;
     }
 }
+
+class Problem0473MatchsticksToSquare1 {
+    int[] ms;
+    int n, k;
+    Random random = new Random(20220601);
+    double hi = 1e9, lo = 1e-4, fa = 0.95;
+    int N = 400;
+    boolean ans = false;
+    int calc() {
+        int diff = 0;
+        for (int i = 0, j = 0; i < 4; i++) {
+            int cnt = 0;
+            while (j < n && cnt < k) cnt += ms[j++];
+            diff += Math.abs(k - cnt);
+        }
+        if (diff == 0) ans = true;
+        return diff;
+    }
+    void sa() {
+        shuffle(ms);
+        for (double t = hi; t > lo && !ans; t *= fa) {
+            int a = random.nextInt(n), b = random.nextInt(n);
+            if (a == b) continue;
+            int prev = calc();
+            swap(ms, a, b);
+            int cur = calc();
+            int diff = cur - prev;
+            if (Math.log(diff / t) > random.nextDouble()) swap(ms, a, b);
+        }
+    }
+    public boolean makesquare(int[] _ms) {
+        ms = _ms;
+        n = ms.length;
+        int sum = 0;
+        for (int i : ms) sum += i;
+        k = sum / 4;
+        if (k * 4 != sum) return false;
+        while (!ans && N-- > 0) sa();
+        return ans;
+    }
+    void shuffle(int[] nums) {
+        for (int i = n; i > 0; i--) {
+            int idx = random.nextInt(i);
+            swap(nums, idx, i - 1);
+        }
+    }
+    void swap(int[] nums, int a, int b) {
+        int c = nums[a];
+        nums[a] = nums[b];
+        nums[b] = c;
+    }
+}
+
 

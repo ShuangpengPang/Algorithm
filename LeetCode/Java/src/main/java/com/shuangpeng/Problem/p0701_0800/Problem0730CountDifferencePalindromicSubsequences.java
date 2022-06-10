@@ -2,6 +2,10 @@ package com.shuangpeng.Problem.p0701_0800;
 
 import java.util.Arrays;
 
+/**
+ * @Description: 统计不同回文子序列（730）
+ * @Date 2022/6/10 1:52 PM
+ **/
 public class Problem0730CountDifferencePalindromicSubsequences {
 
     public int countPalindromicSubsequences0(String s) {
@@ -73,7 +77,7 @@ public class Problem0730CountDifferencePalindromicSubsequences {
         return (int) (total % M);
     }
 
-    public int countPalindromicSubsequences(String s) {
+    public int countPalindromicSubsequences2(String s) {
         final int S = 4;
         int n = s.length();
         int[][] previous = new int[n][S];
@@ -167,6 +171,38 @@ public class Problem0730CountDifferencePalindromicSubsequences {
 
             return ans;
         }
+    }
+
+    public int countPalindromicSubsequences(String s) {
+        int M = (int) 1e9 + 7;
+        int n = s.length();
+        int[][][] dp = new int[n][n][4];
+        for (int j = 0; j < n; ++j) {
+            int cj = s.charAt(j) - 'a';
+            dp[j][j][cj] = 1;
+            for (int i = j - 1; i >= 0; --i) {
+                for (int k = 0; k < 4; ++k) {
+                    dp[i][j][k] = dp[i + 1][j][k];
+                }
+                int ci = s.charAt(i) - 'a';
+                if (ci == cj) {
+                    dp[i][j][ci] = 2;
+                    for (int k = 0; k < 4; ++k) {
+                        dp[i][j][ci] += dp[i + 1][j - 1][k];
+                        if (dp[i][j][ci] >= M) {
+                            dp[i][j][ci] -= M;
+                        }
+                    }
+                } else {
+                    dp[i][j][ci] = dp[i][j - 1][ci];
+                }
+            }
+        }
+        long ans = 0;
+        for (int i = 0; i < 4; ++i) {
+            ans += dp[0][n - 1][i];
+        }
+        return (int) (ans % M);
     }
 
     //    public static void main(String[] args) {

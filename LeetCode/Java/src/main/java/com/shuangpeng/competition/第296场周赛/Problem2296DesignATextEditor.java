@@ -81,67 +81,152 @@ class Problem2296DesignATextEditor0 {
     }
 }
 
+class Problem2296DesignATextEditor1 {
+
+    class TextEditor {
+        class ListNode {
+            ListNode prev, next;
+            char c;
+
+            public ListNode(char c) {
+                this.c = c;
+            }
+        }
+
+        ListNode head, pos;
+
+        public TextEditor() {
+            head = new ListNode(' ');
+            pos = new ListNode(' ');
+            head.next = pos;
+            pos.prev = head;
+        }
+
+        public void addText(String text) {
+            int n = text.length();
+            for (int i = 0; i < n; ++i) {
+                ListNode node = new ListNode(text.charAt(i));
+                node.next = pos;
+                node.prev = pos.prev;
+                pos.prev.next = node;
+                pos.prev = node;
+            }
+        }
+
+        public int deleteText(int k) {
+            int ans = 0;
+            ListNode node = pos.prev;
+            while (k > 0 && node != head) {
+                node = node.prev;
+                --k;
+                ++ans;
+            }
+            node.next = pos;
+            pos.prev = node;
+            return ans;
+        }
+
+        public String cursorLeft(int k) {
+            while (pos.prev != head && k > 0) {
+                pos = pos.prev;
+                --k;
+            }
+            StringBuilder sb = new StringBuilder();
+            ListNode node = pos.prev;
+            for (int i = 0; i < 10 && node != head; ++i) {
+                sb.append(node.c);
+                node = node.prev;
+            }
+            return sb.reverse().toString();
+        }
+
+        public String cursorRight(int k) {
+            while (k > 0 && pos.next != null) {
+                pos = pos.next;
+                --k;
+            }
+            StringBuilder sb = new StringBuilder();
+            ListNode node = pos.prev;
+            for (int i = 0; i < 10 && node != head; ++i) {
+                sb.append(node.c);
+                node = node.prev;
+            }
+            return sb.reverse().toString();
+        }
+    }
+}
+
 class TextEditor {
-    class ListNode {
-        ListNode prev, next;
+
+    class Node {
+        Node prev, next;
         char c;
 
-        public ListNode(char c) {
+        Node() {
+        }
+
+        Node(char c) {
             this.c = c;
+        }
+
+        Node addNode(Node node) {
+            node.next = this.next;
+            this.next.prev = node;
+            node.prev = this;
+            this.next = node;
+            return node;
+        }
+
+        void remove() {
+            this.next.prev = this.prev;
+            this.prev.next = this.next;
         }
     }
 
-    ListNode head, pos;
+    Node head, pos;
 
     public TextEditor() {
-        head = new ListNode(' ');
-        pos = new ListNode(' ');
-        head.next = pos;
-        pos.prev = head;
+        pos = head = new Node();
+        head.prev = head.next = head;
     }
 
     public void addText(String text) {
         int n = text.length();
         for (int i = 0; i < n; ++i) {
-            ListNode node = new ListNode(text.charAt(i));
-            node.next = pos;
-            node.prev = pos.prev;
-            pos.prev.next = node;
-            pos.prev = node;
+            pos = pos.addNode(new Node(text.charAt(i)));
         }
     }
 
     public int deleteText(int k) {
         int ans = 0;
-        while (pos.prev != head && ans < k) {
-            pos.prev.prev.next = pos;
-            pos.prev = pos.prev.prev;
+        while (k > 0 && pos != head) {
+            pos = pos.prev;
+            pos.next.remove();
+            --k;
             ++ans;
         }
         return ans;
     }
 
     public String cursorLeft(int k) {
-        while (pos.prev != head && k > 0) {
-            pos = pos.prev;
+        while (k > 0 && pos != head) {
             --k;
+            pos = pos.prev;
         }
-        StringBuilder sb = new StringBuilder();
-        ListNode node = pos.prev;
-        for (int i = 0; i < 10 && node != head; ++i) {
-            sb.append(node.c);
-            node = node.prev;
-        }
-        return sb.reverse().toString();
+        return text();
     }
 
     public String cursorRight(int k) {
-        while (k > 0 && pos.next != null) {
-            pos = pos.next;
+        while (k > 0 && pos.next != head) {
             --k;
+            pos = pos.next;
         }
+        return text();
+    }
+
+    private String text() {
         StringBuilder sb = new StringBuilder();
-        ListNode node = pos.prev;
+        Node node = pos;
         for (int i = 0; i < 10 && node != head; ++i) {
             sb.append(node.c);
             node = node.prev;

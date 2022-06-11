@@ -20,7 +20,7 @@ public class Problem0926FlipStringToMonotoneIncreasing {
         return ans;
     }
 
-    public int minFlipsMonoIncr(String s) {
+    public int minFlipsMonoIncr1(String s) {
         int n = s.length();
         int[] preSum = new int[n + 1];
         for (int i = 0; i < n; ++i) {
@@ -31,5 +31,32 @@ public class Problem0926FlipStringToMonotoneIncreasing {
             ans = Math.min(ans, (preSum[i] << 1) + n - i - preSum[n]);
         }
         return ans;
+    }
+
+    public int minFlipsMonoIncr2(String s) {
+        int n = s.length();
+        int[] ones = new int[n + 1];
+        int[] zeros = new int[n + 1];
+        for (int i = 1; i <= n; ++i) {
+            ones[i] = ones[i - 1] + (s.charAt(i - 1) == '1' ? 1 : 0);
+            int j = n - i;
+            zeros[j] = zeros[j + 1] + (s.charAt(j) == '0' ? 1 : 0);
+        }
+        int ans = n;
+        for (int i = 0; i <= n; ++i) {
+            ans = Math.min(ans, ones[i] + zeros[i]);
+        }
+        return ans;
+    }
+
+    public int minFlipsMonoIncr(String s) {
+        int n = s.length();
+        int one = s.charAt(0) == '1' ? 0 : 1;
+        int zero = s.charAt(0) == '0' ? 0 : 1;
+        for (int i = 1; i < n; ++i) {
+            one = Math.min(one, zero) + (s.charAt(i) == '1' ? 0 : 1);
+            zero = zero + (s.charAt(i) == '0' ? 0 : 1);
+        }
+        return Math.min(one, zero);
     }
 }

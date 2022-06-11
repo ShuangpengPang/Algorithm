@@ -173,7 +173,7 @@ public class Problem0730CountDifferencePalindromicSubsequences {
         }
     }
 
-    public int countPalindromicSubsequences(String s) {
+    public int countPalindromicSubsequences3(String s) {
         int M = (int) 1e9 + 7;
         int n = s.length();
         int[][][] dp = new int[n][n][4];
@@ -201,6 +201,137 @@ public class Problem0730CountDifferencePalindromicSubsequences {
         long ans = 0;
         for (int i = 0; i < 4; ++i) {
             ans += dp[0][n - 1][i];
+        }
+        return (int) (ans % M);
+    }
+
+    public int countPalindromicSubsequences4(String s) {
+        int M = (int) 1e9 + 7;
+        int n = s.length();
+        int[][][] dp = new int[n][n][4];
+        for (int i = n - 1; i >= 0; --i) {
+            int ci = s.charAt(i) - 'a';
+            dp[i][i][ci] = 1;
+            for (int j = i + 1; j < n; ++j) {
+                for (int k = 0; k < 4; ++k) {
+                    dp[i][j][k] = dp[i][j - 1][k];
+                }
+                int cj = s.charAt(j) - 'a';
+                if (cj == ci) {
+                    dp[i][j][cj] = 2;
+                    for (int k = 0; k < 4; ++k) {
+                        dp[i][j][cj] += dp[i + 1][j - 1][k];
+                        if (dp[i][j][cj] >= M) {
+                            dp[i][j][cj] -= M;
+                        }
+                    }
+                } else {
+                    dp[i][j][cj] = dp[i + 1][j][cj];
+                }
+            }
+        }
+        long ans = 0;
+        for (int i = 0; i < 4; ++i) {
+            ans += dp[0][n - 1][i];
+        }
+        return (int) (ans % M);
+    }
+
+    public int countPalindromicSubsequences5(String s) {
+        int M = (int) 1e9 + 7;
+        int n = s.length();
+        int[][] prev = new int[n][4], next = new int[n][4];
+        Arrays.fill(prev[0], -1);
+        Arrays.fill(next[n - 1], n);
+        for (int i = 1; i < n; ++i) {
+            int j = n - i - 1;
+            for (int k = 0; k < 4; ++k) {
+                prev[i][k] = s.charAt(i - 1) - 'a' == k ? i - 1 : prev[i - 1][k];
+                next[j][k] = s.charAt(j + 1) - 'a' == k ? j + 1 : next[j + 1][k];
+            }
+        }
+        int[][] dp = new int[n][n];
+        for (int i = n - 1; i >= 0; --i) {
+            dp[i][i] = 1;
+            int ci = s.charAt(i) - 'a';
+            for (int j = i + 1; j < n; ++j) {
+                int cj = s.charAt(j) - 'a';
+                if (ci == cj) {
+                    int i1 = next[i][ci], i2 = prev[j][cj];
+                    dp[i][j] = dp[i + 1][j - 1] << 1;
+                    if (i1 < i2) {
+                        dp[i][j] -= dp[i1 + 1][i2 - 1];
+                    } else if (i1 == i2) {
+                        ++dp[i][j];
+                    } else {
+                        dp[i][j] += 2;
+                    }
+                } else {
+                    dp[i][j] = dp[i][j - 1] + dp[i + 1][j] - dp[i + 1][j - 1];
+                }
+                if (dp[i][j] < 0) {
+                    dp[i][j] += M;
+                } else if (dp[i][j] >= M) {
+                    dp[i][j] %= M;
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
+    public int countPalindromicSubsequences6(String s) {
+        int M = (int) 1e9 + 7;
+        char[] chars = s.toCharArray();
+        int n = chars.length;
+        int[][] dp = new int[n][n];
+        int[] left = new int[4], right = new int[4];
+        Arrays.fill(left, n);
+        for (int i = n - 1; i >= 0; --i) {
+            left[chars[i] - 'a'] = i;
+            Arrays.fill(right, -1);
+            for (int j = i; j < n; ++j) {
+                right[chars[j] - 'a'] = j;
+                for (int k = 0; k < 4; ++k) {
+                    int l = left[k], r = right[k];
+                    if (l == r) {
+                        ++dp[i][j];
+                    } else if (l < r) {
+                        dp[i][j] += dp[l + 1][r - 1] + 2;
+                    }
+                    dp[i][j] %= M;
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
+    public int countPalindromicSubsequences(String s) {
+        int M = (int) 1e9 + 7;
+        char[] chars = s.toCharArray();
+        int n = chars.length;
+        int[][] dp = new int[n][4];
+        for (int i = n - 1; i >= 0; --i) {
+            int charIndex = chars[i] - 'a';
+            dp[i][charIndex] = 1;
+            int count = 1;
+            int last = 0;
+            for (int j = i + 1; j < n; ++j) {
+                if (chars[j] - 'a' == charIndex) {
+                    count = 2;
+                    for (int k = 0; k < 4; ++k) {
+                        count += k == charIndex ? last : dp[j - 1][k];
+                        if (count >= M) {
+                            count -= M;
+                        }
+                    }
+                }
+                last = dp[j][charIndex];
+                dp[j][charIndex] = count;
+            }
+        }
+        long ans = 0;
+        for (int i = 0; i < 4; ++i) {
+            ans += dp[n - 1][i];
         }
         return (int) (ans % M);
     }

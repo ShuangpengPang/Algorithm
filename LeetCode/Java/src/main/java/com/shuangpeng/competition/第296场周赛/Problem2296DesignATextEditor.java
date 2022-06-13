@@ -156,82 +156,133 @@ class Problem2296DesignATextEditor1 {
     }
 }
 
-class TextEditor {
+class Problem2296DesignATextEditor2 {
+    class TextEditor {
 
-    class Node {
-        Node prev, next;
-        char c;
+        class Node {
+            Node prev, next;
+            char c;
 
-        Node() {
+            Node() {
+            }
+
+            Node(char c) {
+                this.c = c;
+            }
+
+            Node addNode(Node node) {
+                node.next = this.next;
+                this.next.prev = node;
+                node.prev = this;
+                this.next = node;
+                return node;
+            }
+
+            void remove() {
+                this.next.prev = this.prev;
+                this.prev.next = this.next;
+            }
         }
 
-        Node(char c) {
-            this.c = c;
+        Node head, pos;
+
+        public TextEditor() {
+            pos = head = new Node();
+            head.prev = head.next = head;
         }
 
-        Node addNode(Node node) {
-            node.next = this.next;
-            this.next.prev = node;
-            node.prev = this;
-            this.next = node;
-            return node;
+        public void addText(String text) {
+            int n = text.length();
+            for (int i = 0; i < n; ++i) {
+                pos = pos.addNode(new Node(text.charAt(i)));
+            }
         }
 
-        void remove() {
-            this.next.prev = this.prev;
-            this.prev.next = this.next;
+        public int deleteText(int k) {
+            int ans = 0;
+            while (k > 0 && pos != head) {
+                pos = pos.prev;
+                pos.next.remove();
+                --k;
+                ++ans;
+            }
+            return ans;
+        }
+
+        public String cursorLeft(int k) {
+            while (k > 0 && pos != head) {
+                --k;
+                pos = pos.prev;
+            }
+            return text();
+        }
+
+        public String cursorRight(int k) {
+            while (k > 0 && pos.next != head) {
+                --k;
+                pos = pos.next;
+            }
+            return text();
+        }
+
+        private String text() {
+            StringBuilder sb = new StringBuilder();
+            Node node = pos;
+            for (int i = 0; i < 10 && node != head; ++i) {
+                sb.append(node.c);
+                node = node.prev;
+            }
+            return sb.reverse().toString();
         }
     }
+}
 
-    Node head, pos;
+class TextEditor {
+
+    static int N = (int) 1e6;
+    static char[] left = new char[N], right = new char[N];
+    int idx1 = 0, idx2 = 0;
 
     public TextEditor() {
-        pos = head = new Node();
-        head.prev = head.next = head;
+        idx1 = 0;
+        idx2 = 0;
     }
 
     public void addText(String text) {
         int n = text.length();
         for (int i = 0; i < n; ++i) {
-            pos = pos.addNode(new Node(text.charAt(i)));
+            left[idx1++] = text.charAt(i);
         }
     }
 
     public int deleteText(int k) {
-        int ans = 0;
-        while (k > 0 && pos != head) {
-            pos = pos.prev;
-            pos.next.remove();
-            --k;
-            ++ans;
-        }
+        int ans = Math.min(k, idx1);
+        idx1 -= ans;
         return ans;
     }
 
     public String cursorLeft(int k) {
-        while (k > 0 && pos != head) {
+        while (idx1 > 0 && k > 0) {
+            right[idx2++] = left[--idx1];
             --k;
-            pos = pos.prev;
         }
         return text();
     }
 
     public String cursorRight(int k) {
-        while (k > 0 && pos.next != head) {
+        while (k > 0 && idx2 > 0) {
+            left[idx1++] = right[--idx2];
             --k;
-            pos = pos.next;
         }
         return text();
     }
 
     private String text() {
         StringBuilder sb = new StringBuilder();
-        Node node = pos;
-        for (int i = 0; i < 10 && node != head; ++i) {
-            sb.append(node.c);
-            node = node.prev;
+        for (int i = Math.max(0, idx1 - 10); i < idx1; ++i) {
+            sb.append(left[i]);
         }
-        return sb.reverse().toString();
+        return sb.toString();
     }
 }
 

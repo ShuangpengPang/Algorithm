@@ -24,7 +24,7 @@ public class Problem0532KDiffPairsInAnArray {
         return map.size();
     }
 
-    public int findPairs(int[] nums, int k) {
+    public int findPairs1(int[] nums, int k) {
         Arrays.sort(nums);
         int n = nums.length;
         int ans = 0;
@@ -46,6 +46,84 @@ public class Problem0532KDiffPairsInAnArray {
                     ++ans;
                 }
                 set.add(nums[i]);
+            }
+        }
+        return ans;
+    }
+
+    public int findPairs2(int[] nums, int k) {
+        Set<Integer> visited = new HashSet<Integer>();
+        Set<Integer> res = new HashSet<Integer>();
+        for (int num : nums) {
+            if (visited.contains(num - k)) {
+                res.add(num - k);
+            }
+            if (visited.contains(num + k)) {
+                res.add(num);
+            }
+            visited.add(num);
+        }
+        return res.size();
+    }
+
+    public int findPairs3(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length, y = 0, res = 0;
+        for (int x = 0; x < n; x++) {
+            if (x == 0 || nums[x] != nums[x - 1]) {
+                while (y < n && (nums[y] < nums[x] + k || y <= x)) {
+                    y++;
+                }
+                if (y < n && nums[y] == nums[x] + k) {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    public int findPairs4(int[] nums, int k) {
+        Set<Integer> set = new HashSet<>(), ans = new HashSet<>();
+        for (int num : nums) {
+            if (set.contains(num - k)) {
+                ans.add(num - k);
+            }
+            if (set.contains(num + k)) {
+                ans.add(num);
+            }
+            set.add(num);
+        }
+        return ans.size();
+    }
+
+    public int findPairs5(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        int ans = 0, last = Integer.MIN_VALUE;
+        for (int i = 0, j = 0; j < n; ++j) {
+            while (nums[j] - nums[i] > k) {
+                ++i;
+            }
+            if (i != j && nums[j] - nums[i] == k && nums[i] != last) {
+                last = nums[i];
+                ++ans;
+            }
+        }
+        return ans;
+    }
+
+    public int findPairs(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        int ans = 0;
+        for (int i = 0, j = 0; j < n && i < n; ++i) {
+            if (i == 0 || nums[i] != nums[i - 1]) {
+                while (j <= i || (j < n && nums[j] < nums[i] + k)) {
+                    ++j;
+                }
+                if (j < n && nums[j] == nums[i] + k) {
+                    ++ans;
+                }
             }
         }
         return ans;

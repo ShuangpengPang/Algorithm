@@ -1,9 +1,6 @@
 package com.shuangpeng.competition.第295场周赛;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description: Problem2289StepsToMakeArrayNonDecreasing（使数组按非递减顺序排序）
@@ -69,6 +66,72 @@ public class Problem2289StepsToMakeArrayNonDecreasing {
 }
 
 class Problem2289StepsToMakeArrayNonDecreasing0 {
+
+    class ListNode {
+        ListNode prev, next;
+        int val;
+
+        ListNode(int val) {
+            this.val = val;
+        }
+
+        ListNode add(ListNode node) {
+            node.prev = this;
+            node.next = this.next;
+            this.next = node;
+            return node;
+        }
+
+        void remove() {
+            ListNode next = this.next.next;
+            this.next = next;
+            next.prev = this;
+        }
+    }
+
+    public int totalSteps(int[] nums) {
+        ListNode head = new ListNode(0);
+        head.next = head;
+        head.prev = head;
+        ListNode node = head;
+        for (int num : nums) {
+            node = node.add(new ListNode(num));
+        }
+        node = node.prev;
+        List<ListNode> list = new ArrayList<>();
+        while (node != head) {
+            if (node.val > node.next.val) {
+                if (!list.isEmpty() && list.get(list.size() - 1) == node.next) {
+                    list.remove(list.size() - 1);
+                }
+                node.remove();
+                list.add(node);
+            }
+            node = node.prev;
+        }
+        int ans = 0;
+        while (!list.isEmpty()) {
+            ans++;
+            List<ListNode> temp = new ArrayList<>();
+            for (ListNode curr : list) {
+                if (curr.next == head) {
+                    continue;
+                }
+                if (curr.val > curr.next.val) {
+                    if (!temp.isEmpty() && temp.get(temp.size() - 1) == curr.next) {
+                        temp.remove(temp.size() - 1);
+                    }
+                    curr.remove();
+                    temp.add(curr);
+                }
+            }
+            list = temp;
+        }
+        return ans;
+    }
+}
+
+class Problem2289StepsToMakeArrayNonDecreasing1 {
 
     class Node {
         int index;

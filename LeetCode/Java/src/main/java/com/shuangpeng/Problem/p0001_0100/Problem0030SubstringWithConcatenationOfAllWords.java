@@ -103,7 +103,7 @@ public class Problem0030SubstringWithConcatenationOfAllWords {
         return h;
     }
 
-    public List<Integer> findSubstring(String s, String[] words) {
+    public List<Integer> findSubstring2(String s, String[] words) {
         int m = words.length, n = words[0].length(), ls = s.length();
         int L = m * n;
         List<Integer> ans = new ArrayList<>();
@@ -137,6 +137,98 @@ public class Problem0030SubstringWithConcatenationOfAllWords {
                 }
                 if (map.isEmpty()) {
                     ans.add(j);
+                }
+            }
+        }
+        return ans;
+    }
+
+    public List<Integer> findSubstring(String s, String[] words) {
+        char[] chars = s.toCharArray();
+        int m = words.length, n = words[0].length(), ls = chars.length;
+        Map<String, Integer> map = new HashMap<>();
+        for (String w : words) {
+            map.putIfAbsent(w, map.size());
+        }
+        int[] cnt = new int[map.size()];
+        for (String w : words) {
+            cnt[map.get(w)]++;
+        }
+        int L = m * n;
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int[] copy = cnt.clone();
+            int count = 0;
+            for (int j = i; j <= ls - L; j += n) {
+                if (j == i) {
+                    for (int k = j; k < j + L; k += n) {
+                        String w = new String(chars, k, n);
+                        int id = map.getOrDefault(w, -1);
+                        if (id != -1) {
+                            copy[id]--;
+                            if (copy[id] == 0) {
+                                count++;
+                            } else if (copy[id] == -1) {
+                                count--;
+                            }
+                        }
+                    }
+                } else {
+                    String w = new String(chars, j + L - n, n);
+                    int id = map.getOrDefault(w, -1);
+                    if (id != -1) {
+                        copy[id]--;
+                        if (copy[id] == 0) {
+                            count++;
+                        } else if (copy[id] == -1) {
+                            count--;
+                        }
+                    }
+                    w = new String(chars, j - n, n);
+                    id = map.getOrDefault(w, -1);
+                    if (id != -1) {
+                        copy[id]++;
+                        if (copy[id] == 0) {
+                            count++;
+                        } else if (copy[id] == 1) {
+                            count--;
+                        }
+                    }
+                }
+                if (count == copy.length) {
+                    ans.add(j);
+                }
+            }
+        }
+        return ans;
+    }
+
+    public List<Integer> findSubstring3(String s, String[] words) {
+        Map<String, Integer> map = new HashMap<>();
+        for (String w : words) {
+            map.putIfAbsent(w, map.size());
+        }
+        int[] cnt = new int[map.size()];
+        for (String w : words) {
+            cnt[map.get(w)]++;
+        }
+        char[] chars = s.toCharArray();
+        int n = words[0].length(), m = words.length, ls = chars.length;
+        int L = m * n;
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j <= ls - L; j += n) {
+                int[] temp = new int[cnt.length];
+                for (int k = j + L - n; k >= j; k -= n) {
+                    String w = new String(chars, k, n);
+                    Integer id = map.get(w);
+                    if (id == null || temp[id]++ == cnt[id]) {
+                        j = k;
+                        break;
+                    }
+                    if (k == j) {
+                        ans.add(j);
+                    }
                 }
             }
         }

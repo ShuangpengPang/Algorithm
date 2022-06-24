@@ -7,6 +7,25 @@ package com.shuangpeng.competition.第295场周赛;
  */
 public class Problem2287RearrangeCharactersToMakeTargetString {
 
+    // 比赛时写法
+    public int rearrangeCharacters0(String s, String target) {
+        int[] cnt1 = new int[26];
+        int[] cnt2 = new int[26];
+        for (int i = 0; i < s.length(); ++i) {
+            ++cnt1[s.charAt(i) - 'a'];
+        }
+        for (int i = 0; i < target.length(); ++i){
+            ++cnt2[target.charAt(i) - 'a'];
+        }
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i < 26; ++i) {
+            if (cnt2[i] > 0) {
+                ans = Math.min(ans, cnt1[i] / cnt2[i]);
+            }
+        }
+        return ans;
+    }
+
     public int rearrangeCharacters(String s, String target) {
         int N = 26;
         int[] cnt1 = new int[N], cnt2 = new int[N];

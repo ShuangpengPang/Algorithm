@@ -164,4 +164,8 @@ public class Problem0436FindRightInterval {
         }
         return ret;
     }
+
+//    public int[] findRightInterval(int[][] intervals) {
+//
+//    }
 }

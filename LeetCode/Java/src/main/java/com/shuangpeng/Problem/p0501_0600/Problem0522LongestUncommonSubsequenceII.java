@@ -18,7 +18,7 @@ public class Problem0522LongestUncommonSubsequenceII {
                 if (i == j || strs[j].length() < m) {
                     continue;
                 }
-                if (s.equals(strs[j]) || isSubstring(s, strs[j])) {
+                if (s.equals(strs[j]) || isSubsequence(s, strs[j])) {
                     valid = false;
                     break;
                 }
@@ -30,7 +30,7 @@ public class Problem0522LongestUncommonSubsequenceII {
         return ans;
     }
 
-    private boolean isSubstring(String s1, String s2) {
+    private boolean isSubsequence(String s1, String s2) {
         int n1 = s1.length(), n2 = s2.length();
         int i = 0, j = 0;
         while (i < n1 && j < n2) {

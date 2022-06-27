@@ -11,9 +11,12 @@ public class Problem0522LongestUncommonSubsequenceII {
         int ans = -1;
         int n = strs.length;
         for (int i = 0; i < n; i++) {
-            boolean valid = true;
             String s = strs[i];
             int m = s.length();
+            if (m <= ans) {
+                continue;
+            }
+            boolean valid = true;
             for (int j = 0; j < n; j++) {
                 if (i == j || strs[j].length() < m) {
                     continue;

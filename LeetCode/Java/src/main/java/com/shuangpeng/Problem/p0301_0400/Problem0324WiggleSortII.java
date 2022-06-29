@@ -45,7 +45,7 @@ public class Problem0324WiggleSortII {
         }
     }
 
-    public void wiggleSort(int[] nums) {
+    public void wiggleSort1(int[] nums) {
         if (nums == null || nums.length <= 1) {
             return;
         }
@@ -111,5 +111,18 @@ public class Problem0324WiggleSortII {
             return quickSelect(nums, k, j, end);
         }
         return quickSelect(nums, k, start, i);
+    }
+
+    public void wiggleSort(int[] nums) {
+        int[] copy = nums.clone();
+        Arrays.sort(copy);
+        int n = nums.length;
+        int h = n >> 1;
+        for (int i = n - 1, j = 0; i >= h; i--, j += 2) {
+            nums[j] = copy[i - h];
+            if (j < n - 1) {
+                nums[j + 1] = copy[i];
+            }
+        }
     }
 }

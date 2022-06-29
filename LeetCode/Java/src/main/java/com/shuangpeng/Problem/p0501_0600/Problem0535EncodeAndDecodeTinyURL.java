@@ -2,6 +2,7 @@ package com.shuangpeng.Problem.p0501_0600;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @Description: Problem0535EncodeAndDecodeTinyURL（TinyURL的加密与解密）
@@ -51,36 +52,65 @@ class Problem0535EncodeAndDecodeTinyURL0 {
     }
 }
 
-class Codec {
+class Problem0535EncodeAndDecodeTinyURL1 {
+    class Codec {
 
-    int k1 = 1117, k2 = (int) 1e9 + 7;
-    Map<String, String> toShortMap = new HashMap<>();
-    Map<String, String> toLongMap = new HashMap<>();
+        int k1 = 1117, k2 = (int) 1e9 + 7;
+        Map<String, String> toShortMap = new HashMap<>();
+        Map<String, String> toLongMap = new HashMap<>();
 
-    public String encode(String longUrl) {
-        if (toShortMap.containsKey(longUrl)) {
-            return toShortMap.get(longUrl);
+        public String encode(String longUrl) {
+            if (toShortMap.containsKey(longUrl)) {
+                return toShortMap.get(longUrl);
+            }
+            long key = 0;
+            int n = longUrl.length();
+            long base = 1;
+            for (int i = 0; i < n; i++) {
+                key = (key * base + longUrl.charAt(i)) % k2;
+                base = (base * k1) % k2;
+            }
+            String url = "http://tinyurl.com/";
+            while (toLongMap.containsKey(url + key)) {
+                key++;
+            }
+            url += key;
+            toShortMap.put(longUrl, url);
+            toLongMap.put(url, longUrl);
+            return url;
         }
-        long key = 0;
-        int n = longUrl.length();
-        long base = 1;
-        for (int i = 0; i < n; i++) {
-            key = (key * base + longUrl.charAt(i)) % k2;
-            base = (base * k1) % k2;
-        }
-        String url = "http://tinyurl.com/";
-        while (toLongMap.containsKey(url + key)) {
-            key++;
-        }
-        url += key;
-        toShortMap.put(longUrl, url);
-        toLongMap.put(url, longUrl);
-        return url;
-    }
 
-    public String decode(String shortUrl) {
-        return toLongMap.get(shortUrl);
+        public String decode(String shortUrl) {
+            return toLongMap.get(shortUrl);
+        }
     }
 }
 
+class Problem0535EncodeAndDecodeTinyURL2 {
+    class Codec {
 
+        Map<String, Integer> urlToKey = new HashMap<>();
+        Map<Integer, String> database = new HashMap<>();
+        Random random = new Random();
+
+        public String encode(String longUrl) {
+            if (urlToKey.containsKey(longUrl)) {
+                return database.get(urlToKey.get(longUrl));
+            }
+            int key = random.nextInt();
+            while (database.containsKey(key)) {
+                key = random.nextInt();
+            }
+            String url = "http://tinyurl.com/" + key;
+            urlToKey.put(longUrl, key);
+            database.put(key, longUrl);
+            return url;
+        }
+
+        public String decode(String shortUrl) {
+            int index = shortUrl.lastIndexOf("/") + 1;
+            int key = Integer.parseInt(shortUrl.substring(index));
+            return database.get(key);
+        }
+    }
+}

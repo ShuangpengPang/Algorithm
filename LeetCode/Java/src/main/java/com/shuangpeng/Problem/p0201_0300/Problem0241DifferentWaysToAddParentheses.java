@@ -1,11 +1,14 @@
 package com.shuangpeng.Problem.p0201_0300;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+/**
+ * @Description: 为运算表达式设计优先级
+ * @Date 2022/7/1 10:47 AM
+ **/
 public class Problem0241DifferentWaysToAddParentheses {
 
-    public List<Integer> diffWaysToCompute(String expression) {
+    public List<Integer> diffWaysToCompute0(String expression) {
         List<Integer> datas = new ArrayList<>();
         List<Character> operators = new ArrayList<>();
         int n = expression.length();
@@ -62,4 +65,58 @@ public class Problem0241DifferentWaysToAddParentheses {
 //        Problem0241DifferentWaysToAddParentheses a= new Problem0241DifferentWaysToAddParentheses();
 //        a.diffWaysToCompute("2-1-1");
 //    }
+
+    public List<Integer> diffWaysToCompute(String expression) {
+        int m = expression.length();
+        int n = 1;
+        for (int i = 0; i < m; i++) {
+            char c = expression.charAt(i);
+            if (c < '0' || c > '9') {
+                n++;
+            }
+        }
+        int[] nums = new int[n];
+        char[] chars = new char[n - 1];
+        int idx = 0;
+        int num = 0;
+        for (int i = 0; i < m; i++) {
+            char c = expression.charAt(i);
+            if (c >= '0' && c <= '9') {
+                num = num * 10 + c - '0';
+            } else {
+                nums[idx] = num;
+                chars[idx] = c;
+                num = 0;
+                idx++;
+            }
+        }
+        nums[n - 1] = num;
+        List<Integer>[][] dp = new List[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                dp[i][j] = new ArrayList<>();
+            }
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i][i].add(nums[i]);
+            for (int j = i + 1; j < n; j++) {
+                for (int k = j; k > i; k--) {
+                    for (int num1 : dp[i][k - 1]) {
+                        for (int num2 : dp[k][j]) {
+                            int res = 0;
+                            if (chars[k - 1] == '+') {
+                                res = num1 + num2;
+                            } else if (chars[k - 1] == '-') {
+                                res = num1 - num2;
+                            } else {
+                                res = num1 * num2;
+                            }
+                            dp[i][j].add(res);
+                        }
+                    }
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
 }

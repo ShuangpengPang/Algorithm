@@ -7,6 +7,7 @@ package com.shuangpeng.competition.第081场双周赛;
  */
 public class Problem2317MaximumXORAfterOperations {
 
+    // 比赛时写法
     public int maximumXOR(int[] nums) {
         int ans = 0;
         for (int num : nums) {

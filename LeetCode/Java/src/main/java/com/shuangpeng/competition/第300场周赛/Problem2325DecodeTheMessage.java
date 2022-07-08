@@ -9,7 +9,33 @@ import java.util.Arrays;
  */
 public class Problem2325DecodeTheMessage {
 
-    public String decodeMessage(String key, String message) {
+    // 比赛时写法
+    public String decodeMessage0(String key, String message) {
+        int[] map = new int[26];
+        Arrays.fill(map, -1);
+        int idx = 0;
+        int n = key.length();
+        for (int i = 0; i < n; i++) {
+            int j = key.charAt(i) - 'a';
+            if (j >= 0 && j < 26) {
+                if (map[j] == -1) {
+                    map[j] = idx++;
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < message.length(); i++) {
+            int j = message.charAt(i) - 'a';
+            if (j >= 0 && j < 26) {
+                sb.append((char)('a' + map[j]));
+            } else {
+                sb.append(' ');
+            }
+        }
+        return sb.toString();
+    }
+
+    public String decodeMessage1(String key, String message) {
         int N = 26;
         char[] map = new char[N];
         Arrays.fill(map, 'A');
@@ -33,5 +59,27 @@ public class Problem2325DecodeTheMessage {
             }
         }
         return sb.toString();
+    }
+
+    public String decodeMessage(String key, String message) {
+        int N = 26;
+        char[] map = new char[N];
+        Arrays.fill(map, '.');
+        int m = key.length(), n = message.length();
+        char ch = 'a';
+        for (int i = 0; i < m; i++) {
+            int j = key.charAt(i) - 'a';
+            if (j >= 0 && j < N && map[j] == '.') {
+                map[j] = ch++;
+            }
+        }
+        char[] chars = message.toCharArray();
+        for (int i = 0; i < n; i++) {
+            int j = chars[i] - 'a';
+            if (j >= 0 && j < N) {
+                chars[i] = map[j];
+            }
+        }
+        return new String(chars);
     }
 }

@@ -52,7 +52,7 @@ public class Problem0873LengthOfLongestFibonacciSubsequence {
         return maxLength > 2 ? maxLength : 0;
     }
 
-    public int lenLongestFibSubseq(int[] arr) {
+    public int lenLongestFibSubseq2(int[] arr) {
         int n = arr.length;
         Map<Integer, Integer> index = new HashMap<>(n);
         for (int i = 0; i < n; ++i) {
@@ -72,4 +72,77 @@ public class Problem0873LengthOfLongestFibonacciSubsequence {
         }
         return maxLength;
     }
+
+    // TLE
+    public int lenLongestFibSubseq3(int[] arr) {
+        int n = arr.length;
+        Map<Integer, Map<Integer, Integer>> map = new HashMap<>(n);
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            int num = arr[i];
+            for (int j = i - 1; j >= 0; j--) {
+                map.putIfAbsent(num, new HashMap<>(i));
+                Map<Integer, Integer> m = map.get(num);
+                if (j > 0 && arr[j] > num / 2) {
+                    int len = map.get(arr[j]).getOrDefault(num - arr[j], 1) + 1;
+                    m.put(arr[j], len);
+                    ans = Math.max(ans, len);
+                } else {
+                    m.put(arr[j], 2);
+                }
+            }
+        }
+        return ans >= 3 ? ans : 0;
+    }
+
+    public int lenLongestFibSubseq4(int[] arr) {
+        int n = arr.length;
+        int[][] dp = new int[n][n];
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            int num = arr[i];
+            for (int l = 0, r = i - 1; r >= 0; r--) {
+                if (l < r) {
+                    while (arr[l] < num - arr[r]) {
+                        l++;
+                    }
+                    if (l < r && arr[l] + arr[r] == num) {
+                        dp[r][i] = dp[l][r] + 1;
+                        ans = Math.max(ans, dp[r][i]);
+                    } else {
+                        dp[r][i] = 2;
+                    }
+                } else {
+                    dp[r][i] = 2;
+                }
+            }
+        }
+        return ans >= 3 ? ans : 0;
+    }
+
+    public int lenLongestFibSubseq(int[] arr) {
+        int n = arr.length;
+        int[][] dp = new int[n][n];
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            int num = arr[i];
+            for (int l = 0, r = i - 1; r >= 0 && l < r; r--) {
+                while (arr[l] + arr[r] < num) {
+                    l++;
+                }
+                if (l < r && arr[l] + arr[r] == num) {
+                    dp[r][i] = Math.max(dp[l][r], 2) + 1;
+                    ans = Math.max(ans, dp[r][i]);
+                }
+            }
+        }
+        return ans >= 3 ? ans : 0;
+    }
+
+//    public static void main(String[] args) {
+//        Problem0873LengthOfLongestFibonacciSubsequence a = new Problem0873LengthOfLongestFibonacciSubsequence();
+////        int[] arr = {2,4,5,6,7,8,11,13,14,15,21,22,34};
+//        int[] arr = {1,2,3,4,5,6,7,8};
+//        a.lenLongestFibSubseq(arr);
+//    }
 }

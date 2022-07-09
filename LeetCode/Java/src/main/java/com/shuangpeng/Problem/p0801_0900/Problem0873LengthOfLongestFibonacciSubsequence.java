@@ -120,7 +120,7 @@ public class Problem0873LengthOfLongestFibonacciSubsequence {
         return ans >= 3 ? ans : 0;
     }
 
-    public int lenLongestFibSubseq(int[] arr) {
+    public int lenLongestFibSubseq5(int[] arr) {
         int n = arr.length;
         int[][] dp = new int[n][n];
         int ans = 0;
@@ -137,6 +137,31 @@ public class Problem0873LengthOfLongestFibonacciSubsequence {
             }
         }
         return ans >= 3 ? ans : 0;
+    }
+
+    public int lenLongestFibSubseq(int[] arr) {
+        int n = arr.length;
+        int[][] dp = new int[n][];
+        for (int i = 0; i < n; i++) {
+            dp[i] = new int[i];
+        }
+        int maxLen = -2;
+        for (int j = 1; j < n - 1; j++) {
+            int i = 0, k = j + 1;
+            while (i < j && k < n) {
+                int sum = arr[i] + arr[j];
+                if (sum < arr[k]) {
+                    i++;
+                } else if (sum > arr[k]) {
+                    k++;
+                } else {
+                    maxLen = Math.max(maxLen, dp[k][j] = dp[j][i] + 1);
+                    i++;
+                    k++;
+                }
+            }
+        }
+        return maxLen + 2;
     }
 
 //    public static void main(String[] args) {

@@ -85,4 +85,62 @@ public class Problem0741CherryPickup {
         }
         return Math.max(0, dp[n - 1][n - 1]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public int cherryPickup1(int[][] grid) {
+        int n = grid.length;
+        int N = (n << 1) - 1;
+        int[][][] dp = new int[N][n][n];
+        dp[0][0][0] = grid[0][0];
+        for (int i = 1; i < N; i++) {
+            for (int x1 = Math.max(0, i - n + 1); x1 <= i && x1 < n; x1++) {
+                int y1 = i - x1;
+                for (int x2 = Math.max(0, i - n + 1); x2 <= i && x2 < n; x2++) {
+                    int y2 = i - x2;
+                    if (grid[x1][y1] == -1 || grid[x2][y2] == -1) {
+                        dp[i][x1][x2] = Integer.MIN_VALUE;
+                        continue;
+                    }
+                    // dp[i - 1][x1 - 1][x2] dp[i - 1][x1][x2]   dp[i - 1][x1 - 1][x2 - 1]  dp[i - 1][x1][x2 - 1]
+                    int a = 0, b = 0, c = 0, d = 0;
+                    if (x1 != 0 && x2 != 0) {
+                        dp[i][x1][x2] = Math.max(Math.max(dp[i - 1][x1 - 1][x2], dp[i - 1][x1][x2]), Math.max(dp[i - 1][x1 - 1][x2 - 1], dp[i - 1][x1][x2 - 1]));
+                    } else if (x1 == 0 && x2 == 0) {
+                        dp[i][x1][x2] = dp[i - 1][x1][x2];
+                    } else if (x1 == 0) {
+                        dp[i][x1][x2] = Math.max(dp[i - 1][x1][x2], dp[i - 1][x1][x2 - 1]);
+                    } else if (x2 == 0) {
+                        dp[i][x1][x2] = Math.max(dp[i - 1][x1][x2], dp[i - 1][x1 - 1][x2]);
+                    }
+                    if (dp[i][x1][x2] != Integer.MIN_VALUE) {
+                        dp[i][x1][x2] += x1 == x2 ? grid[x1][y1] : grid[x1][y1] + grid[x2][y2];
+                    }
+                }
+            }
+        }
+        return dp[N - 1][n - 1][n - 1] == Integer.MIN_VALUE ? 0 : dp[N - 1][n - 1][n - 1];
+    }
 }

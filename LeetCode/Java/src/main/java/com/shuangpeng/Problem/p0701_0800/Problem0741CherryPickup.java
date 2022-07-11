@@ -41,7 +41,7 @@ public class Problem0741CherryPickup {
         return count;
     }
 
-    public int cherryPickup(int[][] grid) {
+    public int cherryPickup1(int[][] grid) {
         int n = grid.length;
         int[][] dp = new int[n][n];
         for (int i = 0; i < n; i++) {
@@ -86,46 +86,20 @@ public class Problem0741CherryPickup {
         return Math.max(0, dp[n - 1][n - 1]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public int cherryPickup1(int[][] grid) {
+    public int cherryPickup2(int[][] grid) {
         int n = grid.length;
         int N = (n << 1) - 1;
         int[][][] dp = new int[N][n][n];
         dp[0][0][0] = grid[0][0];
         for (int i = 1; i < N; i++) {
-            for (int x1 = Math.max(0, i - n + 1); x1 <= i && x1 < n; x1++) {
+            for (int x1 = 0; x1 < n; x1++) {
                 int y1 = i - x1;
-                for (int x2 = Math.max(0, i - n + 1); x2 <= i && x2 < n; x2++) {
+                for (int x2 = 0; x2 < n; x2++) {
                     int y2 = i - x2;
-                    if (grid[x1][y1] == -1 || grid[x2][y2] == -1) {
+                    if (y1 < 0 || y1 >= n || y2 < 0 || y2 >= n || grid[x1][y1] == -1 || grid[x2][y2] == -1) {
                         dp[i][x1][x2] = Integer.MIN_VALUE;
                         continue;
                     }
-                    // dp[i - 1][x1 - 1][x2] dp[i - 1][x1][x2]   dp[i - 1][x1 - 1][x2 - 1]  dp[i - 1][x1][x2 - 1]
-                    int a = 0, b = 0, c = 0, d = 0;
                     if (x1 != 0 && x2 != 0) {
                         dp[i][x1][x2] = Math.max(Math.max(dp[i - 1][x1 - 1][x2], dp[i - 1][x1][x2]), Math.max(dp[i - 1][x1 - 1][x2 - 1], dp[i - 1][x1][x2 - 1]));
                     } else if (x1 == 0 && x2 == 0) {
@@ -142,5 +116,82 @@ public class Problem0741CherryPickup {
             }
         }
         return dp[N - 1][n - 1][n - 1] == Integer.MIN_VALUE ? 0 : dp[N - 1][n - 1][n - 1];
+    }
+
+    public int cherryPickup3(int[][] grid) {
+        int n = grid.length;
+        int N = (n << 1) - 1;
+        int[][][] dp = new int[N][n][n];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < n; j++) {
+                Arrays.fill(dp[i][j], Integer.MIN_VALUE);
+            }
+        }
+        dp[0][0][0] = grid[0][0];
+        for (int i = 1; i < N; i++) {
+            for (int x1 = Math.max(0, i - n + 1); x1 <= Math.min(n - 1, i); x1++) {
+                int y1 = i - x1;
+                if (grid[x1][y1] == -1) {
+                    continue;
+                }
+                for (int x2 = x1; x2 <= Math.min(n - 1, i); x2++) {
+                    int y2 = i - x2;
+                    if (grid[x2][y2] == -1) {
+                        continue;
+                    }
+                    dp[i][x1][x2] = dp[i - 1][x1][x2];
+                    if (x1 > 0) {
+                        dp[i][x1][x2] = Math.max(dp[i][x1][x2], dp[i - 1][x1 - 1][x2]);
+                    }
+                    if (x2 > 0) {
+                        dp[i][x1][x2] = Math.max(dp[i][x1][x2], dp[i - 1][x1][x2 - 1]);
+                    }
+                    if (x1 > 0 && x2 > 0) {
+                        dp[i][x1][x2] = Math.max(dp[i][x1][x2], dp[i - 1][x1 - 1][x2 - 1]);
+                    }
+                    dp[i][x1][x2] += grid[x1][y1];
+                    if (x1 != x2) {
+                        dp[i][x1][x2] += grid[x2][y2];
+                    }
+                }
+            }
+        }
+        return Math.max(dp[N - 1][n - 1][n - 1], 0);
+    }
+
+    public int cherryPickup(int[][] grid) {
+        int n = grid.length;
+        int N = (n << 1) - 1;
+        int[][] dp = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dp[i], Integer.MIN_VALUE);
+        }
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < N; i++) {
+            for (int x1 = Math.min(i, n - 1); x1 >= Math.max(0, i - n + 1); x1--) {
+                int y1 = i - x1;
+                for (int x2 = Math.min(i, n - 1); x2 >= x1; x2--) {
+                    int y2 = i - x2;
+                    if (grid[x1][y1] == -1 || grid[x2][y2] == -1) {
+                        dp[x1][x2] = Integer.MIN_VALUE;
+                        continue;
+                    }
+                    if (x1 > 0) {
+                        dp[x1][x2] = Math.max(dp[x1][x2], dp[x1 - 1][x2]);
+                    }
+                    if (x2 > 0) {
+                        dp[x1][x2] = Math.max(dp[x1][x2], dp[x1][x2 - 1]);
+                    }
+                    if (x1 > 0 && x2 > 0) {
+                        dp[x1][x2] = Math.max(dp[x1][x2], dp[x1 - 1][x2 - 1]);
+                    }
+                    dp[x1][x2] += grid[x1][y1];
+                    if (x1 != x2) {
+                        dp[x1][x2] += grid[x2][y2];
+                    }
+                }
+            }
+        }
+        return Math.max(0, dp[n - 1][n - 1]);
     }
 }

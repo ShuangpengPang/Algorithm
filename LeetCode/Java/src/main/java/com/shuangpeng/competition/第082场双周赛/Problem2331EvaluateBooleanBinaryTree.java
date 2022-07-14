@@ -1,0 +1,22 @@
+package com.shuangpeng.competition.第082场双周赛;
+
+import com.shuangpeng.common.TreeNode;
+
+/**
+ * @Description: Problem2331EvaluateBooleanBinaryTree（计算布尔二叉树的值）
+ * @Date 2022/7/14 5:35 PM
+ * @Version 1.0
+ */
+public class Problem2331EvaluateBooleanBinaryTree {
+
+    public boolean evaluateTree(TreeNode root) {
+        if (root.val < 2) {
+            return root.val == 1;
+        }
+        boolean left = evaluateTree(root.left), right = evaluateTree(root.right);
+        if (root.val == 2) {
+            return left || right;
+        }
+        return left && right;
+    }
+}

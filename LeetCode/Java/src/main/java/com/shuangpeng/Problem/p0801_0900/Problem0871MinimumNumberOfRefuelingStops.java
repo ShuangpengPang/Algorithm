@@ -159,7 +159,7 @@ public class Problem0871MinimumNumberOfRefuelingStops {
         return -1;
     }
 
-    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+    public int minRefuelStops4(int target, int startFuel, int[][] stations) {
         int n = stations.length;
         PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> b - a);
         int maxDistance = startFuel;
@@ -178,5 +178,66 @@ public class Problem0871MinimumNumberOfRefuelingStops {
             }
         }
         return count;
+    }
+
+    public int minRefuelStops5(int target, int startFuel, int[][] stations) {
+        PriorityQueue<Integer> q = new PriorityQueue<>((a, b) -> b - a);
+        int p = startFuel, i = 0, n = stations.length;
+        int ans = 0;
+        while (p < target && ((i < n && p >= stations[i][0]) || !q.isEmpty())) {
+            while (i < n && stations[i][0] <= p) {
+                q.offer(stations[i][1]);
+                i++;
+            }
+            if (!q.isEmpty()) {
+                p += q.poll();
+                ans++;
+            }
+        }
+        return p >= target ? ans : -1;
+    }
+
+    public int minRefuelStops6(int target, int startFuel, int[][] stations) {
+        int n = stations.length;
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+        dp[0] = startFuel;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j > 0 && dp[j - 1] >= stations[i][0]; j--) {
+                if (dp[j - 1] < target) {
+                    dp[j] = Math.max(dp[j], dp[j - 1] + stations[i][1]);
+                } else {
+                    dp[j] = Math.max(dp[j], dp[j - 1]);
+                }
+            }
+        }
+        for (int i = 0; i <= n; i++) {
+            if (dp[i] >= target) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        int n = stations.length;
+        int maxPos = startFuel, ans = 0;
+        while (maxPos < target) {
+            int curMax = 0;
+            int curPos = -1;
+            for (int i = 0; i < n; i++) {
+                if (maxPos >= stations[i][0] && stations[i][1] > curMax) {
+                    curMax = stations[i][1];
+                    curPos = i;
+                }
+            }
+            if (curMax == 0) {
+                break;
+            }
+            ans++;
+            maxPos += curMax;
+            stations[curPos][0] = Integer.MAX_VALUE;
+        }
+        return maxPos >= target ? ans : -1;
     }
 }

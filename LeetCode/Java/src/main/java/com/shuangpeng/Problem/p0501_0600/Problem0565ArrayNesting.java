@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p0501_0600;
  */
 public class Problem0565ArrayNesting {
 
-    public int arrayNesting(int[] nums) {
+    public int arrayNesting0(int[] nums) {
         int n = nums.length;
         int[] dp = new int[n];
         int ans = 0;
@@ -41,5 +41,36 @@ public class Problem0565ArrayNesting {
             dp[x] = dp[nums[x]] + 1;
         }
         return dp[x];
+    }
+
+    public int arrayNesting1(int[] nums) {
+        int n = nums.length, ans = 0;
+        boolean[] visited = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            int cnt = 0;
+            int j = i;
+            while (!visited[j]) {
+                visited[j] = true;
+                cnt++;
+                j = nums[j];
+            }
+            ans = Math.max(ans, cnt);
+        }
+        return ans;
+    }
+
+    public int arrayNesting(int[] nums) {
+        int n = nums.length, ans = 0;
+        for (int i = 0; i < n; i++) {
+            int cnt = 0;
+            while (nums[i] < n) {
+                int num = nums[i];
+                nums[i] = n;
+                i = num;
+                cnt++;
+            }
+            ans = Math.max(ans, cnt);
+        }
+        return ans;
     }
 }

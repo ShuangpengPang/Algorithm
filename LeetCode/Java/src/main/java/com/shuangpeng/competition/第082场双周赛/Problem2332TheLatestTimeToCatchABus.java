@@ -9,7 +9,40 @@ import java.util.Arrays;
  */
 public class Problem2332TheLatestTimeToCatchABus {
 
-    public int latestTimeCatchTheBus(int[] buses, int[] passengers, int capacity) {
+    // 比赛时写法
+    public int latestTimeCatchTheBus0(int[] buses, int[] passengers, int capacity) {
+        Arrays.sort(buses);
+        Arrays.sort(passengers);
+        int n = buses.length, m = passengers.length;
+        int i = 0, j = 0;
+        int count = 0;
+        while (i < n && j < m) {
+            if (i < n - 1) {
+                while (j < m && passengers[j] <= buses[i] && count < capacity) {
+                    j++;
+                    count++;
+                }
+                i++;
+                count = 0;
+            } else {
+                while (j < m && passengers[j] < buses[i] && count < capacity - 1) {
+                    j++;
+                    count++;
+                }
+                if (j == m || passengers[j] > buses[i]) {
+                    return buses[i];
+                }
+                int k = j;
+                while (k > 0 && passengers[k] == passengers[k - 1] + 1) {
+                    k--;
+                }
+                return passengers[k] - 1;
+            }
+        }
+        return buses[n - 1];
+    }
+
+    public int latestTimeCatchTheBus1(int[] buses, int[] passengers, int capacity) {
         Arrays.sort(buses);
         Arrays.sort(passengers);
         int n1 = buses.length, n2 = passengers.length;
@@ -37,5 +70,23 @@ public class Problem2332TheLatestTimeToCatchABus {
             p--;
         }
         return passengers[p] - 1;
+    }
+
+    public int latestTimeCatchTheBus(int[] buses, int[] passengers, int capacity) {
+        Arrays.sort(buses);
+        Arrays.sort(passengers);
+        int n = passengers.length, c = 0, p = 0;
+        for (int t : buses) {
+            for (c = capacity; c > 0 && p < n && passengers[p] <= t; c--) {
+                p++;
+            }
+        }
+        p--;
+        int ans = c > 0 ? buses[buses.length - 1] : passengers[p];
+        while (p >= 0 && ans == passengers[p]) {
+            p--;
+            ans--;
+        }
+        return ans;
     }
 }

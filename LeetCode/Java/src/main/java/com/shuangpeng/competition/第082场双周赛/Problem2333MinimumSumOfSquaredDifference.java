@@ -93,32 +93,62 @@ public class Problem2333MinimumSumOfSquaredDifference {
         return ans;
     }
 
-//    public long minSumSquareDiff(int[] a, int[] nums2, int k1, int k2) {
-//        long sum = 0L, ans = 0L;
-//        int n = a.length;
-//        for (int i = 0; i < n; i++) {
-//            a[i] = Math.abs(a[i] - nums2[i]);
-//            sum += a[i];
-//            ans += (long) a[i] * a[i];
-//        }
-//        int k = k1 + k2;
-//        if (sum <= k) {
-//            return 0;
-//        }
-//        Arrays.sort(a);
-//        for (int i = n - 1; i >= 0; i--) {
-//            int m = n - i;
-//            long v = a[i], c = m * (a[i] - (i > 0 ? a[i - 1] : 0));
-//            ans -= v * v;
-//            if (c < k) {
-//                k -= c;
-//                continue;
-//            }
-//            v -= k / m;
-//            int mod = k % m;
-//
-//        }
-//    }
+    public long minSumSquareDiff2(int[] a, int[] nums2, int k1, int k2) {
+        int n = a.length;
+        long ans = 0, sum = 0;
+        for (int i = 0; i < n; i++) {
+            a[i] = Math.abs(a[i] - nums2[i]);
+            sum += a[i];
+            ans += (long) a[i] * a[i];
+        }
+        int k = k1 + k2;
+        if (k >= sum) {
+            return 0;
+        }
+        Arrays.sort(a);
+        for (int i = n - 1; i >= 0; i--) {
+            int m = n - i;
+            long c = (long) m * (i > 0 ? a[i] - a[i - 1] : a[i]);
+            ans -= (long) a[i] * a[i];
+            if (c < k) {
+                k -= c;
+            } else {
+                long v = a[i] - k / m;
+                int mod = k % m;
+                return ans + v * v * (m - mod) + (v - 1) * (v - 1) * mod;
+            }
+        }
+        return ans;
+    }
+
+    public long minSumSquareDiff(int[] a, int[] nums2, int k1, int k2) {
+        int max = 0, n = a.length;
+        long sum = 0L;
+        for (int i = 0; i < n; i++) {
+            a[i] = Math.abs(a[i] - nums2[i]);
+            max = Math.max(max, a[i]);
+            sum += a[i];
+        }
+        int k = k1 + k2;
+        if (k >= sum) {
+            return 0;
+        }
+        int[] cnt = new int[max + 1];
+        for (int num : a) {
+            cnt[num]++;
+        }
+        int pos = max, count = 0;
+        while (k > 0) {
+            count += cnt[pos];
+            k -= count;
+            pos--;
+        }
+        long ans = 0L;
+        for (int i = 1; i <= pos; i++) {
+            ans += (long) i * i * cnt[i];
+        }
+        return ans + (long) (pos + 1) * (pos + 1) * (-k) + (long) pos * pos * (count + k);
+    }
 
 //    public static void main(String[] args) {
 //        int[] nums1 = {1,2,3,4};

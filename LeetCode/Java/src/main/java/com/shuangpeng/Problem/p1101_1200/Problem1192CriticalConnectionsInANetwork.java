@@ -41,3 +41,58 @@ public class Problem1192CriticalConnectionsInANetwork {
         return ids[x];
     }
 }
+
+class Problem1192CriticalConnectionsInANetwork0 {
+    static class T{
+        int N,M;
+        int[] e,ne,h;
+        int[] dfn,low;
+        boolean[] bridge;
+        int[] father;
+        int idx = 1,cnt = 0;
+        public T(int n,int m){
+            N = n;M = m;
+            e = new int[m];ne = new int[m];
+            h = new int[N];
+            dfn = new int[N];low = new int[N];father = new int[N];
+            bridge = new boolean[N];
+        }
+
+        public void add(int a,int b){
+            e[idx] = b;ne[idx] = h[a];h[a] = idx++;
+        }
+
+        //割边
+        public void tarjan(int v,int fa){
+            father[v] = fa;
+            dfn[v] = low[v] = ++cnt;
+            for(int i = h[v];i != 0;i = ne[i]){
+                int j = e[i];
+                if(dfn[j] == 0){
+                    tarjan(j,v);
+                    low[v] = Math.min(low[v],low[j]);
+                    if(low[j] > dfn[v]) bridge[j] = true;
+                }else if(j != fa) low[v] = Math.min(low[v],dfn[j]);
+            }
+        }
+    }
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        int m = 0;
+        for(List<Integer> c : connections){
+            m += c.size();
+        }
+        T tj = new T(n + 10,m * 2 + 10);
+        for(List<Integer> c : connections){
+            tj.add(c.get(0),c.get(1));
+            tj.add(c.get(1),c.get(0));
+        }
+        tj.tarjan(0,0);
+        for(int i = 0;i < n;i++){
+            if(tj.bridge[i]){
+                res.add(Arrays.asList(tj.father[i],i));
+            }
+        }
+        return res;
+    }
+}

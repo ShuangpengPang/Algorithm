@@ -54,3 +54,4 @@ public class Problem2338CountTheNumberOfIdealArrays {
         return ans;
     }
 }
+

@@ -9,7 +9,18 @@ import java.util.Arrays;
  */
 public class Problem2335MinimumAmountOfTimeToFillCups {
 
+    // 比赛时写法
     public int fillCups(int[] amount) {
+        Arrays.sort(amount);
+        if (amount[0] == 0 && amount[1] == 0) {
+            return amount[2];
+        }
+        amount[1]--;
+        amount[2]--;
+        return 1 + fillCups(amount);
+    }
+
+    public int fillCups0(int[] amount) {
         int ans = 0;
         Arrays.sort(amount);
         while (amount[1] > 0 && amount[2] > 0) {
@@ -19,5 +30,15 @@ public class Problem2335MinimumAmountOfTimeToFillCups {
             Arrays.sort(amount);
         }
         return ans + amount[2];
+    }
+
+    public int fillCups1(int[] amount) {
+        Arrays.sort(amount);
+        int x = amount[0], y = amount[1], z = amount[2];
+        if (x + y <= z) {
+            return z;
+        } else {
+            return (x + y - z + 1) / 2 + z;
+        }
     }
 }

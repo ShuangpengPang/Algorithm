@@ -128,3 +128,78 @@ public class Problem1203SortItemsByGroupsRespectingDependencies {
         return ans;
     }
 }
+
+class Problem1203SortItemsByGroupsRespectingDependencies0 {
+
+    public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
+        for (int i = 0; i < n; i++) {
+            if (group[i] == -1) {
+                group[i] = m++;
+            }
+        }
+        List<List<Integer>> groupGraph = new ArrayList<>(m);
+        int[] groupInDegree = new int[m];
+        int[] itemInDegree = new int[n];
+        for (int i = 0; i < m; i++) {
+            groupGraph.add(new ArrayList<>());
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j : beforeItems.get(i)) {
+                if (group[i] != group[j]) {
+                    groupGraph.get(group[i]).add(group[j]);
+                    groupInDegree[group[j]]++;
+                }
+                itemInDegree[j]++;
+            }
+        }
+        int[] groups = topologicalSort(groupGraph, groupInDegree);
+        if (groups == null) {
+            return new int[0];
+        }
+        int[] items = topologicalSort(beforeItems, itemInDegree);
+        if (items == null) {
+            return new int[0];
+        }
+        List<Integer>[] groupItems = new List[m];
+        Arrays.setAll(groupItems, e -> new ArrayList<>());
+        for (int i = 0; i < n; i++) {
+            groupItems[group[items[i]]].add(items[i]);
+        }
+        int[] ans = new int[n];
+        int idx = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j : groupItems[groups[i]]) {
+                ans[idx++] = j;
+            }
+        }
+        return ans;
+    }
+
+    private int[] topologicalSort(List<List<Integer>> graph, int[] inDegree) {
+        int n = inDegree.length;
+        int[] ans = new int[n];
+        int idx = n - 1;
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (inDegree[i] == 0) {
+                q.offer(i);
+                ans[idx--] = i;
+            }
+        }
+        while (!q.isEmpty()) {
+            int i = q.poll();
+            for (int j : graph.get(i)) {
+                inDegree[j]--;
+                if (inDegree[j] == 0) {
+                    q.offer(j);
+                    ans[idx--] = j;
+                }
+            }
+        }
+        if (idx >= 0) {
+            return null;
+        }
+        return ans;
+    }
+}
+

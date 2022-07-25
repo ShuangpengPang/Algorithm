@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p1201_1300;
  */
 public class Problem1223DiceRollSimulation {
 
-    public int dieSimulator(int n, int[] rollMax) {
+    public int dieSimulator0(int n, int[] rollMax) {
         int max = 0;
         for (int r : rollMax) {
             max = Math.max(max, r);
@@ -39,6 +39,35 @@ public class Problem1223DiceRollSimulation {
             for (int j = 0; j < rollMax[i]; j++) {
                 ans += dp[n - 1][i][j];
             }
+        }
+        return (int) (ans % M);
+    }
+
+    public int dieSimulator(int n, int[] rollMax) {
+        int M = (int) 1e9 + 7;
+        int[][] dp = new int[6][16];
+        for (int i = 0; i < 6; i++) {
+            dp[i][0] = 5;
+            dp[i][1] = 1;
+        }
+        for (int i = 1; i < n; i++) {
+            long cnt = 0L;
+            for (int j = 0; j < 6; j++) {
+                cnt += dp[j][rollMax[j]];
+            }
+            cnt %= M;
+            for (int j = 0; j < 6; j++) {
+                long last = dp[j][rollMax[j]], m = dp[j][0];
+                for (int k = rollMax[j]; k > 0; k--) {
+                    m += dp[j][k];
+                    dp[j][k] = dp[j][k - 1];
+                }
+                dp[j][0] = (int) ((m * 5 - cnt + last + M) % M);
+            }
+        }
+        long ans = 0;
+        for (int i = 0; i <= rollMax[0]; i++) {
+            ans += dp[0][i];
         }
         return (int) (ans % M);
     }

@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class Problem1224MaximumEqualFrequency {
 
-    public int maxEqualFreq(int[] nums) {
+    public int maxEqualFreq0(int[] nums) {
         Map<Integer, Integer> freqMap = new HashMap<>();
         Map<Integer, Integer> freqCount = new HashMap<>();
         int ans = 0, n = nums.length;
@@ -48,6 +48,27 @@ public class Problem1224MaximumEqualFrequency {
                 if (min + 1 == max && freqCount.get(max) == 1 || min == 1 && freqCount.get(min) == 1) {
                     ans = i + 1;
                 }
+            }
+        }
+        return ans;
+    }
+
+    public int maxEqualFreq(int[] nums) {
+        int[] cnt = new int[(int) (1e5) + 1];
+        int maxFreq = 0, maxN = 0, N = 0, ans = 0, n = nums.length;
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            if (cnt[num]++ == 0) {
+                N++;
+            }
+            if (cnt[num] > maxFreq) {
+                maxFreq = cnt[num];
+                maxN = 1;
+            } else if (cnt[num] == maxFreq) {
+                maxN++;
+            }
+            if (maxFreq == 1 || maxFreq * maxN == i || maxN == 1 && maxFreq == i / N + 1) {
+                ans = i + 1;
             }
         }
         return ans;

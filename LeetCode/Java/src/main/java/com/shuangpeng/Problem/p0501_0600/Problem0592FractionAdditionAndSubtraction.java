@@ -62,3 +62,49 @@ public class Problem0592FractionAdditionAndSubtraction {
         return b == 0 ? a : gcd(b, a % b);
     }
 }
+
+class Problem0592FractionAdditionAndSubtraction0 {
+
+    public String fractionAddition(String expression) {
+        long numerator = 0, denominator = 1, n = expression.length();
+        int p = 0;
+        while (p < n) {
+            int sign = 1;
+            if (expression.charAt(p) == '+') {
+                p++;
+            } else if (expression.charAt(p) == '-') {
+                sign = -1;
+                p++;
+            }
+            int numerator1 = 0;
+            while (expression.charAt(p) != '/') {
+                numerator1 = numerator1 * 10 + expression.charAt(p) - '0';
+                p++;
+            }
+            numerator1 *= sign;
+            p++;
+            int denominator1 = 0;
+            while (p < n && expression.charAt(p) >= '0' && expression.charAt(p) <= '9') {
+                denominator1 = denominator1 * 10 + expression.charAt(p) - '0';
+                p++;
+            }
+            numerator = numerator * denominator1 + denominator * numerator1;
+            denominator = numerator == 0 ? 1 : denominator * denominator1;
+        }
+        if (numerator == 0) {
+            return "0/1";
+        }
+        long g = gcd(Math.abs(numerator), denominator);
+        return numerator / g + "/" + denominator / g;
+    }
+
+    private long gcd(long a, long b) {
+        while (b != 0) {
+            long c = a % b;
+            a = b;
+            b = c;
+        }
+        return a;
+    }
+}
+

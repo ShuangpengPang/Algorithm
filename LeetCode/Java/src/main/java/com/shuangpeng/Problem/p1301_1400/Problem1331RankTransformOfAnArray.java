@@ -1,5 +1,8 @@
 package com.shuangpeng.Problem.p1301_1400;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -9,7 +12,7 @@ import java.util.TreeMap;
  */
 public class Problem1331RankTransformOfAnArray {
 
-    public int[] arrayRankTransform(int[] arr) {
+    public int[] arrayRankTransform0(int[] arr) {
         TreeMap<Integer, Integer> map = new TreeMap<>();
         for (int num : arr) {
             map.put(num, 1);
@@ -24,4 +27,23 @@ public class Problem1331RankTransformOfAnArray {
         }
         return arr;
     }
+
+    public int[] arrayRankTransform(int[] arr) {
+        int[] copy = arr.clone();
+        Arrays.sort(copy);
+        Map<Integer, Integer> map = new HashMap<>();
+        int rank = 1;
+        int n = copy.length;
+        for (int i = 0; i < n; i++) {
+            if (!map.containsKey(copy[i])) {
+                map.put(copy[i], rank++);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            copy[i] = map.get(arr[i]);
+        }
+        return copy;
+    }
 }
+
+

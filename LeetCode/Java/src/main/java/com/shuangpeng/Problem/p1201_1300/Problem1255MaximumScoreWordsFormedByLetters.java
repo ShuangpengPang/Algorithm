@@ -68,3 +68,58 @@ public class Problem1255MaximumScoreWordsFormedByLetters {
         }
     }
 }
+
+class Problem1255MaximumScoreWordsFormedByLetters0 {
+
+    String[] words;
+    char[] letters;
+    int[] score;
+    int[][] cnt;
+    int ans, n;
+
+    public int maxScoreWords(String[] words, char[] letters, int[] score) {
+        this.words = words;
+        this.letters = letters;
+        this.score = score;
+        this.n = words.length;
+        this.ans = 0;
+        cnt = new int[n][26];
+        for (int i = 0; i < n; i++) {
+            String w = words[i];
+            int m = w.length();
+            for (int j = 0; j < m; j++) {
+                cnt[i][w.charAt(j) - 'a']++;
+            }
+        }
+        int[] map = new int[26];
+        for (char c : letters) {
+            map[c - 'a']++;
+        }
+        dfs(map, 0, 0);
+        return ans;
+    }
+
+    private void dfs(int[] map, int idx, int sum) {
+        if (idx == n) {
+            ans = Math.max(ans, sum);
+            return;
+        }
+        boolean valid = true;
+        int h = 0;
+        for (int i = 0; i < 26; i++) {
+            map[i] -= cnt[idx][i];
+            h += cnt[idx][i] * score[i];
+            if (map[i] < 0) {
+                valid = false;
+            }
+        }
+        if (valid) {
+            dfs(map, idx + 1, sum + h);
+        }
+        for (int i = 0; i < 26; i++) {
+            map[i] += cnt[idx][i];
+        }
+        dfs(map, idx + 1, sum);
+    }
+}
+

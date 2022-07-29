@@ -1,8 +1,6 @@
 package com.shuangpeng.Problem.p1201_1300;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @Description: Problem1293ShortestPathInAGridWithObstaclesElimination（网格中的最短路径）
@@ -15,6 +13,9 @@ public class Problem1293ShortestPathInAGridWithObstaclesElimination {
         int m = grid.length, n = grid[0].length;
         if (m == 1 && n == 1) {
             return 0;
+        }
+        if (k >= m + n - 3) {
+            return m + n - 2;
         }
         int[] dirs = {-1, 0, 1, 0, -1};
         int[][] visited = new int[m][n];

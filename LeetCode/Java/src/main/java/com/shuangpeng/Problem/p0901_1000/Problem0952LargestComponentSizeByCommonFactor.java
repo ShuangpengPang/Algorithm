@@ -3,7 +3,7 @@ package com.shuangpeng.Problem.p0901_1000;
 import java.util.*;
 
 /**
- * @Description: Problem0952LargestComponentSizeByCommonFactor
+ * @Description: Problem0952LargestComponentSizeByCommonFactor（按公因数计算最大组件大小）
  * @Date 2022/4/26 11:28 AM
  * @Version 1.0
  */
@@ -69,3 +69,109 @@ public class Problem0952LargestComponentSizeByCommonFactor {
         return parent[x] = (x == parent[x] ? x : find(parent, parent[x]));
     }
 }
+
+class Problem0952LargestComponentSizeByCommonFactor0 {
+
+    public int largestComponentSize(int[] nums) {
+        int max = 0;
+        for (int num : nums) {
+            max = Math.max(max, num);
+        }
+        int[] parent = new int[max + 1];
+        int[] size = new int[max + 1];
+        for (int i = 0; i <= max; i++) {
+            parent[i] = i;
+        }
+        int ans = 1;
+        for (int num : nums) {
+            List<Integer> list = getPrime(num);
+            int m = list.size();
+            if (m == 0) {
+                continue;
+            }
+            for (int i = 0; i < m - 1; i++) {
+                union(parent, size, list.get(i), list.get(i + 1));
+            }
+            int p = find(parent, list.get(0));
+            size[p]++;
+            ans = Math.max(ans, size[p]);
+        }
+        return ans;
+    }
+
+    private void union(int[] parent, int[] size, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent[px] = py;
+            size[py] += size[px];
+        }
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = parent[x] == x ? x : find(parent, parent[x]);
+    }
+
+    private List<Integer> getPrime(int num) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 2; i * i <= num; i++) {
+            if (num % i == 0) {
+                while (num % i == 0) {
+                    num /= i;
+                }
+                list.add(i);
+            }
+        }
+        if (num > 1) {
+            list.add(num);
+        }
+        return list;
+    }
+}
+
+class Problem0952LargestComponentSizeByCommonFactor1 {
+
+    public int largestComponentSize(int[] nums) {
+        int m = 0;
+        for (int num : nums) {
+            m = Math.max(m, num);
+        }
+        int[] parent = new int[m + 1];
+        for (int i = 0; i <= m; i++) {
+            parent[i] = i;
+        }
+        for (int num : nums) {
+            int x = num;
+            for (int i = 2; i * i <= x; i++) {
+                if (x % i == 0) {
+                    union(parent, num, i);
+                    while (x % i == 0) {
+                        x /= i;
+                    }
+                }
+            }
+            if (x > 1) {
+                union(parent, num, x);
+            }
+        }
+        int ans = 0;
+        int[] size = new int[m + 1];
+        for (int num : nums) {
+            int p = find(parent, num);
+            size[p]++;
+            ans = Math.max(ans, size[p]);
+        }
+        return ans;
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent[px] = py;
+        }
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = parent[x] == x ? x : find(parent, parent[x]);
+    }
+}
+

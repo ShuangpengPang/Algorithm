@@ -102,3 +102,92 @@ public class Problem1307VerbalArithmeticPuzzle {
         }
     }
 }
+
+class Problem1307VerbalArithmeticPuzzle0 {
+
+    Map<Character, Integer> map;
+    Set<Character> nonZeroSet;
+    boolean[] used;
+    String[] words;
+    String result;
+
+    public boolean isSolvable(String[] words, String result) {
+        this.words = words;
+        this.result = result;
+        map = new HashMap<>();
+        nonZeroSet = new HashSet();
+        used = new boolean[10];
+        int maxLen = 0;
+        for (String w : words) {
+            if (w.length() > 1) {
+                nonZeroSet.add(w.charAt(0));
+            }
+            maxLen = Math.max(maxLen, w.length());
+        }
+        if (maxLen > result.length()) {
+            return false;
+        }
+        if (result.length() > 1) {
+            nonZeroSet.add(result.charAt(0));
+        }
+        return dfs(0, 0, 0);
+    }
+
+    private boolean dfs(int idx1, int idx2, int sum) {
+        if (idx1 == result.length()) {
+            return sum == 0 && (map.get(result.charAt(0)) != 0 || result.length() == 1);
+        }
+        if (idx2 < words.length) {
+            String w = words[idx2];
+            int i = w.length() - idx1 - 1;
+            if (i < 0) {
+                return dfs(idx1, idx2 + 1, sum);
+            }
+            char c = w.charAt(i);
+            if (map.containsKey(c)) {
+                return dfs(idx1, idx2 + 1, sum + map.get(c));
+            }
+            for (int j = 0; j < 10; j++) {
+                if (!used[j]) {
+                    if (j == 0 && nonZeroSet.contains(c)) {
+                        continue;
+                    }
+                    used[j] = true;
+                    map.put(c, j);
+                    if (dfs(idx1, idx2 + 1, sum + j)) {
+                        return true;
+                    }
+                    map.remove(c);
+                    used[j] = false;
+                }
+            }
+            return false;
+        }
+        int n = result.length();
+        int mod = sum % 10;
+        char c = result.charAt(n - idx1 - 1);
+        if (map.containsKey(c)) {
+            if (map.get(c) != mod || mod == 0 && nonZeroSet.contains(c)) {
+                return false;
+            }
+            return dfs(idx1 + 1, 0, sum / 10);
+        }
+        if (used[mod]) {
+            return false;
+        }
+        used[mod] = true;
+        map.put(c, mod);
+        boolean ans = dfs(idx1 + 1, 0, sum / 10);
+        map.remove(c);
+        used[mod] = false;
+        return ans;
+    }
+
+//    public static void main(String[] args) {
+//        Problem1307VerbalArithmeticPuzzle0 a = new Problem1307VerbalArithmeticPuzzle0();
+//        String[] words = {"AB","CD","EF"};
+//        String result = "GHIJ";
+//        boolean ans = a.isSolvable(words, result);
+//        int i = 1;
+//    }
+}

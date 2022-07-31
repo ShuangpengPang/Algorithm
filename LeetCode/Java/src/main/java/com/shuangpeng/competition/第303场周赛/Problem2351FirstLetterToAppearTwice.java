@@ -7,6 +7,7 @@ package com.shuangpeng.competition.第303场周赛;
  */
 public class Problem2351FirstLetterToAppearTwice {
 
+    // 比赛时写法
     public char repeatedCharacter(String s) {
         int n = s.length();
         int[] cnt = new int[26];

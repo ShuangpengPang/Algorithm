@@ -73,3 +73,125 @@ public class Problem0622DesignCircularQueue {
  */
 }
 
+class Problem0622DesignCircularQueue0 {
+
+    class MyCircularQueue {
+
+        private int capacity, front, rear;
+        private int[] elements;
+
+        public MyCircularQueue(int k) {
+            capacity = k + 1;
+            elements = new int[capacity];
+            front = rear = 0;
+        }
+
+        public boolean enQueue(int value) {
+            if (isFull()) {
+                return false;
+            }
+            elements[rear] = value;
+            rear = (rear + 1) % capacity;
+            return true;
+        }
+
+        public boolean deQueue() {
+            if (isEmpty()) {
+                return false;
+            }
+            front = (front + capacity + 1) % capacity;
+            return true;
+        }
+
+        public int Front() {
+            if (isEmpty()) {
+                return -1;
+            }
+            return elements[front];
+        }
+
+        public int Rear() {
+            if (isEmpty()) {
+                return -1;
+            }
+            return elements[(rear + capacity - 1) % capacity];
+        }
+
+        public boolean isEmpty() {
+            return front == rear;
+        }
+
+        public boolean isFull() {
+            return (rear + 1) % capacity == front;
+        }
+    }
+}
+
+class MyCircularQueue {
+
+    class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int val) {
+            this.val = val;
+        }
+    }
+
+    private ListNode head, tail;
+    private int capacity, size;
+
+    public MyCircularQueue(int k) {
+        capacity = k;
+        size = 0;
+    }
+
+    public boolean enQueue(int value) {
+        if (size == capacity) {
+            return false;
+        }
+        size++;
+        ListNode node = new ListNode(value);
+        if (head == null) {
+            head = tail = node;
+        } else {
+            tail.next = node;
+            tail = node;
+        }
+        return true;
+    }
+
+    public boolean deQueue() {
+        if (size == 0) {
+            return false;
+        }
+        size--;
+        head = head.next;
+        return true;
+    }
+
+    public int Front() {
+        if (size == 0) {
+            return -1;
+        }
+        return head.val;
+    }
+
+    public int Rear() {
+        if (size == 0) {
+            return -1;
+        }
+        return tail.val;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == capacity;
+    }
+}
+
+
+
+

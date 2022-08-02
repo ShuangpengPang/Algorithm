@@ -123,3 +123,49 @@ class Problem1320MinimumDistanceToTypeAWordUsingTwoFingers0 {
         return ans;
     }
 }
+
+class Problem1320MinimumDistanceToTypeAWordUsingTwoFingers1 {
+
+    static final int N = 26, INF = Integer.MAX_VALUE >> 1;
+    static int[][] dis = new int[N][N];
+    static {
+        for (int i = 0; i < N; i++) {
+            int x = i / 6, y = i % 6;
+            for (int j = i + 1; j < N; j++) {
+                int d = Math.abs(x - j / 6) + Math.abs(y - j % 6);
+                dis[i][j] = d;
+                dis[j][i] = d;
+            }
+        }
+    }
+
+    public int minimumDistance(String word) {
+        char[] chars = word.toCharArray();
+        int n = chars.length;
+        int[][] dp = new int[2][N];
+        for (int i = 1; i < n; i++) {
+            int cur = i & 1, pre = cur ^ 1;
+            for (int j = 0; j < N; j++) {
+                Arrays.fill(dp[cur], INF);
+            }
+            int c1 = chars[i - 1] - 'A', c2 = chars[i] - 'A';
+            for (int j = 0; j < N; j++) {
+                if (j == c2) {
+                    continue;
+                }
+                dp[cur][j] = Math.min(dp[cur][j], dp[pre][j] + dis[c1][c2]);
+                if (j == c1) {
+                    for (int k = 0; k < N; k++) {
+                        dp[cur][j] = Math.min(dp[cur][j], dp[pre][k] + dis[k][c2]);
+                    }
+                }
+            }
+        }
+        int idx = (n - 1) & 1;
+        int ans = INF;
+        for (int i = 0; i < N; i++) {
+            ans = Math.min(ans, dp[idx][i]);
+        }
+        return ans;
+    }
+}

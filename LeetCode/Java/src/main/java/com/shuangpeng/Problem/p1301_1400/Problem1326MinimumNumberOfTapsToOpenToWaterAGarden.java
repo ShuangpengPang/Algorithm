@@ -129,31 +129,4 @@ public class Problem1326MinimumNumberOfTapsToOpenToWaterAGarden {
 //    }
 }
 
-class Solution {
-    public int minTaps(int n, int[] ranges) {
-        int[] next = new int[n + 1];
-        for(int i = 0; i <= n; ++i){
-            next[i] = i;
-        }
-        for(int i = 0; i <= n; ++i){
-            int l = Math.max(0, i - ranges[i]);
-            int r = Math.min(n, i + ranges[i]);
-            next[l] = Math.max(next[l], r);
-        }
-        int right = 0;
-        int max = 0;
-        int ans = 0;
-        for(int i = 0; i < n; ++i){
-            max = Math.max(next[i], max);
-            if(i == right) {
-                if(i == max) return -1;
-                right = max;
-                max = 0;
-                ans++;
-            }
-        }
-        return ans;
-    }
-}
-
 

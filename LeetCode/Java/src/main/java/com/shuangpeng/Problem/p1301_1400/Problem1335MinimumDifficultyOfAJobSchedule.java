@@ -14,13 +14,6 @@ public class Problem1335MinimumDifficultyOfAJobSchedule {
         if (d > n) {
             return -1;
         }
-        int[][] max = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            max[i][i] = jobDifficulty[i];
-            for (int j = i + 1; j < n; j++) {
-                max[i][j] = Math.max(max[i][j - 1], jobDifficulty[j]);
-            }
-        }
         int[] dp = new int[n + 1];
         int INF = Integer.MAX_VALUE / 3;
         Arrays.fill(dp, INF);
@@ -28,11 +21,14 @@ public class Problem1335MinimumDifficultyOfAJobSchedule {
         for (int i = 1; i <= d; i++) {
             for (int j = n; j >= i; j--) {
                 dp[j] = INF;
+                int max = jobDifficulty[j - 1];
                 for (int k = j - 1; k >= i - 1; k--) {
-                    dp[j] = Math.min(dp[j], dp[k] + max[k][j - 1]);
+                    max = Math.max(max, jobDifficulty[k]);
+                    dp[j] = Math.min(dp[j], dp[k] + max);
                 }
             }
         }
         return dp[n];
     }
 }
+

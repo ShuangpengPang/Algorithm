@@ -44,7 +44,7 @@ public class Problem1408StringMatchingInAnArray {
         return false;
     }
 
-    public List<String> stringMatching(String[] words) {
+    public List<String> stringMatching1(String[] words) {
         Arrays.sort(words, Comparator.comparingInt(a -> a.length()));
         int n = words.length;
         List<String> ans = new ArrayList<>();
@@ -86,5 +86,21 @@ public class Problem1408StringMatchingInAnArray {
             idx = s1.charAt(j) == c ? j + 1 : j;
         }
         return idx == n1;
+    }
+
+    public List<String> stringMatching(String[] words) {
+        int n = words.length;
+        List<String> ans = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j) {
+                    if (words[j].contains(words[i])) {
+                        ans.add(words[i]);
+                        break;
+                    }
+                }
+            }
+        }
+        return ans;
     }
 }

@@ -2,6 +2,10 @@ package com.shuangpeng.Problem.p0701_0800;
 
 import java.util.*;
 
+/**
+ * @Description: 特殊的二进制序列
+ * @Date 2022/8/8 2:15 PM
+ **/
 public class Problem0761SpecialBinaryString {
 
     class Info {
@@ -64,7 +68,7 @@ public class Problem0761SpecialBinaryString {
         return new Info(sb, list.get(0).count);
     }
 
-    public String makeLargestSpecial(String s) {
+    public String makeLargestSpecial1(String s) {
         int n = s.length();
         int[] location = new int[n];
         Deque<Integer> stack = new LinkedList<>();
@@ -97,8 +101,75 @@ public class Problem0761SpecialBinaryString {
         return ans.toString();
     }
 
+    public String makeLargestSpecial(String s) {
+        return merge(s);
+    }
+
+    private String merge(String s) {
+        int n = s.length();
+        if (n <= 2) {
+            return s;
+        }
+        int cnt = 0, pre = 0;
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == '1') {
+                cnt++;
+            } else {
+                cnt--;
+            }
+            if (cnt == 0) {
+                list.add(s.substring(pre, i + 1));
+                pre = i + 1;
+            }
+        }
+        int size = list.size();
+        if (size == 1) {
+            return "1" + merge(s.substring(1, n - 1)) + "0";
+        }
+        List<String> ans = new ArrayList<>(size);
+        for (String str : list) {
+            ans.add(merge(str));
+        }
+        ans.sort(String::compareTo);
+        StringBuilder sb = new StringBuilder();
+        for (int i = size - 1; i >= 0; i--) {
+            sb.append(ans.get(i));
+        }
+        return sb.toString();
+    }
+
 //    public static void main(String[] args) {
 //        Problem0761SpecialBinaryString a = new Problem0761SpecialBinaryString();
 //        a.makeLargestSpecial("11011000");
 //    }
 }
+
+class Solution {
+    public String makeLargestSpecial(String s) {
+        if (s.length() <= 2) {
+            return s;
+        }
+        int cnt = 0, left = 0;
+        List<String> subs = new ArrayList<String>();
+        for (int i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) == '1') {
+                ++cnt;
+            } else {
+                --cnt;
+                if (cnt == 0) {
+                    subs.add("1" + makeLargestSpecial(s.substring(left + 1, i)) + "0");
+                    left = i + 1;
+                }
+            }
+        }
+
+        Collections.sort(subs, Comparator.reverseOrder());
+        StringBuilder ans = new StringBuilder();
+        for (String sub : subs) {
+            ans.append(sub);
+        }
+        return ans.toString();
+    }
+}
+

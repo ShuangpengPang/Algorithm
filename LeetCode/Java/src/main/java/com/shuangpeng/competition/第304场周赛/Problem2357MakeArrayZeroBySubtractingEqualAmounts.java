@@ -10,6 +10,7 @@ import java.util.Set;
  */
 public class Problem2357MakeArrayZeroBySubtractingEqualAmounts {
 
+    // 比赛时写法
     public int minimumOperations(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int num : nums) {

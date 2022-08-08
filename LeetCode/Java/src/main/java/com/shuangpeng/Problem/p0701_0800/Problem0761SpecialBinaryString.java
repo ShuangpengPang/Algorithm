@@ -145,31 +145,36 @@ public class Problem0761SpecialBinaryString {
 //    }
 }
 
-class Solution {
+class Problem0761SpecialBinaryString0 {
+
     public String makeLargestSpecial(String s) {
-        if (s.length() <= 2) {
+        return arrange(s);
+    }
+
+    private String arrange(String s) {
+        int n = s.length();
+        if (n <= 2) {
             return s;
         }
+        List<String> ans = new ArrayList<>();
         int cnt = 0, left = 0;
-        List<String> subs = new ArrayList<String>();
-        for (int i = 0; i < s.length(); ++i) {
+        for (int i = 0; i < n; i++) {
             if (s.charAt(i) == '1') {
-                ++cnt;
+                cnt++;
             } else {
-                --cnt;
+                cnt--;
                 if (cnt == 0) {
-                    subs.add("1" + makeLargestSpecial(s.substring(left + 1, i)) + "0");
+                    ans.add("1" + arrange(s.substring(left + 1, i)) + "0");
                     left = i + 1;
                 }
             }
         }
-
-        Collections.sort(subs, Comparator.reverseOrder());
-        StringBuilder ans = new StringBuilder();
-        for (String sub : subs) {
-            ans.append(sub);
+        Collections.sort(ans, Comparator.reverseOrder());
+        StringBuilder sb = new StringBuilder();
+        for (String str : ans) {
+            sb.append(str);
         }
-        return ans.toString();
+        return sb.toString();
     }
 }
 

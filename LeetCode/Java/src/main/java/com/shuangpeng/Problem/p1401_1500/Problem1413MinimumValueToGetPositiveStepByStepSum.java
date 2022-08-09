@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p1401_1500;
  */
 public class Problem1413MinimumValueToGetPositiveStepByStepSum {
 
-    public int minStartValue(int[] nums) {
+    public int minStartValue0(int[] nums) {
         int n = nums.length, min = nums[0];
         for (int i = 1; i < n; i++) {
             nums[i] += nums[i - 1];
@@ -15,4 +15,14 @@ public class Problem1413MinimumValueToGetPositiveStepByStepSum {
         }
         return min < 1 ? 1 - min : 1;
     }
+
+    public int minStartValue(int[] nums) {
+        int sum = 0, minSum = 0;
+        for (int num : nums) {
+            sum += num;
+            minSum = Math.min(minSum, sum);
+        }
+        return -minSum + 1;
+    }
 }
+

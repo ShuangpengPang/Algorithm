@@ -1,7 +1,6 @@
 package com.shuangpeng.Problem.p1301_1400;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * @Description: Problem1383MaximumPerformanceOfATeam（最大的团队表现值）
@@ -10,7 +9,7 @@ import java.util.PriorityQueue;
  */
 public class Problem1383MaximumPerformanceOfATeam {
 
-    public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
+    public int maxPerformance0(int n, int[] speed, int[] efficiency, int k) {
         int[][] pairs = new int[n][2];
         for (int i = 0; i < n; i++) {
             pairs[i][0] = efficiency[i];
@@ -39,4 +38,25 @@ public class Problem1383MaximumPerformanceOfATeam {
         }
         return(int) (ans % ((int) 1e9 + 7));
     }
+
+    public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
+        int[][] staffs = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            staffs[i][0] = efficiency[i];
+            staffs[i][1] = speed[i];
+        }
+        Arrays.sort(staffs, (a, b) -> b[0] - a[0]);
+        PriorityQueue<Integer> q = new PriorityQueue<>();
+        long ans = 0L, sum = 0L;
+        for (int i = 0; i < n; i++) {
+            sum += staffs[i][1];
+            ans = Math.max(ans, sum * staffs[i][0]);
+            q.offer(staffs[i][1]);
+            if (q.size() == k) {
+                sum -= q.poll();
+            }
+        }
+        return (int) (ans % ((long) 1e9 + 7));
+    }
 }
+

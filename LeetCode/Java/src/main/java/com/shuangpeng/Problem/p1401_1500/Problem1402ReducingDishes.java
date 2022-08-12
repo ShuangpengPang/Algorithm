@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class Problem1402ReducingDishes {
 
-    public int maxSatisfaction(int[] satisfaction) {
+    public int maxSatisfaction0(int[] satisfaction) {
         Arrays.sort(satisfaction);
         int cnt = 0, n = satisfaction.length;
         for (int s : satisfaction) {
@@ -28,4 +28,15 @@ public class Problem1402ReducingDishes {
         }
         return ans;
     }
+
+    public int maxSatisfaction(int[] satisfaction) {
+        Arrays.sort(satisfaction);
+        int n = satisfaction.length, ans = 0;
+        for (int i = n - 1, sum = 0; i >= 0 && sum + satisfaction[i] > 0; i--) {
+            sum += satisfaction[i];
+            ans += sum;
+        }
+        return ans;
+    }
 }
+

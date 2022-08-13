@@ -2,6 +2,10 @@ package com.shuangpeng.Problem.p0701_0800;
 
 import java.util.*;
 
+/**
+ * @Description: （最多能完成排序的块II）
+ * @Date 2022/8/13 11:28 PM
+ **/
 public class Problem0768MaxChunksToMakeSortedII {
 
     public int maxChunksToSorted0(int[] arr) {
@@ -121,7 +125,7 @@ public class Problem0768MaxChunksToMakeSortedII {
         }
     }
 
-    public int maxChunksToSorted(int[] arr) {
+    public int maxChunksToSorted4(int[] arr) {
         Deque<Integer> stack = new ArrayDeque<>();
         int n = arr.length;
         for (int i = 0; i < n; ++i) {
@@ -132,5 +136,32 @@ public class Problem0768MaxChunksToMakeSortedII {
             }
         }
         return stack.size();
+    }
+
+    public int maxChunksToSorted(int[] arr) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int cnt = 0, ans = 0, n = arr.length;
+        int[] copy = arr.clone();
+        Arrays.sort(copy);
+        for (int i = 0; i < n; i++) {
+            int count = map.getOrDefault(copy[i], 0) + 1;
+            if (count == 0) {
+                cnt--;
+            } else if (count == 1) {
+                cnt++;
+            }
+            map.put(copy[i], count);
+            count = map.getOrDefault(arr[i], 0) - 1;
+            if (count == 0) {
+                cnt--;
+            } else if (count == -1) {
+                cnt++;
+            }
+            if (cnt == 0) {
+                ans++;
+            }
+            map.put(arr[i], count);
+        }
+        return ans;
     }
 }

@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p1401_1500;
  */
 public class Problem1422MaximumScoreAfterSplitingAString {
 
-    public int maxScore(String s) {
+    public int maxScore0(String s) {
         int total = 0;
         int n = s.length();
         int zeros = 0, ones = 0;
@@ -26,5 +26,23 @@ public class Problem1422MaximumScoreAfterSplitingAString {
             ans = Math.max(ans, zeros + total - ones);
         }
         return ans;
+    }
+
+    public int maxScore(String s) {
+        int total = 0;
+        int n = s.length();
+        int zeros = 0, ones = 0, diff = -n;
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == '0') {
+                zeros++;
+            } else {
+                ones++;
+                total++;
+            }
+            if (i < n - 1) {
+                diff = Math.max(diff, zeros - ones);
+            }
+        }
+        return diff + total;
     }
 }

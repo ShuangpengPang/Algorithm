@@ -138,7 +138,7 @@ public class Problem0768MaxChunksToMakeSortedII {
         return stack.size();
     }
 
-    public int maxChunksToSorted(int[] arr) {
+    public int maxChunksToSorted5(int[] arr) {
         Map<Integer, Integer> map = new HashMap<>();
         int cnt = 0, ans = 0, n = arr.length;
         int[] copy = arr.clone();
@@ -164,4 +164,55 @@ public class Problem0768MaxChunksToMakeSortedII {
         }
         return ans;
     }
+
+    public int maxChunksToSorted6(int[] arr) {
+        int n = arr.length;
+        Deque<int[]> stack = new ArrayDeque<>();
+        int maxValue = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && stack.peek()[0] > arr[i]) {
+                stack.pop();
+            }
+            maxValue = Math.max(maxValue, arr[i]);
+            if (stack.isEmpty() || arr[i] >= stack.peek()[1]) {
+                stack.push(new int[]{arr[i], maxValue});
+            } else {
+                stack.peek()[1] = maxValue;
+            }
+        }
+        return stack.size();
+    }
+
+    public int maxChunksToSorted7(int[] arr) {
+        int n = arr.length, maxValue = Integer.MIN_VALUE;
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && stack.peek() > arr[i]) {
+                stack.pop();
+            }
+            maxValue = Math.max(maxValue, arr[i]);
+            stack.push(maxValue);
+        }
+        return stack.size();
+    }
+
+    public int maxChunksToSorted(int[] arr) {
+        int n = arr.length;
+        int[] leftMax = new int[n], rightMin = new int[n];
+        leftMax[0] = arr[0];
+        rightMin[n - 1] = arr[n - 1];
+        for (int i = 1; i < n; i++) {
+            int j = n - i - 1;
+            leftMax[i] = Math.max(leftMax[i - 1], arr[i]);
+            rightMin[j] = Math.min(rightMin[j + 1], arr[j]);
+        }
+        int ans = 1;
+        for (int i = 0; i < n - 1; i++) {
+            if (leftMax[i] <= rightMin[i + 1]) {
+                ans++;
+            }
+        }
+        return ans;
+    }
 }
+

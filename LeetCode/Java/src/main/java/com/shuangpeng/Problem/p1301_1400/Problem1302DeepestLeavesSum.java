@@ -5,6 +5,10 @@ import com.shuangpeng.common.TreeNode;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * @Description: 层数最深叶子节点的和
+ * @Date 2022/8/17 10:16 AM
+ **/
 public class Problem1302DeepestLeavesSum {
 
     private int answer = 0;
@@ -50,5 +54,30 @@ public class Problem1302DeepestLeavesSum {
             }
         }
         return answer;
+    }
+}
+
+class Problem1302DeepestLeavesSum0 {
+
+    int ans = 0, maxDepth = -1;
+
+    public int deepestLeavesSum(TreeNode root) {
+        ans = 0;
+        dfs(root, 0);
+        return ans;
+    }
+
+    private void dfs(TreeNode root, int depth) {
+        if (root == null) {
+            return;
+        }
+        if (depth > maxDepth) {
+            maxDepth = depth;
+            ans = root.val;
+        } else if (depth == maxDepth) {
+            ans += root.val;
+        }
+        dfs(root.left, depth + 1);
+        dfs(root.right, depth + 1);
     }
 }

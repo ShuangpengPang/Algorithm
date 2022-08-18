@@ -1,7 +1,9 @@
 package com.shuangpeng.Problem.p1201_1300;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @Description: Problem1224MaximumEqualFrequency（最大相等频率）
@@ -53,7 +55,7 @@ public class Problem1224MaximumEqualFrequency {
         return ans;
     }
 
-    public int maxEqualFreq(int[] nums) {
+    public int maxEqualFreq1(int[] nums) {
         int[] cnt = new int[(int) (1e5) + 1];
         int maxFreq = 0, maxN = 0, N = 0, ans = 0, n = nums.length;
         for (int i = 0; i < n; i++) {
@@ -73,4 +75,60 @@ public class Problem1224MaximumEqualFrequency {
         }
         return ans;
     }
+
+    public int maxEqualFreq2(int[] nums) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        Map<Integer, Set<Integer>> sets = new HashMap<>();
+        int n = nums.length, min = 1, max = 0, ans = 0;
+        for (int i = 0; i < n; i++) {
+            int old = freq.getOrDefault(nums[i], 0);
+            if (old != 0) {
+                Set<Integer> set = sets.get(old);
+                set.remove(nums[i]);
+                if (set.isEmpty()) {
+                    sets.remove(old);
+                    if (old == min) {
+                        min++;
+                    }
+                }
+            }
+            int f = old + 1;
+            min = Math.min(min, f);
+            max = Math.max(max, f);
+            freq.put(nums[i], f);
+            sets.computeIfAbsent(f, k -> new HashSet<>()).add(nums[i]);
+            if (sets.size() == 1 && (max == 1 || sets.get(max).size() == 1)) {
+                ans = i + 1;
+            } else if (sets.size() == 2 && (max == min + 1 && sets.get(max).size() == 1 || min == 1 && sets.get(1).size() == 1)) {
+                ans = i + 1;
+            }
+        }
+        return ans;
+    }
+
+    public int maxEqualFreq(int[] nums) {
+        Map<Integer, Integer> freq = new HashMap<>(), freqCount = new HashMap<>();
+        int maxFreq = 0, n = nums.length, ans = 0;
+        for (int i = 0; i < n; i++) {
+            int f = freq.getOrDefault(nums[i], 0) + 1;
+            freq.put(nums[i], f);
+            if (f > 1) {
+                freqCount.put(f - 1, freqCount.get(f - 1) - 1);
+            }
+            freqCount.put(f, freqCount.getOrDefault(f, 0) + 1);
+            maxFreq = Math.max(maxFreq, f);
+            boolean valid = maxFreq == 1 || freqCount.get(maxFreq) == 1 && maxFreq + freqCount.getOrDefault(maxFreq - 1, 0) * (maxFreq - 1) == i + 1
+                    || freqCount.get(maxFreq) * maxFreq == i && freqCount.getOrDefault(1, 0) == 1;
+            if (valid) {
+                ans = i + 1;
+            }
+        }
+        return ans;
+    }
+
+//    public static void main(String[] args) {
+//        Problem1224MaximumEqualFrequency a = new Problem1224MaximumEqualFrequency();
+//        int[] nums = {10,2,8,9,3,8,1,5,2,3,7,6};
+//        a.maxEqualFreq(nums);
+//    }
 }

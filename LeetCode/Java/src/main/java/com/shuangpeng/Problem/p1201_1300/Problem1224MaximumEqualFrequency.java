@@ -1,9 +1,6 @@
 package com.shuangpeng.Problem.p1201_1300;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Description: Problem1224MaximumEqualFrequency（最大相等频率）
@@ -106,7 +103,7 @@ public class Problem1224MaximumEqualFrequency {
         return ans;
     }
 
-    public int maxEqualFreq(int[] nums) {
+    public int maxEqualFreq3(int[] nums) {
         Map<Integer, Integer> freq = new HashMap<>(), freqCount = new HashMap<>();
         int maxFreq = 0, n = nums.length, ans = 0;
         for (int i = 0; i < n; i++) {
@@ -126,9 +123,32 @@ public class Problem1224MaximumEqualFrequency {
         return ans;
     }
 
+    public int maxEqualFreq(int[] nums) {
+        int n = nums.length, ans = 0, maxFreq = 0, N = 0;
+        int M = n;
+        for (int num : nums) {
+            M = Math.max(M, num);
+        }
+        int[] freq = new int[M + 1], cnt = new int[M + 1];
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            if (freq[num]++ == 0) {
+                N++;
+            }
+            cnt[freq[num]]++;
+            cnt[freq[num] - 1]--;
+            maxFreq = Math.max(maxFreq, freq[num]);
+            if (maxFreq == 1 || cnt[maxFreq - 1] == N - 1 || cnt[maxFreq] == N - 1 && cnt[1] == 1) {
+                ans = i + 1;
+            }
+        }
+        return ans;
+    }
+
 //    public static void main(String[] args) {
 //        Problem1224MaximumEqualFrequency a = new Problem1224MaximumEqualFrequency();
 //        int[] nums = {10,2,8,9,3,8,1,5,2,3,7,6};
 //        a.maxEqualFreq(nums);
 //    }
 }
+

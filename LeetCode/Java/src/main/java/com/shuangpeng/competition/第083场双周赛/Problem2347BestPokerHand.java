@@ -7,6 +7,37 @@ package com.shuangpeng.competition.第083场双周赛;
  */
 public class Problem2347BestPokerHand {
 
+    // 比赛时写法
+    public String bestHand0(int[] ranks, char[] suits) {
+        boolean one = true;;
+        for (int i = 1; i < 5; i++) {
+            if (suits[i] != suits[i - 1]) {
+                one = false;
+                break;
+            }
+        }
+        if (one) {
+            return "Flush";
+        }
+        int[] cnt = new int[14];
+        boolean three = false, two = false;
+        for (int r : ranks) {
+            cnt[r]++;
+            if (cnt[r] == 2) {
+                two = true;
+            } else if (cnt[r] == 3) {
+                three = true;
+            }
+        }
+        if (three) {
+            return "Three of a Kind";
+        }
+        if (two) {
+            return "Pair";
+        }
+        return "High Card";
+    }
+
     public String bestHand(int[] ranks, char[] suits) {
         int[] rankCount = new int[14], suitCount = new int[4];
         int n = ranks.length;

@@ -7,7 +7,8 @@ package com.shuangpeng.competition.第083场双周赛;
  */
 public class Problem2348NumberOfZeroFilledSubarrays {
 
-    public long zeroFilledSubarray(int[] nums) {
+    // 比赛时写法
+    public long zeroFilledSubarray0(int[] nums) {
         int n = nums.length;
         long ans = 0L;
         for (int i = 0, l = -1; i < n; i++) {
@@ -18,6 +19,19 @@ public class Problem2348NumberOfZeroFilledSubarrays {
                 ans += i - l + 1;
             } else {
                 l = -1;
+            }
+        }
+        return ans;
+    }
+
+    public long zeroFilledSubarray(int[] nums) {
+        long ans = 0L;
+        int cnt = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                cnt = 0;
+            } else {
+                ans += ++cnt;
             }
         }
         return ans;

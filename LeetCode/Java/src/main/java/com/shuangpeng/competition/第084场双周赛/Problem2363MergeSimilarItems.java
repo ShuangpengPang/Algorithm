@@ -9,6 +9,28 @@ import java.util.*;
  */
 public class Problem2363MergeSimilarItems {
 
+    // 比赛时写法
+    public List<List<Integer>> mergeSimilarItems0(int[][] items1, int[][] items2) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int[] arr : items1) {
+            int v = arr[0], w = arr[1];
+            map.put(v, w);
+        }
+        for (int[] arr : items2) {
+            int v = arr[0], w = arr[1];
+            map.put(v, map.getOrDefault(v, 0) + w);
+        }
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int v : map.keySet()) {
+            List<Integer> list = new ArrayList<>();
+            list.add(v);
+            list.add(map.get(v));
+            ans.add(list);
+        }
+        ans.sort((a, b) -> a.get(0) - b.get(0));
+        return ans;
+    }
+
     public List<List<Integer>> mergeSimilarItems(int[][] items1, int[][] items2) {
         TreeMap<Integer, Integer> map = new TreeMap<>();
         for (int[] item : items1) {

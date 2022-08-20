@@ -1,5 +1,6 @@
 package com.shuangpeng.competition.第084场双周赛;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,8 @@ import java.util.Map;
  */
 public class Problem2364CountNumberOfBadPairs {
 
-    public long countBadPairs(int[] nums) {
+    // 比赛时写法
+    public long countBadPairs0(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         int n = nums.length;
         for (int i = 0; i < n; i++) {
@@ -22,5 +24,22 @@ public class Problem2364CountNumberOfBadPairs {
             cnt += (long) c * (c - 1) >> 1;
         }
         return ((long) n * (n - 1) >> 1) - cnt;
+    }
+
+    public long countBadPairs(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            nums[i] -= i;
+        }
+        Arrays.sort(nums);
+        long ans = (long) n * (n - 1) >> 1;
+        for (int i = 0, j = 0; i < n; i = j) {
+            while (j < n && nums[j] == nums[i]) {
+                j++;
+            }
+            long cnt = j - i;
+            ans -= cnt * (cnt - 1) >> 1;
+        }
+        return ans;
     }
 }

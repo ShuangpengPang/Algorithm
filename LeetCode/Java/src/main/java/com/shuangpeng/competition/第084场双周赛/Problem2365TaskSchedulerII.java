@@ -10,12 +10,29 @@ import java.util.Map;
  */
 public class Problem2365TaskSchedulerII {
 
+    // 比赛时写法
+    public long taskSchedulerII0(int[] tasks, int space) {
+        long ans = 0L;
+        Map<Integer, Long> map = new HashMap<>();
+        long INF = -(long) 1e9 - 10;
+        int n = tasks.length;
+        for (int i = 0; i < n; i++) {
+            int t = tasks[i];
+            long p = map.getOrDefault(t, INF);
+            ans++;
+            if (p + space + 1 > ans) {
+                ans = p + space + 1;
+            }
+            map.put(t, ans);
+        }
+        return ans;
+    }
+
     public long taskSchedulerII(int[] tasks, int space) {
         long ans = 0;
         Map<Integer, Long> lastDay = new HashMap<>();
         for (int t : tasks) {
-            ans++;
-            ans = Math.max(ans, lastDay.getOrDefault(t, (long) -space) + space + 1);
+            ans = Math.max(ans + 1, lastDay.getOrDefault(t, (long) -space) + space + 1);
             lastDay.put(t, ans);
         }
         return ans;

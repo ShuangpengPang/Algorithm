@@ -32,6 +32,30 @@ public class Problem0654MaximumBinaryTree {
         return cur;
     }
 
+    public TreeNode constructMaximumBinaryTree1(int[] nums) {
+        return recurse(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode recurse(int[] nums, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        if (start == end) {
+            return new TreeNode(nums[start]);
+        }
+        int max = -1, idx = -1;
+        for (int i = start; i <= end; i++) {
+            if (nums[i] > max) {
+                max = nums[i];
+                idx = i;
+            }
+        }
+        TreeNode node = new TreeNode(nums[idx]);
+        node.left = recurse(nums, start, idx - 1);
+        node.right = recurse(nums, idx + 1, end);
+        return node;
+    }
+
     public TreeNode constructMaximumBinaryTree(int[] nums) {
         int n = nums.length;
         Deque<TreeNode> stack = new ArrayDeque<>();
@@ -50,3 +74,4 @@ public class Problem0654MaximumBinaryTree {
         return stack.peekFirst();
     }
 }
+

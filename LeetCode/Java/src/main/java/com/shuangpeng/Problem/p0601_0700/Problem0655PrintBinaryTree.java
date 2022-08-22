@@ -4,6 +4,10 @@ import com.shuangpeng.common.TreeNode;
 
 import java.util.*;
 
+/**
+ * @Description: 输出二叉树
+ * @Date 2022/8/22 11:40 AM
+ **/
 public class Problem0655PrintBinaryTree {
 
     public List<List<String>> printTree0(TreeNode root) {
@@ -147,3 +151,88 @@ public class Problem0655PrintBinaryTree {
         return height;
     }
 }
+
+class Problem0655PrintBinaryTree0 {
+
+    int m, n;
+
+    public List<List<String>> printTree(TreeNode root) {
+        m = getHeight(root);
+        n = (1 << m) -1;
+        List<List<String>> ans = new ArrayList<>(m);
+        dfs(root, ans, 0, (n - 1) >> 1);
+        return ans;
+    }
+
+    private int getHeight(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+    }
+
+    private void dfs(TreeNode node, List<List<String>> ans, int level, int c) {
+        if (node == null) {
+            return;
+        }
+        if (level == ans.size()) {
+            List<String> list = new ArrayList<>(n);
+            for (int i = 0; i < n; i++) {
+                list.add("");
+            }
+            ans.add(list);
+        }
+        ans.get(level).set(c, "" + node.val);
+        dfs(node.left, ans, level + 1, c - (1 << (m - level - 2)));
+        dfs(node.right, ans, level + 1, c + (1 << (m - level - 2)));
+    }
+}
+
+class Problem0655PrintBinaryTree1 {
+
+    class Node {
+        TreeNode node;
+        int c, l;
+        Node(TreeNode node, int c, int l) {
+            this.node = node;
+            this.c = c;
+            this.l = l;
+        }
+    }
+
+    public List<List<String>> printTree(TreeNode root) {
+        int m = getHeight(root), n = (1 << m) - 1;
+        Node node = new Node(root, (n - 1) >> 1, 1);
+        Queue<Node> q = new LinkedList<>();
+        q.offer(node);
+        List<List<String>> ans = new ArrayList<>();
+        while (!q.isEmpty()) {
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                list.add("");
+            }
+            for (int i = q.size() - 1; i >= 0; i--) {
+                Node parent = q.poll();
+                list.set(parent.c, "" + parent.node.val);
+                TreeNode left = parent.node.left, right = parent.node.right;
+                int cnt = (1 << (m - parent.l - 1));
+                if (left != null) {
+                    q.offer(new Node(left, parent.c - cnt, parent.l + 1));
+                }
+                if (right != null) {
+                    q.offer(new Node(right, parent.c + cnt, parent.l + 1));
+                }
+            }
+            ans.add(list);
+        }
+        return ans;
+    }
+
+    private int getHeight(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+    }
+}
+

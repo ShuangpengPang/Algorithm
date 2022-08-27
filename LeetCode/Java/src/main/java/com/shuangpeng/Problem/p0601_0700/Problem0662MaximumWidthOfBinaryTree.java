@@ -1,9 +1,14 @@
 package com.shuangpeng.Problem.p0601_0700;
 
 import com.shuangpeng.common.TreeNode;
+import javafx.util.Pair;
 
 import java.util.*;
 
+/**
+ * @Description:（二叉树最大宽度）
+ * @Date 2022/8/27 8:03 PM
+ **/
 public class Problem0662MaximumWidthOfBinaryTree {
 
     private long maxWidth = 0;
@@ -85,7 +90,7 @@ public class Problem0662MaximumWidthOfBinaryTree {
         }
     }
 
-    public int widthOfBinaryTree(TreeNode root) {
+    public int widthOfBinaryTree3(TreeNode root) {
         if (root == null) {
             return 0;
         }
@@ -106,5 +111,62 @@ public class Problem0662MaximumWidthOfBinaryTree {
             }
         }
         return result;
+    }
+
+    public int widthOfBinaryTree(TreeNode root) {
+        List<Pair<TreeNode, Integer>> list = new ArrayList<>();
+        list.add(new Pair<>(root, 1));
+        int ans = 0;
+        while (!list.isEmpty()) {
+            ans = Math.max(ans, list.get(list.size() - 1).getValue() - list.get(0).getValue() + 1);
+            List<Pair<TreeNode, Integer>> tmp = new ArrayList<>();
+            for (Pair<TreeNode, Integer> pair : list) {
+                TreeNode node = pair.getKey();
+                int p = pair.getValue();
+                if (node.left != null) {
+                    tmp.add(new Pair<>(node.left, p << 1));
+                }
+                if (node.right != null) {
+                    tmp.add(new Pair<>(node.right, (p << 1) + 1));
+                }
+            }
+            list = tmp;
+        }
+        return ans;
+    }
+}
+
+class Problem0662MaximumWidthOfBinaryTree0 {
+
+    int ans = 0;
+
+    public int widthOfBinaryTree(TreeNode root) {
+        ans = 0;
+        dfs(root, new ArrayList<>(), 0, 1);
+        return ans;
+    }
+
+    // p还是有可能大于Long.MAX_VALUE
+    private void dfs(TreeNode root, List<long[]> list, int level, long p) {
+        if (root == null) {
+            return;
+        }
+        if (list.size() == level) {
+            list.add(new long[2]);
+        }
+        long[] arr = list.get(level);
+        arr[0] = arr[0] == 0 ? p : arr[0];
+        if (arr[1] == 0) {
+            if (p < 0) {
+                arr[1] = p;
+            } else {
+                arr[1] = Math.max(0L, p);
+            }
+        } else {
+            arr[1] = Math.max(arr[1], p);
+        }
+        ans = (int) Math.max(ans, arr[1] - arr[0] + 1);
+        dfs(root.left, list, level + 1, p << 1);
+        dfs(root.right, list, level + 1, (p << 1) + 1);
     }
 }

@@ -23,15 +23,24 @@ public class Problem2369CheckIfThereIsAValidPartitionForTheArray {
         return dp[n];
     }
 
-//    public boolean validPartition(int[] nums) {
-//        int n = nums.length;
-//        if (n == 1) {
-//            return false;
-//        } else if (n == 2) {
-//            return nums[0] == nums[1];
-//        } else if (n == 3) {
-//            return nums[0] == nums[1] && nums[0] == nums[2] || nums[0] + 1 == nums[1] && nums[0] + 2 == nums[2];
-//        }
-//
-//    }
+    public boolean validPartition(int[] nums) {
+        int n = nums.length;
+        if (n == 1) {
+            return false;
+        } else if (n == 2) {
+            return nums[0] == nums[1];
+        }
+        boolean a = false, b = nums[0] == nums[1], c = valid(nums, 2);
+        for (int i = 3; i < n && (a || b || c); i++) {
+            boolean d = b && nums[i] == nums[i - 1] || a && valid(nums, i);
+            a = b;
+            b = c;
+            c = d;
+        }
+        return c;
+    }
+
+    private boolean valid(int[] nums, int i) {
+        return nums[i] == nums[i - 1] && nums[i] == nums[i - 2] || nums[i] == nums[i - 2] + 2 && nums[i] == nums[i - 1] + 1;
+    }
 }

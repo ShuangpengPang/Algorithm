@@ -9,7 +9,8 @@ import java.util.*;
  */
 public class Problem2368ReachableNodesWithRestrictions {
 
-    public int reachableNodes(int n, int[][] edges, int[] restricted) {
+    // 比赛时写法
+    public int reachableNodes0(int n, int[][] edges, int[] restricted) {
         List<Integer>[] graph = new List[n];
         Arrays.setAll(graph, e -> new ArrayList<>());
         for (int[] edge : edges) {
@@ -33,4 +34,43 @@ public class Problem2368ReachableNodesWithRestrictions {
         }
         return ans;
     }
+
+    public int reachableNodes(int n, int[][] edges, int[] restricted) {
+        int[] parent = new int[n];
+        Arrays.fill(parent, -1);
+        boolean[] invalid = new boolean[n];
+        for (int r : restricted) {
+            invalid[r] = true;
+        }
+        for (int[] e : edges) {
+            int x = e[0], y = e[1];
+            if (invalid[x] || invalid[y]) {
+                continue;
+            }
+            union(parent, x, y);
+        }
+        return -parent[find(parent, 0)];
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (parent[px] <= parent[py]) {
+            parent[px] += parent[py];
+            parent[py] = px;
+        } else {
+            parent[py] += parent[px];
+            parent[px] = py;
+        }
+    }
+
+    private int find(int[] parent, int x) {
+        if (parent[x] >= 0) {
+            parent[x] = find(parent, parent[x]);
+            return parent[x];
+        }
+        return x;
+    }
+
+    // xj - xi + yi + yj = t
+    // xj + yj - (xi - yi) = t
 }

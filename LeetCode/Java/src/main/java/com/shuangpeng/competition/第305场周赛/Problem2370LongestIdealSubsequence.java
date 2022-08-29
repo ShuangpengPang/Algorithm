@@ -31,7 +31,7 @@ public class Problem2370LongestIdealSubsequence {
         return ans;
     }
 
-    public int longestIdealString(String s, int k) {
+    public int longestIdealString1(String s, int k) {
         int n = s.length();
         int[] last = new int[26];
         Arrays.fill(last, -1);
@@ -47,5 +47,22 @@ public class Problem2370LongestIdealSubsequence {
             last[c] = i;
         }
         return Arrays.stream(dp).max().getAsInt();
+    }
+
+    public int longestIdealString(String s, int k) {
+        int n = s.length();
+        int[] dp = new int[26];
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int j = s.charAt(i) - 'a';
+            int m = 0;
+            for (int c = Math.max(j - k, 0); c <= Math.min(j + k, 25); c++) {
+                m = Math.max(m, dp[c]);
+            }
+            m++;
+            dp[j] = m;
+            ans = Math.max(ans, m);
+        }
+        return ans;
     }
 }

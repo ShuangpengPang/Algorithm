@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p1501_1600;
  */
 public class Problem1537GetTheMaximumScore {
 
-    public int maxSum(int[] nums1, int[] nums2) {
+    public int maxSum0(int[] nums1, int[] nums2) {
         int n1 = nums1.length, n2 = nums2.length;
         int s1 = 0, s2 = 0, i1 = 0, i2 = 0;
         long sum = 0;
@@ -40,5 +40,26 @@ public class Problem1537GetTheMaximumScore {
             sum += nums[i];
         }
         return sum;
+    }
+
+    public int maxSum(int[] nums1, int[] nums2) {
+        int n1 = nums1.length, n2 = nums2.length, i1 = 0, i2 = 0;
+        long s1 = 0, s2 = 0;
+        while (i1 < n1 || i2 < n2) {
+            if (i2 == n2) {
+                s1 += nums1[i1++];
+            } else if (i1 == n1) {
+                s2 += nums2[i2++];
+            } else if (nums1[i1] < nums2[i2]) {
+                s1 += nums1[i1++];
+            } else if (nums1[i1] > nums2[i2]) {
+                s2 += nums2[i2++];
+            } else {
+                s1 = s2 = Math.max(s1, s2) + nums1[i1];
+                i1++;
+                i2++;
+            }
+        }
+        return (int) (Math.max(s1, s2) % (long) (1e9 + 7));
     }
 }

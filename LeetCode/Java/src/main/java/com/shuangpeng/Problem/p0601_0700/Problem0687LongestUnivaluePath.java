@@ -2,6 +2,10 @@ package com.shuangpeng.Problem.p0601_0700;
 
 import com.shuangpeng.common.TreeNode;
 
+/**
+ * @Description:（最长同值路径）
+ * @Date 2022/9/2 10:31 AM
+ **/
 public class Problem0687LongestUnivaluePath {
 
     public int longestUnivaluePath0(TreeNode root) {
@@ -66,5 +70,27 @@ public class Problem0687LongestUnivaluePath {
         }
         answer = Math.max(answer, leftPath + rightPath);
         return Math.max(leftPath, rightPath);
+    }
+}
+
+class Problem0687LongestUnivaluePath0 {
+
+    int ans;
+
+    public int longestUnivaluePath(TreeNode root) {
+        ans = 0;
+        dfs(root);
+        return Math.max(ans - 1, 0);
+    }
+
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = dfs(root.left), right = dfs(root.right);
+        left = root.left != null && root.val == root.left.val ? left : 0;
+        right = root.right != null && root.val == root.right.val ? right : 0;
+        ans = Math.max(ans, left + right + 1);
+        return Math.max(left, right) + 1;
     }
 }

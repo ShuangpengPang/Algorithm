@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p1501_1600;
  */
 public class Problem1582SpecialPositionsInABinaryMatrix {
 
-    public int numSpecial(int[][] mat) {
+    public int numSpecial0(int[][] mat) {
         int m = mat.length, n = mat[0].length;
         boolean[] rows = new boolean[m], cols = new boolean[n];
         int ans = 0;
@@ -45,5 +45,57 @@ public class Problem1582SpecialPositionsInABinaryMatrix {
             }
         }
         return true;
+    }
+
+    public int numSpecial1(int[][] mat) {
+        int m = mat.length, n = mat[0].length;
+        int[] rows = new int[m], cols = new int[n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 1) {
+                    rows[i]++;
+                    cols[j]++;
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < m; i++) {
+            if (rows[i] != 1) {
+                continue;
+            }
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 1 && cols[j] == 1) {
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+
+    public int numSpecial(int[][] mat) {
+        int m = mat.length, n = mat[0].length;
+        for (int i = 0; i < m; i++) {
+            int cnt = 0;
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 1) {
+                    cnt++;
+                }
+            }
+            if (i == 0) {
+                cnt--;
+            }
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 1) {
+                    mat[0][j] += cnt;
+                }
+            }
+        }
+        int ans = 0;
+        for (int num : mat[0]) {
+            if (num == 1) {
+                ans++;
+            }
+        }
+        return ans;
     }
 }

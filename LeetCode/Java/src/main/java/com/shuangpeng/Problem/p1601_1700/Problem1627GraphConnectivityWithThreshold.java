@@ -43,3 +43,44 @@ public class Problem1627GraphConnectivityWithThreshold {
         return parent[x] = x == parent[x] ? x : find(parent, parent[x]);
     }
 }
+
+class Problem1627GraphConnectivityWithThreshold0 {
+
+    public List<Boolean> areConnected(int n, int threshold, int[][] queries) {
+        int[] parent = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+        // 埃氏筛
+        boolean[] visited = new boolean[n];
+        for (int i = threshold + 1; i < n; i++) {
+            if (!visited[i - 1]) {
+                for (int j = i; j <= n; j += i) {
+                    visited[j - 1] = true;
+                    union(parent, i - 1, j - 1);
+                }
+            }
+        }
+        int m = queries.length;
+        List<Boolean> ans = new ArrayList<>(m);
+        for (int[] q : queries) {
+            if (find(parent, q[0] - 1) == find(parent, q[1] - 1)) {
+                ans.add(true);
+            } else {
+                ans.add(false);
+            }
+        }
+        return ans;
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent[py] = px;
+        }
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = x == parent[x] ? x : find(parent, parent[x]);
+    }
+}

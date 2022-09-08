@@ -114,3 +114,67 @@ public class Problem1632RankTransformOfAMatrix {
         return parent[x] = parent[x] == x ? x : find(parent, parent[x]);
     }
 }
+
+class Problem1632RankTransformOfAMatrix0 {
+
+    public int[][] matrixRankTransform(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length, N = m * n;
+        Integer[] ids = new Integer[N];
+        int[] parent = new int[N];
+        int[] rank = new int[N];
+        for (int i = 0; i < N; i++) {
+            ids[i] = i;
+            parent[i] = i;
+        }
+        Arrays.sort(ids, Comparator.comparingInt(a -> matrix[a / n][a % n]));
+        int[] maxColIndex = new int[m], maxRowIndex = new int[n];
+        Arrays.fill(maxColIndex, -1);
+        Arrays.fill(maxRowIndex, -1);
+        for (int id : ids) {
+            int x = id / n, y = id % n;
+            int r = 1;
+            if (maxColIndex[x] != -1) {
+                int j = maxColIndex[x];
+                if (matrix[x][y] == matrix[x][j]) {
+                    r = rank[find(parent, x * n + j)];
+                    union(parent, x * n + y, x * n + j);
+                } else {
+                    r = rank[find(parent, x * n + j)] + 1;
+                }
+            }
+            if (maxRowIndex[y] != -1) {
+                int i = maxRowIndex[y];
+                if (matrix[x][y] == matrix[i][y]) {
+                    r = Math.max(r, rank[find(parent, i * n + y)]);
+                    union(parent, x * n + y, i * n+ y);
+                } else {
+                    r = Math.max(r, rank[find(parent, i * n + y)] + 1);
+                }
+            }
+            maxColIndex[x] = y;
+            maxRowIndex[y] = x;
+            int py = find(parent, x * n + y);
+            rank[py] = Math.max(rank[py], r);
+        }
+        int[][] ans = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                ans[i][j] = rank[find(parent, i * n + j)];
+            }
+        }
+        return ans;
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent[py] = px;
+        }
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = parent[x] == x ? x : find(parent, parent[x]);
+    }
+}
+
+

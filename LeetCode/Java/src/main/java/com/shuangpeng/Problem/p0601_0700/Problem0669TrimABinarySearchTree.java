@@ -2,6 +2,10 @@ package com.shuangpeng.Problem.p0601_0700;
 
 import com.shuangpeng.common.TreeNode;
 
+/**
+ * @Description:（修剪二叉搜索树）
+ * @Date 2022/9/10 9:04 PM
+ **/
 public class Problem0669TrimABinarySearchTree {
 
     public TreeNode trimBST(TreeNode root, int low, int high) {

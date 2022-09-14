@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p0601_0700;
  */
 public class Problem0670MaximumSwap {
 
-    public int maximumSwap(int num) {
+    public int maximumSwap0(int num) {
         char[] cs = String.valueOf(num).toCharArray();
         int n = cs.length;
         int idx = -1;
@@ -29,5 +29,28 @@ public class Problem0670MaximumSwap {
             }
         }
         return idx == -1 ? num : Integer.valueOf(new String(cs));
+    }
+
+    public int maximumSwap(int num) {
+        char[] cs = Integer.toString(num).toCharArray();
+        int n = cs.length;
+        int[] maxArr = new int[n];
+        int maxIdx = n - 1;
+        for (int i = n - 1; i >= 0; i--) {
+            if (cs[i] > cs[maxIdx]) {
+                maxIdx = i;
+            }
+            maxArr[i] = maxIdx;
+        }
+        for (int i = 0; i < n; i++) {
+            int j = maxArr[i];
+            if (cs[i] != cs[j]) {
+                char c = cs[i];
+                cs[i] = cs[j];
+                cs[j] = c;
+                break;
+            }
+        }
+        return Integer.parseInt(new String(cs));
     }
 }

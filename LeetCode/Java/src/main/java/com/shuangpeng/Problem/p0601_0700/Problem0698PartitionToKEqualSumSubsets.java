@@ -2,6 +2,7 @@ package com.shuangpeng.Problem.p0601_0700;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -157,7 +158,7 @@ class Problem0698PartitionToKEqualSumSubsets0 {
         return false;
     }
 
-    public boolean canPartitionKSubsets(int[] nums, int k) {
+    public boolean canPartitionKSubsets1(int[] nums, int k) {
         int sum = 0, max = 0;
         for (int num : nums) {
             sum += num;
@@ -195,4 +196,112 @@ class Problem0698PartitionToKEqualSumSubsets0 {
         }
         return dp[N - 1];
     }
+
+    public boolean canPartitionKSubsets2(int[] nums, int k) {
+        int sum = 0, max = 0;
+        for (int num : nums) {
+            sum += num;
+            max = Math.max(max, num);
+        }
+        if (sum % k != 0) {
+            return false;
+        }
+        int target = sum / k;
+        if (max > target) {
+            return false;
+        }
+        int n = nums.length, N = 1 << n;
+        int[] dp = new int[N];
+        Arrays.fill(dp, -1);
+        dp[0] = 0;
+        for (int i = 1; i < N; i++) {
+            for (int j = 0; j < n; j++) {
+                if (((i >> j) & 1) == 1) {
+                    int m = i ^ (1 << j);
+                    if (dp[m] != -1 && dp[m] + nums[j] <= target) {
+                        dp[i] = (dp[m] + nums[j]) % target;
+                        break;
+                    }
+                }
+            }
+        }
+        return dp[N - 1] == 0;
+    }
+
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length, sum = 0, N = 1 << n;
+        for (int num : nums) {
+            sum += num;
+        }
+        int target = sum / k;
+        if (sum % k != 0 || nums[n - 1] > target) {
+            return false;
+        }
+        int[] dp = new int[N];
+        Arrays.fill(dp, -1);
+        dp[0] = 0;
+        for (int i = 0; i < N; i++) {
+            if (dp[i] != -1) {
+                for (int j = 0; j < n && dp[i] + nums[j] <= target; j++) {
+                    int m = i | (1 << j);
+                    if (m != i) {
+                        int s = dp[i] + nums[j];
+                        dp[m] = s == target ? 0 : s;
+                    }
+                }
+            }
+        }
+        return dp[N - 1] == 0;
+    }
 }
+
+// 模拟退火
+class Problem0698PartitionToKEqualSumSubsets1 {
+    int[] nums;
+    int n, tval, k;
+    Random random = new Random(20220920);
+    double hi = 1e9, lo = 1e-4, fa = 0.95;
+    int N = 600;
+    boolean ans;
+    int calc() {
+        int diff = tval * k;
+        for (int i = 0, j = 0; i < n && j < k; j++) {
+            int cur = 0;
+            while (i < n && cur + nums[i] <= tval) cur += nums[i++];
+            diff -= cur;
+        }
+        if (diff == 0) ans = true;
+        return diff;
+    }
+    void sa() {
+        shuffle(nums);
+        for (double t = hi; t > lo && !ans; t *= fa) {
+            int a = random.nextInt(n), b = random.nextInt(n);
+            if (a == b) continue;
+            int prev = calc();
+            swap(nums, a, b);
+            int cur = calc();
+            int diff = cur - prev;
+            if (Math.log(diff / t) > random.nextDouble()) swap(nums, a, b);
+        }
+    }
+    public boolean canPartitionKSubsets(int[] _nums, int _k) {
+        nums = _nums; k = _k;
+        int tot = 0;
+        for (int x : nums) tot += x;
+        if (tot % k != 0) return false;
+        n = nums.length; tval = tot / k;
+        while (!ans && N-- > 0) sa();
+        return ans;
+    }
+    void shuffle(int[] nums) {
+        for (int i = n; i > 0; i--) swap(nums, random.nextInt(i), i - 1);
+    }
+    void swap(int[] nums, int a, int b) {
+        int c = nums[a];
+        nums[a] = nums[b];
+        nums[b] = c;
+    }
+}
+

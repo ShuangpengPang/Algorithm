@@ -80,3 +80,53 @@ public class Problem1707MaximumXORWithAnElementFromArray {
         return x ^ num;
     }
 }
+
+class Problem1707MaximumXORWithAnElementFromArray0 {
+
+    class Trie {
+        static final int L = 30;
+        Trie[] tries = new Trie[2];
+        int min = Integer.MAX_VALUE;
+
+        public void insert(int num) {
+            min = Math.min(min, num);
+            Trie trie = this;
+            for (int i = L - 1; i >= 0; i--) {
+                int b = (num >> i) & 1;
+                if (trie.tries[b] == null) {
+                    trie.tries[b] = new Trie();
+                }
+                trie = trie.tries[b];
+                trie.min = Math.min(trie.min, num);
+            }
+        }
+
+        public int getMaxXor(int x, int m) {
+            Trie trie = this;
+            int ans = 0;
+            for (int i = L - 1; i >= 0; i--) {
+                int b = (x >> i) & 1;
+                if (trie.tries[b ^ 1] != null && trie.tries[b ^ 1].min <= m) {
+                    ans |= 1 << i;
+                    b ^= 1;
+                }
+                trie = trie.tries[b];
+            }
+            return ans;
+        }
+    }
+
+    public int[] maximizeXor(int[] nums, int[][] queries) {
+        Trie root = new Trie();
+        for (int num : nums) {
+            root.insert(num);
+        }
+        int n = queries.length;
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            int x = queries[i][0], m = queries[i][1];
+            ans[i] = root.min > m ? -1 : root.getMaxXor(x, m);
+        }
+        return ans;
+    }
+}

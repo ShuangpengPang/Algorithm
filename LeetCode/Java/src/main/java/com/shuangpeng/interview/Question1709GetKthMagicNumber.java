@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class Question1709GetKthMagicNumber {
 
-    public int getKthMagicNumber(int k) {
+    public int getKthMagicNumber0(int k) {
         PriorityQueue<Long> q = new PriorityQueue<>();
         q.offer(1L);
         Set<Long> visited = new HashSet<>();
@@ -30,5 +30,27 @@ public class Question1709GetKthMagicNumber {
         }
         long ans = q.poll();
         return (int) ans;
+    }
+
+    public int getKthMagicNumber(int k) {
+        long[] dp = new long[k];
+        dp[0] = 1;
+        int[] p = new int[3], nums = {3, 5, 7};
+        for (int i = 1; i < k; i++) {
+            long min = dp[p[0]] * nums[0];
+            for (int j = 1; j < 3; j++) {
+                long next = dp[p[j]] * nums[j];
+                if (next < min) {
+                    min = next;
+                }
+            }
+            for (int j = 0; j < 3; j++) {
+                if (dp[p[j]] * nums[j] == min) {
+                    p[j]++;
+                }
+            }
+            dp[i] = min;
+        }
+        return (int) dp[k - 1];
     }
 }

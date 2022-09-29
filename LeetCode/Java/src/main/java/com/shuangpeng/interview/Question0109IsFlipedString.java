@@ -14,7 +14,6 @@ public class Question0109IsFlipedString {
         if (s1.equals(s2)) {
             return true;
         }
-        s2 += s2;
         int n = s1.length();
         int[] next = new int[n];
         for (int i = 1; i < n; i++) {
@@ -28,7 +27,7 @@ public class Question0109IsFlipedString {
             }
         }
         for (int i = 0, j = 0; i < n && j < (n << 1) && n - i <= (n << 1) - j; j++) {
-            char c = s2.charAt(j);
+            char c = s2.charAt(j % n);
             while (i > 0 && s1.charAt(i) != c) {
                 i = next[i - 1];
             }
@@ -49,7 +48,6 @@ public class Question0109IsFlipedString {
         if (s1.equals(s2)) {
             return true;
         }
-        s2 += s2;
         int n = s1.length();
         int[] next = new int[n];
         for (int i = 1; i < n; i++) {
@@ -63,7 +61,7 @@ public class Question0109IsFlipedString {
             }
         }
         for (int i = 0, j = 0; i < n && j < (n << 1) && n - i <= (n << 1) - j; j++) {
-            char c = s2.charAt(j);
+            char c = s2.charAt(j % n);
             while (i > 0 && s1.charAt(i) != c) {
                 i = next[i - 1];
             }

@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p0901_1000;
  */
 public class Problem0921MinimumAddToMakeParenthesesValid {
 
-    public int minAddToMakeValid(String s) {
+    public int minAddToMakeValid0(String s) {
         int n = s.length();
         int cnt = 0, ans = 0;
         for (int i = 0; i < n; i++) {
@@ -23,5 +23,22 @@ public class Problem0921MinimumAddToMakeParenthesesValid {
             }
         }
         return ans + Math.abs(cnt);
+    }
+
+    public int minAddToMakeValid(String s) {
+        int n = s.length();
+        int cnt = 0, ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == '(') {
+                cnt++;
+            } else {
+                if (cnt == 0) {
+                    ans++;
+                } else {
+                    cnt--;
+                }
+            }
+        }
+        return ans + cnt;
     }
 }

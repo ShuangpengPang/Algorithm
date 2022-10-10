@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1701_1800;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  */
 public class Problem1761MinimumDegreeOfAConnectedTrioInAGraph {
 
-    public int minTrioDegree(int n, int[][] edges) {
+    public int minTrioDegree0(int n, int[][] edges) {
         Set<Integer>[] graph = new Set[n];
         Arrays.setAll(graph, e -> new HashSet<>());
         for (int[] edge : edges) {
@@ -35,4 +36,40 @@ public class Problem1761MinimumDegreeOfAConnectedTrioInAGraph {
         }
         return ans == Integer.MAX_VALUE ? -1 : ans;
     }
+
+    public int minTrioDegree(int n, int[][] edges) {
+        boolean[][] graph = new boolean[n][n];
+        int[] degree = new int[n];
+        for (int[] edge : edges) {
+            int x = edge[0] - 1, y = edge[1] - 1;
+            graph[x][y] = graph[y][x] = true;
+            degree[x]++;
+            degree[y]++;
+        }
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, Comparator.comparingInt(a -> degree[a]));
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            int x = ids[i];
+            if (degree[x] < 2) {
+                continue;
+            }
+            for (int j = i + 1; j < n; j++) {
+                int y = ids[j];
+                if (!graph[x][y]) {
+                    continue;
+                }
+                for (int k = j + 1; k < n; k++) {
+                    int w = ids[k];
+                    if (graph[x][w] && graph[y][w]) {
+                        ans = Math.min(ans, degree[x] + degree[y] + degree[w] - 6);
+                        break;
+                    }
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? -1 : ans;
+    }
 }
+

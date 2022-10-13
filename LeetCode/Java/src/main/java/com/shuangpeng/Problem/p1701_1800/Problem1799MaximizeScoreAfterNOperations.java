@@ -50,3 +50,40 @@ public class Problem1799MaximizeScoreAfterNOperations {
         return b == 0 ? a : gcd(b, a % b);
     }
 }
+
+class Problem1799MaximizeScoreAfterNOperations0 {
+
+    public int maxScore(int[] nums) {
+        int n = nums.length, N = 1 << n;
+        int[][] g = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                g[i][j] = gcd(nums[i], nums[j]);
+            }
+        }
+        int[] dp = new int[N];
+        for (int i = 1; i < N; i++) {
+            int cnt = Integer.bitCount(i);
+            if ((cnt & 1) == 1) {
+                continue;
+            }
+            cnt >>= 1;
+            for (int j = 0; j < n; j++) {
+                if (((i >> j) & 1) == 0) {
+                    continue;
+                }
+                for (int k = j + 1; k < n; k++) {
+                    if (((i >> k) & 1) == 0) {
+                        continue;
+                    }
+                    dp[i] = Math.max(dp[i], dp[i ^ (1 << j) ^ (1 << k)] + cnt * g[j][k]);
+                }
+            }
+        }
+        return dp[N - 1];
+    }
+
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+}

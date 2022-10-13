@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1701_1800;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Deque;
  */
 public class Problem1776CarFleetII {
 
-    public double[] getCollisionTimes(int[][] cars) {
+    public double[] getCollisionTimes0(int[][] cars) {
         int n = cars.length;
         double[] ans = new double[n];
         Deque<Integer> stack = new ArrayDeque<>();
@@ -35,6 +36,29 @@ public class Problem1776CarFleetII {
                 } else {
                     ans[i] = (double) (cars[j][0] - cars[i][0]) / (cars[i][1] - cars[j][1]);
                 }
+            }
+            stack.push(i);
+        }
+        return ans;
+    }
+
+    public double[] getCollisionTimes(int[][] cars) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int n = cars.length;
+        double[] ans = new double[n];
+        Arrays.fill(ans, -1);
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && cars[i][1] <= cars[stack.peek()][1]) {
+                stack.pop();
+            }
+            while (!stack.isEmpty()) {
+                int j = stack.peek();
+                double t = (double) (cars[j][0] - cars[i][0]) / (cars[i][1] - cars[j][1]);
+                if (ans[j] == -1 || t < ans[j]) {
+                    ans[i] = t;
+                    break;
+                }
+                stack.pop();
             }
             stack.push(i);
         }

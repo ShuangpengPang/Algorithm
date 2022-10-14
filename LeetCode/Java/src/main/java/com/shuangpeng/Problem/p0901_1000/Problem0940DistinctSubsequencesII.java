@@ -52,7 +52,7 @@ public class Problem0940DistinctSubsequencesII {
         return dp[n];
     }
 
-    public int distinctSubseqII(String s) {
+    public int distinctSubseqII2(String s) {
         int n = s.length();
         final int N = 26;
         final int M = (int) 1e9 + 7;
@@ -76,7 +76,7 @@ public class Problem0940DistinctSubsequencesII {
         return dp[n] - 1;
     }
 
-    public int distinctSubseqII2(String s) {
+    public int distinctSubseqII3(String s) {
         int n = s.length(), N = 26, M = (int) 1e9 + 7;
         int[] dp = new int[N];
         for (int i = 0; i < n; i++) {
@@ -91,6 +91,18 @@ public class Problem0940DistinctSubsequencesII {
             ans += dp[i];
         }
         return (int) (ans % M);
+    }
+
+    public int distinctSubseqII(String s) {
+        int n = s.length(), ans = 0, M = (int) 1e9 + 7;
+        int[] dp = new int[26];
+        for (int i = 0; i < n; i++) {
+            int j = s.charAt(i) - 'a';
+            int t = dp[j];
+            dp[j] = (ans + 1) % M;
+            ans = (((ans << 1) + 1) % M - t + M) % M;
+        }
+        return ans;
     }
 
 //    public static void main(String[] args) {

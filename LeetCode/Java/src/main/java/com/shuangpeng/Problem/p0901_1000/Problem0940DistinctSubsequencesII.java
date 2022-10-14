@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+/**
+ * @Description:（不同的子序列II）
+ * @Date 2022/10/14 5:38 PM
+ **/
 public class Problem0940DistinctSubsequencesII {
 
     public int distinctSubseqII0(String s) {
@@ -72,50 +76,21 @@ public class Problem0940DistinctSubsequencesII {
         return dp[n] - 1;
     }
 
-    public int maxProduct(String s) {
-        int n = s.length();
-        int M = 1 << n;
-        char[] chars = s.toCharArray();
-        int[] dp = new int[M];
-        for (int i = 1; i < M; ++i) {
-            StringBuilder sb = new StringBuilder();
-            for (int j = 0; j < n; ++j) {
-                if ((i & (1 << j)) != 0) {
-                    sb.append(chars[j]);
-                }
+    public int distinctSubseqII2(String s) {
+        int n = s.length(), N = 26, M = (int) 1e9 + 7;
+        int[] dp = new int[N];
+        for (int i = 0; i < n; i++) {
+            long sum = 0;
+            for (int j = 0; j < N; j++) {
+                sum += dp[j];
             }
-            dp[i] = manacher(sb);
+            dp[s.charAt(i) - 'a'] = (int) ((sum + 1) % M);
         }
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            int j = M - i - 1;
-            ans = Math.max(ans, dp[i] * dp[j]);
+        long ans = 0;
+        for (int i = 0; i < N; i++) {
+            ans += dp[i];
         }
-        return ans;
-    }
-
-    private int manacher(StringBuilder s) {
-        int n = s.length();
-        int maxLength = 0;
-        for (int i = 0; i < n; ++i) {
-            int j = 0;
-            while (i - j >= 0 && i + j < n && s.charAt(i - j) == s.charAt(i + j)) {
-                j++;
-            }
-            j--;
-            maxLength = Math.max(maxLength, (j << 1) + 1);
-        }
-        for (int i = 0; i < n - 1; ++i) {
-            if (s.charAt(i) == s.charAt(i + 1)) {
-                int j = 0;
-                while (i - j >= 0 && i + j + 1 < n && s.charAt(i - j) == s.charAt(i + j + 1)) {
-                    j++;
-                }
-                j--;
-                maxLength = Math.max(maxLength, (j + 1) << 1);
-            }
-        }
-        return maxLength;
+        return (int) (ans % M);
     }
 
 //    public static void main(String[] args) {

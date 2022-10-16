@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Problem1441BuildAnArrayWithStackOperations {
 
-    public List<String> buildArray(int[] target, int n) {
+    public List<String> buildArray0(int[] target, int n) {
         List<String> ans = new ArrayList<>();
         int prev = 0;
         for (int num : target) {
@@ -23,6 +23,20 @@ public class Problem1441BuildAnArrayWithStackOperations {
             }
             ans.add("Push");
             prev = num;
+        }
+        return ans;
+    }
+
+    public List<String> buildArray(int[] target, int n) {
+        List<String> ans = new ArrayList<>();
+        int m = target.length;
+        for (int i = 0, j = 1; i < m; j++) {
+            ans.add("Push");
+            if (j != target[i]) {
+                ans.add("Pop");
+            } else {
+                i++;
+            }
         }
         return ans;
     }

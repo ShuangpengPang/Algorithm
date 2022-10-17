@@ -57,3 +57,53 @@ public class Problem1803CountPairsWithXORInARange {
         return ans;
     }
 }
+
+class Problem1803CountPairsWithXORInARange0 {
+
+    static int N = 14;
+
+    class Trie {
+        Trie[] tries = new Trie[2];
+        int cnt;
+
+        void insert(int num) {
+            cnt++;
+            Trie trie = this;
+            for (int i = N; i >= 0; i--) {
+                int j = (num >> i) & 1;
+                if (trie.tries[j] == null) {
+                    trie.tries[j] = new Trie();
+                }
+                trie = trie.tries[j];
+                trie.cnt++;
+            }
+        }
+
+        int query(int num, int limit) {
+            Trie trie = this;
+            int ans = 0;
+            for (int i = N; i >= 0 && trie != null; i--) {
+                int b1 = (num >> i) & 1, b2 = (limit >> i) & 1;
+                if (b2 == 1) {
+                    if (trie.tries[b1] != null) {
+                        ans += trie.tries[b1].cnt;
+                    }
+                    trie = trie.tries[b1 ^ 1];
+                } else {
+                    trie = trie.tries[b1];
+                }
+            }
+            return ans + (trie == null ? 0 : trie.cnt);
+        }
+    }
+
+    public int countPairs(int[] nums, int low, int high) {
+        int ans = 0;
+        Trie trie = new Trie();
+        for (int num : nums) {
+            ans += trie.query(num, high) - trie.query(num, low - 1);
+            trie.insert(num);
+        }
+        return ans;
+    }
+}

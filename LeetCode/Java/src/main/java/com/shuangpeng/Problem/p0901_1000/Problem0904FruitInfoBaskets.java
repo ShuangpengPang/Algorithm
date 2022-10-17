@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class Problem0904FruitInfoBaskets {
 
-    public int totalFruit(int[] fruits) {
+    public int totalFruit0(int[] fruits) {
         int n = fruits.length, ans = 0;
         int[][] types = new int[2][2];
         for (int i = 0; i < 2; i++) {
@@ -60,5 +60,37 @@ public class Problem0904FruitInfoBaskets {
             return 0;
         }
         return 1;
+    }
+
+    public int totalFruit1(int[] fruits) {
+        int n = fruits.length, ans = 0;
+        int minIndex = -1, maxIndex = -1, prev = -1;
+        for (int i = 0; i < n; i++) {
+            if (maxIndex != -1 && fruits[maxIndex] != fruits[i]) {
+                if (minIndex != -1 && fruits[minIndex] != fruits[i]) {
+                    prev = minIndex;
+                }
+                minIndex = maxIndex;
+            }
+            maxIndex = i;
+            ans = Math.max(ans, i - prev);
+        }
+        return ans;
+    }
+
+    public int totalFruit(int[] fruits) {
+        int n = fruits.length;
+        int idx = -1, prev = -1;
+        int ans = 1;
+        for (int i = 1; i < n; i++) {
+            if (fruits[i] != fruits[i - 1]) {
+                if (idx != -1 && fruits[idx] != fruits[i]) {
+                    prev = idx;
+                }
+                idx = i - 1;
+            }
+            ans = Math.max(ans, i - prev);
+        }
+        return ans;
     }
 }

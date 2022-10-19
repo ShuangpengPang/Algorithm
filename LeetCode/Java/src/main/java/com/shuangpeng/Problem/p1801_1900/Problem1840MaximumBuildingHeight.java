@@ -10,7 +10,7 @@ import java.util.Comparator;
  */
 public class Problem1840MaximumBuildingHeight {
 
-    public int maxBuilding(int n, int[][] restrictions) {
+    public int maxBuilding0(int n, int[][] restrictions) {
         int m = restrictions.length;
         if (m == 0) {
             return n - 1;
@@ -36,5 +36,16 @@ public class Problem1840MaximumBuildingHeight {
             pH = h;
         }
         return Math.max(ans, pH + (pId - (1 + pH)) >> 1);
+    }
+
+    public static int maxBuilding(int n, int[][] restrictions) {
+        Arrays.sort(restrictions, (o1, o2) -> o1[0] + o1[1] - o2[0] - o2[1]);
+        int res = 0, b = -1;
+        for (int[] restriction : restrictions)
+            if (restriction[1] - restriction[0] < b) {
+                res = Math.max(res, (restriction[0] + restriction[1] + b) >>> 1);
+                b = restriction[1] - restriction[0];
+            }
+        return Math.max(res, n + b);
     }
 }

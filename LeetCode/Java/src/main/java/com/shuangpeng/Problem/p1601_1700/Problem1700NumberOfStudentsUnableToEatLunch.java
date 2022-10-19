@@ -11,9 +11,9 @@ public class Problem1700NumberOfStudentsUnableToEatLunch {
         int n = students.length;
         int[] types = new int[2];
         int i = 0;
-        for (int j = 0; i < n && (j < n || types[sandwiches[i]] > 0); j++) {
+        for (int j = 0; i < n && (j < n || types[sandwiches[i]] > 0); ) {
             if (j < n) {
-                types[students[j]]++;
+                types[students[j++]]++;
             }
             if (types[sandwiches[i]] > 0) {
                 types[sandwiches[i++]]--;

@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+/**
+ * @Description:（最大为N的数字组合）
+ * @Date 2022/10/20 12:32 AM
+ **/
 public class Problem0902NumbersAtMostNGivenDigitSet {
 
     public int atMostNGivenDigitSet0(String[] digits, int n) {
@@ -111,7 +115,7 @@ public class Problem0902NumbersAtMostNGivenDigitSet {
         return ans;
     }
 
-    public int atMostNGivenDigitSet(String[] digits, int n) {
+    public int atMostNGivenDigitSet3(String[] digits, int n) {
         int length = digits.length;
         String str = Integer.toString(n);
         int N = str.length();
@@ -151,5 +155,55 @@ public class Problem0902NumbersAtMostNGivenDigitSet {
             ans = ans * length + dp[i];
         }
         return ans;
+    }
+
+    public int atMostNGivenDigitSet4(String[] digits, int n) {
+        char[] cs = Integer.toString(n).toCharArray();
+        int m = cs.length, len = digits.length;
+        int[] arr = new int[m];
+        arr[0] = 1;
+        for (int i = 1; i < m; i++) {
+            arr[i] = len * arr[i - 1];
+        }
+        int[] preCount = new int[10];
+        for (int i = 1, j = 0; i < 10; i++) {
+            while (j < len && i > digits[j].charAt(0) - '0') {
+                j++;
+            }
+            preCount[i] = j;
+        }
+        int ans = 0;
+        for (int i = 1; i < m; i++) {
+            ans += arr[i];
+        }
+        int cnt = 1;
+        for (int i = 0; i < m; i++) {
+            int j = preCount[cs[i] - '0'];
+            ans += j * arr[m - i - 1];
+            if (j == len || cs[i] != digits[j].charAt(0)) {
+                cnt = 0;
+                break;
+            }
+        }
+        return ans + cnt;
+    }
+
+    public int atMostNGivenDigitSet(String[] digits, int n) {
+        char[] cs = Integer.toString(n).toCharArray();
+        int m = cs.length, len = digits.length;
+        int[] preSum = new int[10];
+        for (int i = 0, j = 0; i < 10; i++) {
+            while (j < len && digits[j].charAt(0) - '0' < i) {
+                j++;
+            }
+            preSum[i] = j;
+        }
+        int a = 0, b = 1;
+        for (int i = 0; i < m; i++) {
+            int j = preSum[cs[i] - '0'];
+            a = (a + (i == 0 ? 0 : 1)) * len + b * j;
+            b = b == 0 || j == len || digits[j].charAt(0) != cs[i] ? 0 : 1;
+        }
+        return a + b;
     }
 }

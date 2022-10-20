@@ -1,7 +1,9 @@
 package com.shuangpeng.Problem.p1801_1900;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.TreeMap;
 
 /**
@@ -80,7 +82,7 @@ public class Problem1851MinimumIntervalToIncludeEachQuery {
         return ans;
     }
 
-    public int[] minInterval(int[][] intervals, int[] queries) {
+    public int[] minInterval1(int[][] intervals, int[] queries) {
         Arrays.sort(intervals, (a, b) -> (b[1] - b[0]) - (a[1] - a[0]));
         TreeMap<Integer, int[]> map = new TreeMap<>();
         int m = intervals.length, n = queries.length;
@@ -113,6 +115,30 @@ public class Problem1851MinimumIntervalToIncludeEachQuery {
         for (int i = 0; i < n; i++) {
             Map.Entry<Integer, int[]> entry = map.floorEntry(queries[i]);
             ans[i] = entry == null || entry.getValue()[0] < queries[i] ? -1 : entry.getValue()[1];
+        }
+        return ans;
+    }
+
+    public int[] minInterval(int[][] intervals, int[] queries) {
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        int m = intervals.length, n = queries.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, Comparator.comparingInt(i -> queries[i]));
+        int[] ans = new int[n];
+        PriorityQueue<int[]> q = new PriorityQueue<>(Comparator.comparingInt(a -> a[1] - a[0]));
+        for (int i = 0, j = 0; i < n; i++) {
+            int id = ids[i], num = queries[id];
+            while (j < m && intervals[j][0] <= num) {
+                if (intervals[j][1] >= num) {
+                    q.offer(new int[]{intervals[j][0], intervals[j][1]});
+                }
+                j++;
+            }
+            while (!q.isEmpty() && q.peek()[1] < num) {
+                q.poll();
+            }
+            ans[id] = q.isEmpty() ? -1 : q.peek()[1] - q.peek()[0] + 1;
         }
         return ans;
     }

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Problem0784LetterCasePermutation {
 
-    public List<String> letterCasePermutation(String s) {
+    public List<String> letterCasePermutation0(String s) {
         List<String> ans = new ArrayList<>();
         dfs(s.toCharArray(), 0, ans);
         return ans;
@@ -32,5 +32,29 @@ public class Problem0784LetterCasePermutation {
             dfs(cs, i + 1, ans);
             cs[i] = c;
         }
+    }
+
+    public List<String> letterCasePermutation(String s) {
+        List<StringBuilder> list = new ArrayList<>();
+        list.add(new StringBuilder());
+        for (char c : s.toCharArray()) {
+            int n = list.size();
+            if (Character.isLetter(c)) {
+                for (int i = 0; i < n; i++) {
+                    list.add(new StringBuilder(list.get(i)));
+                    list.get(i).append(Character.toLowerCase(c));
+                    list.get(n + i).append(Character.toUpperCase(c));
+                }
+            } else {
+                for (int i = 0; i < n; i++) {
+                    list.get(i).append(c);
+                }
+            }
+        }
+        List<String> ans = new ArrayList<>(list.size());
+        for (StringBuilder sb : list) {
+            ans.add(sb.toString());
+        }
+        return ans;
     }
 }

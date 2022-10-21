@@ -34,7 +34,7 @@ public class Problem0784LetterCasePermutation {
         }
     }
 
-    public List<String> letterCasePermutation(String s) {
+    public List<String> letterCasePermutation1(String s) {
         List<StringBuilder> list = new ArrayList<>();
         list.add(new StringBuilder());
         for (char c : s.toCharArray()) {
@@ -54,6 +54,38 @@ public class Problem0784LetterCasePermutation {
         List<String> ans = new ArrayList<>(list.size());
         for (StringBuilder sb : list) {
             ans.add(sb.toString());
+        }
+        return ans;
+    }
+
+    public List<String> letterCasePermutation(String s) {
+        char[] cs = s.toCharArray();
+        int N = 0, n = cs.length;
+        for (char c : cs) {
+            if (Character.isLetter(c)) {
+                N++;
+            }
+        }
+        int[] h = new int[N];
+        N = 0;
+        for (int i = 0; i < n; i++) {
+            if (Character.isLetter(cs[i])) {
+                h[N++] = i;
+            }
+        }
+        int M = 1 << N;
+        List<String> ans = new ArrayList<>();
+        for (int i = 0; i < M; i++) {
+            char[] copy = cs.clone();
+            for (int j = 0; j < N; j++) {
+                int idx = h[j];
+                if (((i >> j) & 1) == 1) {
+                    copy[idx] = Character.toUpperCase(copy[idx]);
+                } else {
+                    copy[idx] = Character.toLowerCase(copy[idx]);
+                }
+            }
+            ans.add(new String(copy));
         }
         return ans;
     }

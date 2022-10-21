@@ -2,7 +2,9 @@ package com.shuangpeng.Problem.p1801_1900;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * @Description: Problem1857LargestColorValueInADirectedGraph（有向图中最大颜色值）
@@ -66,5 +68,42 @@ public class Problem1857LargestColorValueInADirectedGraph {
         }
         memo[x] = cnt;
         return cnt;
+    }
+}
+
+class Problem1857LargestColorValueInADirectedGraph0 {
+
+    public int largestPathValue(String colors, int[][] edges) {
+        int n = colors.length();
+        List<Integer>[] graph = new List[n];
+        Arrays.setAll(graph, i -> new ArrayList<>());
+        int[] inDegree = new int[n];
+        for (int[] edge : edges) {
+            int x = edge[0], y = edge[1];
+            graph[x].add(y);
+            inDegree[y]++;
+        }
+        int[][] freq = new int[n][26];
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (inDegree[i] == 0) {
+                q.add(i);
+            }
+        }
+        int ans = 0, found = 0;
+        while (!q.isEmpty()) {
+            found++;
+            int x = q.poll();
+            ans = Math.max(ans, ++freq[x][colors.charAt(x) - 'a']);
+            for (int y : graph[x]) {
+                for (int i = 0; i < 26; i++) {
+                    freq[y][i] = Math.max(freq[y][i], freq[x][i]);
+                }
+                if (--inDegree[y] == 0) {
+                    q.add(y);
+                }
+            }
+        }
+        return found == n ? ans : -1;
     }
 }

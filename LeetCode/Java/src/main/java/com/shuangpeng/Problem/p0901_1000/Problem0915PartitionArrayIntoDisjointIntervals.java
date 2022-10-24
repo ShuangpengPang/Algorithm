@@ -7,7 +7,7 @@ package com.shuangpeng.Problem.p0901_1000;
  */
 public class Problem0915PartitionArrayIntoDisjointIntervals {
 
-    public int partitionDisjoint(int[] nums) {
+    public int partitionDisjoint0(int[] nums) {
         int n = nums.length;
         int[] maxValue = new int[n];
         maxValue[0] = nums[0];
@@ -21,6 +21,18 @@ public class Problem0915PartitionArrayIntoDisjointIntervals {
             }
             minValue = Math.min(minValue, nums[idx]);
             idx--;
+        }
+        return ans + 1;
+    }
+
+    public int partitionDisjoint(int[] nums) {
+        int n = nums.length, ans = 0, max = nums[0];
+        for (int i = 1; i < n; i++) {
+            if (nums[i] < max) {
+                while (ans < i) {
+                    max = Math.max(max, nums[ans++]);
+                }
+            }
         }
         return ans + 1;
     }

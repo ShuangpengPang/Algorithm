@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class Problem1889MinimumSpaceWastedFromPackaging {
 
-    public int minWastedSpace(int[] packages, int[][] boxes) {
+    public int minWastedSpace0(int[] packages, int[][] boxes) {
         Arrays.sort(packages);
         int n = packages.length;
         long[] preSum = new long[n + 1];
@@ -36,6 +36,46 @@ public class Problem1889MinimumSpaceWastedFromPackaging {
     }
 
     private int getIndex(int[] packages, int data) {
+        int left = 0, right = packages.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (packages[mid] <= data) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left - 1;
+    }
+
+    public int minWastedSpace(int[] packages, int[][] boxes) {
+        Arrays.sort(packages);
+        int n = packages.length;
+        long sum = 0;
+        for (int p : packages) {
+            sum += p;
+        }
+        long ans = Long.MAX_VALUE, M = (long) 1e9 + 7;
+        for (int[] box : boxes) {
+            Arrays.sort(box);
+            if (box[box.length - 1] >= packages[n - 1]) {
+                int prev = -1;
+                long s = 0;
+                for (int b : box) {
+                    int idx = binarySearch(packages, b);
+                    s += (long) b * (idx - prev);
+                    prev = idx;
+                    if (prev == n - 1) {
+                        break;
+                    }
+                }
+                ans = Math.min(ans, s - sum);
+            }
+        }
+        return ans == Long.MAX_VALUE ? -1 : (int) (ans % M);
+    }
+
+    private int binarySearch(int[] packages, int data) {
         int left = 0, right = packages.length - 1;
         while (left <= right) {
             int mid = left + (right - left >> 1);

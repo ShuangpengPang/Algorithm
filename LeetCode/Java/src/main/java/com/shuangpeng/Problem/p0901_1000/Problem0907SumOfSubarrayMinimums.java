@@ -134,7 +134,7 @@ public class Problem0907SumOfSubarrayMinimums {
         return ans;
     }
 
-    public int sumSubarrayMins(int[] arr) {
+    public int sumSubarrayMins4(int[] arr) {
         int n = arr.length, M = (int) 1e9 + 7;
         Deque<Integer> stack = new ArrayDeque<>();
         long ans = 0;
@@ -148,6 +148,28 @@ public class Problem0907SumOfSubarrayMinimums {
         while (!stack.isEmpty()) {
             int j = stack.pop();
             ans += (long) arr[j] * (j - (stack.isEmpty() ? -1 : stack.peek())) * (n - j);
+        }
+        return (int) (ans % M);
+    }
+
+    public int sumSubarrayMins(int[] arr) {
+        int n = arr.length;
+        int[] dp = new int[n];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+            if (stack.isEmpty()) {
+                dp[i] = arr[i] * (i + 1);
+            } else {
+                dp[i] = arr[i] * (i - stack.peek()) + dp[stack.peek()];
+            }
+            stack.push(i);
+        }
+        long ans = 0, M = (long) 1e9 + 7;
+        for (int i : dp) {
+            ans += i;
         }
         return (int) (ans % M);
     }

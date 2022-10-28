@@ -105,6 +105,7 @@ public class Problem0907SumOfSubarrayMinimums {
 
     class RepInteger {
         int val, count;
+
         RepInteger(int v, int c) {
             val = v;
             count = c;

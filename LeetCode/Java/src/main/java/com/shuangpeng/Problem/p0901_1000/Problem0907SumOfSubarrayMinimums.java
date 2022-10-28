@@ -1,9 +1,14 @@
 package com.shuangpeng.Problem.p0901_1000;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Stack;
 
-import java.util.*;
-
+/**
+ * @Description: 子数组的最小值之和
+ * @Date 2022/10/28 11:03 AM
+ **/
 public class Problem0907SumOfSubarrayMinimums {
 
     public int sumSubarrayMins0(int[] arr) {
@@ -106,7 +111,7 @@ public class Problem0907SumOfSubarrayMinimums {
         }
     }
 
-    public int sumSubarrayMins(int[] A) {
+    public int sumSubarrayMins3(int[] A) {
         int n = A.length;
         final int M = (int) 1e9 + 7;
         Deque<RepInteger> stack = new ArrayDeque<>();
@@ -127,6 +132,24 @@ public class Problem0907SumOfSubarrayMinimums {
             }
         }
         return ans;
+    }
+
+    public int sumSubarrayMins(int[] arr) {
+        int n = arr.length, M = (int) 1e9 + 7;
+        Deque<Integer> stack = new ArrayDeque<>();
+        long ans = 0;
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                int j = stack.pop();
+                ans += (long) arr[j] * (j - (stack.isEmpty() ? -1 : stack.peek())) * (i - j);
+            }
+            stack.push(i);
+        }
+        while (!stack.isEmpty()) {
+            int j = stack.pop();
+            ans += (long) arr[j] * (j - (stack.isEmpty() ? -1 : stack.peek())) * (n - j);
+        }
+        return (int) (ans % M);
     }
 
 //    public static void main(String[] args) {

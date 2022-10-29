@@ -7,6 +7,7 @@ package com.shuangpeng.competition.第301到310场周赛.第306场周赛;
  */
 public class Problem2373LargestLocalValueInAMatrix {
 
+    // 比赛时写法
     public int[][] largestLocal(int[][] grid) {
         int n = grid.length;
         int[][] ans = new int[n - 2][n - 2];

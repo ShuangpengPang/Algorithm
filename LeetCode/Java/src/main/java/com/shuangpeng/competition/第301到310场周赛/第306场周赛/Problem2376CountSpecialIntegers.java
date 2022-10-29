@@ -42,7 +42,7 @@ public class Problem2376CountSpecialIntegers {
         return cnt;
     }
 
-    public int countSpecialNumbers(int n) {
+    public int countSpecialNumbers1(int n) {
         char[] cs = Integer.toString(n).toCharArray();
         int[][] dp = new int[cs.length][1 << 10];
         Arrays.setAll(dp, i -> {
@@ -70,6 +70,51 @@ public class Problem2376CountSpecialIntegers {
         }
         if (!isLimit && isNum) {
             memo[idx][mask] = ans;
+        }
+        return ans;
+    }
+
+    public int countSpecialNumbers(int n) {
+        int[] arr = toArray(n);
+        int m = arr.length, ans = 0;
+        for (int i = 0; i < m - 1; i++) {
+            ans += 9 * perm(9, i - 1);
+        }
+        boolean[] visited = new boolean[10];
+        int i = 0;
+        for (; i < m; i++) {
+            int num = arr[i];
+            for (int j = i == 0 ? 1 : 0; j < num; j++) {
+                if (!visited[j]) {
+                    ans += perm(9 - i, m - i - 2);
+                }
+            }
+            if (visited[num]) {
+                break;
+            }
+            visited[num] = true;
+        }
+        return i == m ? ans + 1 : ans;
+    }
+
+    private int[] toArray(int n) {
+        int[] arr = new int[10];
+        int len = 0;
+        while (n > 0) {
+            arr[len++] = n % 10;
+            n /= 10;
+        }
+        int[] ans = new int[len];
+        for (int i = 0; i < len; i++) {
+            ans[i] = arr[len - i - 1];
+        }
+        return ans;
+    }
+
+    private int perm(int m, int n) {
+        int ans = 1;
+        while (n-- >= 0) {
+            ans *= m--;
         }
         return ans;
     }

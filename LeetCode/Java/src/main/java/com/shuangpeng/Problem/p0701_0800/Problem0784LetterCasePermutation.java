@@ -90,3 +90,27 @@ public class Problem0784LetterCasePermutation {
         return ans;
     }
 }
+
+class Problem0784LetterCasePermutation0 {
+
+    public List<String> letterCasePermutation(String s) {
+        List<String> ans = new ArrayList<>();
+        dfs(s.toCharArray(), 0, ans);
+        return ans;
+    }
+
+    private void dfs(char[] cs, int idx, List<String> ans) {
+        if (cs.length == idx) {
+            ans.add(new String(cs));
+            return;
+        }
+        if (!Character.isLetter(cs[idx])) {
+            dfs(cs, idx + 1, ans);
+            return;
+        }
+        dfs(cs, idx + 1, ans);
+        cs[idx] = (char) (cs[idx] ^ 32);
+        dfs(cs, idx + 1, ans);
+        cs[idx] = (char) (cs[idx] ^ 32);
+    }
+}

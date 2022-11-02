@@ -10,6 +10,7 @@ import java.util.Set;
  */
 public class Problem2395FindSubarraysWithEqualSum {
 
+    // 比赛时写法
     public boolean findSubarrays(int[] nums) {
         int n = nums.length;
         Set<Integer> set = new HashSet<>();

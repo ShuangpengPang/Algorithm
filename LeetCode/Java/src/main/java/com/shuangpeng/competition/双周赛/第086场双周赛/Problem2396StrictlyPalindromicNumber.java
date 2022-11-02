@@ -7,6 +7,7 @@ package com.shuangpeng.competition.双周赛.第086场双周赛;
  */
 public class Problem2396StrictlyPalindromicNumber {
 
+    // 比赛时写法
     public boolean isStrictlyPalindromic(int n) {
         return false;
     }

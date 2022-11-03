@@ -10,7 +10,7 @@ import java.util.Comparator;
  */
 public class Problem0833FindAndReplaceInString {
 
-    public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
+    public String findReplaceString0(String s, int[] indices, String[] sources, String[] targets) {
         int n = s.length(), k = indices.length;
         Integer[] ids = new Integer[k];
         Arrays.setAll(ids, i -> i);
@@ -42,5 +42,27 @@ public class Problem0833FindAndReplaceInString {
             }
         }
         return true;
+    }
+
+    public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
+        int n = s.length(), m = indices.length;
+        int[] match = new int[n];
+        Arrays.fill(match, -1);
+        for (int i = 0; i < m; i++) {
+            if (s.startsWith(sources[i], indices[i])) {
+                match[indices[i]] = i;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n;) {
+            int j = match[i];
+            if (j != -1) {
+                sb.append(targets[j]);
+                i += sources[j].length();
+            } else {
+                sb.append(s.charAt(i++));
+            }
+        }
+        return sb.toString();
     }
 }

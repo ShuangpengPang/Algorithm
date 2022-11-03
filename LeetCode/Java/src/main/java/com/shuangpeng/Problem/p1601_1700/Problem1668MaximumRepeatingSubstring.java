@@ -10,7 +10,7 @@ import java.util.Deque;
  */
 public class Problem1668MaximumRepeatingSubstring {
 
-    public int maxRepeating(String sequence, String word) {
+    public int maxRepeating0(String sequence, String word) {
         int n = sequence.length(), m = word.length();
         Deque<Integer> q = new ArrayDeque<>();
         int ans = 0;
@@ -37,5 +37,38 @@ public class Problem1668MaximumRepeatingSubstring {
             }
         }
         return true;
+    }
+
+    public int maxRepeating(String sequence, String word) {
+        int n = sequence.length(), m = word.length();
+        int[] fail = new int[m];
+        for (int i = 1; i < m; i++) {
+            char c = word.charAt(i);
+            int j = fail[i - 1];
+            while (j > 0 && word.charAt(j) != c) {
+                j = fail[j - 1];
+            }
+            if (word.charAt(j) == c) {
+                fail[i] = j + 1;
+            }
+        }
+        int j = 0;
+        int[] dp = new int[n];
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            char c = sequence.charAt(i);
+            while (j > 0 && word.charAt(j) != c) {
+                j = fail[j - 1];
+            }
+            if (word.charAt(j) == c) {
+                j++;
+            }
+            if (j == m) {
+                dp[i] = 1 + (i >= m ? dp[i - m] : 0);
+                ans = Math.max(ans, dp[i]);
+                j = fail[m - 1];
+            }
+        }
+        return ans;
     }
 }

@@ -23,12 +23,19 @@ public class Problem0754ReachANumber {
         }
     }
 
-    public int reachNumber(int target) {
+    public int reachNumbe1(int target) {
         target = Math.abs(target);
         int s = 0, n = 0;
         while (s < target || ((s - target) & 1) == 1) {
             s += ++n;
         }
         return n;
+    }
+
+    public int reachNumber(int target) {
+        target = Math.abs(target);
+        long n = (long) Math.ceil((Math.sqrt(1 + 8.0 * target) - 1) / 2);
+        long d = n * (n + 1) / 2 - target;
+        return (int) ((d & 1) == 0 ? n : n + 1 + n % 2);
     }
 }

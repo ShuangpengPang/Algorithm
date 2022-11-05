@@ -119,4 +119,44 @@ class Problem1106ParsingABooleanExpression1 {
     }
 }
 
+class Problem1106ParsingABooleanExpression2 {
 
+    public boolean parseBoolExpr(String expression) {
+        idx = 0;
+        return parse(expression);
+    }
+
+    int idx;
+
+    private boolean parse(String expression) {
+        char c = expression.charAt(idx);
+        if (c == 't') {
+            return true;
+        } else if (c == 'f') {
+            return false;
+        }
+        idx++;
+        if (c == '!') {
+            idx++;
+            boolean ans = !parse(expression);
+            idx++;
+            return ans;
+        } else if (c == '&') {
+            boolean ans = true;
+            while (expression.charAt(idx) != ')') {
+                idx++;
+                ans &= parse(expression);
+                idx++;
+            }
+            return ans;
+        } else {
+            boolean ans = false;
+            while (expression.charAt(idx) != ')') {
+                idx++;
+                ans |= parse(expression);
+                idx++;
+            }
+            return ans;
+        }
+    }
+}

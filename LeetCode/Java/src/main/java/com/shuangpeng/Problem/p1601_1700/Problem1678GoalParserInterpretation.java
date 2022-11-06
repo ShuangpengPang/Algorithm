@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1601_1700;
 
 /**
+ * @author ShuangPengPang
  * @Description: Problem1678GoalParserInterpretation（设计Goal解析器）
  * @Date 2022/11/6 8:57 PM
  * @Version 1.0

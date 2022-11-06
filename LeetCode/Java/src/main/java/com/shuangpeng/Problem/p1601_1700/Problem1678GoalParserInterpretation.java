@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1601_1700;
  */
 public class Problem1678GoalParserInterpretation {
 
-    public String interpret(String command) {
+    public String interpret0(String command) {
         int n = command.length();
         StringBuilder sb = new StringBuilder();
         int i = 0;
@@ -22,6 +22,28 @@ public class Problem1678GoalParserInterpretation {
             } else {
                 sb.append("al");
                 i += 4;
+            }
+        }
+        return sb.toString();
+    }
+
+    public String interpret1(String command) {
+        return command.replace("()", "o").replace("(al)", "al");
+    }
+
+    public String interpret(String command) {
+        int n = command.length();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            char c = command.charAt(i);
+            if (c == 'G') {
+                sb.append(c);
+            } else if (c == '(') {
+                if (command.charAt(i + 1) == ')') {
+                    sb.append('o');
+                } else {
+                    sb.append("al");
+                }
             }
         }
         return sb.toString();

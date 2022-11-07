@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Problem0816AmbiguousCoordinates {
 
-    public List<String> ambiguousCoordinates(String s) {
+    public List<String> ambiguousCoordinates0(String s) {
         int n = s.length();
         List<String> ans = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
@@ -46,6 +46,49 @@ public class Problem0816AmbiguousCoordinates {
                 break;
             }
             ans.add(s1 + '.' + s2);
+        }
+        return ans;
+    }
+
+    public List<String> ambiguousCoordinates(String s) {
+        int n = s.length();
+        List<String> ans = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 2; i < n - 1; i++) {
+            List<String> list1 = getPos(s.substring(1, i));
+            if (list1.isEmpty()) {
+                continue;
+            }
+            List<String> list2 = getPos(s.substring(i, n - 1));
+            if (list2.isEmpty()) {
+                continue;
+            }
+            for (String s1 : list1) {
+                for (String s2 : list2) {
+                    sb.setLength(0);
+                    sb.append('(').append(s1).append(", ").append(s2).append(')');
+                    ans.add(sb.toString());
+                }
+            }
+        }
+        return ans;
+    }
+
+    private List<String> getPos(String s) {
+        int n = s.length();
+        List<String> ans = new ArrayList<>();
+        if (s.charAt(0) != '0' || s.equals("0")) {
+            ans.add(s);
+        }
+        if (s.charAt(n - 1) == '0') {
+            return ans;
+        }
+        for (int i = 1; i < n; i++) {
+            String s1 = s.substring(0, i);
+            if (s1.charAt(0) == '0' && s1.length() > 1) {
+                break;
+            }
+            ans.add(s1 + '.' + s.substring(i));
         }
         return ans;
     }

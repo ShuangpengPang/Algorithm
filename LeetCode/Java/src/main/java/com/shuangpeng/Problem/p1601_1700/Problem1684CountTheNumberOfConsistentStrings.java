@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1601_1700;
  */
 public class Problem1684CountTheNumberOfConsistentStrings {
 
-    public int countConsistentStrings(String allowed, String[] words) {
+    public int countConsistentStrings0(String allowed, String[] words) {
         int n = allowed.length();
         boolean[] map = new boolean[26];
         for (int i = 0; i < n; i++) {
@@ -25,6 +25,24 @@ public class Problem1684CountTheNumberOfConsistentStrings {
                 }
             }
             if (valid) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public int countConsistentStrings(String allowed, String[] words) {
+        int n = allowed.length(), mask = 0;
+        for (int i = 0; i < n; i++) {
+            mask |= 1 << allowed.charAt(i) - 'a';
+        }
+        int ans = 0;
+        for (String w : words) {
+            int l = w.length(), m = 0;
+            for (int i = 0; i < l; i++) {
+                m |= 1 << w.charAt(i) - 'a';
+            }
+            if ((mask | m) == mask) {
                 ans++;
             }
         }

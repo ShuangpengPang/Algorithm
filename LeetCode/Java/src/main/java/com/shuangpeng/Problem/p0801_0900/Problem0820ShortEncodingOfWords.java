@@ -28,3 +28,42 @@ public class Problem0820ShortEncodingOfWords {
         return ans;
     }
 }
+
+class Problem0820ShortEncodingOfWords0 {
+
+    class Trie {
+        Trie[] tries = new Trie[26];
+    }
+
+    int ans = 0;
+
+    public int minimumLengthEncoding(String[] words) {
+        Trie root = new Trie();
+        for (String w : words) {
+            Trie trie = root;
+            for (int i = w.length() - 1; i >= 0; i--) {
+                int j = w.charAt(i) - 'a';
+                if (trie.tries[j] == null) {
+                    trie.tries[j] = new Trie();
+                }
+                trie = trie.tries[j];
+            }
+        }
+        ans = 0;
+        dfs(root, 0);
+        return ans;
+    }
+
+    private void dfs(Trie root, int depth) {
+        boolean isWord = true;
+        for (int i = 0; i < 26; i++) {
+            if (root.tries[i] != null) {
+                isWord = false;
+                dfs(root.tries[i], depth + 1);
+            }
+        }
+        if (isWord && depth > 0) {
+            ans += depth + 1;
+        }
+    }
+}

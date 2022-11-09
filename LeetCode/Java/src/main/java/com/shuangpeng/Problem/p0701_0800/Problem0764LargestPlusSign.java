@@ -1,6 +1,8 @@
 package com.shuangpeng.Problem.p0701_0800;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @description: 最大加号标志
@@ -44,7 +46,7 @@ public class Problem0764LargestPlusSign {
         return k;
     }
 
-    public int orderOfLargestPlusSign(int n, int[][] mines) {
+    public int orderOfLargestPlusSign1(int n, int[][] mines) {
         boolean[][] grid = new boolean[n][n];
         for (int[] m : mines) {
             grid[m[0]][m[1]] = true;
@@ -70,6 +72,44 @@ public class Problem0764LargestPlusSign {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 ans = Math.max(ans, Math.min(Math.min(left[i][j], right[i][j]), Math.min(top[i][j], down[i][j])));
+            }
+        }
+        return ans;
+    }
+
+    public int orderOfLargestPlusSign(int n, int[][] mines) {
+        int[][] dp = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dp[i], n);
+        }
+        Set<Integer> banned = new HashSet<>();
+        for (int[] m : mines) {
+            banned.add(m[0] * n + m[1]);
+        }
+        for (int i = 0; i < n; i++) {
+            int cnt = 0;
+            for (int j = 0; j < n; j++) {
+                cnt = banned.contains(i * n + j) ? 0 : cnt + 1;
+                dp[i][j] = Math.min(dp[i][j], cnt);
+            }
+            cnt = 0;
+            for (int j = n - 1; j >= 0; j--) {
+                cnt = banned.contains(i * n + j) ? 0 : cnt + 1;
+                dp[i][j] = Math.min(dp[i][j], cnt);
+            }
+        }
+        int ans = 0;
+        for (int j = 0; j < n; j++) {
+            int cnt = 0;
+            for (int i = 0; i < n; i++) {
+                cnt = banned.contains(i * n + j) ? 0 : cnt + 1;
+                dp[i][j] = Math.min(dp[i][j], cnt);
+            }
+            cnt = 0;
+            for (int i = n - 1; i >= 0; i--) {
+                cnt = banned.contains(i * n + j) ? 0 : cnt + 1;
+                dp[i][j] = Math.min(dp[i][j], cnt);
+                ans = Math.max(ans, dp[i][j]);
             }
         }
         return ans;

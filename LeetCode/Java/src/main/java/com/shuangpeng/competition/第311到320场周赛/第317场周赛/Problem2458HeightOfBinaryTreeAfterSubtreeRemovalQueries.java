@@ -63,4 +63,35 @@ public class Problem2458HeightOfBinaryTreeAfterSubtreeRemovalQueries {
 }
 
 class Problem2458HeightOfBinaryTreeAfterSubtreeRemovalQueries0 {
+
+    public int[] treeQueries(TreeNode root, int[] queries) {
+        Map<Integer, Integer> height = new HashMap<>();
+        getHeight(root, height);
+        int[] dp = new int[height.size()];
+        dfs(root, dp, height, 0, 0);
+        int n = queries.length;
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[i] = dp[queries[i] - 1];
+        }
+        return ans;
+    }
+
+    private int getHeight(TreeNode root, Map<Integer, Integer> height) {
+        if (root == null) {
+            return 0;
+        }
+        int h = 1 + Math.max(getHeight(root.left, height), getHeight(root.right, height));
+        height.put(root.val, h);
+        return h;
+    }
+
+    private void dfs(TreeNode root, int[] dp, Map<Integer, Integer> height, int depth, int h) {
+        if (root == null) {
+            return;
+        }
+        dp[root.val - 1] = h;
+        dfs(root.left, dp, height, depth + 1, Math.max(h, depth + (root.right == null ? 0 : height.get(root.right.val))));
+        dfs(root.right, dp, height, depth + 1, Math.max(h, depth + (root.left == null ? 0 : height.get(root.left.val))));
+    }
 }

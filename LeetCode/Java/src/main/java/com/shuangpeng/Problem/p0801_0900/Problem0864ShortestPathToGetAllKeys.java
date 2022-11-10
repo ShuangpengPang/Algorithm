@@ -2,6 +2,10 @@ package com.shuangpeng.Problem.p0801_0900;
 
 import java.util.*;
 
+/**
+ * @description: 获取所有钥匙的最短路径
+ * @date 2022/11/10 2:48 PM
+ **/
 public class Problem0864ShortestPathToGetAllKeys {
 
     public int shortestPathAllKeys0(String[] grid) {
@@ -272,5 +276,70 @@ public class Problem0864ShortestPathToGetAllKeys {
             }
         }
         return -1;
+    }
+}
+
+class Problem0864ShortestPathToGetAllKeys0 {
+
+    public int shortestPathAllKeys(String[] grid) {
+        int m = grid.length, n = grid[0].length();
+        int startX = -1, startY = -1;
+        int keyCount = 0;
+        for (int i = 0; i < m; i++) {
+            String s = grid[i];
+            for (int j = 0; j < n; j++) {
+                char c = s.charAt(j);
+                if (c == '@') {
+                    startX = i;
+                    startY = j;
+                } else if (Character.isLowerCase(c)) {
+                    keyCount++;
+                }
+            }
+        }
+        if (keyCount == 0) {
+            return 0;
+        }
+        boolean[] visited = new boolean[1 << (10 + keyCount)];
+        Queue<Integer> q = new LinkedList<>();
+        int code = getCode(startX, startY, 0);
+        q.offer(code);
+        visited[code] = true;
+        int[] dirs = {-1, 0, 1, 0, -1};
+        int step = 0, target = (1 << keyCount) - 1;
+        while (!q.isEmpty()) {
+            step++;
+            for (int i = q.size() - 1; i >= 0; i--) {
+                int num = q.poll(), x = num & 31, y = (num >> 5) & 31, k = num >> 10;
+                for (int d = 0; d < 4; d++) {
+                    int nx = x + dirs[d], ny = y + dirs[d + 1];
+                    if (nx < 0 || nx >= m || ny < 0 || ny >= n) {
+                        continue;
+                    }
+                    char c = grid[nx].charAt(ny);
+                    if (c == '#' || (c >= 'A' && c <= 'Z' && ((k >> (c - 'A')) & 1) == 0)) {
+                        continue;
+                    }
+                    int nk = k;
+                    if (c >= 'a' && c <= 'z') {
+                        nk |= 1 << (c - 'a');
+                        if (nk == target) {
+                            return step;
+                        }
+                    }
+                    int h = getCode(nx, ny, nk);
+                    if (visited[h]) {
+                        continue;
+                    }
+                    visited[h] = true;
+                    q.offer(h);
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int getCode(int x, int y, int k) {
+        return x | y << 5 | k << 10;
     }
 }

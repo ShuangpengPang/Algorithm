@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p1701_1800;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -21,5 +25,23 @@ public class Problem1704DetermineIfStringHalvesAreAlike {
             }
         }
         return cnt1 == cnt2;
+    }
+}
+
+class Problem1704DetermineIfStringHalvesAreAlike0 {
+
+    private static final Set<Character> set = new HashSet<>(Arrays.asList('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'));
+
+    public boolean halvesAreAlike(String s) {
+        int n = s.length() >> 1, cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (set.contains(s.charAt(i))) {
+                cnt++;
+            }
+            if (set.contains(s.charAt(i + n))) {
+                cnt--;
+            }
+        }
+        return cnt == 0;
     }
 }

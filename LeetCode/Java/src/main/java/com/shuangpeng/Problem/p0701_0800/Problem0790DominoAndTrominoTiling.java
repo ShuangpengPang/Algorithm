@@ -123,3 +123,54 @@ public class Problem0790DominoAndTrominoTiling {
         return a10;
     }
 }
+
+class Problem0790DominoAndTrominoTiling0 {
+
+    public int numTilings(int n) {
+        int[][] A = {
+                {0, 1, 1, 1},
+                {1, 1, 0, 0},
+                {0, 1, 0, 1},
+                {0, 1, 1, 0},
+        };
+        int[][] ans = {{1, 1, 0, 0}};
+        ans = matrixMultiply(ans, matrixPower(A, n - 1));
+        return ans[0][1];
+    }
+
+    private int[][] matrixPower(int[][] A, int p) {
+        int n = A.length;
+        int[][] ans = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            ans[i][i] = 1;
+        }
+        int[][] B = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            B[i] = A[i].clone();
+        }
+        while (p > 0) {
+            if ((p & 1) == 1) {
+                ans = matrixMultiply(ans, B);
+            }
+            p >>= 1;
+            B = matrixMultiply(B, B);
+        }
+        return ans;
+    }
+
+    private int[][] matrixMultiply(int[][] A, int[][] B) {
+        int m = A.length, n = B[0].length;
+        long M = (long) 1e9 + 7;
+        int[][] C = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                long res = 0L;
+                for (int k = 0; k < B.length; k++) {
+                    res += (long) A[i][k] * B[k][j];
+                }
+                C[i][j] = (int) (res % M);
+            }
+        }
+        return C;
+    }
+}

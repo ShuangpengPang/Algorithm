@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p0701_0800;
 
+/**
+ * @description: 多米诺和托米诺平铺
+ * @date 2022/11/12 11:40 AM
+ **/
 public class Problem0790DominoAndTrominoTiling {
 
     public int numTilings0(int n) {
@@ -65,7 +69,7 @@ public class Problem0790DominoAndTrominoTiling {
         return (int) dp[0];
     }
 
-    public int numTilings(int N) {
+    public int numTilings4(int N) {
         final int M = (int) 1e9 + 7;
         int[][] dp = {{1, 0, 0, 0}};
         int[][] T = {
@@ -103,5 +107,19 @@ public class Problem0790DominoAndTrominoTiling {
             }
         }
         return C;
+    }
+
+    public int numTilings(int n) {
+        int a20 = 1, a10 = 1, a11 = 0, a12 = 0, M = (int) 1e9 + 7;
+        for (int i = 2; i <= n; i++) {
+            int t0 = (int) (((long) a10 + a11 + a12 + a20) % M);
+            int t1 = (a20 + a12) % M;
+            int t2 = (a20 + a11) % M;
+            a20 = a10;
+            a10 = t0;
+            a11 = t1;
+            a12 = t2;
+        }
+        return a10;
     }
 }

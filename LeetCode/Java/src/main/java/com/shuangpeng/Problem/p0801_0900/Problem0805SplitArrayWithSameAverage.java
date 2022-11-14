@@ -199,7 +199,7 @@ public class Problem0805SplitArrayWithSameAverage {
         return false;
     }
 
-    public boolean splitArraySameAverage(int[] nums) {
+    public boolean splitArraySameAverage4(int[] nums) {
         int n = nums.length, n1 = n >> 1, n2 = n - n1, s = 0;
         for (int num : nums) {
             s += num;
@@ -242,6 +242,49 @@ public class Problem0805SplitArrayWithSameAverage {
             map.put(s, map.getOrDefault(s, 0) + 1);
         }
         return map;
+    }
+
+    public boolean splitArraySameAverage(int[] nums) {
+        int n = nums.length, sum = 0;
+        if (n == 1) {
+            return false;
+        }
+        for (int num : nums) {
+            sum += num;
+        }
+        for (int i = 0; i < n; i++) {
+            nums[i] = n * nums[i] - sum;
+        }
+        int n1 = (n + 1) >> 1, n2 = n - n1;
+        Set<Integer> set = new HashSet<>();
+        for (int i = 1; i < 1 << n1; i++) {
+            int s = 0;
+            for (int j = 0; j < n1; j++) {
+                if (((i >> j) & 1) == 1) {
+                    s += nums[j];
+                }
+            }
+            if (s == 0) {
+                return true;
+            }
+            set.add(s);
+        }
+        int sumExcept = 0;
+        for (int i = n1; i < n; i++) {
+            sumExcept += nums[i];
+        }
+        for (int i = 1; i < 1 << n2; i++) {
+            int s = 0;
+            for (int j = 0; j < n2; j++) {
+                if (((i >> j) & 1) == 1) {
+                    s += nums[n1 + j];
+                }
+            }
+            if (s == 0 || (s != sumExcept && set.contains(-s))) {
+                return true;
+            }
+        }
+        return false;
     }
 
 //    public static void main(String[] args) {

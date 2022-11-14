@@ -4,6 +4,10 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * @description: 数组的均值分割
+ * @date 2022/11/14 3:04 PM
+ **/
 public class Problem0805SplitArrayWithSameAverage {
 
     // MTE
@@ -175,7 +179,7 @@ public class Problem0805SplitArrayWithSameAverage {
     }
 
     // 参考：https://leetcode-cn.com/problems/split-array-with-same-average/solution/0-1bei-bao-zhuang-tai-ya-suo-by-guo-ke-f-pgvn/
-    public boolean splitArraySameAverage(int[] nums) {
+    public boolean splitArraySameAverage3(int[] nums) {
         int n = nums.length;
         int sum = Arrays.stream(nums).sum();
         int half = sum >> 1;
@@ -193,6 +197,51 @@ public class Problem0805SplitArrayWithSameAverage {
             }
         }
         return false;
+    }
+
+    public boolean splitArraySameAverage(int[] nums) {
+        int n = nums.length, n1 = n >> 1, n2 = n - n1, s = 0;
+        for (int num : nums) {
+            s += num;
+        }
+        int sum = 0;
+        int[] nums1 = new int[n1], nums2 = new int[n2];
+        for (int i = 0; i < n; i++) {
+            int val = n * nums[i] - s;
+            if (i < n1) {
+                nums1[i] = val;
+                sum += val;
+            } else {
+                nums2[i - n1] = val;
+            }
+        }
+        Map<Integer, Integer> map1 = calculate(nums1), map2 = calculate(nums2);
+        for (Map.Entry<Integer, Integer> entry : map1.entrySet()) {
+            int s1 = entry.getKey(), s2 = -s1;
+            if (s1 == 0) {
+                return true;
+            }
+            int cnt1 = entry.getValue(), cnt2 = map2.getOrDefault(s2, 0);
+            if (cnt2 > 0 && (cnt1 > 1 || cnt2 > 1 || s1 != sum)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Map<Integer, Integer> calculate(int[] nums) {
+        int n = nums.length, N = 1 << n;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 1; i < N; i++) {
+            int s = 0;
+            for (int j = 0; j < n; j++) {
+                if (((i >> j) & 1) == 1) {
+                    s += nums[j];
+                }
+            }
+            map.put(s, map.getOrDefault(s, 0) + 1);
+        }
+        return map;
     }
 
 //    public static void main(String[] args) {

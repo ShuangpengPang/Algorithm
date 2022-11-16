@@ -13,11 +13,13 @@ import java.util.List;
 public class Problem1916CountWaysToBuildRoomsInAnAntColony {
 
     private static final int N = (int) 1e5, M = (int) 1e9 + 7;
-    private static final int[] c = new int[N];
+    private static final int[] fac = new int[N], inv = new int[N];
     static {
-        c[0] = 1;
+        fac[0] = 1;
+        inv[0] = 1;
         for (int i = 1; i < N; i++) {
-            c[i] = (int) ((long) c[i - 1] * i % M);
+            fac[i] = (int) ((long) fac[i - 1] * i % M);
+            inv[i] = inversePower(fac[i], M - 2);
         }
     }
 
@@ -32,17 +34,18 @@ public class Problem1916CountWaysToBuildRoomsInAnAntColony {
     }
 
     private int dfs(List<Integer>[] g, int[] cnt, int x) {
-        int count = 0, p = 1, a = 1;
+        int ans = 1;
+        cnt[x] = 0;
         for (int y : g[x]) {
-            p = (int) ((long) p * dfs(g, cnt, y) % M);
-            count += cnt[y];
-            a = (int) ((long) a * c[cnt[y]] % M);
+            ans = (int) ((long) ans * dfs(g, cnt, y) % M * inv[cnt[y]] % M);
+            cnt[x] += cnt[y];
         }
-        cnt[x] = count + 1;
-        return (int) ((long) p * c[count] % M * inversePower(a, M - 2) % M);
+        ans = (int) ((long) ans * fac[cnt[x]] % M);
+        cnt[x]++;
+        return ans;
     }
 
-    private int inversePower(int a, int p) {
+    private static int inversePower(int a, int p) {
         int ans = 1;
         while (p > 0) {
             if ((p & 1) == 1) {

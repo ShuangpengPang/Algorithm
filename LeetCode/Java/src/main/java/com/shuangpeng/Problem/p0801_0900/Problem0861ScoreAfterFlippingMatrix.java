@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0801_0900;
  */
 public class Problem0861ScoreAfterFlippingMatrix {
 
-    public int matrixScore(int[][] grid) {
+    public int matrixScore0(int[][] grid) {
         int m = grid.length, n = grid[0].length;
         for (int i = 0; i < m; i++) {
             if (grid[i][0] == 0) {
@@ -27,6 +27,22 @@ public class Problem0861ScoreAfterFlippingMatrix {
             }
             ans += Math.max(cnt, m - cnt) * b;
             b <<= 1;
+        }
+        return ans;
+    }
+
+    public int matrixScore(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int ans = 0, p = 1;
+        for (int j = n - 1; j >= 0; j--) {
+            int cnt = 0;
+            for (int i = 0; i < m; i++) {
+                if ((grid[i][j] ^ grid[i][0]) == 0) {
+                    cnt++;
+                }
+            }
+            ans += Math.max(cnt, m - cnt) * p;
+            p <<= 1;
         }
         return ans;
     }

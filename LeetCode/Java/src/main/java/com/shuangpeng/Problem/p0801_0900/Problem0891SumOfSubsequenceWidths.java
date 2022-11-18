@@ -46,7 +46,7 @@ public class Problem0891SumOfSubsequenceWidths {
         return (int) ans;
     }
 
-    public int sumSubseqWidths(int[] nums) {
+    public int sumSubseqWidths2(int[] nums) {
         Arrays.sort(nums);
         int n = nums.length, M = (int) 1e9 + 7;
         long ans = 0L, p = 1L, d = 0;
@@ -56,5 +56,32 @@ public class Problem0891SumOfSubsequenceWidths {
             ans = (ans + nums[i] * (p - 1) - d + M) % M;
         }
         return (int) ans;
+    }
+
+    // 计数每个元素的贡献值
+    public int sumSubseqWidths3(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length, M = (int) 1e9 + 7;
+        long[] p = new long[n];
+        p[0] = 1L;
+        for (int i = 1; i < n; i++) {
+            p[i] = (p[i - 1] << 1) % M;
+        }
+        long ans = 0;
+        for (int i = 0; i < n; i++) {
+            ans = (ans + nums[i] * (p[i] - p[n - i - 1])) % M;
+        }
+        return (int) ((ans + M) % M);
+    }
+
+    public int sumSubseqWidths(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        long ans = 0L, p = 1L, M = (long) 1e9 + 7;
+        for (int i = 0; i < n; i++) {
+            ans = (ans + (nums[i] - nums[n - i - 1]) * p) % M;
+            p = (p << 1) % M;
+        }
+        return (int) ((ans + M) % M);
     }
 }

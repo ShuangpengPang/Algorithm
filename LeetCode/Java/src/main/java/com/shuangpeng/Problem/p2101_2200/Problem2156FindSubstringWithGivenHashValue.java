@@ -15,13 +15,13 @@ public class Problem2156FindSubstringWithGivenHashValue {
             hash = (hash + (s.charAt(i) - 'a' + 1) * p) % modulo;
             p = (p * power) % modulo;
         }
-        String ans = hash == hashValue ? s.substring(n - k) : "";
+        int pos = hash == hashValue ? n - k : -1;
         for (int i = n - k - 1; i >= 0; i--) {
-            hash = ((hash * power - (s.charAt(i + k) - 'a' + 1) * p + s.charAt(i) - 'a' + 1) % modulo + modulo) % modulo;
+            hash = ((hash * power - (long) (s.charAt(i + k) - 'a' + 1) * p + s.charAt(i) - 'a' + 1) % modulo + modulo) % modulo;
             if (hash == hashValue) {
-                ans = s.substring(i, i + k);
+                pos = i;
             }
         }
-        return ans;
+        return s.substring(pos, pos + k);
     }
 }

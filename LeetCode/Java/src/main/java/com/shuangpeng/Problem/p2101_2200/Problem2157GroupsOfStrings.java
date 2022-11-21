@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p2101_2200;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,5 +62,64 @@ public class Problem2157GroupsOfStrings {
             parent.put(p2, p1);
             size.put(p1, s);
         }
+    }
+}
+
+class Problem2157GroupsOfStrings0 {
+
+    public int[] groupStrings(String[] words) {
+        int n = words.length;
+        int[] parent = new int[n];
+        Arrays.setAll(parent, i -> i);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int h = getHash(words[i]);
+            int j = map.getOrDefault(h, -1);
+            if (j != -1) {
+                union(parent, i, j);
+            } else {
+                map.put(h, i);
+            }
+            for (int k = 0; k < 26; k++) {
+                if (((h >> k) & 1) == 1) {
+                    int h1 = h ^ (1 << k);
+                    if (map.containsKey(h1)) {
+                        union(parent, i, map.get(h1));
+                    } else {
+                        map.put(h1, i);
+                    }
+                }
+            }
+        }
+        Map<Integer, Integer> size = new HashMap<>();
+        int maxSize = 0;
+        for (int i = 0; i < n; i++) {
+            int p = find(parent, i);
+            int j = size.getOrDefault(p, 0) + 1;
+            size.put(p, j);
+            maxSize = Math.max(maxSize, j);
+        }
+        return new int[]{size.size(), maxSize};
+    }
+
+    private int getHash(String w) {
+        int h = 0, n = w.length();
+        for (int i = 0; i < n; i++) {
+            h |= 1 << (w.charAt(i) - 'a');
+        }
+        return h;
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px < py) {
+            parent[py] = px;
+        } else if (py < px) {
+            parent[px] = py;
+        }
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = x == parent[x] ? x : find(parent, parent[x]);
     }
 }

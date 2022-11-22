@@ -63,3 +63,33 @@ class Problem0878NthMagicalNumber0 {
         return b == 0 ? a : gcd(b, a % b);
     }
 }
+
+class Problem0878NthMagicalNumber1 {
+    static final int MOD = 1000000007;
+
+    public int nthMagicalNumber(int n, int a, int b) {
+        long l = lcm(a, b), c = l / a + l / b - 1;
+        long ans = l * (n / c), m = n % c;
+        long addA = 0, addB = 0, add = 0;
+        for (int i = 0; i < m; i++) {
+            if (addA < addB) {
+                addA += a;
+            } else if (addA > addB) {
+                addB += b;
+            } else {
+                addA += a;
+                addB += b;
+            }
+            add = Math.min(addA, addB);
+        }
+        return (int) ((ans + add) % MOD);
+    }
+
+    private int lcm(int a, int b) {
+        return a * b / gcd(a, b);
+    }
+
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+}

@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p0801_0900;
 
+/**
+ * @description: 第N个神奇数字
+ * @date 2022/11/22 10:24 AM
+ **/
 public class Problem0878NthMagicalNumber {
 
     public int nthMagicalNumber(int n, int a, int b) {
@@ -32,52 +36,30 @@ public class Problem0878NthMagicalNumber {
         return ans;
     }
 
-//    public int nthMagicalNumber(int N, int A, int B) {
-//        int MOD = 1_000_000_007;
-//        int L = A / gcd(A, B) * B;
+//    public static void main(String[] args) {
+//        Problem0878NthMagicalNumber a = new Problem0878NthMagicalNumber();
 //
-//        long lo = 0;
-//        long hi = (long) 1e15;
-//        while (lo < hi) {
-//            long mi = lo + (hi - lo) / 2;
-//            // If there are not enough magic numbers below mi...
-//            if (mi / A + mi / B - mi / L < N)
-//                lo = mi + 1;
-//            else
-//                hi = mi;
-//        }
-//
-//        return (int) (lo % MOD);
 //    }
-//
-//    public int gcd(int x, int y) {
-//        if (x == 0) return y;
-//        return gcd(y % x, x);
-//    }
+}
 
-    public static void main(String[] args) {
-        Problem0878NthMagicalNumber a = new Problem0878NthMagicalNumber();
+class Problem0878NthMagicalNumber0 {
 
+    public int nthMagicalNumber(int n, int a, int b) {
+        int g = gcd(a, b), c = a * b / g, M = (int) 1e9 + 7;
+        long left = 0, right = (long) n * Math.max(a, b);
+        while (left <= right) {
+            long mid = left + (right - left >> 1);
+            long cnt = mid / a + mid / b - mid / c;
+            if (cnt < n) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return (int) (left % M);
     }
 
-//    public long maxRunTime(int n, int[] batteries) {
-//        int m = batteries.length;
-//        if (m < n) {
-//            return 0;
-//        }
-//        Long[] copy = new Long[m];
-//        for (int i = 0; i < m; ++i) {
-//            copy[i] = (long) batteries[i];
-//        }
-//        Arrays.sort(copy, (a, b) -> b - a);
-//        PriorityQueue<Long> pq = new PriorityQueue<>();
-//        for (int i = 0; i < n; ++i) {
-//            pq.offer(copy[i]);
-//        }
-//        for (int i = n; i < m; ++i) {
-//            long num = pq.poll();
-//            pq.offer(num + copy[i]);
-//        }
-//        return pq.peek();
-//    }
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
 }

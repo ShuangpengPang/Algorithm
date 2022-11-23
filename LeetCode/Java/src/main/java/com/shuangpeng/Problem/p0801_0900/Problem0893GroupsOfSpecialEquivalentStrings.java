@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class Problem0893GroupsOfSpecialEquivalentStrings {
 
-    public int numSpecialEquivGroups(String[] words) {
+    public int numSpecialEquivGroups0(String[] words) {
         int n = words[0].length(), h = n >> 1;
         Set<String> set = new HashSet<>();
         char[] even = new char[n - h], odd = new char[h];
@@ -37,6 +37,20 @@ public class Problem0893GroupsOfSpecialEquivalentStrings {
                 }
             }
             set.add(sb.toString());
+        }
+        return set.size();
+    }
+
+    public int numSpecialEquivGroups(String[] words) {
+        Set<String> set = new HashSet<>();
+        int n = words[0].length();
+        int[] cnt = new int[52];
+        for (String w : words) {
+            Arrays.fill(cnt, 0);
+            for (int i = 0; i < n; i++) {
+                cnt[w.charAt(i) - 'a' + ((i & 1) == 1 ? 26 : 0)]++;
+            }
+            set.add(Arrays.toString(cnt));
         }
         return set.size();
     }

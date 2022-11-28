@@ -1,5 +1,11 @@
 package com.shuangpeng.Problem.p0801_0900;
 
+import java.util.Arrays;
+
+/**
+ * @description: 最大平均值和的分组
+ * @date 2022/11/28 3:49 PM
+ **/
 public class Problem0813LargestSumOfAverages {
 
     public double largestSumOfAverages0(int[] nums, int k) {
@@ -40,7 +46,7 @@ public class Problem0813LargestSumOfAverages {
         return dp[n];
     }
 
-    public double largestSumOfAverages(int[] nums, int k) {
+    public double largestSumOfAverages2(int[] nums, int k) {
         int n = nums.length;
         int[] sum = new int[n + 1];
         for (int i = 0; i < n; ++i) {
@@ -59,4 +65,32 @@ public class Problem0813LargestSumOfAverages {
         }
         return dp[1];
     }
+
+
+    public double largestSumOfAverages(int[] nums, int k) {
+        int n = nums.length;
+        double[] preSum = new double[n + 1];
+        for (int i = 0; i < n; i++) {
+            preSum[i + 1] = preSum[i] + nums[i];
+        }
+        double[][] dp = new double[n + 1][k + 1];
+        for (int i = 0; i <= n; i++) {
+            Arrays.fill(dp[i], -Double.MAX_VALUE);
+        }
+        dp[0][0] = 0.0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = Math.min(i, k); j >= 1; j--) {
+                for (int p = i; p >= j; p--) {
+                    dp[i][j] = Math.max(dp[i][j], dp[p - 1][j - 1] + (preSum[i] - preSum[p - 1]) / (i - p + 1));
+                }
+            }
+        }
+        return Arrays.stream(dp[n]).max().getAsDouble();
+    }
+
+//    public static void main(String[] args) {
+//        Problem0813LargestSumOfAverages a = new Problem0813LargestSumOfAverages();
+//        int[] nums = {1, 2, 3, 4, 5, 6, 7};
+//        a.largestSumOfAverages(nums, 4);
+//    }
 }

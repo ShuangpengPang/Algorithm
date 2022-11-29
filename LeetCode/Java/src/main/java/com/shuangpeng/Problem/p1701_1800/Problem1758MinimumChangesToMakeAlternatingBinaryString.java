@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1701_1800;
  */
 public class Problem1758MinimumChangesToMakeAlternatingBinaryString {
 
-    public int minOperations(String s) {
+    public int minOperations0(String s) {
         int n = s.length(), c = 0, c0 = 0, c1 = 0;
         for (int i = 0; i < n; i++) {
             char ch = s.charAt(i);
@@ -22,5 +22,16 @@ public class Problem1758MinimumChangesToMakeAlternatingBinaryString {
             }
         }
         return Math.min(c - c0 + c1, c0 + n - c - c1);
+    }
+
+    public int minOperations(String s) {
+        int n = s.length(), cnt = 0;
+        for (int i = 0; i < n; i++) {
+            int c = s.charAt(i) - '0';
+            if (((i & 1) ^ c) == 1) {
+                cnt++;
+            }
+        }
+        return Math.min(cnt, n - cnt);
     }
 }

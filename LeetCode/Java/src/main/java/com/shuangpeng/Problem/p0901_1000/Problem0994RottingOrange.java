@@ -26,8 +26,8 @@ public class Problem0994RottingOrange {
                 }
             }
         }
-        int ans = -1;
-        while (!q.isEmpty()) {
+        int ans = 0;
+        while (cnt > 0 && !q.isEmpty()) {
             ans++;
             for (int i = q.size() - 1; i >= 0; i--) {
                 int[] p = q.poll();
@@ -42,6 +42,6 @@ public class Problem0994RottingOrange {
                 }
             }
         }
-        return cnt == 0 ? Math.max(0, ans) : -1;
+        return cnt == 0 ? ans : -1;
     }
 }

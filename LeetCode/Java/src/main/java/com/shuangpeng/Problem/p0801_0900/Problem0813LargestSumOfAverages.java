@@ -88,7 +88,7 @@ public class Problem0813LargestSumOfAverages {
         return Arrays.stream(dp[n]).max().getAsDouble();
     }
 
-    public double largestSumOfAverages(int[] nums, int k) {
+    public double largestSumOfAverages4(int[] nums, int k) {
         int n = nums.length;
         double[][] dp = new double[n][k];
         double sum = 0.0;
@@ -104,6 +104,25 @@ public class Problem0813LargestSumOfAverages {
             }
         }
         return Arrays.stream(dp[n - 1]).max().getAsDouble();
+    }
+
+    public double largestSumOfAverages(int[] nums, int k) {
+        int n = nums.length;
+        double[] dp = new double[n + 1];
+        for (int i = 0, s = 0; i < n; i++) {
+            s += nums[i];
+            dp[i + 1] = (double) s / (i + 1);
+        }
+        for (int i = 2; i <= k; i++) {
+            for (int j = n; j >= i; j--) {
+                dp[j] = 0.0;
+                for (int x = j, s = 0; x >= i; x--) {
+                    s += nums[x - 1];
+                    dp[j] = Math.max(dp[j], dp[x - 1] + (double) s / (j - x + 1));
+                }
+            }
+        }
+        return dp[n];
     }
 
 //    public static void main(String[] args) {

@@ -164,3 +164,35 @@ class Problem0895MaximumFrequencyStack2 {
         }
     }
 }
+
+class FreqStack {
+
+    Map<Integer, Integer> freq;
+    List<List<Integer>> stacks;
+
+    public FreqStack() {
+        freq = new HashMap<>();
+        stacks = new ArrayList<>();
+    }
+
+    public void push(int val) {
+        int f = freq.getOrDefault(val, 0) + 1;
+        if (f > stacks.size()) {
+            stacks.add(new ArrayList<>());
+        }
+        freq.put(val, f);
+        stacks.get(f - 1).add(val);
+    }
+
+    public int pop() {
+        int f = stacks.size();
+        List<Integer> list = stacks.get(f - 1);
+        int val = list.get(list.size() - 1);
+        list.remove(list.size() - 1);
+        freq.put(val, f - 1);
+        if (list.isEmpty()) {
+            stacks.remove(f - 1);
+        }
+        return val;
+    }
+}

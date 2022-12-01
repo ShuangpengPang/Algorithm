@@ -139,9 +139,7 @@ class Problem2213LongestSubstringOfOneRepeatingCharacter0 {
                 tree.remove(next.getKey());
                 r = next.getValue().r;
             }
-
             tree.put(l, new Node(l, r, v));
-
             pp.offer(new Node(l, r, v));
         }
 
@@ -158,7 +156,6 @@ class Problem2213LongestSubstringOfOneRepeatingCharacter0 {
             // unreachable
             return 0;
         }
-
     }
 
     public int[] longestRepeating(String s, String queryCharacters, int[] queryIndices) {
@@ -188,8 +185,78 @@ class Problem2213LongestSubstringOfOneRepeatingCharacter0 {
 
             res[k] = odt.queryMax();
         }
-
         return res;
     }
+}
 
+class Problem2213LongestSubstringOfOneRepeatingCharacter1 {
+
+    char[] cs;
+
+    class Node {
+        int start, end;
+        Node left, right;
+        int pre, suf, max;
+
+        Node(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    private void build(Node node) {
+        if (node.start == node.end) {
+            node.pre = node.suf = node.max = 1;
+            return;
+        }
+        int mid = node.start + (node.end - node.start >> 1);
+        node.left = new Node(node.start, mid);
+        node.right = new Node(mid + 1, node.end);
+        build(node.left);
+        build(node.right);
+        merge(node, mid);
+    }
+
+    private void update(Node node, int idx) {
+        if (node.start == node.end) {
+            return;
+        }
+        int mid = node.start + (node.end - node.start >> 1);
+        if (idx <= mid) {
+            update(node.left, idx);
+        } else {
+            update(node.right, idx);
+        }
+        merge(node, mid);
+    }
+
+    private void merge(Node node, int mid) {
+        node.pre = node.left.pre;
+        node.suf = node.right.suf;
+        node.max = Math.max(node.left.max, node.right.max);
+        if (cs[mid] == cs[mid + 1]) {
+            if (node.pre == mid - node.start + 1) {
+                node.pre += node.right.pre;
+            }
+            if (node.suf == node.end - mid) {
+                node.suf += node.left.suf;
+            }
+            node.max = Math.max(node.max, node.left.suf + node.right.pre);
+        }
+    }
+
+    public int[] longestRepeating(String s, String queryCharacters, int[] queryIndices) {
+        this.cs = s.toCharArray();
+        Node root = new Node(0, cs.length - 1);
+        build(root);
+        int k = queryIndices.length;
+        int[] ans = new int[k];
+        for (int i = 0; i < k; i++) {
+            int idx = queryIndices[i];
+            cs[idx] = queryCharacters.charAt(i);
+            update(root, idx);
+            ans[i] = root.max;
+        }
+        return ans;
+    }
 }

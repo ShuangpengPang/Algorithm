@@ -50,4 +50,38 @@ public class Problem2223SumOfScoresOfBuiltStrings {
         int c2 = (int) (((dp2[j] - (i == 0 ? 0 : (long) dp2[i - 1] * e2[j - i + 1])) % m2 + m2) % m2);
         return h1 == c1 && h2 == c2;
     }
+
+    // C++ Version
+    vector<int> z_function(string s) {
+        int n = (int)s.length();
+        vector<int> z(n);
+        for (int i = 1, l = 0, r = 0; i < n; ++i) {
+            if (i <= r && z[i - l] < r - i + 1) {
+                z[i] = z[i - l];
+            } else {
+                z[i] = max(0, r - i + 1);
+                while (i + z[i] < n && s[z[i]] == s[i + z[i]]) ++z[i];
+            }
+            if (i + z[i] - 1 > r) l = i, r = i + z[i] - 1;
+        }
+        return z;
+    }
+}
+
+class Solution {
+    public long sumScores(String s) {
+        var n = s.length();
+        var z = new int[n];
+        long ans = n;
+        for (int i = 1, l = 0, r = 0; i < n; i++) {
+            z[i] = Math.max(Math.min(z[i - l], r - i + 1), 0);
+            while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i])) {
+                l = i;
+                r = i + z[i];
+                z[i]++;
+            }
+            ans += z[i];
+        }
+        return ans;
+    }
 }

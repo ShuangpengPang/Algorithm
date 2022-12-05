@@ -10,7 +10,7 @@ import java.util.Deque;
  */
 public class Problem1687DeliveringBoxesFromStorageToPorts {
 
-    public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
+    public int boxDelivering0(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
         int n = boxes.length;
         long[] preWeight = new long[n + 1];
         int[] prePort = new int[n + 2];
@@ -28,6 +28,30 @@ public class Problem1687DeliveringBoxesFromStorageToPorts {
             int j = stack.isEmpty() ? -1 : stack.peekFirst();
             dp[i] = (j == -1 ? dp[i - 1] : dp[j] + prePort[i] - prePort[j + 1]) + 2;
             while (!stack.isEmpty() && dp[stack.peekLast()] - prePort[stack.peekLast() + 1] >= dp[i] - prePort[i + 1]) {
+                stack.pollLast();
+            }
+            stack.addLast(i);
+        }
+        return dp[n];
+    }
+
+    public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
+        int n = boxes.length;
+        int[] count = new int[n + 2], preWeight = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            count[i] = count[i - 1] + (i == 1 ? 0 : (boxes[i - 1][0] == boxes[i - 2][0] ? 0 : 1));
+            preWeight[i] = preWeight[i - 1] + boxes[i - 1][1];
+        }
+        int[] dp = new int[n + 1];
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.addLast(0);
+        for (int i = 1; i <= n; i++) {
+            while (stack.peek() < i - maxBoxes || preWeight[i] - preWeight[stack.peek()] > maxWeight) {
+                stack.pollFirst();
+            }
+            int j = stack.peekFirst();
+            dp[i] = dp[j] - count[j + 1] + count[i] + 2;
+            while (!stack.isEmpty() && dp[stack.peekLast()] - count[stack.peekLast() + 1] >= dp[i] - count[i + 1]) {
                 stack.pollLast();
             }
             stack.addLast(i);

@@ -35,7 +35,7 @@ public class Problem1687DeliveringBoxesFromStorageToPorts {
         return dp[n];
     }
 
-    public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
+    public int boxDelivering1(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
         int n = boxes.length;
         int[] count = new int[n + 2], preWeight = new int[n + 1];
         for (int i = 1; i <= n; i++) {
@@ -55,6 +55,27 @@ public class Problem1687DeliveringBoxesFromStorageToPorts {
                 stack.pollLast();
             }
             stack.addLast(i);
+        }
+        return dp[n];
+    }
+
+    public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
+        int n = boxes.length, left = 0;
+        int[] dp = new int[n + 1];
+        dp[1] = 2;
+        int w = boxes[0][1], count = 2;
+        for (int i = 1; i < n; i++) {
+            w += boxes[i][1];
+            if (boxes[i][0] != boxes[i - 1][0]) {
+                count++;
+            }
+            while (i - left + 1 > maxBoxes || w > maxWeight || dp[left] == dp[left + 1]) {
+                w -= boxes[left++][1];
+                if (boxes[left][0] != boxes[left - 1][0]) {
+                    count--;
+                }
+            }
+            dp[i + 1] = dp[left] + count;
         }
         return dp[n];
     }

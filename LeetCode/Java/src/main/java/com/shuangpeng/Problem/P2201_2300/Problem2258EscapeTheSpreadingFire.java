@@ -1,6 +1,9 @@
 package com.shuangpeng.Problem.P2201_2300;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -105,5 +108,61 @@ public class Problem2258EscapeTheSpreadingFire {
             }
         }
         return find;
+    }
+}
+
+class Problem2258EscapeTheSpreadingFire0 {
+
+    static final int[] dirs = {-1, 0, 1, 0, -1};
+
+    public int maximumMinutes(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[] person = bfs(grid, Arrays.asList(new int[]{0, 0}));
+        if (person[0] == 0) {
+            return -1;
+        }
+        List<int[]> q = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    q.add(new int[]{i, j});
+                }
+            }
+        }
+        int[] fire = bfs(grid, q);
+        if (fire[0] == 0) {
+            return (int) 1e9;
+        }
+        int ans = fire[0] - person[0];
+        if (ans < 0) {
+            return -1;
+        }
+        if (person[1] == 0 || person[2] == 0 || fire[1] - person[1] == ans && fire[2] - person[2] == ans) {
+            return ans - 1;
+        }
+        return ans;
+    }
+
+    private int[] bfs(int[][] grid, List<int[]> q) {
+        int m = grid.length, n = grid[0].length;
+        int[][] time = new int[m][n];
+        for (int[] p : q) {
+            time[p[0]][p[1]] = 1;
+        }
+        for (int t = 2; !q.isEmpty(); t++) {
+            List<int[]> tmp = new ArrayList<>(q.size() << 2);
+            for (int[] p : q) {
+                for (int d = 0; d < 4; d++) {
+                    int x = p[0] + dirs[d], y = p[1] + dirs[d + 1];
+                    if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == 2 || time[x][y] != 0) {
+                        continue;
+                    }
+                    time[x][y] = t;
+                    tmp.add(new int[]{x, y});
+                }
+            }
+            q = tmp;
+        }
+        return new int[]{time[m - 1][n - 1], time[m - 1][n - 2], time[m - 2][n - 1]};
     }
 }

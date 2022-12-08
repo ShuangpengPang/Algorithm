@@ -40,3 +40,49 @@ public class Problem2267CheckIfThereIsAValidParenthesesStringPath {
         return ans;
     }
 }
+
+class Problem2267CheckIfThereIsAValidParenthesesStringPath0 {
+
+    public boolean hasValidPath(char[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        if (grid[0][0] == ')' || grid[m - 1][n - 1] == '(' || ((m + n) & 1) == 0) {
+            return false;
+        }
+        return dfs(grid, 0, 0, 0, new boolean[m][n][(m + n + 1) >> 1]);
+    }
+
+    private boolean dfs(char[][] grid, int x, int y, int cnt, boolean[][][] visited) {
+        int m = grid.length, n = grid[0].length;
+        if (x == m || y == n || cnt > m + n - 1 - x - y || visited[x][y][cnt]) {
+            return false;
+        }
+        if (x == m - 1 && y == n - 1) {
+            return cnt == 1;
+        }
+        visited[x][y][cnt] = true;
+        cnt += grid[x][y] == '(' ? 1 : -1;
+        return cnt >= 0 && (dfs(grid, x, y + 1, cnt, visited) || dfs(grid, x + 1, y, cnt, visited));
+    }
+}
+
+class Problem2267CheckIfThereIsAValidParenthesesStringPath1 {
+
+    public boolean hasValidPath(char[][] grid) {
+        int m = grid.length, n = grid[0].length, len = (m + n - 1) >> 1;
+        if (grid[0][0] == ')' || grid[m - 1][n - 1] == '(' || ((m + n) & 1) == 0) {
+            return false;
+        }
+        boolean[][][] dp = new boolean[m + 1][n + 1][len + 1];
+        dp[0][1][0] = dp[1][0][0] = true;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                int d = grid[i - 1][j - 1] == '(' ? -1 : 1;
+                for (int k = 0; k <= len; k++) {
+                    int t = k + d;
+                    dp[i][j][k] = t >= 0 && t <= len && (dp[i - 1][j][t] || dp[i][j - 1][t]);
+                }
+            }
+        }
+        return dp[m][n][0];
+    }
+}

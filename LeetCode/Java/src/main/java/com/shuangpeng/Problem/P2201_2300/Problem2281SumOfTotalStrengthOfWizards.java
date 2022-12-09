@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.P2201_2300;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Deque;
  */
 public class Problem2281SumOfTotalStrengthOfWizards {
 
-    public int totalStrength(int[] strength) {
+    public int totalStrength0(int[] strength) {
         int n = strength.length, M = (int) 1e9 + 7;
         int[] preSum = new int[n + 1];
         for (int i = 0; i < n; i++) {
@@ -46,5 +47,33 @@ public class Problem2281SumOfTotalStrengthOfWizards {
             ans = (int) ((ans + (long) strength[i - 1] * (((long) sum1 * cnt1 % M - (long) sum2 * cnt2 % M + M) % M)) % M);
         }
         return ans;
+    }
+
+    public int totalStrength(int[] strength) {
+        int n = strength.length, M = (int) 1e9 + 7;
+        int[] left = new int[n], right = new int[n];
+        Arrays.fill(right, n);
+        Deque<Integer> st = new ArrayDeque<>();
+        st.push(-1);
+        for (int i = 0; i < n; i++) {
+            while (st.size() > 1 && strength[st.peek()] >= strength[i]) {
+                right[st.pop()] = i;
+            }
+            left[i] = st.peek();
+            st.push(i);
+        }
+        int[] ss = new int[n + 2];
+        int s = 0;
+        for (int i = 1; i <= n; i++) {
+            s = (s + strength[i - 1]) % M;
+            ss[i + 1] = (ss[i] + s) % M;
+        }
+        long ans = 0L;
+        for (int i = 0; i < n; i++) {
+            int l = left[i] + 1, r = right[i] - 1;
+            long total = ((long) (i - l + 1) * (ss[r + 2] - ss[i + 1]) - (long) (r - i + 1) * (ss[i + 1] - ss[l])) % M;
+            ans = (ans + strength[i] * total) % M;
+        }
+        return (int) ((ans + M) % M);
     }
 }

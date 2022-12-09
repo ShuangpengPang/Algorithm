@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0401_0500;
  */
 public class Problem0459RepeatedSubstringPattern {
 
-    public boolean repeatedSubstringPattern(String s) {
+    public boolean repeatedSubstringPattern0(String s) {
         int n = s.length(), h = n >> 1;
         for (int i = 1; i <= h; i++) {
             if (n % i != 0) {
@@ -26,6 +26,55 @@ public class Problem0459RepeatedSubstringPattern {
             }
             if (valid) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean repeatedSubstringPattern1(String s) {
+        int n = s.length(), h = n >> 1;
+        for (int i = 1; i <= h; i++) {
+            if (n % i == 0) {
+                boolean match = true;
+                for (int j = i; j < n; j++) {
+                    if (s.charAt(j) != s.charAt(j - i)) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean repeatedSubstringPattern2(String s) {
+        return (s + s).indexOf(s, 1) != s.length();
+    }
+
+    // KMP模版
+    public boolean repeatedSubstringPattern(String s) {
+        int n = s.length();
+        int[] fail = new int[n];
+        for (int i = 1; i < n; i++) {
+            int j = fail[i - 1];
+            while (j > 0 && s.charAt(j) != s.charAt(i)) {
+                j = fail[j - 1];
+            }
+            fail[i] = s.charAt(j) == s.charAt(i) ? j + 1 : j;
+        }
+        for (int i = 1, j = 0; i < (n << 1) - 1; i++) {
+            char c = s.charAt(i % n);
+            while (j > 0 && s.charAt(j) != c) {
+                j = fail[j - 1];
+            }
+            if (s.charAt(j) == c) {
+                j++;
+                if (j == n) {
+                    return true;
+                }
             }
         }
         return false;

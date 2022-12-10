@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1601_1700;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * @Description: Problem1691MaximumHeightByStackingCuboids（堆叠长方体的最大高度）
@@ -9,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem1691MaximumHeightByStackingCuboids {
 
-    public int maxHeight(int[][] cuboids) {
+    public int maxHeight0(int[][] cuboids) {
         for (int[] cuboid : cuboids) {
             Arrays.sort(cuboid);
         }
@@ -46,5 +47,116 @@ public class Problem1691MaximumHeightByStackingCuboids {
             }
         }
         return ans;
+    }
+
+    public int maxHeight1(int[][] cuboids) {
+        for (int[] c : cuboids) {
+            Arrays.sort(c);
+        }
+        Arrays.sort(cuboids, (a, b) -> b[2] != a[2] ? b[2] - a[2] : (b[1] != a[1] ? b[1] - a[1] : b[0] - a[0]));
+        int n = cuboids.length;
+        int[][] dp = new int[n][3];
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < 3; j++) {
+                int[] p1 = getPair(cuboids[i], j);
+                int w = p1[0], l = p1[1], h = cuboids[i][j];
+                dp[i][j] = h;
+                for (int x = i - 1; x >= 0; x--) {
+                    for (int y = 0; y < 3; y++) {
+                        if (cuboids[x][y] >= h) {
+                            int[] p2 = getPair(cuboids[x], y);
+                            if (p2[0] >= w && p2[1] >= l) {
+                                dp[i][j] = Math.max(dp[i][j], dp[x][y] + h);
+                            }
+                        }
+                    }
+                }
+                ans = Math.max(ans, dp[i][j]);
+            }
+        }
+        return ans;
+    }
+
+    private int[] getPair(int[] c, int i) {
+        int[] ans = new int[2];
+        for (int j = 0, k = 0; j < 3; j++) {
+            if (j != i) {
+                ans[k++] = c[j];
+            }
+        }
+        return ans;
+    }
+
+    public int maxHeight2(int[][] cuboids) {
+        for (int[] c : cuboids) {
+            Arrays.sort(c);
+        }
+        Arrays.sort(cuboids, (a, b) -> b[2] != a[2] ? b[2] - a[2] : (b[1] != a[1] ? b[1] - a[1] : b[0] - a[0]));
+        int n = cuboids.length;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            int w = cuboids[i][0], l = cuboids[i][1], h = cuboids[i][2];
+            dp[i] = h;
+            for (int j = i - 1; j >= 0; j--) {
+                if (cuboids[j][0] >= w && cuboids[j][1] >= l && cuboids[j][2] >= h) {
+                    dp[i] = Math.max(dp[i], dp[j] + h);
+                }
+            }
+        }
+        return Arrays.stream(dp).max().getAsInt();
+    }
+
+    public int maxHeight(int[][] cuboids) {
+        for (int[] c : cuboids) {
+            Arrays.sort(c);
+        }
+        Arrays.sort(cuboids, Comparator.comparingInt(e -> e[0] + e[1] + e[2]));
+        int n = cuboids.length;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            dp[i] = cuboids[i][2];
+            for (int j = 0; j < i; j++) {
+                if (cuboids[j][0] <= cuboids[i][0] && cuboids[j][1] <= cuboids[i][1] && cuboids[j][2] <= cuboids[i][2]) {
+                    dp[i] = Math.max(dp[i], dp[j] + cuboids[i][2]);
+                }
+            }
+        }
+        return Arrays.stream(dp).max().getAsInt();
+    }
+}
+
+class Problem1691MaximumHeightByStackingCuboids0 {
+
+    public int maxHeight(int[][] cuboids) {
+        int n = cuboids.length;
+        for (int[] c : cuboids) {
+            Arrays.sort(c);
+        }
+        Arrays.sort(cuboids, Comparator.comparingInt(e -> e[0] + e[1] + e[2]));
+        int[] memo = new int[n];
+        Arrays.fill(memo, -1);
+        return dfs(cuboids, -1, 0, memo);
+    }
+
+    private int dfs(int[][] cuboids, int top, int index, int[] memo) {
+        if (index == cuboids.length) {
+            return 0;
+        }
+        if (top != -1 && memo[top] != -1) {
+            return memo[top];
+        }
+        int height = dfs(cuboids, top, index + 1, memo), h = cuboids[index][2];
+        if (top == -1 || check(cuboids, top, index)) {
+            height = Math.max(height, dfs(cuboids, index, index + 1, memo) + h);
+        }
+        if (top != -1) {
+            memo[top] = height;
+        }
+        return height;
+    }
+
+    private boolean check(int[][] cuboids, int i, int j) {
+        return cuboids[i][0] <= cuboids[j][0] && cuboids[i][1] <= cuboids[j][1] && cuboids[i][2] <= cuboids[j][2];
     }
 }

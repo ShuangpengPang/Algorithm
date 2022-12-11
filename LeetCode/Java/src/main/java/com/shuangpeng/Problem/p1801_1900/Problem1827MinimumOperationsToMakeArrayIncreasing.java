@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p1801_1900;
 
+/**
+ * @description: 最少操作使数组递增
+ * @date 2022/12/11 7:27 PM
+ **/
 public class Problem1827MinimumOperationsToMakeArrayIncreasing {
 
     public int minOperations0(int[] nums) {
@@ -19,7 +23,7 @@ public class Problem1827MinimumOperationsToMakeArrayIncreasing {
         return count;
     }
 
-    public int minOperations(int[] nums) {
+    public int minOperations1(int[] nums) {
         if (nums.length < 2) {
             return 0;
         }
@@ -34,5 +38,14 @@ public class Problem1827MinimumOperationsToMakeArrayIncreasing {
             }
         }
         return opt;
+    }
+
+    public int minOperations(int[] nums) {
+        int n = nums.length, ans = 0, prev = 0;
+        for (int i = 0; i < n; i++) {
+            ans += Math.max(0, prev + 1 - nums[i]);
+            prev = Math.max(prev + 1, nums[i]);
+        }
+        return ans;
     }
 }

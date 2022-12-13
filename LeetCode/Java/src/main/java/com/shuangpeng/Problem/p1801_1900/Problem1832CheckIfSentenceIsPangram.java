@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1801_1900;
  */
 public class Problem1832CheckIfSentenceIsPangram {
 
-    public boolean checkIfPangram(String sentence) {
+    public boolean checkIfPangram0(String sentence) {
         int n = sentence.length(), cnt = 0;
         boolean[] has = new boolean[26];
         for (int i = 0; i < n; i++) {
@@ -19,5 +19,13 @@ public class Problem1832CheckIfSentenceIsPangram {
             has[c] = true;
         }
         return cnt == 26;
+    }
+
+    public boolean checkIfPangram(String sentence) {
+        int n = sentence.length(), h = 0, N = (1 << 26) - 1;
+        for (int i = 0; i < n && h != N; i++) {
+            h |= 1 << sentence.charAt(i) - 'a';
+        }
+        return h == N;
     }
 }

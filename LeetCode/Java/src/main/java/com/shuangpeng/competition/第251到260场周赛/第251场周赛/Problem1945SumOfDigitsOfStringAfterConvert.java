@@ -33,7 +33,7 @@ public class Problem1945SumOfDigitsOfStringAfterConvert {
         for (int i = 0; i < n; i++) {
             sum += getDigitSum(s.charAt(i) - 'a' + 1);
         }
-        for (int i = 1; i < k; i++) {
+        for (int i = 1; i < k && sum >= 10; i++) {
             sum = getDigitSum(sum);
         }
         return sum;

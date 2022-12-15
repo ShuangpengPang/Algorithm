@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem2488CountSubarraysWithMedianK {
 
-    public int countSubarrays(int[] nums, int k) {
+    public int countSubarrays0(int[] nums, int k) {
         int n = nums.length, idx = -1;
         int cnt = 0, ans = 0;
         Map<Integer, Integer> even = new HashMap<>(), odd = new HashMap<>();
@@ -32,6 +32,25 @@ public class Problem2488CountSubarraysWithMedianK {
                 ans += m1.getOrDefault(j + 2, 0);
                 ans += m2.getOrDefault(j + 1, 0);
             }
+        }
+        return ans;
+    }
+
+    public int countSubarrays(int[] nums, int k) {
+        int n = nums.length, pos = 0;
+        while (nums[pos] != k) {
+            pos++;
+        }
+        Map<Integer, Integer> diff = new HashMap<>();
+        diff.put(0, 1);
+        for (int i = pos + 1, c = 0; i < n; i++) {
+            c += nums[i] > k ? 1 : -1;
+            diff.put(c, diff.getOrDefault(c, 0) + 1);
+        }
+        int ans = 0;
+        for (int i = pos, c = 0; i >= 0; i--) {
+            c += nums[i] < k ? 1 : (nums[i] > k ? -1 : 0);
+            ans += diff.getOrDefault(c, 0) + diff.getOrDefault(c + 1, 0);
         }
         return ans;
     }

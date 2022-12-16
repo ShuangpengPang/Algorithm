@@ -1,6 +1,10 @@
 package com.shuangpeng.competition.第231到240场周赛.第231场周赛;
 
-public class Problem1785 {
+/**
+ * @description: 构成特定和需要添加的最少元素
+ * @date 2022/12/16 11:18 AM
+ **/
+public class Problem1785MinimumElementsToAddToFormAGivenSum {
 
     public int minElements0(int[] nums, int limit, int goal) {
         if (nums == null || nums.length == 0) {
@@ -20,7 +24,7 @@ public class Problem1785 {
         return (int) (diff / limit + 1);
     }
 
-    public int minElements(int[] nums, int limit, int goal) {
+    public int minElements1(int[] nums, int limit, int goal) {
         if (nums == null || nums.length == 0 || limit == 0) {
             return 0;
         }
@@ -29,5 +33,13 @@ public class Problem1785 {
             target -= num;
         }
         return (int) Math.ceil(((double) Math.abs(target)) / limit);
+    }
+
+    public int minElements(int[] nums, int limit, int goal) {
+        long sum = 0L;
+        for (int num : nums) {
+            sum += num;
+        }
+        return (int) ((Math.abs(goal - sum) + limit - 1) / limit);
     }
 }

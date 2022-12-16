@@ -79,3 +79,74 @@ public class Problem2493DivideNodesIntoMaximumNumberOfGroups {
         }
     }
 }
+
+class Problem2493DivideNodesIntoMaximumNumberOfGroups0 {
+
+    int n, clock;
+    int[] time, color;
+    List<Integer>[] g;
+    List<Integer> nodes;
+
+    public int magnificentSets(int n, int[][] edges) {
+        this.n = n;
+        time = new int[n];
+        color = new int[n];
+        g = new List[n];
+        nodes = new ArrayList<>();
+        Arrays.setAll(g, i -> new ArrayList<>());
+        for (int[] edge : edges) {
+            int x = edge[0] - 1, y = edge[1] - 1;
+            g[x].add(y);
+            g[y].add(x);
+        }
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (color[i] != 0) {
+                continue;
+            }
+            nodes.clear();
+            if (!isBipartite(i, 1)) {
+                return -1;
+            }
+            int c = 0;
+            for (int x : nodes) {
+                c = Math.max(c, bfs(x));
+            }
+            ans += c;
+        }
+        return ans;
+    }
+
+    private boolean isBipartite(int x, int c) {
+        nodes.add(x);
+        color[x] = c;
+        for (int y : g[x]) {
+            if (color[y] == c || color[y] == 0 && !isBipartite(y, -c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int bfs(int start) {
+        time[start] = ++clock;
+        List<Integer> q = new ArrayList<>();
+        q.add(start);
+        int depth = 0;
+        while (!q.isEmpty()) {
+            depth++;
+            List<Integer> tmp = new ArrayList<>();
+            for (int i = q.size() - 1; i >= 0; i--) {
+                int x = q.get(i);
+                for (int y : g[x]) {
+                    if (time[y] != clock) {
+                        time[y] = clock;
+                        tmp.add(y);
+                    }
+                }
+            }
+            q = tmp;
+        }
+        return depth;
+    }
+}

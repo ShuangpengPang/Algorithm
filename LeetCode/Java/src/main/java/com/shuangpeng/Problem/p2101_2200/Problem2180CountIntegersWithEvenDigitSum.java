@@ -24,7 +24,18 @@ public class Problem2180CountIntegersWithEvenDigitSum {
         }
     }
 
-    public int countEven(int num) {
+    public int countEven0(int num) {
         return memo[num];
+    }
+
+    public int countEven(int num) {
+        int x = num / 10, m = num % 10;
+        int sum = 0, y = x;
+        while (y > 0) {
+            sum += y % 10;
+            y /= 10;
+        }
+        int k = (sum & 1) == 0 ? 1 + m / 2 : (m + 1) / 2;
+        return x * 5 + k - 1;
     }
 }

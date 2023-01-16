@@ -37,13 +37,38 @@ public class Problem2293MinMaxGame {
         return nums[0];
     }
 
-    public int minMaxGame(int[] nums) {
+    public int minMaxGame2(int[] nums) {
         int n = nums.length;
         while (n > 1) {
             int h = n >> 1;
             for (int i = 0; i < h; ++i) {
                 int j = i << 1;
                 nums[i] = (i & 1) == 0 ? Math.min(nums[j], nums[j + 1]) : Math.max(nums[j], nums[j + 1]);
+            }
+            n = h;
+        }
+        return nums[0];
+    }
+
+    public int minMaxGame3(int[] nums) {
+        while (nums.length > 1) {
+            int n = nums.length;
+            int[] tmp = new int[n >> 1];
+            for (int i = 0; i < n; i += 2) {
+                int j = i >> 1;
+                tmp[j] = (j & 1) == 0 ? Math.min(nums[i], nums[i + 1]) : Math.max(nums[i], nums[i + 1]);
+            }
+            nums = tmp;
+        }
+        return nums[0];
+    }
+
+    public int minMaxGame(int[] nums) {
+        int n = nums.length;
+        while (n > 1) {
+            int h = n >> 1;
+            for (int i = 0; i < h; i++) {
+                nums[i] = (i & 1) == 0 ? Math.min(nums[i << 1], nums[(i << 1) + 1]) : Math.max(nums[i << 1], nums[(i << 1) + 1]);
             }
             n = h;
         }

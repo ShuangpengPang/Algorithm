@@ -1,5 +1,10 @@
 package com.shuangpeng.Problem.p1801_1900;
 
+/**
+ * @author shuangpeng
+ * @description: 句子相似性III
+ * @date 2023/1/16 5:28 PM
+ **/
 public class Problem1813SentenceSimilarityIII {
 
     public boolean areSentencesSimilar0(String sentence1, String sentence2) {
@@ -26,7 +31,7 @@ public class Problem1813SentenceSimilarityIII {
         return true;
     }
 
-    public boolean areSentencesSimilar(String sentence1, String sentence2) {
+    public boolean areSentencesSimilar1(String sentence1, String sentence2) {
         if (sentence1.equals(sentence2)) {
             return true;
         }
@@ -60,5 +65,22 @@ public class Problem1813SentenceSimilarityIII {
             return true;
         }
         return i > j && sentence1.charAt(i - 1) == ' ' && sentence1.charAt(j + 1) == ' ';
+    }
+
+    public boolean areSentencesSimilar(String sentence1, String sentence2) {
+        String[] s1 = sentence1.split(" "), s2 = sentence2.split(" ");
+        int i1 = 0, j1 = s1.length - 1, i2 = 0, j2 = s2.length - 1;
+        while (i1 <= j1 && i2 <= j2) {
+            if (s1[i1].equals(s2[i2])) {
+                i1++;
+                i2++;
+            } else if (s1[j1].equals(s2[j2])) {
+                j1--;
+                j2--;
+            } else {
+                break;
+            }
+        }
+        return i1 > j1 || i2 > j2;
     }
 }

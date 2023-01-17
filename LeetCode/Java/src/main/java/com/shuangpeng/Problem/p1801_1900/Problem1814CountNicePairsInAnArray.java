@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem1814CountNicePairsInAnArray {
 
-    public int countNicePairs(int[] nums) {
+    public int countNicePairs0(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
             int key = num - reverse(num);
@@ -29,6 +29,22 @@ public class Problem1814CountNicePairsInAnArray {
         while (x > 0) {
             ans = ans * 10 + x % 10;
             x /= 10;
+        }
+        return ans;
+    }
+
+    public int countNicePairs(int[] nums) {
+        int ans = 0, M = (int) 1e9 + 7;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            int x = num, r = 0;
+            while (x > 0) {
+                r = r * 10 + x % 10;
+                x /= 10;
+            }
+            int count = map.getOrDefault(num - r, 0);
+            map.put(num - r, count + 1);
+            ans = (ans + count) % M;
         }
         return ans;
     }

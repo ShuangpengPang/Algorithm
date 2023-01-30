@@ -66,7 +66,7 @@ public class Problem2315CountAsterisks {
         return ans;
     }
 
-    public int countAsterisks(String s) {
+    public int countAsterisks3(String s) {
         int n = s.length(), ans = 0;
         boolean between = false;
         for (int i = 0; i < n; i++) {
@@ -75,6 +75,40 @@ public class Problem2315CountAsterisks {
                 between = !between;
             } else if (c == '*' && !between) {
                 ans++;
+            }
+        }
+        return ans;
+    }
+
+    public int countAsterisks4(String s) {
+        int n = s.length(), ans = 0, cnt1 = 0;
+        boolean outer = true;
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c == '|') {
+                outer = !outer;
+                if (outer) {
+                    cnt1 = 0;
+                }
+            } else if (c == '*') {
+                if (outer) {
+                    ans++;
+                } else {
+                    cnt1++;
+                }
+            }
+        }
+        return ans + cnt1;
+    }
+
+    public int countAsterisks(String s) {
+        int n = s.length(), ans = 0, ok = 1;
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c == '|') {
+                ok ^= 1;
+            } else if (c == '*') {
+                ans += ok;
             }
         }
         return ans;

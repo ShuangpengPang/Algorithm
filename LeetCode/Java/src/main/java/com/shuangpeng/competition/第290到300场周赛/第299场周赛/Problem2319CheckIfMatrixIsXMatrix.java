@@ -27,7 +27,7 @@ public class Problem2319CheckIfMatrixIsXMatrix {
         return valid;
     }
 
-    public boolean checkXMatrix(int[][] grid) {
+    public boolean checkXMatrix1(int[][] grid) {
         int m = grid.length, n = grid[0].length;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -36,6 +36,21 @@ public class Problem2319CheckIfMatrixIsXMatrix {
                         return false;
                     }
                 } else if (grid[i][j] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean checkXMatrix(int[][] grid) {
+        int n = grid.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != 0 && i != j && i + j != n - 1) {
+                    return false;
+                }
+                if (grid[i][j] == 0 && (i == j || i + j == n - 1)) {
                     return false;
                 }
             }

@@ -30,7 +30,7 @@ public class Problem2309GreatestEnglishLetterInUpperAndLowerCase {
         return "";
     }
 
-    public String greatestLetter(String s) {
+    public String greatestLetter1(String s) {
         int N = 26;
         int[] arr = new int[N];
         int n = s.length();
@@ -44,6 +44,20 @@ public class Problem2309GreatestEnglishLetterInUpperAndLowerCase {
         }
         for (int i = N - 1; i >= 0; i--) {
             if (arr[i] == 3) {
+                return "" + (char) (i + 'A');
+            }
+        }
+        return "";
+    }
+
+    public String greatestLetter(String s) {
+        boolean[] has = new boolean[58];
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            has[s.charAt(i) - 'A'] = true;
+        }
+        for (int i = 25; i >= 0; i--) {
+            if (has[i] && has[i | 32]) {
                 return "" + (char) (i + 'A');
             }
         }

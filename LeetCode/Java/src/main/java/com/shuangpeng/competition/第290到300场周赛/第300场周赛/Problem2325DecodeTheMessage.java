@@ -61,7 +61,7 @@ public class Problem2325DecodeTheMessage {
         return sb.toString();
     }
 
-    public String decodeMessage(String key, String message) {
+    public String decodeMessage2(String key, String message) {
         int N = 26;
         char[] map = new char[N];
         Arrays.fill(map, '.');
@@ -81,5 +81,29 @@ public class Problem2325DecodeTheMessage {
             }
         }
         return new String(chars);
+    }
+
+    public String decodeMessage(String key, String message) {
+        int m = key.length();
+        int[] map = new int[26];
+        Arrays.fill(map, -1);
+        int idx = 0;
+        for (int i = 0; i < m; i++) {
+            int j = key.charAt(i) - 'a';
+            if (j >= 0 && j < 26 && map[j] == -1) {
+                map[j] = idx++;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        int n = message.length();
+        for (int i = 0; i < n; i++) {
+            int j = message.charAt(i) - 'a';
+            if (j >= 0 && j < 26) {
+                sb.append((char) ('a' + map[j]));
+            } else {
+                sb.append(' ');
+            }
+        }
+        return sb.toString();
     }
 }

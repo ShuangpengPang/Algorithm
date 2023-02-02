@@ -177,4 +177,173 @@ class Problem1632RankTransformOfAMatrix0 {
     }
 }
 
+class Problem1632RankTransformOfAMatrix1 {
 
+    public int[][] matrixRankTransform(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length, N = m * n;
+        Integer[] ids = new Integer[N];
+        int[] parent = new int[N], rank = new int[N];
+        for (int i = 0; i < N; i++) {
+            ids[i] = i;
+            parent[i] = i;
+        }
+        Arrays.sort(ids, Comparator.comparingInt(a -> matrix[a / n][a % n]));
+        int[] maxCol = new int[m], maxRow = new int[n];
+        Arrays.fill(maxCol, -1);
+        Arrays.fill(maxRow, -1);
+        for (int id : ids) {
+            int i = id / n, j = id % n, r = 1;
+            int x = maxRow[j], y = maxCol[i];
+            if (y != -1) {
+                if (matrix[i][j] == matrix[i][y]) {
+                    r = Math.max(r, rank[find(parent, i * n + y)]);
+                    union(parent, id, i * n + y);
+                } else {
+                    r = Math.max(r, rank[find(parent, i * n + y)] + 1);
+                }
+            }
+            if (x != -1) {
+                if (matrix[i][j] == matrix[x][j]) {
+                    r = Math.max(r, rank[find(parent, x * n + j)]);
+                    union(parent, id, x * n + j);
+                } else {
+                    r = Math.max(r, rank[find(parent, x * n + j)] + 1);
+                }
+            }
+            int p = find(parent, id);
+            rank[p] = Math.max(rank[p], r);
+            maxCol[i] = j;
+            maxRow[j] = i;
+        }
+        int[][] ans = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                ans[i][j] = rank[find(parent, i * n + j)];
+            }
+        }
+        return ans;
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = parent[x] == x ? x : find(parent, parent[x]);
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent[py] = px;
+        }
+    }
+}
+
+class Problem1632RankTransformOfAMatrix2 {
+
+    public int[][] matrixRankTransform(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length, N = m * n;
+        int[] parent = new int[N], degree = new int[N];
+        Arrays.setAll(parent, i -> i);
+        for (int i = 0; i < m; i++) {
+            Map<Integer, List<Integer>> map = new HashMap<>();
+            int h = i * n;
+            for (int j = 0; j < n; j++) {
+                map.computeIfAbsent(matrix[i][j], k -> new ArrayList<>()).add(h + j);
+            }
+            for (List<Integer> list : map.values()) {
+                int size = list.size();
+                for (int j = 1; j < size; j++) {
+                    union(parent, list.get(j - 1), list.get(j));
+                }
+            }
+        }
+        for (int j = 0; j < n; j++) {
+            int h = j;
+            Map<Integer, List<Integer>> map = new HashMap<>();
+            for (int i = 0; i < m; i++) {
+                map.computeIfAbsent(matrix[i][j], k -> new ArrayList<>()).add(h);
+                h += n;
+            }
+            for (List<Integer> list : map.values()) {
+                int size = list.size();
+                for (int i = 1; i < size; i++) {
+                    union(parent, list.get(i - 1), list.get(i));
+                }
+            }
+        }
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int j = 0, h = i * n; j < n; j++) {
+                map.put(matrix[i][j], h + j);
+            }
+            List<Integer> list = new ArrayList<>(map.keySet());
+            Collections.sort(list);
+            int size = list.size();
+            for (int j = 1; j < size; j++) {
+                int p1 = find(parent, map.get(list.get(j - 1)));
+                int p2 = find(parent, map.get(list.get(j)));
+                degree[p2]++;
+                adj.computeIfAbsent(p1, k -> new ArrayList<>()).add(p2);
+            }
+        }
+        for (int j = 0; j < n; j++) {
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int i = 0, h = j; i < m; i++) {
+                map.put(matrix[i][j], h);
+                h += n;
+            }
+            List<Integer> list = new ArrayList<>(map.keySet());
+            Collections.sort(list);
+            int size = list.size();
+            for (int i = 1; i < size; i++) {
+                int p1 = find(parent, map.get(list.get(i - 1)));
+                int p2 = find(parent, map.get(list.get(i)));
+                degree[p2]++;
+                adj.computeIfAbsent(p1, k -> new ArrayList<>()).add(p2);
+            }
+        }
+        int[] rank = new int[N];
+        Arrays.fill(rank, 1);
+        Deque<Integer> q = new ArrayDeque<>();
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0, h = i * n; j < n; j++) {
+                int p = find(parent, h + j);
+                if (set.add(p) && degree[p] == 0) {
+                    q.offer(p);
+                }
+            }
+        }
+        while (!q.isEmpty()) {
+            int x = q.poll();
+            if (adj.containsKey(x)) {
+                for (int y : adj.get(x)) {
+                    rank[y] = Math.max(rank[y], rank[x] + 1);
+                    if (--degree[y] == 0) {
+                        q.offer(y);
+                    }
+                }
+            }
+        }
+        int[][] ans = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0, h = i * n; j < n; j++) {
+                ans[i][j] = rank[find(parent, h + j)];
+            }
+        }
+        return ans;
+    }
+
+    private int find(int[] parent, int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent, parent[x]);
+        }
+        return parent[x];
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent[py] = px;
+        }
+    }
+}

@@ -59,3 +59,41 @@ class Problem1145BinaryTreeColoringGame0 {
         return left + right + 1;
     }
 }
+
+class Problem1145BinaryTreeColoringGame1 {
+
+    TreeNode xNode;
+
+    public boolean btreeGameWinningMove(TreeNode root, int n, int x) {
+        find(root, x);
+        int half = n >> 1;
+        int leftCount = getSubtreeCount(xNode.left);
+        if (leftCount > half) {
+            return true;
+        }
+        int rightCount = getSubtreeCount(xNode.right);
+        if (rightCount > half) {
+            return true;
+        }
+        return n - leftCount - rightCount - 1 > half;
+    }
+
+    private void find(TreeNode root, int x) {
+        if (xNode != null || root == null) {
+            return;
+        }
+        if (root.val == x) {
+            xNode = root;
+            return;
+        }
+        find(root.left, x);
+        find(root.right, x);
+    }
+
+    private int getSubtreeCount(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return getSubtreeCount(root.left) + getSubtreeCount(root.right) + 1;
+    }
+}

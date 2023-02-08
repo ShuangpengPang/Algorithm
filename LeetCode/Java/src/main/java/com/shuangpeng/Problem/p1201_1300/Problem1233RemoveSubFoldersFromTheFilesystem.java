@@ -3,8 +3,10 @@ package com.shuangpeng.Problem.p1201_1300;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -44,5 +46,54 @@ public class Problem1233RemoveSubFoldersFromTheFilesystem {
             }
         }
         return ans;
+    }
+}
+
+class Problem1233RemoveSubFoldersFromTheFilesystem0 {
+
+    class Trie {
+        Map<String, Trie> trieMap = new HashMap<>();
+        boolean isFolder;
+    }
+
+    public List<String> removeSubfolders(String[] folder) {
+        Trie root = new Trie();
+        for (String f : folder) {
+            int n = f.length(), i = 1;
+            Trie trie = root;
+            while (i < n && !trie.isFolder) {
+                StringBuilder sb = new StringBuilder();
+                while (i < n && f.charAt(i) != '/') {
+                    sb.append(f.charAt(i));
+                    i++;
+                }
+                String s = sb.toString();
+                if (!trie.trieMap.containsKey(s)) {
+                    trie.trieMap.put(s, new Trie());
+                }
+                trie = trie.trieMap.get(s);
+                i++;
+            }
+            trie.isFolder = true;
+        }
+        List<String> ans = new ArrayList<>();
+        dfs(root, new StringBuilder(), ans);
+        return ans;
+    }
+
+    private void dfs(Trie root, StringBuilder sb, List<String> ans) {
+        if (root.isFolder) {
+            ans.add(sb.toString());
+            return;
+        }
+        int n = sb.length();
+        sb.append('/');
+        for (Map.Entry<String, Trie> entry : root.trieMap.entrySet()) {
+            String s = entry.getKey();
+            sb.append(s);
+            dfs(entry.getValue(), sb, ans);
+            sb.setLength(n + 1);
+        }
+        sb.setLength(n);
     }
 }

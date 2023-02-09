@@ -33,3 +33,16 @@ class Problem2331EvaluateBooleanBinaryTree0 {
         return root.val == 2 ? (left || right) : (left && right);
     }
 }
+
+class Problem2331EvaluateBooleanBinaryTree1 {
+
+    public boolean evaluateTree(TreeNode root) {
+        if (root.val == 2) {
+            return evaluateTree(root.left) || evaluateTree(root.right);
+        }
+        if (root.val == 3) {
+            return evaluateTree(root.left) && evaluateTree(root.right);
+        }
+        return root.val == 1;
+    }
+}

@@ -114,3 +114,46 @@ class Problem1233RemoveSubFoldersFromTheFilesystem1 {
         return ans;
     }
 }
+
+class Problem1233RemoveSubFoldersFromTheFilesystem2 {
+
+    class Trie {
+        int index = -1;
+        Map<String, Trie> tries = new HashMap<>();
+    }
+
+    public List<String> removeSubfolders(String[] folder) {
+        Trie root = new Trie();
+        for (int i = 0; i < folder.length; i++) {
+            String f = folder[i];
+            StringBuilder sb = new StringBuilder();
+            Trie cur = root;
+            for (int j = 1; j <= f.length() && cur.index == -1; j++) {
+                if (j == f.length() || f.charAt(j) == '/') {
+                    String s = sb.toString();
+                    cur.tries.putIfAbsent(s, new Trie());
+                    cur = cur.tries.get(s);
+                    sb.setLength(0);
+                } else {
+                    sb.append(f.charAt(j));
+                }
+            }
+            if (cur.index == -1) {
+                cur.index = i;
+            }
+        }
+        List<String> ans = new ArrayList<>();
+        dfs(root, folder, ans);
+        return ans;
+    }
+
+    private void dfs(Trie root, String[] folder, List<String> ans) {
+        if (root.index != -1) {
+            ans.add(folder[root.index]);
+            return;
+        }
+        for (Trie trie : root.tries.values()) {
+            dfs(trie, folder, ans);
+        }
+    }
+}

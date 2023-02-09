@@ -5,6 +5,8 @@ import javafx.util.Pair;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -130,6 +132,40 @@ class Problem1797DesignAuthenticationManager0 {
             this.expireTime = expireTime;
             this.prev = prev;
             this.next = next;
+        }
+    }
+}
+
+class Problem1797DesignAuthenticationManager1 {
+
+    class AuthenticationManager {
+
+        int timeToLive;
+        LinkedHashMap<String, Integer> map;
+
+        public AuthenticationManager(int timeToLive) {
+            this.timeToLive = timeToLive;
+            this.map = new LinkedHashMap<>();
+        }
+
+        public void generate(String tokenId, int currentTime) {
+            map.put(tokenId, currentTime + timeToLive);
+        }
+
+        public void renew(String tokenId, int currentTime) {
+            if (map.containsKey(tokenId) && map.get(tokenId) > currentTime) {
+                map.put(tokenId, currentTime + timeToLive);
+            }
+        }
+
+        public int countUnexpiredTokens(int currentTime) {
+            Iterator iterator = map.entrySet().iterator();
+            while (iterator.hasNext()) {
+                if (((Map.Entry<String, Integer>) iterator.next()).getValue() <= currentTime) {
+                    iterator.remove();
+                }
+            }
+            return map.size();
         }
     }
 }

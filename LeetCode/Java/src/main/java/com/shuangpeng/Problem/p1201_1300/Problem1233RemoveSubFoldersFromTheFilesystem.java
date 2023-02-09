@@ -97,3 +97,20 @@ class Problem1233RemoveSubFoldersFromTheFilesystem0 {
         sb.setLength(n);
     }
 }
+
+class Problem1233RemoveSubFoldersFromTheFilesystem1 {
+
+    public List<String> removeSubfolders(String[] folder) {
+        Arrays.sort(folder);
+        List<String> ans = new ArrayList<>();
+        ans.add(folder[0]);
+        for (int i = 1; i < folder.length; i++) {
+            String p = ans.get(ans.size() - 1), s = folder[i];
+            int n1 = p.length(), n2 = s.length();
+            if (n2 < n1 || !p.equals(s.substring(0, n1)) || (n1 < n2 && s.charAt(n1) != '/')) {
+                ans.add(s);
+            }
+        }
+        return ans;
+    }
+}

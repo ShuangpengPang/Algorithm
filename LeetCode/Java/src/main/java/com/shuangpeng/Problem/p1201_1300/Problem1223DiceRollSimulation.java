@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p1201_1300;
 
+import java.util.Arrays;
+
 /**
  * @Description: Problem1223DiceRollSimulation（掷骰子模拟）
  * @Date 2022/7/24 9:05 PM
@@ -43,7 +45,7 @@ public class Problem1223DiceRollSimulation {
         return (int) (ans % M);
     }
 
-    public int dieSimulator(int n, int[] rollMax) {
+    public int dieSimulator1(int n, int[] rollMax) {
         int M = (int) 1e9 + 7;
         int[][] dp = new int[6][16];
         for (int i = 0; i < 6; i++) {
@@ -71,4 +73,63 @@ public class Problem1223DiceRollSimulation {
         }
         return (int) (ans % M);
     }
+
+    public int dieSimulator2(int n, int[] rollMax) {
+        int M = (int) 1e9 + 7;
+        int[][] dp = new int[n][6];
+        Arrays.fill(dp[0], 1);
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (rollMax[j] >= i + 1) {
+                    dp[i][j] = 1;
+                }
+                for (int c = 1; c <= rollMax[j] && c <= i; c++) {
+                    for (int k = 0; k < 6; k++) {
+                        if (j != k) {
+                            dp[i][j] = (dp[i][j] + dp[i - c][k]) % M;
+                        }
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        for (int count : dp[n - 1]) {
+            ans = (ans + count) % M;
+        }
+        return ans;
+    }
+
+    public int dieSimulator3(int n, int[] rollMax) {
+        int M = (int) 1e9 + 7;
+        int[][] dp = new int[n + 1][6];
+        int[] sum = new int[n + 1];
+        sum[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < 6; j++) {
+                int k = Math.max(i - rollMax[j] - 1, 0);
+                dp[i][j] = ((sum[i - 1] + dp[k][j] - sum[k]) % M + M) % M;
+                if (i <= rollMax[j]) {
+                    dp[i][j] = (dp[i][j] + 1) % M;
+                }
+                sum[i] = (sum[i] + dp[i][j]) % M;
+            }
+        }
+        return sum[n];
+    }
+
+//    public int dieSimulator(int n, int[] rollMax) {
+//        int M = (int) 1e9 + 7;
+//        int[][] dp = new int[n + 1][6];
+//        int[] sum = new int[n + 1];
+//        Arrays.fill(dp[1], 1);
+//        sum[1] = 6;
+//        for (int i = 2; i <= n; i++) {
+//            for (int j = 0; j < 6; j++) {
+//                int k = Math.max(i - rollMax[j] - 1, 0);
+//                dp[i][j] = ((sum[i - 1] + dp[k][j] - sum[k]) % M + M) % M;
+//                sum[i] = (sum[i] + dp[i][j]) % M;
+//            }
+//        }
+//        return sum[n];
+//    }
 }

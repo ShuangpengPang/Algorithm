@@ -103,6 +103,48 @@ public class Problem1223DiceRollSimulation {
         int M = (int) 1e9 + 7;
         int[][] dp = new int[n + 1][6];
         int[] sum = new int[n + 1];
+        Arrays.fill(dp[1], 1);
+        sum[1] = 6;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 0; j < 6; j++) {
+                int k = Math.max(i - rollMax[j] - 1, 0);
+                dp[i][j] = (sum[i - 1] + dp[k][j] - sum[k]) % M;
+                if (i == rollMax[j] + 1) {
+                    dp[i][j]--;
+                }
+                dp[i][j] = (dp[i][j] + M) % M;
+                sum[i] = (sum[i] + dp[i][j]) % M;
+            }
+        }
+        return sum[n];
+    }
+
+    public int dieSimulator4(int n, int[] rollMax) {
+        int m = rollMax.length, M = (int) 1e9 + 7;
+        int[][] dp = new int[n][m];
+        int[] sum = new int[n];
+        Arrays.fill(dp[0], 1);
+        sum[0] = m;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int k = i - rollMax[j] - 1;
+                dp[i][j] = sum[i - 1];
+                if (k >= 0) {
+                    dp[i][j] = (dp[i][j] - sum[k] + dp[k][j]) % M;
+                } else if (k == -1) {
+                    dp[i][j]--;
+                }
+                dp[i][j] = (dp[i][j] + M) % M;
+                sum[i] = (sum[i] + dp[i][j]) % M;
+            }
+        }
+        return sum[n - 1];
+    }
+
+    public int dieSimulator5(int n, int[] rollMax) {
+        int M = (int) 1e9 + 7;
+        int[][] dp = new int[n + 1][6];
+        int[] sum = new int[n + 1];
         sum[0] = 1;
         for (int i = 1; i <= n; i++) {
             for (int j = 0; j < 6; j++) {
@@ -116,20 +158,4 @@ public class Problem1223DiceRollSimulation {
         }
         return sum[n];
     }
-
-//    public int dieSimulator(int n, int[] rollMax) {
-//        int M = (int) 1e9 + 7;
-//        int[][] dp = new int[n + 1][6];
-//        int[] sum = new int[n + 1];
-//        Arrays.fill(dp[1], 1);
-//        sum[1] = 6;
-//        for (int i = 2; i <= n; i++) {
-//            for (int j = 0; j < 6; j++) {
-//                int k = Math.max(i - rollMax[j] - 1, 0);
-//                dp[i][j] = ((sum[i - 1] + dp[k][j] - sum[k]) % M + M) % M;
-//                sum[i] = (sum[i] + dp[i][j]) % M;
-//            }
-//        }
-//        return sum[n];
-//    }
 }

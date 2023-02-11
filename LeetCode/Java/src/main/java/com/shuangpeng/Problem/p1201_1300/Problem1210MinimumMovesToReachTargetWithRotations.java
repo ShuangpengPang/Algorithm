@@ -132,3 +132,56 @@ public class Problem1210MinimumMovesToReachTargetWithRotations {
         }
     }
 }
+
+class Problem1210MinimumMovesToReachTargetWithRotations0 {
+
+    public int minimumMoves(int[][] grid) {
+        int n = grid.length;
+        if (grid[n - 1][n - 2] == 1 || grid[n - 1][n - 1] == 1) {
+            return -1;
+        }
+        boolean[][][] visited = new boolean[n][n][2];
+        Queue<int[]> q = new ArrayDeque<>();
+        q.offer(new int[]{0, 1, 0});
+        visited[0][1][0] = true;
+        int step = 0;
+        while (!q.isEmpty()) {
+            for (int i = q.size() - 1; i >= 0; i--) {
+                int[] p = q.poll();
+                int x = p[0], y = p[1], d = p[2];
+                if (d == 0 && x == n - 1 && y == n - 1) {
+                    return step;
+                }
+                if (d == 0) {
+                    if (y + 1 < n && !visited[x][y + 1][0] && grid[x][y + 1] == 0) {
+                        visited[x][y + 1][0] = true;
+                        q.offer(new int[]{x, y + 1, 0});
+                    }
+                    if (x + 1 < n && !visited[x + 1][y][0] && grid[x + 1][y] == 0 && grid[x + 1][y - 1] == 0) {
+                        visited[x + 1][y][0] = true;
+                        q.offer(new int[]{x + 1, y, 0});
+                    }
+                    if (x + 1 < n && !visited[x + 1][y - 1][1] && grid[x + 1][y - 1] == 0 && grid[x + 1][y] == 0) {
+                        visited[x + 1][y - 1][1] = true;
+                        q.offer(new int[]{x + 1, y - 1, 1});
+                    }
+                } else if (d == 1) {
+                    if (x + 1 < n && !visited[x + 1][y][1] && grid[x + 1][y] == 0) {
+                        visited[x + 1][y][1] = true;
+                        q.offer(new int[]{x + 1, y, 1});
+                    }
+                    if (y + 1 < n && !visited[x][y + 1][1] && grid[x][y + 1] == 0 && grid[x - 1][y + 1] == 0) {
+                        visited[x][y + 1][1] = true;
+                        q.offer(new int[]{x, y + 1, 1});
+                    }
+                    if (y + 1 < n && !visited[x - 1][y + 1][0] && grid[x - 1][y + 1] == 0 && grid[x][y + 1] == 0) {
+                        visited[x - 1][y + 1][0] = true;
+                        q.offer(new int[]{x - 1, y + 1, 0});
+                    }
+                }
+            }
+            step++;
+        }
+        return -1;
+    }
+}

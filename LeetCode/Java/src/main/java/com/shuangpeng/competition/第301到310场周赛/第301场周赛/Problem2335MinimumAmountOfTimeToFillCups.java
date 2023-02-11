@@ -41,4 +41,11 @@ public class Problem2335MinimumAmountOfTimeToFillCups {
             return (x + y - z + 1) / 2 + z;
         }
     }
+
+    public int fillCups2(int[] amount) {
+        int sum = amount[0] + amount[1] + amount[2];
+        int max = Math.max(Math.max(amount[0], amount[1]), amount[2]);
+        int half = sum + 1 >> 1;
+        return max >= half ? max : half;
+    }
 }

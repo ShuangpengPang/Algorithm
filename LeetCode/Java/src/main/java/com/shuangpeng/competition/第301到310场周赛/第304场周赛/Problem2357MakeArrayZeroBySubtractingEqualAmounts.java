@@ -11,7 +11,7 @@ import java.util.Set;
 public class Problem2357MakeArrayZeroBySubtractingEqualAmounts {
 
     // 比赛时写法
-    public int minimumOperations(int[] nums) {
+    public int minimumOperations0(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int num : nums) {
             if (num > 0) {
@@ -19,5 +19,17 @@ public class Problem2357MakeArrayZeroBySubtractingEqualAmounts {
             }
         }
         return set.size();
+    }
+
+    public int minimumOperations(int[] nums) {
+        int ans = 0, N = 101;
+        boolean[] has = new boolean[N];
+        for (int num : nums) {
+            if (num > 0 && !has[num]) {
+                has[num] = true;
+                ans++;
+            }
+        }
+        return ans;
     }
 }

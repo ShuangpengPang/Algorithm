@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1101_1200;
  */
 public class Problem1144DecreaseElementsToMakeArrayZigzag {
 
-    public int movesToMakeZigzag(int[] nums) {
+    public int movesToMakeZigzag0(int[] nums) {
         int n = nums.length, c1 = 0, c2 = 0;
         for (int i = 0; i < n; i++) {
             int m = Math.min(i - 1 < 0 ? Integer.MAX_VALUE : nums[i - 1], i + 1 >= n ? Integer.MAX_VALUE : nums[i + 1]);
@@ -20,5 +20,16 @@ public class Problem1144DecreaseElementsToMakeArrayZigzag {
             }
         }
         return Math.min(c1, c2);
+    }
+
+    public int movesToMakeZigzag(int[] nums) {
+        int n = nums.length, N = Integer.MAX_VALUE;
+        int[] cnt = new int[2];
+        for (int i = 0; i < n; i++) {
+            int left = i - 1 >= 0 ? nums[i - 1] : N;
+            int right = i + 1 < n ? nums[i + 1] : N;
+            cnt[i & 1] += Math.max(nums[i] - Math.min(left, right) + 1, 0);
+        }
+        return Math.min(cnt[0], cnt[1]);
     }
 }

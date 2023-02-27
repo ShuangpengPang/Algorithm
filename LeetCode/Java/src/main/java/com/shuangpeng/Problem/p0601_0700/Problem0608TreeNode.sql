@@ -52,3 +52,11 @@ SELECT
 FROM
     Tree
 ;
+
+SELECT
+    id,
+    IF(ISNULL(p_id), 'Root',
+        IF(id IN (SELECT p_id FROM Tree), 'Inner', 'Leaf')) AS type
+FROM
+    Tree
+;

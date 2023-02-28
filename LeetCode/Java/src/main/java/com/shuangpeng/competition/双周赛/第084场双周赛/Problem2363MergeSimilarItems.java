@@ -31,7 +31,7 @@ public class Problem2363MergeSimilarItems {
         return ans;
     }
 
-    public List<List<Integer>> mergeSimilarItems(int[][] items1, int[][] items2) {
+    public List<List<Integer>> mergeSimilarItems1(int[][] items1, int[][] items2) {
         TreeMap<Integer, Integer> map = new TreeMap<>();
         for (int[] item : items1) {
             map.put(item[0], map.getOrDefault(item[0], 0) + item[1]);
@@ -43,6 +43,24 @@ public class Problem2363MergeSimilarItems {
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             ans.add(Arrays.asList(entry.getKey(), entry.getValue()));
         }
+        return ans;
+    }
+
+    public List<List<Integer>> mergeSimilarItems(int[][] items1, int[][] items2) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int[] item : items1) {
+            int v = item[0], w = item[1];
+            map.put(v, map.getOrDefault(v, 0) + w);
+        }
+        for (int[] item : items2) {
+            int v = item[0], w = item[1];
+            map.put(v, map.getOrDefault(v, 0) + w);
+        }
+        List<List<Integer>> ans = new ArrayList<>(map.size());
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            ans.add(Arrays.asList(entry.getKey(), entry.getValue()));
+        }
+        ans.sort(Comparator.comparingInt(a -> a.get(0)));
         return ans;
     }
 }

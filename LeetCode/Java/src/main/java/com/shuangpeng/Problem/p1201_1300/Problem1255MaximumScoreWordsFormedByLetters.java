@@ -123,3 +123,69 @@ class Problem1255MaximumScoreWordsFormedByLetters0 {
     }
 }
 
+class Problem1255MaximumScoreWordsFormedByLetters1 {
+
+    public int maxScoreWords(String[] words, char[] letters, int[] score) {
+        int n = words.length, N = 26, M = 1 << n;
+        int[][] cnt = new int[n][N];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < words[i].length(); j++) {
+                cnt[i][words[i].charAt(j) - 'a']++;
+            }
+        }
+        int[] total = new int[N];
+        for (char c : letters) {
+            total[c - 'a']++;
+        }
+        int ans = 0;
+        for (int i = 1; i < M; i++) {
+            int[] copy = total.clone();
+            int s = 0;
+            for (int j = 0; j < n && s >= 0; j++) {
+                if (((i >> j) & 1) == 1) {
+                    for (int k = 0; k < N; k++) {
+                        if (cnt[j][k] > copy[k]) {
+                            s = -1;
+                            break;
+                        }
+                        copy[k] -= cnt[j][k];
+                        s += cnt[j][k] * score[k];
+                    }
+                }
+            }
+            ans = Math.max(ans, s);
+        }
+        return ans;
+    }
+}
+
+class Problem1255MaximumScoreWordsFormedByLetters2 {
+
+    public int maxScoreWords(String[] words, char[] letters, int[] score) {
+        int[] cnt = new int[26];
+        for (char c : letters) {
+            cnt[c - 'a']++;
+        }
+        int n = words.length, M = 1 << n, ans = 0;
+        for (int i = 1; i < M; i++) {
+            int s = 0;
+            int[] copy = cnt.clone();
+            for (int j = 0; j < n && s >= 0; j++) {
+                if (((i >> j) & 1) == 0) {
+                    continue;
+                }
+                for (int k = 0; k < words[j].length(); k++) {
+                    int c = words[j].charAt(k) - 'a';
+                    if (copy[c] <= 0) {
+                        s = -1;
+                        break;
+                    }
+                    s += score[c];
+                    copy[c]--;
+                }
+            }
+            ans = Math.max(ans, s);
+        }
+        return ans;
+    }
+}

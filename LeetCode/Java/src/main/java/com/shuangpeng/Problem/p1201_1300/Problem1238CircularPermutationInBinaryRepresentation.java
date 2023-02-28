@@ -91,3 +91,25 @@ class Problem1238CircularPermutationInBinaryRepresentation0 {
         }
     }
 }
+
+class Problem1238CircularPermutationInBinaryRepresentation1 {
+
+    public List<Integer> circularPermutation0(int n, int start) {
+        List<Integer> ans = new ArrayList<>(1 << n);
+        ans.add(start);
+        for (int i = 0; i < n; i++) {
+            for (int j = ans.size() - 1; j >= 0; j--) {
+                ans.add(((ans.get(j) ^ start) | 1 << i) ^ start);
+            }
+        }
+        return ans;
+    }
+
+    public List<Integer> circularPermutation(int n, int start) {
+        List<Integer> ans = new ArrayList<>(1 << n);
+        for (int i = 0; i < 1 << n; i++) {
+            ans.add(i ^ (i >> 1) ^ start);
+        }
+        return ans;
+    }
+}

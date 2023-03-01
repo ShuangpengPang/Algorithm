@@ -102,4 +102,3 @@ public class Problem1140StoneGameII {
         return Math.max(dp[0][0], dp[0][1]);
     }
 }
-

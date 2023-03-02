@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p0701_0800;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -32,7 +33,7 @@ public class Problem0785IsGraphBipartite {
         return true;
     }
 
-    public boolean isBipartite(int[][] graph) {
+    public boolean isBipartite1(int[][] graph) {
         int n = graph.length;
         int[] color = new int[n];
         Queue<Integer> q = new LinkedList<>();
@@ -55,5 +56,31 @@ public class Problem0785IsGraphBipartite {
             }
         }
         return true;
+    }
+
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        int[] parent = new int[n];
+        Arrays.setAll(parent, i -> i);
+        for (int i = 0; i < n; i++) {
+            for (int x : graph[i]) {
+                if (find(parent, i) == find(parent, x)) {
+                    return false;
+                }
+                union(parent, graph[i][0], x);
+            }
+        }
+        return true;
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = x == parent[x] ? x : find(parent, parent[x]);
+    }
+
+    private void union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent[py] = px;
+        }
     }
 }

@@ -8,7 +8,7 @@ package com.shuangpeng.interview;
  */
 public class Question0502PrintBin {
 
-    public String printBin(double num) {
+    public String printBin0(double num) {
         StringBuilder sb = new StringBuilder("0.");
         for (int i = 0; i < 30 && num > 0; i++) {
             num *= 2;
@@ -18,6 +18,17 @@ public class Question0502PrintBin {
             } else {
                 sb.append("0");
             }
+        }
+        return num > 0 ? "ERROR" : sb.toString();
+    }
+
+    public String printBin(double num) {
+        StringBuilder sb = new StringBuilder("0.");
+        for (int i = 0; i < 30 && num > 0; i++) {
+            num *= 2;
+            int digit = (int) num;
+            sb.append(digit);
+            num -= digit;
         }
         return num > 0 ? "ERROR" : sb.toString();
     }

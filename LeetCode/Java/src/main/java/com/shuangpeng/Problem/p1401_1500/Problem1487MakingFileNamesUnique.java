@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem1487MakingFileNamesUnique {
 
-    public String[] getFolderNames(String[] names) {
+    public String[] getFolderNames0(String[] names) {
         int n = names.length;
         String[] ans = new String[n];
         Map<String, Integer> map = new HashMap<>(n);
@@ -30,5 +30,22 @@ public class Problem1487MakingFileNamesUnique {
             map.put(ans[i], 1);
         }
         return ans;
+    }
+
+    public String[] getFolderNames(String[] names) {
+        int n = names.length;
+        Map<String, Integer> map = new HashMap<>(n);
+        for (int i = 0; i < n; i++) {
+            if (map.containsKey(names[i])) {
+                int num = map.get(names[i]);
+                while (map.containsKey(names[i] + "(" + num + ")")) {
+                    num++;
+                }
+                map.put(names[i], num + 1);
+                names[i] += "(" + num + ")";
+            }
+            map.put(names[i], 1);
+        }
+        return names;
     }
 }

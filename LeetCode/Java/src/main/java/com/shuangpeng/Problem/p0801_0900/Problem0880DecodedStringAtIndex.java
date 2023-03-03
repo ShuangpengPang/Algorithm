@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0801_0900;
  */
 public class Problem0880DecodedStringAtIndex {
 
-    public String decodeAtIndex(String s, int k) {
+    public String decodeAtIndex0(String s, int k) {
         char[] cs = s.toCharArray();
         int n = cs.length;
         char last = 'a';
@@ -32,5 +32,32 @@ public class Problem0880DecodedStringAtIndex {
             }
         }
         return String.valueOf(last);
+    }
+
+    // 逆向工作
+    public String decodeAtIndex(String s, int k) {
+        char[] cs = s.toCharArray();
+        int n = cs.length;
+        long size = 0L;
+        for (char c : cs) {
+            if (c >= 'a' && c <= 'z') {
+                size++;
+            } else {
+                size *= c - '0';
+            }
+        }
+        for (int i = n - 1; i>= 0; i--) {
+            char c = cs[i];
+            k %= size;
+            if (k == 0 && c >= 'a' && c <= 'z') {
+                return String.valueOf(c);
+            }
+            if (c >= 'a' && c <= 'z') {
+                size--;
+            } else {
+                size /= c - '0';
+            }
+        }
+        return null;
     }
 }

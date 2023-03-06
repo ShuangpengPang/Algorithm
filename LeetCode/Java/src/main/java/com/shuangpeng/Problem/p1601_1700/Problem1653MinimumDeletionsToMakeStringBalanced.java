@@ -43,6 +43,20 @@ public class Problem1653MinimumDeletionsToMakeStringBalanced {
         return ans;
     }
 
+    public int minimumDeletions2(String s) {
+        char[] cs = s.toCharArray();
+        int del = 0;
+        for (char c : cs) {
+            del += 'b' - c;
+        }
+        int ans = del;
+        for (char c : cs) {
+            del += ((c - 'a') << 1) - 1;
+            ans = Math.min(ans, del);
+        }
+        return ans;
+    }
+
     public int minimumDeletions(String s) {
         int n = s.length(), ans = 0, bCnt = 0;
         for (int i = 0; i < n; i++) {

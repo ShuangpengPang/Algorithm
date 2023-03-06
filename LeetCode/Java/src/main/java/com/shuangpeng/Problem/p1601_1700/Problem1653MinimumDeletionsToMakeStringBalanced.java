@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1601_1700;
  */
 public class Problem1653MinimumDeletionsToMakeStringBalanced {
 
-    public int minimumDeletions(String s) {
+    public int minimumDeletions0(String s) {
         int n = s.length();
         int[] cnt = new int[n + 1];
         for (int i = n - 1; i >= 0; i--) {
@@ -20,6 +20,25 @@ public class Problem1653MinimumDeletionsToMakeStringBalanced {
             if (i < n && s.charAt(i) == 'b') {
                 count++;
             }
+        }
+        return ans;
+    }
+
+    public int minimumDeletions(String s) {
+        int n = s.length(), rightA = 0;
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == 'a') {
+                rightA++;
+            }
+        }
+        int ans = rightA;
+        for (int i = 0, leftB = 0; i < n; i++) {
+            if (s.charAt(i) == 'a') {
+                rightA--;
+            } else {
+                leftB++;
+            }
+            ans = Math.min(ans, leftB + rightA);
         }
         return ans;
     }

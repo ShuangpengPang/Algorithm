@@ -24,7 +24,7 @@ public class Problem1653MinimumDeletionsToMakeStringBalanced {
         return ans;
     }
 
-    public int minimumDeletions(String s) {
+    public int minimumDeletions1(String s) {
         int n = s.length(), rightA = 0;
         for (int i = 0; i < n; i++) {
             if (s.charAt(i) == 'a') {
@@ -39,6 +39,18 @@ public class Problem1653MinimumDeletionsToMakeStringBalanced {
                 leftB++;
             }
             ans = Math.min(ans, leftB + rightA);
+        }
+        return ans;
+    }
+
+    public int minimumDeletions(String s) {
+        int n = s.length(), ans = 0, bCnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == 'a') {
+                ans = Math.min(ans + 1, bCnt);
+            } else {
+                bCnt++;
+            }
         }
         return ans;
     }

@@ -1,6 +1,8 @@
 package com.shuangpeng.Problem.p1001_1100;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -169,10 +171,65 @@ class Problem1096BraceExpansionII0 {
         }
         return ans;
     }
+}
 
-//    public static void main(String[] args) {
-//        test test = new test();
-//        test.braceExpansionII("{a,b}{c,{d,e}}");
-//        int i = 1;
-//    }
+class Problem1096BraceExpansionII1 {
+
+    public List<String> braceExpansionII(String expression) {
+        Deque<Character> op = new ArrayDeque<>();
+        List<List<String>> stack = new ArrayList<>();
+        char[] cs = expression.toCharArray();
+        int n = cs.length;
+        for (int i = 0; i < n; i++) {
+            char c = expression.charAt(i);
+            if (c == '{') {
+                if (i > 0 && cs[i - 1] != ',' && cs[i - 1] != '{') {
+                    op.push('*');
+                }
+                op.push('{');
+            } else if (c == '}') {
+                while (op.peek() != '{') {
+                    calculate(stack, op);
+                }
+                op.pop();
+            } else if (c == ',') {
+                while (op.peek() == '*') {
+                    calculate(stack, op);
+                }
+                op.push('+');
+            } else {
+                if (i > 0 && cs[i - 1] != '{' && cs[i - 1] != ',') {
+                    op.push('*');
+                }
+                List<String> list = new ArrayList<>();
+                list.add(String.valueOf(cs[i]));
+                stack.add(list);
+            }
+        }
+        while (!op.isEmpty()) {
+            calculate(stack, op);
+        }
+        stack.get(0).sort(String::compareTo);
+        return stack.get(0);
+    }
+
+    private void calculate(List<List<String>> stack, Deque<Character> op) {
+        int n = stack.size();
+        List<String> l1 = stack.get(n - 2), l2 = stack.get(n - 1);
+        char o = op.pop();
+        if (o == '+') {
+            Set<String> set = new HashSet<>(l1);
+            set.addAll(l2);
+            stack.set(n - 2, new ArrayList<>(set));
+        } else {
+            List<String> list = new ArrayList<>(l1.size() * l2.size());
+            for (String s1 : l1) {
+                for (String s2 : l2) {
+                    list.add(s1 + s2);
+                }
+            }
+            stack.set(n - 2, list);
+        }
+        stack.remove(n - 1);
+    }
 }

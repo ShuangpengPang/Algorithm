@@ -233,3 +233,32 @@ class Problem1096BraceExpansionII1 {
         stack.remove(n - 1);
     }
 }
+
+class Problem1096BraceExpansionII2 {
+
+    Set<String> set;
+
+    public List<String> braceExpansionII(String expression) {
+        set = new HashSet<>();
+        dfs(expression);
+        List<String> ans = new ArrayList<>(set);
+        ans.sort(String::compareTo);
+        return ans;
+    }
+
+    private void dfs(String s) {
+        int i = s.indexOf('}');
+        if (i == -1) {
+            set.add(s);
+            return;
+        }
+        int j = i;
+        while (s.charAt(i) != '{') {
+            i--;
+        }
+        String a = s.substring(0, i), c = s.substring(j + 1);
+        for (String b : s.substring(i + 1, j).split(",")) {
+            dfs(a + b + c);
+        }
+    }
+}

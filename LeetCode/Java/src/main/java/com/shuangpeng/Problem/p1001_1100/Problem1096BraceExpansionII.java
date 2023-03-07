@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1001_1100;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -126,3 +127,56 @@ public class Problem1096BraceExpansionII {
         }
     }
 }
+
+class Problem1096BraceExpansionII0 {
+
+    int index = 0;
+
+    public List<String> braceExpansionII(String expression) {
+        index = 0;
+        List<String> ans = dfs(expression.toCharArray());
+        ans.sort(String::compareTo);
+        return ans;
+    }
+
+    private List<String> dfs(char[] cs) {
+        int n = cs.length;
+        List<List<String>> list = new ArrayList<>();
+        while (index < n && cs[index] != ',' && cs[index] != '}') {
+            if (cs[index] != '{') {
+                StringBuilder sb = new StringBuilder();
+                while (index < n && cs[index] >= 'a' && cs[index] <= 'z') {
+                    sb.append(cs[index++]);
+                }
+                list.add(Arrays.asList(sb.toString()));
+            } else {
+                Set<String> set = new HashSet<>();
+                while (cs[index] != '}') {
+                    index++;
+                    set.addAll(dfs(cs));
+                }
+                index++;
+                list.add(new ArrayList<>(set));
+            }
+        }
+        int size = list.size();
+        List<String> ans = list.get(0);
+        for (int i = 1; i < size; i++) {
+            List<String> tmp = new ArrayList<>();
+            for (String s1 : ans) {
+                for (String s2 : list.get(i)) {
+                    tmp.add(s1 + s2);
+                }
+            }
+            ans = tmp;
+        }
+        return ans;
+    }
+
+//    public static void main(String[] args) {
+//        test test = new test();
+//        test.braceExpansionII("{a,b}{c,{d,e}}");
+//        int i = 1;
+//    }
+}
+

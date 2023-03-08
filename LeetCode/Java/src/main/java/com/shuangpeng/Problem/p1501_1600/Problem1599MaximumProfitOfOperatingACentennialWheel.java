@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1501_1600;
  */
 public class Problem1599MaximumProfitOfOperatingACentennialWheel {
 
-    public int minOperationsMaxProfit(int[] customers, int boardingCost, int runningCost) {
+    public int minOperationsMaxProfit0(int[] customers, int boardingCost, int runningCost) {
         int n = customers.length, max = Integer.MIN_VALUE, ans = 0;
         int s = 0, c = 0, p = 0;
         for (int i = 0; i < n; i++) {
@@ -36,6 +36,34 @@ public class Problem1599MaximumProfitOfOperatingACentennialWheel {
             if (p > max) {
                 max = p;
                 ans = s + 1;
+            }
+        }
+        return max > 0 ? ans : -1;
+    }
+
+    public int minOperationsMaxProfit(int[] customers, int boardingCost, int runningCost) {
+        int n = customers.length, max = 0, ans = -1, cnt = 0, p = 0;
+        for (int i = 0; i < n; i++) {
+            cnt += customers[i];
+            int c = Math.min(cnt, 4);
+            cnt -= c;
+            p += c * boardingCost - runningCost;
+            if (p > max) {
+                max = p;
+                ans = i + 1;
+            }
+        }
+        int s = cnt / 4, m = cnt % 4;
+        p += s * 4 * boardingCost - s * runningCost;
+        if (p > max) {
+            max = p;
+            ans = n + s;
+        }
+        if (m > 0) {
+            p += m * boardingCost - runningCost;
+            if (p > max) {
+                max = p;
+                ans = n + s + 1;
             }
         }
         return max > 0 ? ans : -1;

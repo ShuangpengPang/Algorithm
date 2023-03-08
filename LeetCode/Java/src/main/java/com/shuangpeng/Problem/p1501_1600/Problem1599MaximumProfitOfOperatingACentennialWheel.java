@@ -41,7 +41,7 @@ public class Problem1599MaximumProfitOfOperatingACentennialWheel {
         return max > 0 ? ans : -1;
     }
 
-    public int minOperationsMaxProfit(int[] customers, int boardingCost, int runningCost) {
+    public int minOperationsMaxProfit1(int[] customers, int boardingCost, int runningCost) {
         int n = customers.length, max = 0, ans = -1, cnt = 0, p = 0;
         for (int i = 0; i < n; i++) {
             cnt += customers[i];
@@ -67,5 +67,24 @@ public class Problem1599MaximumProfitOfOperatingACentennialWheel {
             }
         }
         return max > 0 ? ans : -1;
+    }
+
+    public int minOperationsMaxProfit(int[] customers, int boardingCost, int runningCost) {
+        int n = customers.length, max = 0, p = 0, ans = -1, cnt = 0, i = 0, s = 0;
+        while (i < n || cnt > 0) {
+            if (i < n) {
+                cnt += customers[i];
+            }
+            int c = Math.min(cnt, 4);
+            cnt -= c;
+            p += c * boardingCost - runningCost;
+            s++;
+            if (p > max) {
+                max = p;
+                ans = s;
+            }
+            i++;
+        }
+        return ans;
     }
 }

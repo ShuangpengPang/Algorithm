@@ -1,7 +1,7 @@
 package com.shuangpeng.Problem.p0901_1000;
 
 /**
- * @Description: Problem0982TriplesWithBitwiseANDEqualToZero
+ * @Description: Problem0982TriplesWithBitwiseANDEqualToZero（按位与为零的三元组）
  * @Date 2022/4/28 7:06 PM
  * @Version 1.0
  */
@@ -58,7 +58,7 @@ public class Problem0982TriplesWithBitwiseANDEqualToZero {
         return dfs(trie.tries[0], num, i + 1) + dfs(trie.tries[1], num, i + 1);
     }
 
-    public int countTriplets(int[] nums) {
+    public int countTriplets1(int[] nums) {
         int k = 1;
         for (int num : nums) {
             while (k <= num) {
@@ -79,6 +79,30 @@ public class Problem0982TriplesWithBitwiseANDEqualToZero {
         for (int i : nums) {
             for (int j : nums) {
                 ans += memo[i & j];
+            }
+        }
+        return ans;
+    }
+
+    public int countTriplets(int[] nums) {
+        int N = 1;
+        for (int num : nums) {
+            while (N <= num) {
+                N <<= 1;
+            }
+        }
+        int[] cnt = new int[N];
+        for (int x : nums) {
+            for (int y : nums) {
+                cnt[x & y]++;
+            }
+        }
+        int ans = 0;
+        for (int num : nums) {
+            int subset = num ^ (N - 1);
+            ans += cnt[0];
+            for (int i = subset; i > 0; i = subset & (i - 1)) {
+                ans += cnt[i];
             }
         }
         return ans;

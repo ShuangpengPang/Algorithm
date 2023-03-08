@@ -52,3 +52,31 @@ public class Problem0900RLEIterator {
  * int param_1 = obj.next(n);
  */
 }
+
+class Problem0900RLEIterator0 {
+
+    class RLEIterator {
+
+        int[] encoding;
+        int index, p;
+
+        public RLEIterator(int[] encoding) {
+            this.encoding = encoding;
+            index = p = 0;
+        }
+
+        public int next(int n) {
+            while (index < encoding.length) {
+                if (p + n > encoding[index]) {
+                    n -= encoding[index] - p;
+                    p = 0;
+                    index += 2;
+                } else {
+                    p += n;
+                    return encoding[index + 1];
+                }
+            }
+            return -1;
+        }
+    }
+}

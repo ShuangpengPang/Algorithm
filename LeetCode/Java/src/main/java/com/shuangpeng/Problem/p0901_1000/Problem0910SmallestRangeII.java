@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem0910SmallestRangeII {
 
-    public int smallestRangeII(int[] nums, int k) {
+    public int smallestRangeII0(int[] nums, int k) {
         Arrays.sort(nums);
         int n = nums.length, min = nums[0], max = nums[0];
         int ans = nums[n - 1] - nums[0];
@@ -19,6 +19,18 @@ public class Problem0910SmallestRangeII {
             max = Math.max(max, nums[i] - k);
             min = Math.min(min, nums[i] - k);
             ans = Math.min(ans, Math.max(max, nums[i - 1]) - min);
+        }
+        return ans;
+    }
+
+    public int smallestRangeII(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length, ans = nums[n - 1] - nums[0];
+        int high = nums[n - 1] - k, low = nums[0] + k;
+        for (int i = 0; i < n - 1; i++) {
+            int max = Math.max(nums[i] + k, high);
+            int min = Math.min(nums[i + 1] - k, low);
+            ans = Math.min(ans, max - min);
         }
         return ans;
     }

@@ -2,6 +2,7 @@ package com.shuangpeng.Problem.p1301_1400;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -102,7 +103,7 @@ public class Problem1326MinimumNumberOfTapsToOpenToWaterAGarden {
         return ans;
     }
 
-    public int minTaps(int n, int[] ranges) {
+    public int minTaps4(int n, int[] ranges) {
         int[] next = new int[n + 1];
         for (int i = 0; i <= n; i++) {
             int l = Math.max(0, i - ranges[i]), r = Math.min(n, i + ranges[i]);
@@ -122,11 +123,99 @@ public class Problem1326MinimumNumberOfTapsToOpenToWaterAGarden {
         return ans;
     }
 
+    public int minTaps5(int n, int[] ranges) {
+        int N = 0, INF = Integer.MAX_VALUE >> 1;
+        for (int r : ranges) {
+            if (r << 1 > N) {
+                N = r << 1;
+            }
+        }
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, INF);
+        dp[0] = 1;
+        int ans = INF;
+        for (int i = 1; i <= n; i++) {
+            if (ranges[i] >= i) {
+                dp[i] = 1;
+            } else {
+                for (int j = i - 1; j >= Math.max(0, i - N); j--) {
+                    if (ranges[i] + ranges[j] >= i - j) {
+                        dp[i] = Math.min(dp[i], dp[j] + 1);
+                    }
+                }
+            }
+            if (i + ranges[i] >= n) {
+                ans = Math.min(ans, dp[i]);
+            }
+        }
+        return ans == INF ? -1 : ans;
+    }
+
+    public int minTaps6(int n, int[] ranges) {
+        int[][] intervals = new int[n + 1][2];
+        for (int i = 0; i <= n; i++) {
+            intervals[i][0] = Math.max(0, i - ranges[i]);
+            intervals[i][1] = Math.min(n, i + ranges[i]);
+        }
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for (int[] interval : intervals) {
+            int start = interval[0], end = interval[1];
+            if (dp[start] == Integer.MAX_VALUE) {
+                return -1;
+            }
+            for (int i = start + 1; i <= end; i++) {
+                dp[i] = Math.min(dp[i], dp[start] + 1);
+            }
+        }
+        return dp[n];
+    }
+
+    public int minTaps7(int n, int[] ranges) {
+        int[] rightMost = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            int start = Math.max(0, i - ranges[i]);
+            rightMost[start] = Math.max(rightMost[start], i + ranges[i]);
+        }
+        int pre = 0, last = rightMost[0], ans = 1;
+        for (int i = 1; i <= n && last < n; i++) {
+            if (last < i) {
+                return -1;
+            }
+            if (i > pre) {
+                pre = last;
+                ans++;
+            }
+            last = Math.max(last, rightMost[i]);
+        }
+        return last >= n ? ans : -1;
+    }
+
+    public int minTaps(int n, int[] ranges) {
+        int[] rightMost = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            int start = Math.max(0, i - ranges[i]);
+            rightMost[start] = Math.max(rightMost[start], i + ranges[i]);
+        }
+        int pre = 0, last = 0, ans = 0;
+        for (int i = 0; i <= n && pre < n; i++) {
+            if (last < i) {
+                return -1;
+            }
+            last = Math.max(last, rightMost[i]);
+            if (i == pre) {
+                pre = last;
+                ans++;
+            }
+        }
+        return ans;
+    }
+
 //    public static void main(String[] args) {
 //        Problem1326MinimumNumberOfTapsToOpenToWaterAGarden a = new Problem1326MinimumNumberOfTapsToOpenToWaterAGarden();
 //        int[] ranges = {0, 0, 0, 0};
 //        a.minTaps(ranges.length - 1, ranges);
 //    }
 }
-
-

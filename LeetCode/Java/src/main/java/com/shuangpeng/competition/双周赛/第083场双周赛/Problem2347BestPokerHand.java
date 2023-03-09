@@ -38,7 +38,7 @@ public class Problem2347BestPokerHand {
         return "High Card";
     }
 
-    public String bestHand(int[] ranks, char[] suits) {
+    public String bestHand1(int[] ranks, char[] suits) {
         int[] rankCount = new int[14], suitCount = new int[4];
         int n = ranks.length;
         boolean hasFive = false, hasThree = false, hasPair = false;
@@ -66,5 +66,29 @@ public class Problem2347BestPokerHand {
             return "Pair";
         }
         return "High Card";
+    }
+
+    public String bestHand(int[] ranks, char[] suits) {
+        boolean flag = true;
+        for (int i = 0; i < suits.length; i++) {
+            if (suits[i] != suits[0]) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return "Flush";
+        }
+        int[] cnt = new int[14];
+        boolean pair = false;
+        for (int r : ranks) {
+            cnt[r]++;
+            if (cnt[r] >= 3) {
+                return "Three of a Kind";
+            } else if (cnt[r] >= 2) {
+                pair = true;
+            }
+        }
+        return pair ? "Pair" : "High Card";
     }
 }

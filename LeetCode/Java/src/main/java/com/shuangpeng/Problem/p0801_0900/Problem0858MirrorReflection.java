@@ -84,3 +84,43 @@ public class Problem0858MirrorReflection {
 //        a.mirrorReflection(347, 89);
 //    }
 }
+
+class Problem0858MirrorReflection0 {
+
+    static final double E = 1e-6;
+
+    public int mirrorReflection(int p, int q) {
+        double rx = p, ry = q, x = 0, y = 0;
+        while (!(close(x, p) && close(y, 0) || close(x, p) && close(y, p) || close(x, 0) && close(y, p))) {
+            double t = Double.MAX_VALUE;
+            if (-x / rx > E) {
+                t = Math.min(t, -x / rx);
+            }
+            if (-y / ry > E) {
+                t = Math.min(t, -y / ry);
+            }
+            if ((p - x) / rx > E) {
+                t = Math.min(t, (p - x) / rx);
+            }
+            if ((p - y) / ry > E) {
+                t = Math.min(t, (p - y) / ry);
+            }
+            x += t * rx;
+            y += t * ry;
+            if (close(x, 0) || close(x, p)) {
+                rx = -rx;
+            }
+            if (close(y, 0) || close(y, p)) {
+                ry = -ry;
+            }
+        }
+        if (close(x, p)) {
+            return close(y, 0) ? 0 : 1;
+        }
+        return 2;
+    }
+
+    private boolean close(double d1, double d2) {
+        return Math.abs(d1 - d2) < E;
+    }
+}

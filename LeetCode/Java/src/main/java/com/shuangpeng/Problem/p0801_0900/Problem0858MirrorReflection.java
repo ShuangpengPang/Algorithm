@@ -124,3 +124,20 @@ class Problem0858MirrorReflection0 {
         return Math.abs(d1 - d2) < E;
     }
 }
+
+class Problem0858MirrorReflection1 {
+
+    public int mirrorReflection(int p, int q) {
+        int g = p, r = q;
+        while (r > 0) {
+            int t = r;
+            r = g % r;
+            g = t;
+        }
+        int x = p / g, y = q / g;
+        if ((x & 1) == 0) {
+            return 2;
+        }
+        return y & 1;
+    }
+}

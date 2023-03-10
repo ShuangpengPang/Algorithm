@@ -69,3 +69,22 @@ class Problem0932BeautifulArray0 {
         return ans;
     }
 }
+
+class Problem0932BeautifulArray1 {
+
+    public int[] beautifulArray(int n) {
+        int[][] dp = new int[n + 1][];
+        dp[1] = new int[]{1};
+        for (int i = 2; i <= n; i++) {
+            dp[i] = new int[i];
+            int left = i + 1 >> 1, right = i >> 1;
+            for (int j = 0; j < left; j++) {
+                dp[i][j] = (dp[left][j] << 1) - 1;
+            }
+            for (int j = 0; j < right; j++) {
+                dp[i][j + left] = dp[right][j] << 1;
+            }
+        }
+        return dp[n];
+    }
+}

@@ -1,6 +1,8 @@
 package com.shuangpeng.Problem.p0901_1000;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ShuangPengPang
@@ -35,5 +37,35 @@ public class Problem0932BeautifulArray {
         System.arraycopy(tmp, s, nums, s, n);
         divideAndConquer(nums, s, m - 1);
         divideAndConquer(nums, m, e);
+    }
+}
+
+class Problem0932BeautifulArray0 {
+
+    Map<Integer, int[]> memo;
+
+    public int[] beautifulArray(int n) {
+        memo = new HashMap<>();
+        return divideAndConquer(n);
+    }
+
+    private int[] divideAndConquer(int n) {
+        if (memo.containsKey(n)) {
+            return memo.get(n);
+        }
+        int[] ans = new int[n];
+        memo.put(n, ans);
+        if (n == 1) {
+            ans[0] = 1;
+            return ans;
+        }
+        int i = 0;
+        for (int num : divideAndConquer((n + 1) >> 1)) {
+            ans[i++] = (num << 1) - 1;
+        }
+        for (int num : divideAndConquer(n >> 1)) {
+            ans[i++] = num << 1;
+        }
+        return ans;
     }
 }

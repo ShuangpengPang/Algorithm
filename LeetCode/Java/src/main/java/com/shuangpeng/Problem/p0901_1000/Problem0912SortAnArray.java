@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+import java.util.Random;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -17,6 +19,8 @@ public class Problem0912SortAnArray {
         if (s >= e) {
             return;
         }
+        int j = new Random().nextInt(e - s + 1) + s;
+        swap(nums, e, j);
         int p = s, num = nums[e];
         for (int i = s; i < e; i++) {
             if (nums[i] <= num) {
@@ -91,5 +95,51 @@ class Problem0912SortAnArray1 {
             }
         }
         return nums;
+    }
+}
+
+class Problem0912SortAnArray2 {
+
+    public int[] sortArray(int[] nums) {
+        int n = nums.length;
+        int[] heap = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            heap[i + 1] = nums[i];
+            ascent(heap, i + 1);
+        }
+        for (int i = 0; i < n; i++) {
+            nums[i] = heap[1];
+            swap(heap, 1, n - i);
+            sink(heap, n - i - 1);
+        }
+        return nums;
+    }
+
+    private void ascent(int[] heap, int i) {
+        while (i > 1 && heap[i] < heap[i >> 1]) {
+            swap(heap, i, i >> 1);
+            i >>= 1;
+        }
+    }
+
+    private void sink(int[] heap, int n) {
+        int i = 1;
+        while (i << 1 <= n) {
+            int j = i << 1;
+            j = j + 1 > n || heap[j] <= heap[j + 1] ? j : j + 1;
+            if (heap[i] <= heap[j]) {
+                break;
+            }
+            swap(heap, i, j);
+            i = j;
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        if (i != j) {
+            nums[i] = nums[i] ^ nums[j];
+            nums[j] = nums[i] ^ nums[j];
+            nums[i] = nums[i] ^ nums[j];
+        }
     }
 }

@@ -71,3 +71,25 @@ class Problem0912SortAnArray0 {
         System.arraycopy(tmp, 0, nums, s, n);
     }
 }
+
+class Problem0912SortAnArray1 {
+
+    public int[] sortArray(int[] nums) {
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE, n = nums.length;
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+        int m = max - min + 1;
+        int[] cnt = new int[m];
+        for (int num : nums) {
+            cnt[num - min]++;
+        }
+        for (int i = 0, j = 0; i < m; i++) {
+            while (cnt[i]-- > 0) {
+                nums[j++] = i + min;
+            }
+        }
+        return nums;
+    }
+}

@@ -186,3 +186,38 @@ class Problem0912SortAnArray3 {
         }
     }
 }
+
+class Problem0912SortAnArray4 {
+
+    int[] tmp;
+
+    public int[] sortArray(int[] nums) {
+        tmp = new int[nums.length];
+        mergeSort(nums, 0, nums.length - 1);
+        return nums;
+    }
+
+    private void mergeSort(int[] nums, int s, int e) {
+        if (s >= e) {
+            return;
+        }
+        int m = s + e >> 1;
+        mergeSort(nums, s, m);
+        mergeSort(nums, m + 1, e);
+        int i = s, j = m + 1, k = s;
+        while (i <= m && j <= e) {
+            if (nums[i] <= nums[j]) {
+                tmp[k++] = nums[i++];
+            } else {
+                tmp[k++] = nums[j++];
+            }
+        }
+        while (i <= m) {
+            tmp[k++] = nums[i++];
+        }
+        while (j <= e) {
+            tmp[k++] = nums[j++];
+        }
+        System.arraycopy(tmp, s, nums, s, e - s + 1);
+    }
+}

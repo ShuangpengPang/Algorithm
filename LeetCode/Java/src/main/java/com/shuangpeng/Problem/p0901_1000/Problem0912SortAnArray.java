@@ -143,3 +143,46 @@ class Problem0912SortAnArray2 {
         }
     }
 }
+
+class Problem0912SortAnArray3 {
+
+    public int[] sortArray(int[] nums) {
+        heapSort(nums);
+        return nums;
+    }
+
+    private void heapSort(int[] nums) {
+        buildMaxHeap(nums);
+        for (int i = nums.length - 1; i > 0; i--) {
+            swap(nums, 0, i);
+            sink(nums, 0, i - 1);
+        }
+    }
+
+    private void buildMaxHeap(int[] nums) {
+        int n = nums.length - 1;
+        for (int i = n >> 1; i >= 0; i--) {
+            sink(nums, i, n);
+        }
+    }
+
+    private void sink(int[] nums, int i, int n) {
+        while ((i << 1) + 1 <= n) {
+            int j = (i << 1) + 1;
+            j = j + 1 > n || nums[j] >= nums[j + 1] ? j : j + 1;
+            if (nums[i] >= nums[j]) {
+                break;
+            }
+            swap(nums, i, j);
+            i = j;
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        if (i != j) {
+            nums[i] = nums[i] ^ nums[j];
+            nums[j] = nums[i] ^ nums[j];
+            nums[i] = nums[i] ^ nums[j];
+        }
+    }
+}

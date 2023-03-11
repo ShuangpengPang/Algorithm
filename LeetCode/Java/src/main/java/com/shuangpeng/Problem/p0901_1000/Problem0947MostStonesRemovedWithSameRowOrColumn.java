@@ -1,7 +1,9 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +47,40 @@ public class Problem0947MostStonesRemovedWithSameRowOrColumn {
                 dfs(row, col, visited, x1, y);
             }
         }
+    }
+
+    public int removeStones1(int[][] stones) {
+        Map<Integer, List<Integer>> row = new HashMap<>(), col = new HashMap<>();
+        for (int[] s : stones) {
+            int x = s[0], y = s[1];
+            row.computeIfAbsent(x, k -> new ArrayList<>()).add(y);
+            col.computeIfAbsent(y, k -> new ArrayList<>()).add(x);
+        }
+        Set<Integer> visited = new HashSet<>();
+        Deque<int[]> q = new ArrayDeque<>();
+        int part = 0;
+        for (int[] s : stones) {
+            int x = s[0], y = s[1];
+            if (visited.add(x << 14 | y)) {
+                part++;
+                q.addLast(new int[]{x, y});
+                while (!q.isEmpty()) {
+                    int[] p = q.pollFirst();
+                    int x1 = p[0], y1 = p[1];
+                    for (int y2 : row.get(x1)) {
+                        if (visited.add(x1 << 14 | y2)) {
+                            q.addLast(new int[]{x1, y2});
+                        }
+                    }
+                    for (int x2 : col.get(y1)) {
+                        if (visited.add(x2 << 14 | y1)) {
+                            q.addLast(new int[]{x2, y1});
+                        }
+                    }
+                }
+            }
+        }
+        return stones.length - part;
     }
 
     public int removeStones(int[][] stones) {

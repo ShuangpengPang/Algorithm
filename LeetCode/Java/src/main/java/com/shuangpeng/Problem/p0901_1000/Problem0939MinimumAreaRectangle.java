@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,7 +78,7 @@ public class Problem0939MinimumAreaRectangle {
         return ans == Integer.MAX_VALUE ? 0 : ans;
     }
 
-    public int minAreaRect(int[][] points) {
+    public int minAreaRect2(int[][] points) {
         Map<Integer, List<Integer>> map = new TreeMap<>();
         for (int[] p : points) {
             map.computeIfAbsent(p[0], k -> new ArrayList<>()).add(p[1]);
@@ -95,6 +97,48 @@ public class Problem0939MinimumAreaRectangle {
                         ans = Math.min(ans, (x - lastX.get(code)) * (y2 - y1));
                     }
                     lastX.put(code, x);
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+
+    public int minAreaRect3(int[][] points) {
+        Set<Integer> set = new HashSet<>();
+        for (int[] p : points) {
+            set.add(p[0] << 16 | p[1]);
+        }
+        int n = points.length, ans = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            int x1 = points[i][0], y1 = points[i][1];
+            for (int j = i + 1; j < n; j++) {
+                int x2 = points[j][0], y2 = points[j][1], area = Math.abs(x1 - x2) * Math.abs(y2 - y1);
+                if (x1 == x2 || y1 == y2 || area >= ans) {
+                    continue;
+                }
+                if (set.contains(x1 << 16 | y2) && set.contains(x2 << 16 | y1)) {
+                    ans = area;
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+
+    public int minAreaRect(int[][] points) {
+        Set<Pair<Integer, Integer>> set = new HashSet<>();
+        for (int[] p : points) {
+            set.add(new Pair<>(p[0], p[1]));
+        }
+        int n = points.length, ans = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            int x1 = points[i][0], y1 = points[i][1];
+            for (int j = i + 1; j < n; j++) {
+                int x2 = points[j][0], y2 = points[j][1], area = Math.abs(x1 - x2) * Math.abs(y2 - y1);
+                if (x1 == x2 || y1 == y2 || area >= ans) {
+                    continue;
+                }
+                if (set.contains(new Pair<>(x1, y2)) && set.contains(new Pair<>(x2, y1))) {
+                    ans = area;
                 }
             }
         }

@@ -1,11 +1,13 @@
 package com.shuangpeng.Problem.p0901_1000;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * @author ShuangPengPang
@@ -15,7 +17,35 @@ import java.util.Set;
  */
 public class Problem0939MinimumAreaRectangle {
 
-    public int minAreaRect(int[][] points) {
+    public int minAreaRect0(int[][] points) {
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        for (int[] p : points) {
+            map.computeIfAbsent(p[0], k -> new HashSet<>()).add(p[1]);
+        }
+        int ans = Integer.MAX_VALUE;
+        for (Map.Entry<Integer, Set<Integer>> e1 : map.entrySet()) {
+            int x1 = e1.getKey();
+            for (int y1 : e1.getValue()) {
+                for (int y2 : e1.getValue()) {
+                    if (y1 >= y2) {
+                        continue;
+                    }
+                    int height = y2 - y1;
+                    for (Map.Entry<Integer, Set<Integer>> e2 : map.entrySet()) {
+                        int x2 = e2.getKey();
+                        Set<Integer> set = e2.getValue();
+                        if (x1 >= x2 || !set.contains(y1) || !set.contains(y2)) {
+                            continue;
+                        }
+                        ans = Math.min(ans, (x2 - x1) * height);
+                    }
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+
+    public int minAreaRect1(int[][] points) {
         Map<Integer, List<Integer>> xMap = new HashMap<>();
         Map<Integer, Set<Integer>> yMap = new HashMap<>();
         for (int[] p : points) {
@@ -40,6 +70,31 @@ public class Problem0939MinimumAreaRectangle {
                             ans = Math.min(ans, Math.abs(x1 - x2) * height);
                         }
                     }
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+
+    public int minAreaRect(int[][] points) {
+        Map<Integer, List<Integer>> map = new TreeMap<>();
+        for (int[] p : points) {
+            map.computeIfAbsent(p[0], k -> new ArrayList<>()).add(p[1]);
+        }
+        Map<Integer, Integer> lastX = new HashMap<>();
+        int ans = Integer.MAX_VALUE;
+        for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
+            List<Integer> list = entry.getValue();
+            Collections.sort(list);
+            int x = entry.getKey(), size = list.size();
+            for (int i = 0; i < size; i++) {
+                int y1 = list.get(i);
+                for (int j = i + 1; j < size; j++) {
+                    int y2 = list.get(j), code = y1 << 16 | y2;
+                    if (lastX.containsKey(code)) {
+                        ans = Math.min(ans, (x - lastX.get(code)) * (y2 - y1));
+                    }
+                    lastX.put(code, x);
                 }
             }
         }

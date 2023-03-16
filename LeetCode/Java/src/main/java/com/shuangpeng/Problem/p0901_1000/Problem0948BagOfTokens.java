@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem0948BagOfTokens {
 
-    public int bagOfTokensScore(int[] tokens, int power) {
+    public int bagOfTokensScore0(int[] tokens, int power) {
         Arrays.sort(tokens);
         int ans = 0, n = tokens.length;
         for (int i = 0, j = 0, k = n, p = power; i < k && j < k && power >= tokens[i]; i++) {
@@ -22,6 +22,56 @@ public class Problem0948BagOfTokens {
             int add = tokens[--k] - tokens[i];
             power += add;
             p += tokens[i] + add;
+        }
+        return ans;
+    }
+
+    public int bagOfTokensScore1(int[] tokens, int power) {
+        Arrays.sort(tokens);
+        int lo = 0, hi = tokens.length - 1, score = 0, ans = 0;
+        while (lo <= hi && (power >= tokens[lo] || score > 0)) {
+            while (lo <= hi && power >= tokens[lo]) {
+                power -= tokens[lo++];
+                score++;
+            }
+            ans = Math.max(ans, score);
+            if (score > 0 && lo <= hi) {
+                power += tokens[hi--];
+                score--;
+            }
+        }
+        return ans;
+    }
+
+    public int bagOfTokensScore2(int[] tokens, int power) {
+        Arrays.sort(tokens);
+        int left = 0, right = tokens.length - 1, score = 0, ans = 0;
+        while (left <= right && (power >= tokens[left] || score > 0)) {
+            if (power >= tokens[left]) {
+                power -= tokens[left++];
+                score++;
+                ans = Math.max(ans, score);
+            } else {
+                power += tokens[right--];
+                score--;
+            }
+        }
+        return ans;
+    }
+
+    public int bagOfTokensScore(int[] tokens, int power) {
+        Arrays.sort(tokens);
+        int left = 0, right = tokens.length - 1, ans = 0;
+        while (left <= right) {
+            if (power >= tokens[left]) {
+                power -= tokens[left++];
+                ans++;
+            } else if (left < right && ans > 0) {
+                power += tokens[right--];
+                ans--;
+            } else {
+                left++;
+            }
         }
         return ans;
     }

@@ -22,7 +22,7 @@ public class Problem0949LargestTimeForGivenDigits {
     private int dfs(int[] arr, int[] result, int index, boolean[] visited) {
         int n = arr.length;
         if (index == n) {
-            if (10 * result[0] + result[1] > 23 || result[2] > 5) {
+            if (result[2] > 5) {
                 return -1;
             }
             return result[0] * 1000 + result[1] * 100 + result[2] * 10 + result[3];
@@ -30,6 +30,9 @@ public class Problem0949LargestTimeForGivenDigits {
         int ans = -1;
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
+                if (index == 0 && arr[i] > 2 || index == 1 && result[0] * 10 + arr[i] > 23) {
+                    continue;
+                }
                 visited[i] = true;
                 result[index] = arr[i];
                 ans = Math.max(ans, dfs(arr, result, index + 1, visited));

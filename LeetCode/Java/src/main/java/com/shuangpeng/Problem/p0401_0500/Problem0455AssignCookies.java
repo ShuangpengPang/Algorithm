@@ -25,7 +25,7 @@ public class Problem0455AssignCookies {
         return ans;
     }
 
-    public int findContentChildren(int[] g, int[] s) {
+    public int findContentChildren1(int[] g, int[] s) {
         Arrays.sort(g);
         Arrays.sort(s);
         int ans = 0;
@@ -33,6 +33,18 @@ public class Problem0455AssignCookies {
             if (s[j] >= g[i]) {
                 ans++;
                 j--;
+            }
+        }
+        return ans;
+    }
+
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int m = g.length, n = s.length, ans = 0;
+        for (int i = 0; i < n && ans < m; i++) {
+            if (g[ans] <= s[i]) {
+                ans++;
             }
         }
         return ans;

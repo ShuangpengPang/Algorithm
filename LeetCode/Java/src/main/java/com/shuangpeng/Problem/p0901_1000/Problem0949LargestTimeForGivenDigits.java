@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0901_1000;
  */
 public class Problem0949LargestTimeForGivenDigits {
 
-    public String largestTimeFromDigits(int[] arr) {
+    public String largestTimeFromDigits0(int[] arr) {
         int n = arr.length;
         int value = dfs(arr, new int[n], 0, new boolean[n]);
         if (value == -1) {
@@ -40,5 +40,36 @@ public class Problem0949LargestTimeForGivenDigits {
             }
         }
         return ans;
+    }
+
+    public String largestTimeFromDigits(int[] arr) {
+        int n = arr.length, ans = -1;
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > 2) {
+                continue;
+            }
+            int v = arr[i];
+            for (int j = 0; j < n; j++) {
+                if (j == i || v * 10 + arr[j] > 23) {
+                    continue;
+                }
+                for (int x = 0; x < n; x++) {
+                    if (x == i || x == j || arr[x] > 5) {
+                        continue;
+                    }
+                    for (int y = 0; y < n; y++) {
+                        if (y != i && y != j && y != x) {
+                            ans = Math.max(ans, v * 1000 + arr[j] * 100 + arr[x] * 10 + arr[y]);
+                        }
+                    }
+                }
+            }
+        }
+        if (ans == -1) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(ans / 1000).append(ans / 100 % 10).append(':').append(ans / 10 % 10).append(ans % 10);
+        return sb.toString();
     }
 }

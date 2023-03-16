@@ -42,7 +42,7 @@ public class Problem0949LargestTimeForGivenDigits {
         return ans;
     }
 
-    public String largestTimeFromDigits(int[] arr) {
+    public String largestTimeFromDigits1(int[] arr) {
         int n = arr.length, ans = -1;
         for (int i = 0; i < n; i++) {
             if (arr[i] > 2) {
@@ -71,5 +71,26 @@ public class Problem0949LargestTimeForGivenDigits {
         StringBuilder sb = new StringBuilder();
         sb.append(ans / 1000).append(ans / 100 % 10).append(':').append(ans / 10 % 10).append(ans % 10);
         return sb.toString();
+    }
+
+    public String largestTimeFromDigits(int[] arr) {
+        int n = arr.length, ans = -1;
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > 2) {
+                continue;
+            }
+            for (int j = 0; j < n; j++) {
+                if (j == i || arr[i] * 10 + arr[j] > 23) {
+                    continue;
+                }
+                for (int k = 0; k < n; k++) {
+                    if (k == i || k == j || arr[k] > 5) {
+                        continue;
+                    }
+                    ans = Math.max(ans, arr[i] * 1000 + arr[j] * 100 + arr[k] * 10 + arr[6 - i - j - k]);
+                }
+            }
+        }
+        return ans == -1 ? "" : String.format("%02d:%02d", ans / 100, ans % 100);
     }
 }

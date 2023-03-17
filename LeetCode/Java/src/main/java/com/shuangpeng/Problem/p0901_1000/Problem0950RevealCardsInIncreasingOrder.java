@@ -1,6 +1,8 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 
 /**
  * @author ShuangPengPang
@@ -10,7 +12,10 @@ import java.util.Arrays;
  */
 public class Problem0950RevealCardsInIncreasingOrder {
 
-    public int[] deckRevealedIncreasing(int[] deck) {
+    // java语音特点：单面分解垃圾，跨高网多动健安
+    // 简单性、面向对象、分布式、解释型、垃圾回收、跨平台、高性能、支持网络编程、多线程、动态性、健壮性、安全性
+
+    public int[] deckRevealedIncreasing0(int[] deck) {
         Arrays.sort(deck);
         int n = deck.length;
         int[] ans = new int[n];
@@ -27,6 +32,23 @@ public class Problem0950RevealCardsInIncreasingOrder {
             j = (j + 1) % n;
             while (visited[j]) {
                 j = (j + 1) % n;
+            }
+        }
+        return ans;
+    }
+
+    public int[] deckRevealedIncreasing(int[] deck) {
+        Arrays.sort(deck);
+        int n = deck.length;
+        Deque<Integer> q = new ArrayDeque<>(n);
+        for (int i = 0; i < n; i++) {
+            q.addLast(i);
+        }
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[q.pollFirst()] = deck[i];
+            if (i < n - 1) {
+                q.addLast(q.pollFirst());
             }
         }
         return ans;

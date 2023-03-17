@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 public class Problem2389LongestSubsequenceWithLimitedSum {
 
-    public int[] answerQueries(int[] nums, int[] queries) {
+    public int[] answerQueries0(int[] nums, int[] queries) {
         int n = nums.length, m = queries.length;
         Integer[] ids = new Integer[m];
         Arrays.setAll(ids, i -> i);
@@ -24,6 +24,28 @@ public class Problem2389LongestSubsequenceWithLimitedSum {
                 s += nums[j++];
             }
             ans[id] = j;
+        }
+        return ans;
+    }
+
+    public int[] answerQueries(int[] nums, int[] queries) {
+        Arrays.sort(nums);
+        int n = nums.length, m = queries.length;
+        for (int i = 1; i < n; i++) {
+            nums[i] += nums[i - 1];
+        }
+        int[] ans = new int[m];
+        for (int i = 0; i < m; i++) {
+            int s = queries[i], left = 0, right = n - 1;
+            while (left <= right) {
+                int mid = left + right >> 1;
+                if (nums[mid] <= s) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+            ans[i] = left;
         }
         return ans;
     }

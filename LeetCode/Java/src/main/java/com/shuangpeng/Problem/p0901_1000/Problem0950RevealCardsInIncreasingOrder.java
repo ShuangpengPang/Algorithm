@@ -37,7 +37,7 @@ public class Problem0950RevealCardsInIncreasingOrder {
         return ans;
     }
 
-    public int[] deckRevealedIncreasing(int[] deck) {
+    public int[] deckRevealedIncreasing1(int[] deck) {
         Arrays.sort(deck);
         int n = deck.length;
         Deque<Integer> q = new ArrayDeque<>(n);
@@ -49,6 +49,43 @@ public class Problem0950RevealCardsInIncreasingOrder {
             ans[q.pollFirst()] = deck[i];
             if (i < n - 1) {
                 q.addLast(q.pollFirst());
+            }
+        }
+        return ans;
+    }
+
+    public int[] deckRevealedIncreasing2(int[] deck) {
+        Arrays.sort(deck);
+        int n = deck.length;
+        int[] ans = new int[n];
+        boolean skip = false;
+        for (int i = 0, j = 0; i < n; i++) {
+            while (ans[j] != 0 || skip) {
+                if (ans[j] == 0) {
+                    skip = false;
+                }
+                j = (j + 1) % n;
+            }
+            ans[j] = deck[i];
+            skip = true;
+        }
+        return ans;
+    }
+
+    public int[] deckRevealedIncreasing(int[] deck) {
+        Arrays.sort(deck);
+        int n = deck.length;
+        int[] ans = new int[n];
+        int index = 0;
+        boolean skip = false;
+        while (index < n) {
+            for (int i = 0; i < n; i++) {
+                if (ans[i] == 0) {
+                    if (!skip) {
+                        ans[i] = deck[index++];
+                    }
+                    skip = !skip;
+                }
             }
         }
         return ans;

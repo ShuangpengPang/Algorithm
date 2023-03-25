@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Problem1574ShortestSubarrayToBeRemovedToMakeArraySorted {
 
-    public int findLengthOfShortestSubarray(int[] arr) {
+    public int findLengthOfShortestSubarray0(int[] arr) {
         int n = arr.length;
         List<Integer> left = new ArrayList<>(), right = new ArrayList<>();
         for (int i = 0; i < n && (i == 0 || arr[i] >= arr[i - 1]); i++) {
@@ -37,6 +37,33 @@ public class Problem1574ShortestSubarrayToBeRemovedToMakeArraySorted {
                 }
             }
             maxLength = Math.max(maxLength, low + i + 1);
+        }
+        return n - maxLength;
+    }
+
+    public int findLengthOfShortestSubarray(int[] arr) {
+        int n = arr.length, left = 0, right = n - 1;
+        for (int i = 1; i < n && arr[i] >= arr[i - 1]; i++) {
+            left = i;
+        }
+        for (int i = n - 2; i >= 0 && arr[i] <= arr[i + 1]; i--) {
+            right = i;
+        }
+        if (left >= right) {
+            return 0;
+        }
+        int maxLength = Math.max(left + 1, n - right);
+        for (int i = right; i < n; i++) {
+            int low = 0, high = left, num = arr[i];
+            while (low <= high) {
+                int mid = low + high >> 1;
+                if (arr[mid] <= num) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+            maxLength = Math.max(maxLength, low + n - i);
         }
         return n - maxLength;
     }

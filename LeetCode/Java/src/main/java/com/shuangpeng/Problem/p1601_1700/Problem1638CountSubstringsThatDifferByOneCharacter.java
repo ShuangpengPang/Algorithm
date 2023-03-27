@@ -79,6 +79,33 @@ class Problem1638CountSubstringsThatDifferByOneCharacter0 {
 class Problem1638CountSubstringsThatDifferByOneCharacter1 {
 
     public int countSubstrings(String s, String t) {
+        int m = s.length(), n = t.length();
+        int[][] left = new int[m + 2][n + 2], right = new int[m + 2][n + 2];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                left[i][j] = s.charAt(i - 1) == t.charAt(j - 1) ? left[i - 1][j - 1] + 1 : 0;
+            }
+        }
+        for (int i = m; i >= 1; i--) {
+            for (int j = n; j >= 1; j--) {
+                right[i][j] = s.charAt(i - 1) == t.charAt(j - 1) ? right[i + 1][j + 1] + 1 : 0;
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (left[i][j] == 0) {
+                    ans += (left[i - 1][j - 1] + 1) * (right[i + 1][j + 1] + 1);
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+class Problem1638CountSubstringsThatDifferByOneCharacter2 {
+
+    public int countSubstrings(String s, String t) {
         int m = s.length(), n = t.length(), ans = 0;
         int[][] dp = new int[n + 1][2];
         for (int i = 1; i <= m; i++) {

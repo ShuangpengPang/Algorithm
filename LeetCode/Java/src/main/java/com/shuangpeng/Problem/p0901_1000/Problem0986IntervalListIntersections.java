@@ -12,13 +12,13 @@ import java.util.List;
 public class Problem0986IntervalListIntersections {
 
     public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
-        List<int[]> list = new ArrayList<>();
+        List<int[]> ans = new ArrayList<>();
         int n1 = firstList.length, n2 = secondList.length;
         for (int i = 0, j = 0; i < n1 && j < n2;) {
             int start = Math.max(firstList[i][0], secondList[j][0]);
             int end = Math.min(firstList[i][1], secondList[j][1]);
             if (start <= end) {
-                list.add(new int[]{start, end});
+                ans.add(new int[]{start, end});
             }
             if (firstList[i][1] <= secondList[j][1]) {
                 i++;
@@ -26,11 +26,6 @@ public class Problem0986IntervalListIntersections {
                 j++;
             }
         }
-        int n = list.size();
-        int[][] ans = new int[n][];
-        for (int i = 0; i < n; i++) {
-            ans[i] = list.get(i);
-        }
-        return ans;
+        return ans.toArray(new int[ans.size()][]);
     }
 }

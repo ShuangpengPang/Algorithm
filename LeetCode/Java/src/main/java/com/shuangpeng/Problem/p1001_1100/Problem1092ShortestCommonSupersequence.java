@@ -1,5 +1,8 @@
 package com.shuangpeng.Problem.p1001_1100;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @description: 最短公共超序列
  * @date 2023/3/28 12:07 PM
@@ -169,5 +172,51 @@ class Problem1092ShortestCommonSupersequence1 {
             sb.append(str2.substring(j));
         }
         return sb.toString();
+    }
+}
+
+class Problem1092ShortestCommonSupersequence2 {
+
+    // MLE
+    public String shortestCommonSupersequence(String str1, String str2) {
+        return new String(dfs(str1.toCharArray(), str2.toCharArray(), str1.length() - 1, str2.length() - 1, new HashMap<>()));
+    }
+
+    private char[] dfs(char[] cs1, char[] cs2, int i, int j, Map<Integer, char[]> memo) {
+        if (i == -1) {
+            char[] ans = new char[j + 1];
+            System.arraycopy(cs2, 0, ans, 0, j + 1);
+            return ans;
+        }
+        if (j == -1) {
+            char[] ans = new char[i + 1];
+            System.arraycopy(cs1, 0, ans, 0, i + 1);
+            return ans;
+        }
+        int key = i * cs2.length + j;
+        if (memo.containsKey(key)) {
+            return memo.get(key);
+        }
+        char[] cs;
+        char last;
+        if (cs1[i] == cs2[j]) {
+            cs = dfs(cs1, cs2, i - 1, j - 1, memo);
+            last = cs1[i];
+        } else {
+            char[] a1 = dfs(cs1, cs2, i - 1, j, memo), a2 = dfs(cs1, cs2, i, j - 1, memo);
+            if (a1.length <= a2.length) {
+                cs = a1;
+                last = cs1[i];
+            } else {
+                cs = a2;
+                last = cs2[j];
+            }
+        }
+        int n = cs.length;
+        char[] ans = new char[n + 1];
+        System.arraycopy(cs, 0, ans, 0, n);
+        ans[n] = last;
+        memo.put(key, ans);
+        return ans;
     }
 }

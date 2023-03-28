@@ -68,10 +68,25 @@ public class Problem1574ShortestSubarrayToBeRemovedToMakeArraySorted {
         return n - maxLength;
     }
 
-    public int findLengthOfShortestSubarray(int[] arr) {
+    public int findLengthOfShortestSubarray2(int[] arr) {
         int n = arr.length, j = n - 1;
         for (int i = n - 2; i >= 0 && arr[i] <= arr[j]; i--) {
             j = i;
+        }
+        int ans = j;
+        for (int i = 0; ans > 0 && i < n && (i == 0 || arr[i] >= arr[i - 1]); i++) {
+            while (j < n && arr[i] > arr[j]) {
+                j++;
+            }
+            ans = Math.min(ans, j - i - 1);
+        }
+        return ans;
+    }
+
+    public int findLengthOfShortestSubarray(int[] arr) {
+        int n = arr.length, j = n - 1;
+        while (j > 0 && arr[j - 1] <= arr[j]) {
+            j--;
         }
         int ans = j;
         for (int i = 0; ans > 0 && i < n && (i == 0 || arr[i] >= arr[i - 1]); i++) {

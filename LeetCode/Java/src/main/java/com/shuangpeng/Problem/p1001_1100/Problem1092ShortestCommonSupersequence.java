@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p1001_1100;
 
+/**
+ * @description: 最短公共超序列
+ * @date 2023/3/28 12:07 PM
+ **/
 public class Problem1092ShortestCommonSupersequence {
 
     public String shortestCommonSupersequence(String str1, String str2) {
@@ -86,5 +90,84 @@ public class Problem1092ShortestCommonSupersequence {
             ++i;
             --j;
         }
+    }
+}
+
+class Problem1092ShortestCommonSupersequence0 {
+
+    public String shortestCommonSupersequence(String str1, String str2) {
+        int n1 = str1.length(), n2 = str2.length();
+        int[][][] dp = new int[n1 + 1][n2 + 1][3];
+        for (int i = 1; i <= n1; i++) {
+            for (int j = 1; j <= n2; j++) {
+                if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+                    dp[i][j][0] = i;
+                    dp[i][j][1] = j;
+                    dp[i][j][2] = dp[i - 1][j - 1][2] + 1;
+                } else if (dp[i - 1][j][2] >= dp[i][j - 1][2]) {
+                    dp[i][j] = dp[i - 1][j];
+                } else {
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = n1, j = n2; i >= 0; i--, j--) {
+            int idx1 = dp[i][j][0], idx2 = dp[i][j][1];
+            while (i > idx1) {
+                sb.append(str1.charAt(--i));
+            }
+            while (j > idx2) {
+                sb.append(str2.charAt(--j));
+            }
+            if (i > 0) {
+                sb.append(str1.charAt(i - 1));
+            }
+        }
+        return sb.reverse().toString();
+    }
+}
+
+class Problem1092ShortestCommonSupersequence1 {
+
+    public String shortestCommonSupersequence(String str1, String str2) {
+        int n1 = str1.length(), n2 = str2.length();
+        int[][] dp = new int[n1 + 1][n2 + 1];
+        for (int i = 0; i < n1; i++) {
+            dp[i][n2] = n1 - i;
+        }
+        for (int i = 0; i < n2; i++) {
+            dp[n1][i] = n2 - i;
+        }
+        for (int i = n1 - 1; i >= 0; i--) {
+            for (int j = n2 - 1; j >= 0; j--) {
+                if (str1.charAt(i) == str2.charAt(j)) {
+                    dp[i][j] = dp[i + 1][j + 1] + 1;
+                } else {
+                    dp[i][j] = Math.min(dp[i + 1][j], dp[i][j + 1]) + 1;
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        int i = 0, j = 0;
+        while (i < n1 && j < n2) {
+            if (str1.charAt(i) == str2.charAt(j)) {
+                sb.append(str1.charAt(i));
+                i++;
+                j++;
+            } else if (dp[i + 1][j] == dp[i][j] - 1) {
+                sb.append(str1.charAt(i));
+                i++;
+            } else {
+                sb.append(str2.charAt(j));
+                j++;
+            }
+        }
+        if (i < n1) {
+            sb.append(str1.substring(i));
+        } else {
+            sb.append(str2.substring(j));
+        }
+        return sb.toString();
     }
 }

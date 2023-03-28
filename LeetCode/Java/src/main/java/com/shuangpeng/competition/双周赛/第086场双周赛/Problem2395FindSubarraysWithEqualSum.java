@@ -11,12 +11,23 @@ import java.util.Set;
 public class Problem2395FindSubarraysWithEqualSum {
 
     // 比赛时写法
-    public boolean findSubarrays(int[] nums) {
+    public boolean findSubarrays0(int[] nums) {
         int n = nums.length;
         Set<Integer> set = new HashSet<>();
         for (int i = 1; i < n; i++) {
             int sum = nums[i] + nums[i - 1];
             if (!set.add(sum)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean findSubarrays(int[] nums) {
+        int n = nums.length;
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < n - 1; i++) {
+            if (!set.add(nums[i] + nums[i + 1])) {
                 return true;
             }
         }

@@ -40,11 +40,4 @@ public class Problem0957PrisonCellsAfterNDays {
         }
         return ans;
     }
-
-//    public static void main(String[] args) {
-//        Problem0957PrisonCellsAfterNDays a = new Problem0957PrisonCellsAfterNDays();
-//        int[] cells = {0, 1, 0, 1, 1, 0, 0, 1};
-//        int[] arr = a.prisonAfterNDays(cells, 7);
-//        int i = 0;
-//    }
 }

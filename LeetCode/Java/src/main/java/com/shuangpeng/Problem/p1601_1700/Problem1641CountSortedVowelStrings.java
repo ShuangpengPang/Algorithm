@@ -23,7 +23,7 @@ public class Problem1641CountSortedVowelStrings {
         return Arrays.stream(dp).sum();
     }
 
-    public int countVowelStrings(int n) {
+    public int countVowelStrings1(int n) {
         int[] dp = new int[5];
         Arrays.fill(dp, 1);
         for (int i = 2; i <= n; i++) {
@@ -32,5 +32,13 @@ public class Problem1641CountSortedVowelStrings {
             }
         }
         return Arrays.stream(dp).sum();
+    }
+
+    public int countVowelStrings(int n) {
+        int ans = 1;
+        for (int i = 1; i <= 4; i++) {
+            ans = ans * (n + i) / i;
+        }
+        return ans;
     }
 }

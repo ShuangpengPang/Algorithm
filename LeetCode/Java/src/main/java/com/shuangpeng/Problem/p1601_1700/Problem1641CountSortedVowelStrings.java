@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem1641CountSortedVowelStrings {
 
-    public int countVowelStrings(int n) {
+    public int countVowelStrings0(int n) {
         int[] dp = new int[5];
         Arrays.fill(dp, 1);
         for (int i = 2; i <= n; i++) {
@@ -18,6 +18,17 @@ public class Problem1641CountSortedVowelStrings {
                 for (int k = 0; k < j; k++) {
                     dp[j] += dp[k];
                 }
+            }
+        }
+        return Arrays.stream(dp).sum();
+    }
+
+    public int countVowelStrings(int n) {
+        int[] dp = new int[5];
+        Arrays.fill(dp, 1);
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j < 5; j++) {
+                dp[j] += dp[j - 1];
             }
         }
         return Arrays.stream(dp).sum();

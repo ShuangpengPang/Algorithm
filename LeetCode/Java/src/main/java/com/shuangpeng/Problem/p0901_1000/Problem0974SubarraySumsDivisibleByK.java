@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem0974SubarraySumsDivisibleByK {
 
-    public int subarraysDivByK(int[] nums, int k) {
+    public int subarraysDivByK0(int[] nums, int k) {
         Map<Integer, Integer> map = new HashMap<>();
         map.put(0, 1);
         int sum = 0, ans = 0;
@@ -20,6 +20,18 @@ public class Problem0974SubarraySumsDivisibleByK {
             int count = map.getOrDefault(sum, 0);
             ans += count;
             map.put(sum, count + 1);
+        }
+        return ans;
+    }
+
+    public int subarraysDivByK(int[] nums, int k) {
+        int n = nums.length, ans = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+            sum = ((sum + nums[i]) % k + k) % k;
+            ans += map.getOrDefault(sum, 0);
         }
         return ans;
     }

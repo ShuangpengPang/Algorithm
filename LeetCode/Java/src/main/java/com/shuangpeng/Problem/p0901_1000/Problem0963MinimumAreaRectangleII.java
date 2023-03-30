@@ -1,5 +1,10 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+import javafx.util.Pair;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -52,5 +57,49 @@ public class Problem0963MinimumAreaRectangleII {
     private boolean checkDiagonal(int[][] points, int p1, int p2, int p3, int p4) {
         int[] e1 = getEdge(points, p1, p4), e2 = getEdge(points, p2, p3);
         return (long) e1[0] * e1[0] + (long) e1[1] * e1[1] == (long) e2[0] * e2[0] + (long) e2[1] * e2[1];
+    }
+}
+
+class Problem0963MinimumAreaRectangleII0 {
+
+    public double minAreaFreeRect(int[][] points) {
+        int n = points.length;
+        Set<Pair<Integer, Integer>> set = new HashSet<>(n);
+        for (int[] p : points) {
+            set.add(new Pair<>(p[0], p[1]));
+        }
+        long ans = Long.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                for (int k = j + 1; k < n; k++) {
+                    ans = Math.min(ans, getArea(points, i, j, k, set));
+                    ans = Math.min(ans, getArea(points, j, i, k, set));
+                    ans = Math.min(ans, getArea(points, k, i, j, set));
+                }
+            }
+        }
+        return ans == Long.MAX_VALUE ? 0 : ans;
+    }
+
+    private long getArea(int[][] points, int p1, int p2, int p3, Set<Pair<Integer, Integer>> set) {
+        int[] edge1 = getEdge(points, p1, p2), edge2 = getEdge(points, p1, p3);
+        int x = points[p2][0] + points[p3][0] - points[p1][0];
+        int y = points[p2][1] + points[p3][1] - points[p1][1];
+        if (dotProduct(edge1, edge2) != 0 || !set.contains(new Pair<>(x, y))) {
+            return Long.MAX_VALUE;
+        }
+        return crossProduct(edge1, edge2);
+    }
+
+    private int[] getEdge(int[][] points, int p1, int p2) {
+        return new int[]{points[p2][0] - points[p1][0], points[p2][1] - points[p1][1]};
+    }
+
+    private long dotProduct(int[] p1, int[] p2) {
+        return (long) p1[0] * p2[0] + (long) p1[1] * p2[1];
+    }
+
+    private long crossProduct(int[] p1, int[] p2) {
+        return Math.abs((long) p1[0] * p2[1] - (long) p2[0] * p1[1]);
     }
 }

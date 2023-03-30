@@ -64,3 +64,49 @@ public class Problem0959RegionsCutBySlashes {
         }
     }
 }
+
+class Problem0959RegionsCutBySlashes0 {
+
+    public int regionsBySlashes(String[] grid) {
+        int n = grid.length, M = n << 2, N = M * n, ans = N;
+        int[] parent = new int[N];
+        Arrays.setAll(parent, i -> i);
+        for (int i = 0, k = 0; i < n; i++) {
+            for (int j = 0; j < n; j++, k += 4) {
+                int k1 = k + 1, k2 = k + 2, k3 = k + 3;
+                if (i > 0) {
+                    ans -= union(parent, k, k - M + 2);
+                }
+                if (j > 0) {
+                    ans -= union(parent, k3, k - 3);
+                }
+                char c = grid[i].charAt(j);
+                if (c == '/') {
+                    ans -= union(parent, k, k3);
+                    ans -= union(parent, k1, k2);
+                } else if (c == '\\') {
+                    ans -= union(parent, k, k1);
+                    ans -= union(parent, k2, k3);
+                } else {
+                    ans -= union(parent, k, k1);
+                    ans -= union(parent, k1, k2);
+                    ans -= union(parent, k2, k3);
+                }
+            }
+        }
+        return ans;
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = parent[x] == x ? x : find(parent, parent[x]);
+    }
+
+    private int union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px == py) {
+            return 0;
+        }
+        parent[py] = px;
+        return 1;
+    }
+}

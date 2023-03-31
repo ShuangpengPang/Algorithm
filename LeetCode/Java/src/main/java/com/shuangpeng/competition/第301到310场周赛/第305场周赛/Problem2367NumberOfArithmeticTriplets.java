@@ -82,7 +82,7 @@ public class Problem2367NumberOfArithmeticTriplets {
         return ans;
     }
 
-    public int arithmeticTriplets(int[] nums, int diff) {
+    public int arithmeticTriplets4(int[] nums, int diff) {
         int N = 251, ans = 0;
         int[] map = new int[N];
         for (int num : nums) {
@@ -91,6 +91,22 @@ public class Problem2367NumberOfArithmeticTriplets {
                 ans++;
             }
             map[num + 50] = count + 1;
+        }
+        return ans;
+    }
+
+    public int arithmeticTriplets(int[] nums, int diff) {
+        int n = nums.length, ans = 0;
+        for (int i = 0, j = 1, k = 2; i < n && k < n; i++) {
+            while (j < n && nums[i] + diff > nums[j]) {
+                j++;
+            }
+            while (k < n && nums[i] + (diff << 1) > nums[k]) {
+                k++;
+            }
+            if (k < n && nums[j] - nums[i] == diff && nums[k] - nums[j] == diff) {
+                ans++;
+            }
         }
         return ans;
     }

@@ -70,7 +70,7 @@ public class Problem2367NumberOfArithmeticTriplets {
         return ans;
     }
 
-    public int arithmeticTriplets(int[] nums, int diff) {
+    public int arithmeticTriplets3(int[] nums, int diff) {
         boolean[] set = new boolean[201];
         int ans = 0;
         for (int num : nums) {
@@ -78,6 +78,19 @@ public class Problem2367NumberOfArithmeticTriplets {
                 ans++;
             }
             set[num] = true;
+        }
+        return ans;
+    }
+
+    public int arithmeticTriplets(int[] nums, int diff) {
+        int N = 251, ans = 0;
+        int[] map = new int[N];
+        for (int num : nums) {
+            int count = map[num - diff + 50];
+            if (count >= 2) {
+                ans++;
+            }
+            map[num + 50] = count + 1;
         }
         return ans;
     }

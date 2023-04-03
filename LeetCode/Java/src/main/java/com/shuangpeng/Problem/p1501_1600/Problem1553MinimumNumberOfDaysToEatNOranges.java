@@ -43,7 +43,7 @@ public class Problem1553MinimumNumberOfDaysToEatNOranges {
         return 0;
     }
 
-    public int minDays(int n) {
+    public int minDays1(int n) {
         return dfs(n, new HashMap<>());
     }
 
@@ -57,5 +57,38 @@ public class Problem1553MinimumNumberOfDaysToEatNOranges {
         int ans = Math.min(dfs(n / 3, memo) + n % 3, dfs(n / 2, memo) + n % 2) + 1;
         memo.put(n, ans);
         return ans;
+    }
+
+    public int minDays(int n) {
+        Map<Integer, Integer> map = new HashMap<>();
+        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]);
+        q.offer(new int[]{n, 0});
+        map.put(n, 0);
+        int INF = Integer.MAX_VALUE;
+        while (q.peek()[0] != 1) {
+            int[] arr = q.poll();
+            int num = arr[0], days = arr[1];
+            int minDays = map.get(num);
+            if (days <= minDays) {
+                if (num == 2 || num == 3) {
+                    if (days + 1 < map.getOrDefault(1, INF)) {
+                        q.offer(new int[]{1, days + 1});
+                        map.put(1, days + 1);
+                    }
+                } else {
+                    int m1 = num >> 1, m2 = num / 3;
+                    int d1 = days + num % 2 + 1, d2 = days + num % 3 + 1;
+                    if (d1 < map.getOrDefault(m1, INF)) {
+                        map.put(m1, d1);
+                        q.offer(new int[]{m1, d1});
+                    }
+                    if (d2 < map.getOrDefault(m2, INF)) {
+                        map.put(m2, d2);
+                        q.offer(new int[]{m2, d2});
+                    }
+                }
+            }
+        }
+        return q.poll()[1] + 1;
     }
 }

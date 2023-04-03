@@ -60,7 +60,7 @@ public class Problem0831MaskingPersonalInformation {
         return ans.toString();
     }
 
-    public String maskPII(String s) {
+    public String maskPII1(String s) {
         int index = s.indexOf('@');
         if (index != -1) {
             s = s.toLowerCase();
@@ -76,5 +76,42 @@ public class Problem0831MaskingPersonalInformation {
         }
         int m = sb.length();
         return (m == 10 ? "" : m == 11 ? "+*-" : m == 12 ? "+**-" : "+***-") + "***-***-" + sb.substring(m - 4);
+    }
+
+    public String maskPII(String s) {
+        int n = s.length();
+        StringBuilder sb = new StringBuilder();
+        if (Character.isLetter(s.charAt(0))) {
+            sb.append(Character.toLowerCase(s.charAt(0))).append("*****");
+            int i = 0;
+            while (s.charAt(i + 1) != '@') {
+                i++;
+            }
+            sb.append(Character.toLowerCase(s.charAt(i))).append('@');
+            i += 2;
+            while (i < n) {
+                sb.append(Character.toLowerCase(s.charAt(i)));
+                i++;
+            }
+        } else {
+            StringBuilder tmp = new StringBuilder();
+            for (int i = 0; i < n; i++) {
+                char c = s.charAt(i);
+                if (Character.isDigit(c)) {
+                    tmp.append(c);
+                }
+            }
+            int size = tmp.length();
+            if (size == 10) {
+                sb.append("***-***-").append(tmp.substring(size - 4));
+            } else if (size == 11) {
+                sb.append("+*-***-***-").append(tmp.substring(size - 4));
+            } else if (size == 12) {
+                sb.append("+**-***-***-").append(tmp.substring(size - 4));
+            } else if (size == 13) {
+                sb.append("+***-***-***-").append(tmp.substring(size - 4));
+            }
+        }
+        return sb.toString();
     }
 }

@@ -78,7 +78,7 @@ public class Problem0831MaskingPersonalInformation {
         return (m == 10 ? "" : m == 11 ? "+*-" : m == 12 ? "+**-" : "+***-") + "***-***-" + sb.substring(m - 4);
     }
 
-    public String maskPII(String s) {
+    public String maskPII2(String s) {
         int n = s.length();
         StringBuilder sb = new StringBuilder();
         if (Character.isLetter(s.charAt(0))) {
@@ -101,16 +101,22 @@ public class Problem0831MaskingPersonalInformation {
                     tmp.append(c);
                 }
             }
-            int size = tmp.length();
-            if (size == 10) {
-                sb.append("***-***-").append(tmp.substring(size - 4));
-            } else if (size == 11) {
-                sb.append("+*-***-***-").append(tmp.substring(size - 4));
-            } else if (size == 12) {
-                sb.append("+**-***-***-").append(tmp.substring(size - 4));
-            } else if (size == 13) {
-                sb.append("+***-***-***-").append(tmp.substring(size - 4));
-            }
+            String[] prefix = {"", "+*-", "+**-", "+***-"};
+            sb.append(prefix[tmp.length() - 10]).append("***-***-").append(tmp.substring(tmp.length() - 4));
+        }
+        return sb.toString();
+    }
+
+    public String maskPII(String s) {
+        int at = s.indexOf('@');
+        StringBuilder sb = new StringBuilder();
+        if (at > 0) {
+            s = s.toLowerCase();
+            sb.append(s.charAt(0)).append("*****").append(s.substring(at - 1));
+        } else {
+            s = s.replaceAll("[^0-9]", "");
+            String[] prefix = {"", "+*-", "+**-", "+***-"};
+            sb.append(prefix[s.length() - 10]).append("***-***-").append(s.substring(s.length() - 4));
         }
         return sb.toString();
     }

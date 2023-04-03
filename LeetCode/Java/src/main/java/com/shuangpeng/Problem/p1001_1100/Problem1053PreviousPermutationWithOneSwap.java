@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1001_1100;
  */
 public class Problem1053PreviousPermutationWithOneSwap {
 
-    public int[] prevPermOpt1(int[] arr) {
+    public int[] prevPermOpt10(int[] arr) {
         int n = arr.length, i = n -2;
         while (i >= 0 && arr[i] <= arr[i + 1]) {
             i--;
@@ -26,6 +26,25 @@ public class Problem1053PreviousPermutationWithOneSwap {
         arr[i] = arr[i] ^ arr[k];
         arr[k] = arr[i] ^ arr[k];
         arr[i] = arr[i] ^ arr[k];
+        return arr;
+    }
+
+    public int[] prevPermOpt1(int[] arr) {
+        int n = arr.length;
+        for (int i = n - 2; i >= 0; i--) {
+            if (arr[i] > arr[i + 1]) {
+                int k = i + 1;
+                for (int j = k; j < n && arr[j] < arr[i]; j++) {
+                    if (arr[j] > arr[k]) {
+                        k = j;
+                    }
+                }
+                arr[i] = arr[i] ^ arr[k];
+                arr[k] = arr[i] ^ arr[k];
+                arr[i] = arr[i] ^ arr[k];
+                break;
+            }
+        }
         return arr;
     }
 }

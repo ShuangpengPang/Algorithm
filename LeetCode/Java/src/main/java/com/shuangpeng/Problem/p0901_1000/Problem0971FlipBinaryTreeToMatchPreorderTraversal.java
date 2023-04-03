@@ -26,10 +26,7 @@ public class Problem0971FlipBinaryTreeToMatchPreorderTraversal {
     }
 
     private boolean dfs(TreeNode root, int[] voyage) {
-        if (root == null) {
-            return true;
-        }
-        if (index == voyage.length) {
+        if (root == null || index == voyage.length) {
             return true;
         }
         if (root.val != voyage[index]) {

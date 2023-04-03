@@ -70,11 +70,15 @@ class Problem0963MinimumAreaRectangleII0 {
         }
         long ans = Long.MAX_VALUE;
         for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j) {
+                    continue;
+                }
                 for (int k = j + 1; k < n; k++) {
+                    if (i == k) {
+                        continue;
+                    }
                     ans = Math.min(ans, getArea(points, i, j, k, set));
-                    ans = Math.min(ans, getArea(points, j, i, k, set));
-                    ans = Math.min(ans, getArea(points, k, i, j, set));
                 }
             }
         }

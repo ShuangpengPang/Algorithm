@@ -146,3 +146,35 @@ class Problem0963MinimumAreaRectangleII1 {
         return ans == Long.MAX_VALUE ? 0 : ans;
     }
 }
+
+class Problem0963MinimumAreaRectangleII2 {
+
+    public double minAreaFreeRect(int[][] points) {
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        for (int[] p : points) {
+            map.computeIfAbsent(p[0], k -> new HashSet<>()).add(p[1]);
+        }
+        int n = points.length;
+        long ans = Long.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            int[] p1 = points[i];
+            for (int j = 0; j < n; j++) {
+                if (j != i) {
+                    int[] p2 = points[j];
+                    int x1 = p2[0] - p1[0], y1 = p2[1] - p1[1];
+                    for (int k = j + 1; k < n; k++) {
+                        if (k != i) {
+                            int[] p3 = points[k];
+                            int x2 = p3[0] - p1[0], y2 = p3[1] - p1[1];
+                            int x = x1 + p3[0], y = y1 + p3[1];
+                            if ((long) x1 * x2 + (long) y1 * y2 == 0 && map.containsKey(x) && map.get(x).contains(y)) {
+                                ans = Math.min(ans, Math.abs((long) x1 * y2 - (long) x2 * y1));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ans == Long.MAX_VALUE ? 0 : ans;
+    }
+}

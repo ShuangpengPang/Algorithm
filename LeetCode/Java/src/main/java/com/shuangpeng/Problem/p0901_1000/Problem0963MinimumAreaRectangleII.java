@@ -2,7 +2,11 @@ package com.shuangpeng.Problem.p0901_1000;
 
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -105,5 +109,40 @@ class Problem0963MinimumAreaRectangleII0 {
 
     private long crossProduct(int[] p1, int[] p2) {
         return Math.abs((long) p1[0] * p2[1] - (long) p2[0] * p1[1]);
+    }
+}
+
+class Problem0963MinimumAreaRectangleII1 {
+
+    public double minAreaFreeRect(int[][] points) {
+        int n = points.length;
+        Map<Pair<Integer, Integer>, Map<Integer, List<int[]>>> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int x1 = points[i][0], y1 = points[i][1];
+            for (int j = i + 1; j < n; j++) {
+                int x2 = points[j][0], y2 = points[j][1];
+                Pair<Integer, Integer> center = new Pair<>(x1 + x2, y1 + y2);
+                int d = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+                map.computeIfAbsent(center, k -> new HashMap<>()).computeIfAbsent(d, k -> new ArrayList<>()).add(new int[]{x1, y1});
+            }
+        }
+        long ans = Long.MAX_VALUE;
+        for (Map.Entry<Pair<Integer, Integer>, Map<Integer, List<int[]>>> entry : map.entrySet()) {
+            Pair<Integer, Integer> center = entry.getKey();
+            for (List<int[]> list : entry.getValue().values()) {
+                int size = list.size();
+                for (int i = 0; i < size; i++) {
+                    int x1 = list.get(i)[0], y1 = list.get(i)[1];
+                    int x2 = center.getKey() - x1, y2 = center.getValue() - y1;
+                    for (int j = i + 1; j < size; j++) {
+                        int x3 = list.get(j)[0], y3 = list.get(j)[1];
+                        int dx1 = x1 - x3, dy1 = y1 - y3;
+                        int dx2 = x2 - x3, dy2 = y2 - y3;
+                        ans = Math.min(ans, Math.abs((long) dx1 * dy2 - (long) dy1 * dx2));
+                    }
+                }
+            }
+        }
+        return ans == Long.MAX_VALUE ? 0 : ans;
     }
 }

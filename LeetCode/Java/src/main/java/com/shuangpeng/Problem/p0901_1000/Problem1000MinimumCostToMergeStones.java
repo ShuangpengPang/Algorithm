@@ -34,7 +34,7 @@ public class Problem1000MinimumCostToMergeStones {
         return dp[1][n][1] == INF ? -1 : dp[1][n][1];
     }
 
-    public int mergeStones(int[] stones, int k) {
+    public int mergeStones1(int[] stones, int k) {
         int n = stones.length;
         if ((n - 1) % (k - 1) != 0) {
             return -1;
@@ -59,10 +59,21 @@ public class Problem1000MinimumCostToMergeStones {
         return dp[1][n];
     }
 
-//    public static void main(String[] args) {
-//        Problem1000MinimumCostToMergeStones a = new Problem1000MinimumCostToMergeStones();
-////        a.mergeStones(new int[]{3, 2, 4, 1}, 2);
-//        a.mergeStones(new int[]{3, 5, 1, 2, 6}, 3);
-////     3, 2, 4, 1
-//    }
+    public int mergeStones(int[] stones, int k) {
+        int n = stones.length, INF = Integer.MAX_VALUE / 3;
+        int[][][] dp = new int[n][n][k];
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1, sum = stones[i]; j < n; j++) {
+                sum += stones[j];
+                for (int p = 1; p < k && p <= j - i; p++) {
+                    dp[i][j][p] = INF;
+                    for (int x = i; x <= j - p; x++) {
+                        dp[i][j][p] = Math.min(dp[i][j][p], dp[i][x][0] + dp[x + 1][j][p - 1]);
+                    }
+                }
+                dp[i][j][0] = j - i + 1 >= k ? Math.min(INF, dp[i][j][k - 1] + sum) : INF;
+            }
+        }
+        return dp[0][n - 1][0] == INF ? -1 : dp[0][n - 1][0];
+    }
 }

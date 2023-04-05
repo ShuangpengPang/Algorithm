@@ -42,3 +42,20 @@ class Problem2427NumberOfCommonFactors0 {
         return b == 0 ? a : gcd(b, a % b);
     }
 }
+
+class Problem2427NumberOfCommonFactors1 {
+
+    public int commonFactors(int a, int b) {
+        int g = gcd(a, b), ans = 0;
+        for (int i = 1; i * i <= g; i++) {
+            if (g % i == 0) {
+                ans = i != g / i ? ans + 2 : ans + 1;
+            }
+        }
+        return ans;
+    }
+
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+}

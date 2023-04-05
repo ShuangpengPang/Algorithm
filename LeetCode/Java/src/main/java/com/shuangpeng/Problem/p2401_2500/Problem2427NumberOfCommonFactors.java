@@ -22,3 +22,23 @@ public class Problem2427NumberOfCommonFactors {
         return b == 0 ? a : gcd(b, a % b);
     }
 }
+
+class Problem2427NumberOfCommonFactors0 {
+
+    static int[] count = new int[1001];
+    static {
+        for (int i = 1; i <= 1000; i++) {
+            for (int j = i; j <= 1000; j += i) {
+                count[j]++;
+            }
+        }
+    }
+
+    public int commonFactors(int a, int b) {
+        return count[gcd(a, b)];
+    }
+
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+}

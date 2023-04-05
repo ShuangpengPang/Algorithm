@@ -43,7 +43,7 @@ public class Problem0967NumbersWithSameConsecutiveDifferences {
         }
     }
 
-    public int[] numsSameConsecDiff(int n, int k) {
+    public int[] numsSameConsecDiff1(int n, int k) {
         if (k == 0) {
             int num = ((int) Math.pow(10, n) - 1) / 9;
             int[] ans = new int[9];
@@ -70,6 +70,28 @@ public class Problem0967NumbersWithSameConsecutiveDifferences {
                     ans.add(num);
                 }
             }
+        }
+        return ans.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public int[] numsSameConsecDiff(int n, int k) {
+        List<Integer> ans = new ArrayList<>(9);
+        for (int i = 1; i < 10; i++) {
+            ans.add(i);
+        }
+        for (int i = 1; i < n; i++) {
+            List<Integer> tmp = new ArrayList<>();
+            for (int j = ans.size() - 1; j >= 0; j--) {
+                int num = ans.get(j), d = num % 10;
+                num *= 10;
+                if (d - k >= 0) {
+                    tmp.add(num + d - k);
+                }
+                if (k != 0 && d + k < 10) {
+                    tmp.add(num + d + k);
+                }
+            }
+            ans = tmp;
         }
         return ans.stream().mapToInt(Integer::intValue).toArray();
     }

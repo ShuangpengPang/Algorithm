@@ -56,7 +56,7 @@ public class Problem1637WidestVerticalAreaBetweenTwoPointsContainingNoPoints {
         return ans;
     }
 
-    public int maxWidthOfVerticalArea(int[][] points) {
+    public int maxWidthOfVerticalArea2(int[][] points) {
         int n = points.length, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (int[] p : points) {
             min = Math.min(min, p[0]);
@@ -85,6 +85,34 @@ public class Problem1637WidestVerticalAreaBetweenTwoPointsContainingNoPoints {
             }
             ans = Math.max(ans, x - last);
             last = bucket[i][1];
+        }
+        return ans;
+    }
+
+    public int maxWidthOfVerticalArea(int[][] points) {
+        int n = points.length, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int[] p : points) {
+            min = Math.min(min, p[0]);
+            max = Math.max(max, p[0]);
+        }
+        int d = Math.max((max - min) / (n - 1), 1);
+        int m = (max - min) / d + 1;
+        int[][] bucket = new int[m][2];
+        for (int i = 0; i < m; i++) {
+            bucket[i][0] = Integer.MAX_VALUE;
+            bucket[i][1] = Integer.MIN_VALUE;
+        }
+        for (int[] p : points) {
+            int x = p[0], i = (x - min) / d;
+            bucket[i][0] = Math.min(bucket[i][0], x);
+            bucket[i][1] = Math.max(bucket[i][1], x);
+        }
+        int last = bucket[0][1], ans = 0;
+        for (int i = 1; i < m; i++) {
+            if (bucket[i][0] != Integer.MAX_VALUE) {
+                ans = Math.max(ans, bucket[i][0] - last);
+                last = bucket[i][1];
+            }
         }
         return ans;
     }

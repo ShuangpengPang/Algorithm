@@ -39,7 +39,7 @@ public class Problem1017ConvertToBaseNeg2 {
         return sb.toString();
     }
 
-    public String baseNeg2(int n) {
+    public String baseNeg21(int n) {
         if (n == 0) {
             return "0";
         }
@@ -51,4 +51,14 @@ public class Problem1017ConvertToBaseNeg2 {
         }
         return sb.reverse().toString();
     }
+
+    public String baseNeg2(int n) {
+        int M = 0x55555555;
+        return Integer.toBinaryString(M ^ (M - n));
+    }
+
+//    public static void main(String[] args) {
+//        int n = ~0;
+//        int i = 1;
+//    }
 }

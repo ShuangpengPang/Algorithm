@@ -8,6 +8,23 @@ package com.shuangpeng.Problem.p0901_1000;
  */
 public class Problem0991BrokenCalculator {
 
+    public int brokenCalc0(int startValue, int target) {
+        int count = 0;
+        while (target > startValue) {
+            startValue <<= 1;
+            count++;
+        }
+        int d = startValue - target, n = 1 << count;
+        while (d > 0) {
+            if (d >= n) {
+                count += d / n;
+                d %= n;
+            }
+            n >>= 1;
+        }
+        return count;
+    }
+
     public int brokenCalc(int startValue, int target) {
         int ans = 0;
         while (target > startValue) {

@@ -32,3 +32,31 @@ public class Problem1007MinimumDominoRotationsForEqualRow {
         return ans;
     }
 }
+
+class Problem1007MinimumDominoRotationsForEqualRow0 {
+
+    public int minDominoRotations(int[] tops, int[] bottoms) {
+        int ans = check(tops, bottoms, tops[0]);
+        if (tops[0] != bottoms[0]) {
+            ans = Math.min(ans, check(tops, bottoms, bottoms[0]));
+        }
+        return ans == tops.length + 1 ? -1 : ans;
+    }
+
+    private int check(int[] t, int[] b, int target) {
+        int n = t.length, N = n + 1;
+        int c1 = 0, c2 = 0;
+        for (int i = 0; i < n; i++) {
+            if (t[i] != target && b[i] != target) {
+                return N;
+            }
+            if (t[i] != target) {
+                c1++;
+            }
+            if (b[i] != target) {
+                c2++;
+            }
+        }
+        return Math.min(c1, c2);
+    }
+}

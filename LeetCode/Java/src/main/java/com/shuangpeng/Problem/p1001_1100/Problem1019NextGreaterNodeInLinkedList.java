@@ -1,0 +1,38 @@
+package com.shuangpeng.Problem.p1001_1100;
+
+import com.shuangpeng.common.ListNode;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+
+/**
+ * @author ShuangPengPang
+ * @version 1.0
+ * @description: Problem1019NextGreaterNodeInLinkedList（链表中的下一个更大节点）
+ * @date 2023/4/7 4:50 PM
+ */
+public class Problem1019NextGreaterNodeInLinkedList {
+
+    public int[] nextLargerNodes(ListNode head) {
+        List<Integer> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head.val);
+            head = head.next;
+        }
+        int n = list.size();
+        int[] ans = new int[n];
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.push(0);
+        for (int i = n - 1; i >= 0; i--) {
+            int num = list.get(i);
+            while (stack.peek() != 0 && stack.peek() <= num) {
+                stack.pop();
+            }
+            ans[i] = stack.peek();
+            stack.push(num);
+        }
+        return ans;
+    }
+}

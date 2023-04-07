@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Problem1019NextGreaterNodeInLinkedList {
 
-    public int[] nextLargerNodes(ListNode head) {
+    public int[] nextLargerNodes0(ListNode head) {
         List<Integer> list = new ArrayList<>();
         while (head != null) {
             list.add(head.val);
@@ -32,6 +32,31 @@ public class Problem1019NextGreaterNodeInLinkedList {
             }
             ans[i] = stack.peek();
             stack.push(num);
+        }
+        return ans;
+    }
+
+    public int[] nextLargerNodes(ListNode head) {
+        int n = 0;
+        ListNode prev = null;
+        while (head != null) {
+            ListNode node = head.next;
+            head.next = prev;
+            prev = head;
+            head = node;
+            n++;
+        }
+        int[] ans = new int[n];
+        Deque<Integer> q = new ArrayDeque<>();
+        q.push(0);
+        for (int i = n - 1; i >= 0; i--) {
+            int num = prev.val;
+            while (q.peek() != 0 && q.peek() <= num) {
+                q.pop();
+            }
+            ans[i] = q.peek();
+            q.push(num);
+            prev = prev.next;
         }
         return ans;
     }

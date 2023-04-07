@@ -9,10 +9,10 @@ package com.shuangpeng.Problem.p1001_1100;
 public class Problem1016BinaryStringWithSubstringsRepresenting1ToN {
 
     public boolean queryString(String s, int n) {
-        if (n >= 2048) {
+        int m = s.length(), count = 0;
+        if (n >= 2048 || n > m * m) {
             return false;
         }
-        int m = s.length(), count = 0;
         boolean[] has = new boolean[n + 1];
         for (int i = m - 1; i >= 0 && count < n; i--) {
             if (s.charAt(i) == '1') {

@@ -1,11 +1,16 @@
 package com.shuangpeng.Problem.p1101_1200;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @description: 最小的必要团队
+ * @date 2023/4/9 8:33 PM
+ **/
 public class Problem1125SmallestSufficientTeam {
 
-    public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+    public int[] smallestSufficientTeam0(String[] req_skills, List<List<String>> people) {
         int n = req_skills.length;
         int size = people.size();
         int[] masks = new int[size];
@@ -52,5 +57,41 @@ public class Problem1125SmallestSufficientTeam {
             s = pre[s];
         }
         return ans;
+    }
+
+    public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+        int n = req_skills.length, m = people.size(), N = 1 << n;
+        int[] hash = new int[m];
+        for (int i = 0; i < m; i++) {
+            List<String> list = people.get(i);
+            int h = 0;
+            for (String s : list) {
+                for (int j = 0; j < n; j++) {
+                    if (req_skills[j].equals(s)) {
+                        h |= 1 << j;
+                        break;
+                    }
+                }
+            }
+            hash[i] = h;
+        }
+        int[][] dp = new int[N][2];
+        for (int i = 1; i < N; i++) {
+            dp[i][0] = m + 1;
+            for (int j = 0; j < m; j++) {
+                int h = hash[j], k = i & (i ^ h);
+                if (dp[i][0] > dp[k][0] + 1) {
+                    dp[i][0] = dp[k][0] + 1;
+                    dp[i][1] = j;
+                }
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        int index = N - 1;
+        while (index != 0) {
+            ans.add(dp[index][1]);
+            index = index & (index ^ hash[dp[index][1]]);
+        }
+        return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 }

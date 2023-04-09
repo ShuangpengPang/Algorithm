@@ -2,7 +2,11 @@ package com.shuangpeng.Problem.p1101_1200;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @description: 最小的必要团队
@@ -59,7 +63,7 @@ public class Problem1125SmallestSufficientTeam {
         return ans;
     }
 
-    public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+    public int[] smallestSufficientTeam1(String[] req_skills, List<List<String>> people) {
         int n = req_skills.length, m = people.size(), N = 1 << n;
         int[] hash = new int[m];
         for (int i = 0; i < m; i++) {
@@ -93,5 +97,31 @@ public class Problem1125SmallestSufficientTeam {
             index = index & (index ^ hash[dp[index][1]]);
         }
         return ans.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+        int n = req_skills.length, m = people.size(), N = 1 << n;
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            map.put(req_skills[i], i);
+        }
+        Set<Integer>[] dp = new Set[N];
+        Arrays.setAll(dp, i -> new HashSet<>());
+        for (int i = 0; i < m; i++) {
+            List<String> skills = people.get(i);
+            int cur = 0;
+            for (String s : skills) {
+                cur |= 1 << map.get(s);
+            }
+            for (int j = 0; j < N; j++) {
+                int k = cur | j;
+                if (dp[k].isEmpty() || dp[k].size() > dp[j].size() + 1) {
+                    dp[k].clear();
+                    dp[k].addAll(dp[j]);
+                    dp[k].add(i);
+                }
+            }
+        }
+        return dp[N - 1].stream().mapToInt(Integer::intValue).toArray();
     }
 }

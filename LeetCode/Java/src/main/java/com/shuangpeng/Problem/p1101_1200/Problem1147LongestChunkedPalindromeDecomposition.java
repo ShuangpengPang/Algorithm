@@ -71,3 +71,33 @@ class Problem1147LongestChunkedPalindromeDecomposition0 {
         return true;
     }
 }
+
+class Problem1147LongestChunkedPalindromeDecomposition1 {
+
+    public int longestDecomposition(String text) {
+        char[] cs = text.toCharArray();
+        int n = cs.length, m = n >> 1, h = (n - 1) >> 1;
+        int start = 0, ans = 0;
+        while (start <= h) {
+            int i = start;
+            while (i < m) {
+                if (check(cs, start, n - i - 1, i - start + 1)) {
+                    break;
+                }
+                i++;
+            }
+            ans += i < m ? 2 : 1;
+            start = i + 1;
+        }
+        return ans;
+    }
+
+    private boolean check(char[] cs, int s1, int s2, int n) {
+        for (int i = 0; i < n; i++) {
+            if (cs[s1 + i] != cs[s2 + i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

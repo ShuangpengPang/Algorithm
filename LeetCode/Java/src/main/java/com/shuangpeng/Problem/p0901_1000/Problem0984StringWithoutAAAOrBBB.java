@@ -33,7 +33,7 @@ public class Problem0984StringWithoutAAAOrBBB {
         return sb.toString();
     }
 
-    public String strWithout3a3b(int a, int b) {
+    public String strWithout3a3b1(int a, int b) {
         StringBuilder sb = new StringBuilder();
         while (a > 0 || b > 0) {
             int n = sb.length();
@@ -50,5 +50,78 @@ public class Problem0984StringWithoutAAAOrBBB {
             }
         }
         return sb.toString();
+    }
+
+    public String strWithout3a3b2(int a, int b) {
+        StringBuilder sb = new StringBuilder();
+        while (a > b && b > 0) {
+            sb.append("aab");
+            a -= 2;
+            b--;
+        }
+        while (b > a && a > 0) {
+            sb.append("bba");
+            b -= 2;
+            a--;
+        }
+        while (a > 0 && b > 0) {
+            sb.append("ab");
+            a--;
+            b--;
+        }
+        while (a > 0) {
+            sb.append('a');
+            a--;
+        }
+        while (b > 0) {
+            sb.append("b");
+            b--;
+        }
+        return sb.toString();
+    }
+
+    public String strWithout3a3b3(int a, int b) {
+        StringBuilder sb = new StringBuilder(a + b);
+        while (a > 0 || b > 0) {
+            if (a > b && b > 0) {
+                sb.append("aab");
+                a -= 2;
+                b--;
+            } else if (b > a && a > 0) {
+                sb.append("bba");
+                b -= 2;
+                a--;
+            } else if (a > 0 && b > 0) {
+                sb.append("ab");
+                a--;
+                b--;
+            } else if (a > 0) {
+                sb.append("a");
+                a--;
+            } else {
+                sb.append("b");
+                b--;
+            }
+        }
+        return sb.toString();
+    }
+
+    public String strWithout3a3b(int a, int b) {
+        int n = a + b, aCount = 0, bCount = 0;
+        char[] cs = new char[n];
+        for (int i = 0; i < n; i++) {
+            if (bCount == 2 || (aCount < 2 && a >= b)) {
+                aCount++;
+                a--;
+                bCount = 0;
+                cs[i] = 'a';
+            } else {
+                bCount++;
+                b--;
+                aCount = 0;
+                cs[i] = 'b';
+            }
+        }
+        return new String(cs);
     }
 }

@@ -1,7 +1,9 @@
 package com.shuangpeng.Problem.p1001_1100;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author ShuangPengPang
@@ -42,6 +44,15 @@ public class Problem1023CamelcaseMatching {
             ans.add(i == m);
         }
         return ans;
+    }
+
+    public List<Boolean> camelMatch1(String[] queries, String pattern) {
+        StringBuilder regex = new StringBuilder("[a-z]*");
+        int n = pattern.length();
+        for (int i = 0; i < n; i++) {
+            regex.append(pattern.charAt(i)).append("[a-z]*");
+        }
+        return Arrays.stream(queries).map(q -> q.matches(regex.toString())).collect(Collectors.toList());
     }
 
     public List<Boolean> camelMatch(String[] queries, String pattern) {

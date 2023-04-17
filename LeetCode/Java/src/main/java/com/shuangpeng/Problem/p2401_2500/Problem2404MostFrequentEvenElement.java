@@ -16,12 +16,11 @@ public class Problem2404MostFrequentEvenElement {
         int ans = -1, freq = 0;
         for (int num : nums) {
             if ((num & 1) == 0) {
-                int f = map.getOrDefault(num, 0) + 1;
+                int f = map.merge(num, 1, Integer::sum);
                 if (f >= freq) {
                     ans = f > freq ? num : Math.min(ans, num);
                     freq = f;
                 }
-                map.put(num, f);
             }
         }
         return ans;

@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0901_1000;
  */
 public class Problem0984StringWithoutAAAOrBBB {
 
-    public String strWithout3a3b(int a, int b) {
+    public String strWithout3a3b0(int a, int b) {
         int n = a + b;
         int c = a, d = b;
         char c1 = 'a', c2 = 'b';
@@ -29,6 +29,25 @@ public class Problem0984StringWithoutAAAOrBBB {
         int l = c - d - cnt;
         for (int i = 0; i < l; i++) {
             sb.append(c1);
+        }
+        return sb.toString();
+    }
+
+    public String strWithout3a3b(int a, int b) {
+        StringBuilder sb = new StringBuilder();
+        while (a > 0 || b > 0) {
+            int n = sb.length();
+            boolean writeA = a >= b;
+            if (n >= 2 && sb.charAt(n - 1) == sb.charAt(n - 2)) {
+                writeA = sb.charAt(n - 1) == 'b';
+            }
+            if (writeA) {
+                sb.append('a');
+                a--;
+            } else {
+                sb.append('b');
+                b--;
+            }
         }
         return sb.toString();
     }

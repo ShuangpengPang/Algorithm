@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Problem1023CamelcaseMatching {
 
-    public List<Boolean> camelMatch(String[] queries, String pattern) {
+    public List<Boolean> camelMatch0(String[] queries, String pattern) {
         int n = pattern.length();
         List<Boolean> ans = new ArrayList<>(queries.length);
         for (String q : queries) {
@@ -40,6 +40,27 @@ public class Problem1023CamelcaseMatching {
                 i++;
             }
             ans.add(i == m);
+        }
+        return ans;
+    }
+
+    public List<Boolean> camelMatch(String[] queries, String pattern) {
+        int n = queries.length, m = pattern.length();
+        List<Boolean> ans = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            String q = queries[i];
+            int len = q.length(), p = 0;
+            boolean match = true;
+            for (int j = 0; j < len; j++) {
+                char c = q.charAt(j);
+                if (p < m && pattern.charAt(p) == c) {
+                    p++;
+                } else if (Character.isUpperCase(c)) {
+                    match = false;
+                    break;
+                }
+            }
+            ans.add(p == m && match);
         }
         return ans;
     }

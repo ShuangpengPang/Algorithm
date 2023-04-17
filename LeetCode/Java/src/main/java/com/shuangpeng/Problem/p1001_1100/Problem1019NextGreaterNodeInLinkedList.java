@@ -36,7 +36,7 @@ public class Problem1019NextGreaterNodeInLinkedList {
         return ans;
     }
 
-    public int[] nextLargerNodes(ListNode head) {
+    public int[] nextLargerNodes1(ListNode head) {
         int n = 0;
         ListNode prev = null;
         while (head != null) {
@@ -58,6 +58,23 @@ public class Problem1019NextGreaterNodeInLinkedList {
             q.push(num);
             prev = prev.next;
         }
+        return ans;
+    }
+
+    public int[] nextLargerNodes(ListNode head) {
+        return recurse(head, 0, new ArrayDeque<>());
+    }
+
+    private int[] recurse(ListNode node, int n, Deque<Integer> stack) {
+        if (node == null) {
+            return new int[n];
+        }
+        int[] ans = recurse(node.next, n + 1, stack);
+        while (!stack.isEmpty() && stack.peek() <= node.val) {
+            stack.pop();
+        }
+        ans[n] = stack.isEmpty() ? 0 : stack.peek();
+        stack.push(node.val);
         return ans;
     }
 }

@@ -2,6 +2,7 @@ package com.shuangpeng.Problem.p0901_1000;
 
 import javafx.util.Pair;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -61,6 +62,24 @@ public class Problem0962MaximumWidthRamp {
             } else {
                 map.put(nums[i], i);
             }
+        }
+        return ans;
+    }
+
+    public int maxWidthRamp3(int[] nums) {
+        int n = nums.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, (a, b) -> {
+            if (nums[a] != nums[b]) {
+                return nums[a] - nums[b];
+            }
+            return a - b;
+        });
+        int m = n, ans = 0;
+        for (int id : ids) {
+            ans = Math.max(ans, id - m);
+            m = Math.min(m, id);
         }
         return ans;
     }

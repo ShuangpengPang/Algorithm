@@ -84,24 +84,40 @@ public class Problem0962MaximumWidthRamp {
         return ans;
     }
 
-    public int maxWidthRamp(int[] nums) {
-        int n = nums.length, top = 1;
+    public int maxWidthRamp4(int[] nums) {
+        int n = nums.length, ans = 0, top = 0;
         int[] stack = new int[n];
-        int ans = 0;
-        for (int i = 1; i < n; i++) {
+        for (int i = n - 1; i >= 0; i--) {
             int left = 0, right = top - 1;
             while (left <= right) {
                 int mid = left + (right - left >> 1);
-                if (nums[stack[mid]] > nums[i]) {
+                if (nums[stack[mid]] < nums[i]) {
                     left = mid + 1;
                 } else {
                     right = mid - 1;
                 }
             }
-            ans = Math.max(ans, left < top ? i - stack[left] : 0);
-            if (nums[i] < nums[stack[top - 1]]) {
+            ans = Math.max(ans, left < top ? stack[left] - i : 0);
+            if (left == top) {
                 stack[top++] = i;
             }
+        }
+        return ans;
+    }
+
+    public int maxWidthRamp(int[] nums) {
+        int n = nums.length, top = 0, ans = 0;
+        int[] stack = new int[n];
+        for (int i = 1; i < n; i++) {
+            if (nums[i] < nums[stack[top]]) {
+                stack[++top] = i;
+            }
+        }
+        for (int i = n - 1; i > ans; i--) {
+            while (top >= 0 && nums[i] >= nums[stack[top]]) {
+                top--;
+            }
+            ans = Math.max(ans, i - stack[top + 1]);
         }
         return ans;
     }

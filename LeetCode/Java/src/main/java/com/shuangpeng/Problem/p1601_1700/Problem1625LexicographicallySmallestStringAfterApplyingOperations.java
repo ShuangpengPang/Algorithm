@@ -65,52 +65,32 @@ public class Problem1625LexicographicallySmallestStringAfterApplyingOperations {
     }
 
     public String findLexSmallestString(String s, int a, int b) {
-        char[] cs = s.toCharArray();
         int n = s.length();
-        boolean[] visited = new boolean[n];
         String ans = s;
-        boolean isOdd = (b & 1) == 1;
+        s += s;
+        boolean[] visited = new boolean[n];
+        int limit = (b & 1) == 0 ? 0 : 9;
         for (int i = 0; !visited[i]; i = (i + b) % n) {
             visited[i] = true;
             boolean[] even = new boolean[10];
-            char[] copy = getRotate(cs, i);
             for (int j = 0; !even[j]; j = (j + a) % 10) {
-                even[j] = true;
-                char[] tmp = copy.clone();
+                char[] cs = s.substring(i, i + n).toCharArray();
                 for (int k = 1; k < n; k += 2) {
-                    tmp[k] = (char) ('0' + (tmp[k] - '0' + j) % 10);
+                    cs[k] = (char) ('0' + (cs[k] - '0' + a * j) % 10);
                 }
-                if (isOdd) {
-                    boolean[] odd = new boolean[10];
-                    for (int k = 0; !odd[k]; k = (k + a) % 10) {
-                        odd[k] = true;
-                        String str = new String(tmp);
-                        if (str.compareTo(ans) < 0) {
-                            ans = str;
-                        }
-                        for (int x = 0; x < n; x += 2) {
-                            tmp[x] = (char) ('0' + (tmp[x] - '0' + a) % 10);
-                        }
-                    }
-                } else {
-                    String str = new String(tmp);
+                even[j] = true;
+                boolean[] odd = new boolean[10];
+                for (int k = 0; k <= limit && !odd[k]; k = (k + a) % 10) {
+                    odd[k] = true;
+                    String str = new String(cs);
                     if (str.compareTo(ans) < 0) {
                         ans = str;
                     }
+                    for (int p = 0; p < n; p += 2) {
+                        cs[p] = (char) ('0' + (cs[p] - '0' + a) % 10);
+                    }
                 }
             }
-        }
-        return ans;
-    }
-
-    private char[] getRotate(char[] cs, int i) {
-        int n = cs.length;
-        char[] ans = new char[n];
-        for (int j = i; j < n; j++) {
-            ans[j - i] = cs[j];
-        }
-        for (int j = 0; j < i; j++) {
-            ans[n - i + j] = cs[j];
         }
         return ans;
     }

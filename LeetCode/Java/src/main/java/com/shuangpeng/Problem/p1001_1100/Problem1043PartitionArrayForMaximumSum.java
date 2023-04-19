@@ -1,8 +1,12 @@
 package com.shuangpeng.Problem.p1001_1100;
 
+/**
+ * @description: 分割数组以得到最大和
+ * @date 2023/4/19 10:49 AM
+ **/
 public class Problem1043PartitionArrayForMaximumSum {
 
-    public int maxSumAfterPartitioning(int[] arr, int k) {
+    public int maxSumAfterPartitioning0(int[] arr, int k) {
         int n = arr.length;
         int[] dp = new int[n + 1];
         for (int i = 1; i <= n; ++i) {
@@ -11,6 +15,19 @@ public class Problem1043PartitionArrayForMaximumSum {
             for (int j = i; j >= s; --j) {
                 maxValue = Math.max(maxValue, arr[j - 1]);
                 dp[i] = Math.max(dp[i], dp[j - 1] + maxValue * (i - j + 1));
+            }
+        }
+        return dp[n];
+    }
+
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int n = arr.length;
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int max = 0;
+            for (int j = i; j > 0 && j > i - k; j--) {
+                max = Math.max(max, arr[j - 1]);
+                dp[i] = Math.max(dp[i], dp[j - 1] + max * (i - j + 1));
             }
         }
         return dp[n];

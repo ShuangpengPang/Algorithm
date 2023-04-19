@@ -68,30 +68,37 @@ public class Problem1625LexicographicallySmallestStringAfterApplyingOperations {
         int n = s.length();
         String ans = s;
         s += s;
-        boolean[] visited = new boolean[n];
-        int limit = (b & 1) == 0 ? 0 : 9;
-        for (int i = 0; !visited[i]; i = (i + b) % n) {
-            visited[i] = true;
-            boolean[] even = new boolean[10];
-            for (int j = 0; !even[j]; j = (j + a) % 10) {
-                char[] cs = s.substring(i, i + n).toCharArray();
-                for (int k = 1; k < n; k += 2) {
-                    cs[k] = (char) ('0' + (cs[k] - '0' + a * j) % 10);
-                }
-                even[j] = true;
-                boolean[] odd = new boolean[10];
-                for (int k = 0; k <= limit && !odd[k]; k = (k + a) % 10) {
-                    odd[k] = true;
-                    String str = new String(cs);
-                    if (str.compareTo(ans) < 0) {
-                        ans = str;
-                    }
-                    for (int p = 0; p < n; p += 2) {
-                        cs[p] = (char) ('0' + (cs[p] - '0' + a) % 10);
-                    }
-                }
+        int g1 = gcd(n, b), g2 = gcd(10, a);
+        boolean isOdd = (b & 1) == 1;
+        for (int i = 0; i < n; i += g1) {
+            char[] cs = s.substring(i, i + n).toCharArray();
+            add(cs, g2, 1);
+            if (isOdd) {
+                add(cs, g2, 0);
+            }
+            String str = new String(cs);
+            if (str.compareTo(ans) < 0) {
+                ans = str;
             }
         }
         return ans;
+    }
+
+    private void add(char[] cs, int g, int start) {
+        int minNum = 10, delta = 0, c = cs[start], n = cs.length;
+        for (int i = 0; i < 10; i += g) {
+            int num = (c - '0' + i) % 10;
+            if (num < minNum) {
+                minNum = num;
+                delta = i;
+            }
+        }
+        for (int i = start; i < n; i += 2) {
+            cs[i] = (char) ('0' + (cs[i] - '0' + delta) % 10);
+        }
+    }
+
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
     }
 }

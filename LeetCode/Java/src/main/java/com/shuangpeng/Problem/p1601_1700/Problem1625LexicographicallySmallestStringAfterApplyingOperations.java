@@ -102,3 +102,53 @@ public class Problem1625LexicographicallySmallestStringAfterApplyingOperations {
         return b == 0 ? a : gcd(b, a % b);
     }
 }
+
+class Problem1625LexicographicallySmallestStringAfterApplyingOperations0 {
+
+    public String findLexSmallestString(String s, int a, int b) {
+        char[] cs = s.toCharArray();
+        int n = cs.length, g1 = gcd(n, b), g2 = gcd(10, a);
+        int[] ans = {0, 0, 0};
+        boolean isOdd = (b & 1) == 1;
+        for (int i = 0; i < n; i += g1) {
+            int d0 = isOdd ? 10 - (cs[i] - '0') / g2 * g2 : 0;
+            int d1 = 10 - (cs[(i + 1) % n] - '0') / g2 * g2;
+            int[] offset = {d0, d1, i};
+            if (compare(cs, offset, ans) < 0) {
+                ans = offset;
+            }
+        }
+        char[] ch = new char[n];
+        for (int p = ans[2], i = 0; i < n; i++) {
+            ch[i] = (char) ('0' + (cs[p] - '0' + ans[i & 1]) % 10);
+            if (++p == n) {
+                p = 0;
+            }
+        }
+        return new String(ch);
+    }
+
+    private int compare(char[] cs, int[] offset1, int[] offset2) {
+        int p1 = offset1[2], p2 = offset2[2], n = cs.length;
+        for (int i = 0; i < n; i++) {
+            int c1 = cs[p1] - '0' + offset1[i & 1];
+            c1 = c1 >= 10 ? c1 - 10 : c1;
+            int c2 = cs[p2] - '0' + offset2[i & 1];
+            c2 = c2 >= 10 ? c2 - 10 : c2;
+            if (c1 != c2) {
+                return c1 - c2;
+            }
+            if (++p1 == n) {
+                p1 = 0;
+            }
+            if (++p2 == n) {
+                p2 = 0;
+            }
+        }
+        return 0;
+    }
+
+    private int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+}

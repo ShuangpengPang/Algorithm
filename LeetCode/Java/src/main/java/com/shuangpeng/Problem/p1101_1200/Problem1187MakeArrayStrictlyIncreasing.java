@@ -198,3 +198,108 @@ class Problem1187MakeArrayStrictlyIncreasing1 {
     }
 }
 
+class Problem1187MakeArrayStrictlyIncreasing2 {
+
+    static final int INF = Integer.MAX_VALUE >> 1;
+
+    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+        int n1 = arr1.length, n2 = arr2.length;
+        int[][][] memo = new int[n1][n2][2];
+        for (int i = 0; i < n1; i++) {
+            for (int j = 0; j < n2; j++) {
+                Arrays.fill(memo[i][j], -1);
+            }
+        }
+        Arrays.sort(arr2);
+        int ans = dfs(arr1, arr2, n1 - 1, n2 - 1, 1, memo);
+        return ans == INF ? -1 : ans;
+    }
+
+    private int dfs(int[] arr1, int[] arr2, int i, int j, int flag, int[][][] memo) {
+        if (i == 0) {
+            return flag == 1 ? 0 : (j >= 0 ? 1 : INF);
+        }
+        if (j < 0) {
+            while (i > 0 && arr1[i] > arr1[i - 1]) {
+                i--;
+            }
+            return i == 0 ? 0 : INF;
+        }
+        if (memo[i][j][flag] != -1) {
+            return memo[i][j][flag];
+        }
+        int ans = INF;
+        if (flag == 1) {
+            int t = j;
+            while (t >= 0 && arr2[t] >= arr1[i]) {
+                t--;
+            }
+            ans = Math.min(ans, dfs(arr1, arr2, i - 1, t, arr1[i - 1] < arr1[i] ? 1 : 0, memo));
+        }
+        int num = arr2[j];
+        while (j > 0 && arr2[j] == arr2[j - 1]) {
+            j--;
+        }
+        if (arr1[i - 1] < num || j > 0) {
+            ans = Math.min(ans, dfs(arr1, arr2,i - 1, j - 1, arr1[i - 1] < num ? 1 : 0, memo) + 1);
+        }
+        memo[i][j][flag] = ans;
+        return ans;
+    }
+}
+
+class Problem1187MakeArrayStrictlyIncreasing3 {
+
+    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+        Arrays.sort(arr2);
+        int n1 = arr1.length, n2 = arr2.length, INF = Integer.MAX_VALUE >> 1;
+        int[][][] dp = new int[2][n2][2];
+        for (int i = 0; i < n2; i++) {
+            dp[0][i][1] = 1;
+        }
+        boolean valid = true;
+        for (int i = 1; i < n1; i++) {
+            int idx = i & 1, pre = idx ^ 1;
+            for (int j = 0, k = 0; j < n2; j++) {
+                while (arr2[k] < arr2[j]) {
+                    k++;
+                }
+                dp[idx][j][0] = dp[idx][j][1] = INF;
+                if (arr1[i - 1] < arr1[i]) {
+                    dp[idx][j][0] = dp[pre][j][0];
+                }
+                int p = binarySearch(arr2, arr1[i], j);
+                if (p >= 0) {
+                    dp[idx][j][0] = Math.min(dp[idx][j][0], dp[pre][p][1]);
+                }
+                if (j == 0) {
+                    dp[idx][j][1] = valid && arr1[i - 1] < arr2[j] ? 1 : INF;
+                } else {
+                    if (arr1[i - 1] < arr2[j]) {
+                        dp[idx][j][1] = Math.min(dp[idx][j][1], 1 + dp[pre][j - 1][0]);
+                    }
+                    if (k > 0) {
+                        dp[idx][j][1] = Math.min(dp[idx][j][1], 1 + dp[pre][k - 1][1]);
+                    }
+                }
+            }
+            valid &= arr1[i] > arr1[i - 1];
+        }
+        int index = (n1 - 1) & 1;
+        int ans = Math.min(dp[index][n2 - 1][0], dp[index][n2 - 1][1]);
+        return ans == INF ? -1 : ans;
+    }
+
+    private int binarySearch(int[] arr, int num, int i) {
+        int left = 0, right = i;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[mid] < num) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left - 1;
+    }
+}

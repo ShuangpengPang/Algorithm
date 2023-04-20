@@ -303,3 +303,47 @@ class Problem1187MakeArrayStrictlyIncreasing3 {
         return left - 1;
     }
 }
+
+class Problem1187MakeArrayStrictlyIncreasing4 {
+
+    static int INF = Integer.MAX_VALUE >> 1;
+
+    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+        int n1 = arr1.length, n2 = arr2.length, m = Math.min(n1, n2);
+        int[] dp = new int[m + 1];
+        Arrays.fill(dp, INF);
+        dp[0] = -1;
+        Arrays.sort(arr2);
+        for (int i = 1; i <= n1; i++) {
+            for (int j = Math.min(i, m); j >= 0; j--) {
+                int count = INF;
+                if (dp[j] < arr1[i - 1]) {
+                    count = arr1[i - 1];
+                }
+                if (j > 0 && dp[j - 1] < INF) {
+                    count = Math.min(count, binarySearch(arr2, dp[j - 1]));
+                }
+                dp[j] = count;
+            }
+        }
+        for (int i = 0; i <= m; i++) {
+            if (dp[i] != INF) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int binarySearch(int[] arr, int num) {
+        int n = arr.length, left = 0, right = n - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[mid] <= num) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left < n ? arr[left] : INF;
+    }
+}

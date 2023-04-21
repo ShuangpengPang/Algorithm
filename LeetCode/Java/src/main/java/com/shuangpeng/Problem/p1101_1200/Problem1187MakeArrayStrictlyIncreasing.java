@@ -358,21 +358,25 @@ class Problem1187MakeArrayStrictlyIncreasing5 {
     public int makeArrayIncreasing(int[] arr1, int[] arr2) {
         Arrays.sort(arr2);
         List<Integer> list = new ArrayList<>(arr2.length);
-        for (int i = 0; i < arr2.length; i++) {
-            if (i == 0 || arr2[i] > arr2[i - 1]) {
-                list.add(arr2[i]);
+        int prev = -1;
+        for (int num : arr2) {
+            if (num != prev) {
+                list.add(num);
+                prev = num;
             }
         }
-        int INF = Integer.MAX_VALUE >> 1;
-        int n = arr1.length, m = list.size();
+        int INF = Integer.MAX_VALUE >> 1, n = arr1.length;
         int[] dp = new int[n + 1];
         for (int i = 1; i <= n; i++) {
             int num = i < n ? arr1[i] : INF;
             int p = binarySearch(list, num), count = p + 1 >= i ? i : INF;
-            for (int j = i - 1; j >= 0 && i - j <= m + 1; j--) {
-                int c = i - j - 1;
-                if (arr1[j] < num && p - binarySearch(list, arr1[j] + 1) >= c) {
-                    count = Math.min(count, dp[j] + c);
+            if (arr1[i - 1] < num) {
+                count = Math.min(count, dp[i - 1]);
+            }
+            for (int j = 1; j < i && j <= p + 1; j++) {
+                int k = i - j - 1;
+                if (arr1[k] < list.get(p - j + 1)) {
+                    count = Math.min(count, dp[k] + j);
                 }
             }
             dp[i] = count;

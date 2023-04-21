@@ -1,7 +1,9 @@
 package com.shuangpeng.Problem.p1101_1200;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
@@ -348,5 +350,46 @@ class Problem1187MakeArrayStrictlyIncreasing4 {
             }
         }
         return -1;
+    }
+}
+
+class Problem1187MakeArrayStrictlyIncreasing5 {
+
+    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+        Arrays.sort(arr2);
+        List<Integer> list = new ArrayList<>(arr2.length);
+        for (int i = 0; i < arr2.length; i++) {
+            if (i == 0 || arr2[i] > arr2[i - 1]) {
+                list.add(arr2[i]);
+            }
+        }
+        int INF = Integer.MAX_VALUE >> 1;
+        int n = arr1.length, m = list.size();
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int num = i < n ? arr1[i] : INF;
+            int p = binarySearch(list, num), count = p + 1 >= i ? i : INF;
+            for (int j = i - 1; j >= 0 && i - j <= m + 1; j--) {
+                int c = i - j - 1;
+                if (arr1[j] < num && p - binarySearch(list, arr1[j] + 1) >= c) {
+                    count = Math.min(count, dp[j] + c);
+                }
+            }
+            dp[i] = count;
+        }
+        return dp[n] == INF ? -1 : dp[n];
+    }
+
+    private int binarySearch(List<Integer> list, int num) {
+        int left = 0, right = list.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (list.get(mid) < num) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left - 1;
     }
 }

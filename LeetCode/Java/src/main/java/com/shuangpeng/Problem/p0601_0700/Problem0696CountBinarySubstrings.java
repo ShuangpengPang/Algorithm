@@ -29,7 +29,7 @@ public class Problem0696CountBinarySubstrings {
         return ans;
     }
 
-    public int countBinarySubstrings(String s) {
+    public int countBinarySubstrings1(String s) {
         int n = s.length(), p = 0, c = 0, ans = 0;
         for (int i = 0; i < n; i++) {
             if (i == 0 || s.charAt(i) == s.charAt(i - 1)) {
@@ -41,5 +41,18 @@ public class Problem0696CountBinarySubstrings {
             }
         }
         return ans + Math.min(p, c);
+    }
+
+    public int countBinarySubstrings(String s) {
+        int n = s.length(), p = 0, c = 0, ans = 0;
+        for (int i = 0; i < n; i++) {
+            c++;
+            if (i == n - 1 || s.charAt(i) != s.charAt(i + 1)) {
+                ans += Math.min(p, c);
+                p = c;
+                c = 0;
+            }
+        }
+        return ans;
     }
 }

@@ -255,6 +255,66 @@ class Problem1187MakeArrayStrictlyIncreasing2 {
 
 class Problem1187MakeArrayStrictlyIncreasing3 {
 
+    static final int INF = Integer.MAX_VALUE >> 1;
+    int[] arr1;
+    Map<String, Integer> memo;
+    Map<Integer, Integer> lowerMap;
+
+    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+        Arrays.sort(arr2);
+        this.arr1 = arr1;
+        memo = new HashMap<>();
+        lowerMap = new HashMap<>();
+        for (int num : arr2) {
+            int index = binarySearch(arr2, num);
+            lowerMap.put(num, index >= 0 ? arr2[index] : -1);
+        }
+        for (int num : arr1) {
+            int index = binarySearch(arr2, num);
+            lowerMap.put(num, index >= 0 ? arr2[index] : -1);
+        }
+        lowerMap.put(INF, arr2[arr2.length - 1]);
+        int ans = dfs(arr1.length - 1, INF);
+        return ans == INF ? -1 : ans;
+    }
+
+    private int dfs(int i, int upper) {
+        if (upper == -1) {
+            return INF;
+        }
+        if (i == -1) {
+            return 0;
+        }
+        String key = "" + i + "_" + upper;
+        int m = memo.getOrDefault(key, -1);
+        if (m != -1) {
+            return m;
+        }
+        int ans = arr1[i] < upper ? dfs(i - 1, arr1[i]) : INF;
+        int lower = lowerMap.get(upper);
+        if (arr1[i] >= upper || lower > arr1[i]) {
+            ans = Math.min(ans, 1 + dfs(i - 1, lowerMap.get(upper)));
+        }
+        memo.put(key, ans);
+        return ans;
+    }
+
+    private int binarySearch(int[] arr, int num) {
+        int left = 0, right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[mid] < num) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left - 1;
+    }
+}
+
+class Problem1187MakeArrayStrictlyIncreasing4 {
+
     public int makeArrayIncreasing(int[] arr1, int[] arr2) {
         Arrays.sort(arr2);
         int n1 = arr1.length, n2 = arr2.length, INF = Integer.MAX_VALUE >> 1;
@@ -309,7 +369,7 @@ class Problem1187MakeArrayStrictlyIncreasing3 {
     }
 }
 
-class Problem1187MakeArrayStrictlyIncreasing4 {
+class Problem1187MakeArrayStrictlyIncreasing5 {
 
     static int INF = Integer.MAX_VALUE >> 1;
 
@@ -353,7 +413,7 @@ class Problem1187MakeArrayStrictlyIncreasing4 {
     }
 }
 
-class Problem1187MakeArrayStrictlyIncreasing5 {
+class Problem1187MakeArrayStrictlyIncreasing6 {
 
     public int makeArrayIncreasing(int[] arr1, int[] arr2) {
         Arrays.sort(arr2);

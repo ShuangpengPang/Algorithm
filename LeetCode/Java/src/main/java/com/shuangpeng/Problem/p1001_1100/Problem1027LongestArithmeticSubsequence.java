@@ -49,7 +49,7 @@ public class Problem1027LongestArithmeticSubsequence {
         return ans;
     }
 
-    public int longestArithSeqLength(int[] nums) {
+    public int longestArithSeqLength2(int[] nums) {
         int n = nums.length, max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
         for (int num : nums) {
             max = Math.max(max, num);
@@ -67,6 +67,27 @@ public class Problem1027LongestArithmeticSubsequence {
         for (int i = 0; i <= o; i++) {
             for (int j = 0; j <= r; j++) {
                 ans = Math.max(ans, dp[i][j]);
+            }
+        }
+        return ans;
+    }
+
+    public int longestArithSeqLength(int[] nums) {
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+        int d = max - min, ans = 0;
+        for (int i = -d; i <= d; i++) {
+            int[] dp = new int[max + 1];
+            for (int num : nums) {
+                int prev = num - i;
+                if (prev >= 0 && prev <= max) {
+                    dp[num] = dp[prev] + 1;
+                    ans = Math.max(ans, dp[num]);
+                }
+                dp[num] = Math.max(dp[num], 1);
             }
         }
         return ans;

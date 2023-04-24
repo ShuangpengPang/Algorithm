@@ -67,7 +67,7 @@ public class Problem1163LastSubstringInLexicographicalOrder {
         return s.substring(l);
     }
 
-    public String lastSubstring(String s) {
+    public String lastSubstring2(String s) {
         char[] chars = s.toCharArray();
         int n = chars.length;
         int start = 0, end = 1;
@@ -96,5 +96,26 @@ public class Problem1163LastSubstringInLexicographicalOrder {
             }
         }
         return s.substring(start);
+    }
+
+    public String lastSubstring(String s) {
+        int n = s.length(), i = 0, j = 1;
+        while (j < n) {
+            int k = 0;
+            while (j + k < n && s.charAt(i + k) == s.charAt(j + k)) {
+                k++;
+            }
+            if (j + k == n) {
+                break;
+            }
+            if (s.charAt(i + k) < s.charAt(j + k)) {
+                int t = i + k + 1;
+                i = Math.max(j, t);
+                j = Math.max(i + 1, t);
+            } else {
+                j += k + 1;
+            }
+        }
+        return s.substring(i);
     }
 }

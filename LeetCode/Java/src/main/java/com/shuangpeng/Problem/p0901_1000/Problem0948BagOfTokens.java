@@ -59,7 +59,7 @@ public class Problem0948BagOfTokens {
         return ans;
     }
 
-    public int bagOfTokensScore(int[] tokens, int power) {
+    public int bagOfTokensScore3(int[] tokens, int power) {
         Arrays.sort(tokens);
         int left = 0, right = tokens.length - 1, ans = 0;
         while (left <= right) {
@@ -72,6 +72,19 @@ public class Problem0948BagOfTokens {
             } else {
                 left++;
             }
+        }
+        return ans;
+    }
+
+    public int bagOfTokensScore(int[] tokens, int power) {
+        Arrays.sort(tokens);
+        int n = tokens.length, ans = 0;
+        for (int i = 0, j = n, r = 0; r < j && i <= r; i++) {
+            while (r < j && power >= tokens[r]) {
+                power -= tokens[r++];
+            }
+            ans = Math.max(ans, r - i);
+            power += tokens[--j];
         }
         return ans;
     }

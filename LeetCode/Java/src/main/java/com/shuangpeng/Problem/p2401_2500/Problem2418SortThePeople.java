@@ -15,13 +15,21 @@ public class Problem2418SortThePeople {
         Integer[] ids = new Integer[n];
         Arrays.setAll(ids, i -> i);
         Arrays.sort(ids, (a, b) -> heights[b] - heights[a]);
+        boolean[] visited = new boolean[n];
         for (int i = 0; i < n; i++) {
-            int id = ids[i];
-            if (i != id) {
-                String name = names[i];
-                names[i] = names[id];
-                names[id] = name;
+            if (visited[i]) {
+                continue;
             }
+            String name = names[i];
+            int j = i;
+            while (i != ids[j]) {
+                int id = ids[j];
+                names[j] = names[id];
+                visited[j] = true;
+                j = id;
+            }
+            names[j] = name;
+            visited[j] = true;
         }
         return names;
     }

@@ -24,10 +24,9 @@ public class Problem1043PartitionArrayForMaximumSum {
         int n = arr.length;
         int[] dp = new int[n + 1];
         for (int i = 1; i <= n; i++) {
-            int max = 0;
-            for (int j = i; j > 0 && j > i - k; j--) {
-                max = Math.max(max, arr[j - 1]);
-                dp[i] = Math.max(dp[i], dp[j - 1] + max * (i - j + 1));
+            for (int j = i, m = 0; j >= 1 && i - j < k; j--) {
+                m = Math.max(m, arr[j - 1]);
+                dp[i] = Math.max(dp[i], dp[j - 1] + m * (i - j + 1));
             }
         }
         return dp[n];

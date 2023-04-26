@@ -55,7 +55,7 @@ public class Problem1023CamelcaseMatching {
         return Arrays.stream(queries).map(q -> q.matches(regex.toString())).collect(Collectors.toList());
     }
 
-    public List<Boolean> camelMatch(String[] queries, String pattern) {
+    public List<Boolean> camelMatch2(String[] queries, String pattern) {
         int n = queries.length, m = pattern.length();
         List<Boolean> ans = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
@@ -74,5 +74,31 @@ public class Problem1023CamelcaseMatching {
             ans.add(p == m && match);
         }
         return ans;
+    }
+
+    public List<Boolean> camelMatch(String[] queries, String pattern) {
+        List<Boolean> ans = new ArrayList<>(queries.length);
+        for (String q : queries) {
+            ans.add(check(q, pattern));
+        }
+        return ans;
+    }
+
+    private boolean check(String q, String p) {
+        int n = q.length(), m = p.length();
+        for (int i = 0, j = 0; i < n || j < m; i++) {
+            if (i == n) {
+                return false;
+            }
+            char c1 = q.charAt(i);
+            if (j < m && c1 == p.charAt(j)) {
+                j++;
+                continue;
+            }
+            if (Character.isUpperCase(c1)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

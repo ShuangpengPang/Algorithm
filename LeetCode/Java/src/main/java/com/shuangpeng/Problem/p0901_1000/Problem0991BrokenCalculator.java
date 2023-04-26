@@ -10,22 +10,20 @@ public class Problem0991BrokenCalculator {
 
     public int brokenCalc0(int startValue, int target) {
         int count = 0;
-        while (target > startValue) {
+        while (startValue < target) {
             startValue <<= 1;
             count++;
         }
-        int d = startValue - target, n = 1 << count;
+        int p = 1 << count, d = startValue - target;
         while (d > 0) {
-            if (d >= n) {
-                count += d / n;
-                d %= n;
-            }
-            n >>= 1;
+            count += d / p;
+            d %= p;
+            p >>= 1;
         }
         return count;
     }
 
-    public int brokenCalc(int startValue, int target) {
+    public int brokenCalc1(int startValue, int target) {
         int ans = 0;
         while (target > startValue) {
             if ((target & 1) == 1) {
@@ -34,6 +32,15 @@ public class Problem0991BrokenCalculator {
             }
             ans++;
             target >>= 1;
+        }
+        return ans + startValue - target;
+    }
+
+    public int brokenCalc(int startValue, int target) {
+        int ans = 0;
+        while (target > startValue) {
+            ans += (target & 1) + 1;
+            target = (target + 1) >> 1;
         }
         return ans + startValue - target;
     }

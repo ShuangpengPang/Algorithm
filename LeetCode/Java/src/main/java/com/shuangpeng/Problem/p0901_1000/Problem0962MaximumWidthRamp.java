@@ -105,7 +105,7 @@ public class Problem0962MaximumWidthRamp {
         return ans;
     }
 
-    public int maxWidthRamp(int[] nums) {
+    public int maxWidthRamp5(int[] nums) {
         int n = nums.length, top = 0, ans = 0;
         int[] stack = new int[n];
         for (int i = 1; i < n; i++) {
@@ -118,6 +118,24 @@ public class Problem0962MaximumWidthRamp {
                 top--;
             }
             ans = Math.max(ans, i - stack[top + 1]);
+        }
+        return ans;
+    }
+
+    public int maxWidthRamp(int[] nums) {
+        int n = nums.length, top = 1;
+        int[] stack = new int[n];
+        for (int i = 1; i < n; i++) {
+            if (nums[stack[top - 1]] > nums[i]) {
+                stack[top++] = i;
+            }
+        }
+        int ans = 0;
+        for (int i = n - 1; top > 0; i--) {
+            while (top > 0 && nums[stack[top - 1]] <= nums[i]) {
+                top--;
+            }
+            ans = Math.max(ans, i - stack[top]);
         }
         return ans;
     }

@@ -1,11 +1,19 @@
 package com.shuangpeng.Problem.p1001_1100;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @description: 最长字符串链
+ * @date 2023/4/27 10:36 AM
+ **/
 public class Problem1048LongestStringChain {
 
-    public int longestStrChain(String[] words) {
+    public int longestStrChain0(String[] words) {
         final int N = 17;
         List<int[]>[] lists = new List[N];
         for (int i = 0; i < N; ++i) {
@@ -47,5 +55,23 @@ public class Problem1048LongestStringChain {
             }
         }
         return true;
+    }
+
+    public int longestStrChain(String[] words) {
+        Map<String, Integer> dp = new HashMap<>();
+        int ans = 0;
+        Arrays.sort(words, Comparator.comparingInt(a -> a.length()));
+        for (String w : words) {
+            int m = w.length();
+            int count = 0;
+            for (int i = 0; i < m; i++) {
+                String s = w.substring(0, i) + w.substring(i + 1);
+                count = Math.max(count, dp.getOrDefault(s, 0));
+            }
+            count++;
+            ans = Math.max(ans, count);
+            dp.put(w, count);
+        }
+        return ans;
     }
 }

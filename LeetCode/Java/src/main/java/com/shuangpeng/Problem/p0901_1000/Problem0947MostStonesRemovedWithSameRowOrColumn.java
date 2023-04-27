@@ -117,3 +117,94 @@ public class Problem0947MostStonesRemovedWithSameRowOrColumn {
         return parent[x] = parent[x] == x ? x :find(parent, parent[x]);
     }
 }
+
+class Problem0947MostStonesRemovedWithSameRowOrColumn0 {
+
+    public int removeStones(int[][] stones) {
+        int n = stones.length, N = (int) 1e4 + 1;
+        int[] parent = new int[n], row = new int[N], col = new int[N];
+        Arrays.setAll(parent, i -> i);
+        for (int i = 0; i < N; i++) {
+            row[i] = -1;
+            col[i] = -1;
+        }
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int x = stones[i][0], y = stones[i][1];
+            int s1 = row[x] == -1 ? i : row[x];
+            int s2 = col[y] == -1 ? i : col[y];
+            ans += union(parent, s1, s2);
+            ans += union(parent, s1, i);
+            row[x] = col[y] = i;
+        }
+        return ans;
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = parent[x] == x ? x : find(parent, parent[x]);
+    }
+
+    private int union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px == py) {
+            return 0;
+        }
+        parent[py] = px;
+        return 1;
+    }
+}
+
+//public class Solution {
+//
+//    public int removeStones(int[][] stones) {
+//        UnionFind unionFind = new UnionFind();
+//
+//        for (int[] stone : stones) {
+//            // 下面这三种写法任选其一
+//            // unionFind.union(~stone[0], stone[1]);
+//            // unionFind.union(stone[0] - 10001, stone[1]);
+//            unionFind.union(stone[0] + 10001, stone[1]);
+//        }
+//        return stones.length - unionFind.getCount();
+//    }
+//
+//    private class UnionFind {
+//
+//        private Map<Integer, Integer> parent;
+//        private int count;
+//
+//        public UnionFind() {
+//            this.parent = new HashMap<>();
+//            this.count = 0;
+//        }
+//
+//        public int getCount() {
+//            return count;
+//        }
+//
+//        public int find(int x) {
+//            if (!parent.containsKey(x)) {
+//                parent.put(x, x);
+//                // 并查集集中新加入一个结点，结点的父亲结点是它自己，所以连通分量的总数 +1
+//                count++;
+//            }
+//
+//            if (x != parent.get(x)) {
+//                parent.put(x, find(parent.get(x)));
+//            }
+//            return parent.get(x);
+//        }
+//
+//        public void union(int x, int y) {
+//            int rootX = find(x);
+//            int rootY = find(y);
+//            if (rootX == rootY) {
+//                return;
+//            }
+//
+//            parent.put(rootX, rootY);
+//            // 两个连通分量合并成为一个，连通分量的总数 -1
+//            count--;
+//        }
+//    }
+//}

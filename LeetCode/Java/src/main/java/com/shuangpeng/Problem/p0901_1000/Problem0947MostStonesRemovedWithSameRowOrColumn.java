@@ -154,6 +154,48 @@ class Problem0947MostStonesRemovedWithSameRowOrColumn0 {
     }
 }
 
+class Problem0947MostStonesRemovedWithSameRowOrColumn1 {
+
+    public int removeStones(int[][] stones) {
+        Map<Integer, Integer> parent = new HashMap<>();
+        int part = 0;
+        for (int[] s : stones) {
+            part += union(parent, s[0] + 10001, s[1]);
+        }
+        return stones.length - part;
+    }
+
+    private int find(Map<Integer, Integer> parent, int x) {
+        int p = parent.getOrDefault(x, -1);
+        if (p == x || p == -1) {
+            return p;
+        }
+        p = find(parent, p);
+        parent.put(x, p);
+        return p;
+    }
+
+    private int union(Map<Integer, Integer> parent, int x, int y) {
+        int count = 0;
+        int px = find(parent, x), py = find(parent, y);
+        if (px == -1) {
+            count++;
+            px = x;
+            parent.put(x, x);
+        }
+        if (py == -1) {
+            count++;
+            py = y;
+            parent.put(y, y);
+        }
+        if (px != py) {
+            count--;
+            parent.put(py, px);
+        }
+        return count;
+    }
+}
+
 //public class Solution {
 //
 //    public int removeStones(int[][] stones) {

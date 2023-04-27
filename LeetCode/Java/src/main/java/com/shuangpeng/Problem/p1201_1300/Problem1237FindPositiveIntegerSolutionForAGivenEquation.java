@@ -18,7 +18,7 @@ interface CustomFunction {
 
 public class Problem1237FindPositiveIntegerSolutionForAGivenEquation {
 
-    public List<List<Integer>> findSolution(CustomFunction customfunction, int z) {
+    public List<List<Integer>> findSolution0(CustomFunction customfunction, int z) {
         List<List<Integer>> ans = new ArrayList<>();
         for (int x = 1; x <= 1000; x++) {
             for (int y = 1; y <= 1000; y++) {
@@ -29,6 +29,58 @@ public class Problem1237FindPositiveIntegerSolutionForAGivenEquation {
                 if (value >= z) {
                     break;
                 }
+            }
+        }
+        return ans;
+    }
+
+    public List<List<Integer>> findSolution1(CustomFunction customfunction, int z) {
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int x = 1, y = 1000; x <= 1000 && y > 0; x++) {
+            int left = 1, right = y;
+            while (left <= right) {
+                int mid = left + (right - left >> 1);
+                int value = customfunction.f(x, mid);
+                if (value < z) {
+                    left = mid + 1;
+                } else if (value > z) {
+                    right = mid - 1;
+                } else {
+                    left = mid;
+                    ans.add(Arrays.asList(x, left));
+                    break;
+                }
+            }
+            y = left - 1;
+        }
+        return ans;
+    }
+
+    public List<List<Integer>> findSolution2(CustomFunction customfunction, int z) {
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int x = 1, y = 1000; x <= 1000 && y > 0;) {
+            int value = customfunction.f(x, y);
+            if (value > z) {
+                y--;
+            } else if (value < z) {
+                x++;
+            } else {
+                ans.add(Arrays.asList(x, y));
+                x++;
+                y--;
+            }
+        }
+        return ans;
+    }
+
+    public List<List<Integer>> findSolution(CustomFunction customfunction, int z) {
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int x = 1, y = 1000; x <= 1000 && y > 0; x++) {
+            while (y > 0 && customfunction.f(x, y) > z) {
+                y--;
+            }
+            if (y > 0 && customfunction.f(x, y) == z) {
+                ans.add(Arrays.asList(x, y));
             }
         }
         return ans;

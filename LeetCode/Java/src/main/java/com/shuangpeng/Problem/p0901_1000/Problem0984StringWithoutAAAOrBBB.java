@@ -9,7 +9,6 @@ package com.shuangpeng.Problem.p0901_1000;
 public class Problem0984StringWithoutAAAOrBBB {
 
     public String strWithout3a3b0(int a, int b) {
-        int n = a + b;
         int c = a, d = b;
         char c1 = 'a', c2 = 'b';
         if (a < b) {

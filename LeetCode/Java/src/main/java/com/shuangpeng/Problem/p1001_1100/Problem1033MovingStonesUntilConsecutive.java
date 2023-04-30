@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem1033MovingStonesUntilConsecutive {
 
-    public int[] numMovesStones(int a, int b, int c) {
+    public int[] numMovesStones0(int a, int b, int c) {
         int[] arr = {a, b, c};
         Arrays.sort(arr);
         int min = 2;
@@ -20,5 +20,20 @@ public class Problem1033MovingStonesUntilConsecutive {
             min = 1;
         }
         return new int[]{min, arr[2] - arr[0] - 2};
+    }
+
+    public int[] numMovesStones(int a, int b, int c) {
+        int x = Math.min(Math.min(a, b), c);
+        int z = Math.max(Math.max(a, b), c);
+        int y = a + b + c - x - z;
+        int[] ans = new int[2];
+        ans[0] = 2;
+        if (z - x == 2) {
+            ans[0] = 0;
+        } else if (y - x <= 2 || z - y <= 2) {
+            ans[0] = 1;
+        }
+        ans[1] = z - x - 2;
+        return ans;
     }
 }

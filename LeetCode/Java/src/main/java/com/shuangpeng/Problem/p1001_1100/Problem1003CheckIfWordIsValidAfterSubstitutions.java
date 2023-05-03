@@ -11,7 +11,7 @@ import java.util.Deque;
  */
 public class Problem1003CheckIfWordIsValidAfterSubstitutions {
 
-    public boolean isValid(String s) {
+    public boolean isValid0(String s) {
         int n = s.length();
         Deque<Integer> q = new ArrayDeque<>();
         for (int i = 0; i < n; i++) {
@@ -31,6 +31,31 @@ public class Problem1003CheckIfWordIsValidAfterSubstitutions {
                 if (a != 1 || b != 0) {
                     return false;
                 }
+            }
+        }
+        return q.isEmpty();
+    }
+
+    public boolean isValid(String s) {
+        int n = s.length();
+        Deque<Character> q = new ArrayDeque<>(n);
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c == 'b' && (q.isEmpty() || q.peek() != 'a')) {
+                return false;
+            }
+            if (c == 'c') {
+                if (q.size() < 2) {
+                    return false;
+                }
+                if (q.pop() != 'b') {
+                    return false;
+                }
+                if (q.pop() != 'a') {
+                    return false;
+                }
+            } else {
+                q.push(c);
             }
         }
         return q.isEmpty();

@@ -12,10 +12,8 @@ public class Problem2432TheEmployeeThatWorkedOnTheLongestTask {
         int ans = 0, maxTime = 0, startTime = 0;
         for (int[] log : logs) {
             int id = log[0], time = log[1] - startTime;
-            if (time > maxTime) {
+            if (time > maxTime || (time == maxTime && id < ans)) {
                 maxTime = time;
-                ans = id;
-            } else if (time == maxTime && id < ans) {
                 ans = id;
             }
             startTime = log[1];

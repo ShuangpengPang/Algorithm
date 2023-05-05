@@ -36,7 +36,7 @@ public class Problem1003CheckIfWordIsValidAfterSubstitutions {
         return q.isEmpty();
     }
 
-    public boolean isValid(String s) {
+    public boolean isValid1(String s) {
         int n = s.length();
         Deque<Character> q = new ArrayDeque<>(n);
         for (int i = 0; i < n; i++) {
@@ -59,5 +59,21 @@ public class Problem1003CheckIfWordIsValidAfterSubstitutions {
             }
         }
         return q.isEmpty();
+    }
+
+    public boolean isValid(String s) {
+        StringBuilder sb = new StringBuilder();
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            sb.append(c);
+            if (c == 'c') {
+                if (sb.length() < 3 || !sb.substring(sb.length() - 3).equals("abc")) {
+                    return false;
+                }
+                sb.setLength(sb.length() - 3);
+            }
+        }
+        return sb.length() == 0;
     }
 }

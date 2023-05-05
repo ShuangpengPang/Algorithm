@@ -61,7 +61,7 @@ public class Problem1003CheckIfWordIsValidAfterSubstitutions {
         return q.isEmpty();
     }
 
-    public boolean isValid(String s) {
+    public boolean isValid2(String s) {
         StringBuilder sb = new StringBuilder();
         int n = s.length();
         for (int i = 0; i < n; i++) {
@@ -75,5 +75,31 @@ public class Problem1003CheckIfWordIsValidAfterSubstitutions {
             }
         }
         return sb.length() == 0;
+    }
+
+    public boolean isValid3(String s) {
+        StringBuilder sb = new StringBuilder();
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            sb.append(s.charAt(i));
+            if (sb.length() >= 3 && sb.substring(sb.length() - 3).equals("abc")) {
+                sb.setLength(sb.length() - 3);
+            }
+        }
+        return sb.length() == 0;
+    }
+
+    public boolean isValid(String s) {
+        char[] cs = s.toCharArray();
+        int i = 0;
+        for (char c : cs) {
+            if (c != 'a' && (i == 0 || c != cs[--i] + 1)) {
+                return false;
+            }
+            if (c != 'c') {
+                cs[i++] = c;
+            }
+        }
+        return i == 0;
     }
 }

@@ -1,7 +1,9 @@
 package com.shuangpeng.Problem.p1201_1300;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -348,5 +350,68 @@ class Problem1263MinimumMovesToMoveABoxToTheirTargetLocation2 {
         for (int[] p : neighbors) {
             dfs(p[0], p[1], bx, by, count + 1);
         }
+    }
+}
+
+class Problem1263MinimumMovesToMoveABoxToTheirTargetLocation3 {
+
+    char[][] grid;
+    int m, n, tx, ty;
+    int[] dirs = {-1, 0, 1, 0, -1};
+
+    public int minPushBox(char[][] grid) {
+        this.grid = grid;
+        m = grid.length;
+        n = grid[0].length;
+        int px = 0, py = 0, bx = 0, by = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char c = grid[i][j];
+                if (c == 'S') {
+                    px = i;
+                    py = j;
+                } else if (c == 'B') {
+                    bx = i;
+                    by = j;
+                } else if (c == 'T') {
+                    tx = i;
+                    ty = j;
+                }
+            }
+        }
+        Deque<int[]> q = new ArrayDeque<>();
+        boolean[][][][] visited = new boolean[m][n][m][n];
+        visited[px][py][bx][by] = true;
+        q.addLast(new int[]{px, py, bx, by, 0});
+        return bfs(q, visited);
+    }
+
+    private int bfs(Deque<int[]> q, boolean[][][][] visited) {
+        while (!q.isEmpty()) {
+            int[] p = q.pollFirst();
+            int px = p[0], py = p[1], bx = p[2], by = p[3], c = p[4];
+            if (bx == tx && by == ty) {
+                return c;
+            }
+            for (int d = 0; d < 4; d++) {
+                int dx = dirs[d], dy = dirs[d + 1], x = px + dx, y = py + dy, cx = bx, cy = by;
+                if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '#') {
+                    continue;
+                }
+                if (x == cx && y == cy) {
+                    cx += dx;
+                    cy += dy;
+                    if (cx < 0 || cx >= m || cy < 0 || cy >= n || grid[cx][cy] == '#' || visited[x][y][cx][cy]) {
+                        continue;
+                    }
+                    visited[x][y][cx][cy] = true;
+                    q.addLast(new int[]{x, y, cx, cy, c + 1});
+                } else if (!visited[x][y][cx][cy]) {
+                    visited[x][y][cx][cy] = true;
+                    q.addFirst(new int[]{x, y, cx, cy, c});
+                }
+            }
+        }
+        return -1;
     }
 }

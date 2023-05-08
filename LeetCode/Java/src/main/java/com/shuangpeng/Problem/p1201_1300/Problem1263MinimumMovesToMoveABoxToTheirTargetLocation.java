@@ -1,7 +1,9 @@
 package com.shuangpeng.Problem.p1201_1300;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -172,3 +174,179 @@ class Problem1263MinimumMovesToMoveABoxToTheirTargetLocation0 {
     }
 }
 
+class Problem1263MinimumMovesToMoveABoxToTheirTargetLocation1 {
+
+    char[][] grid;
+    int m, n, tx, ty;
+    int[] dirs = {-1, 0, 1, 0, -1};
+
+    public int minPushBox(char[][] grid) {
+        this.grid = grid;
+        m = grid.length;
+        n = grid[0].length;
+        int px = 0, py = 0, bx = 0, by = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char c = grid[i][j];
+                if (c == 'S') {
+                    px = i;
+                    py = j;
+                } else if (c == 'B') {
+                    bx = i;
+                    by = j;
+                } else if (c == 'T') {
+                    tx = i;
+                    ty = j;
+                }
+            }
+        }
+        List<int[]> neighbors = new ArrayList<>();
+        findNeighbor(px, py, bx, by, new boolean[m][n], neighbors);
+        return bfs(neighbors);
+    }
+
+    private void findNeighbor(int px, int py, int bx, int by, boolean[][] visited, List<int[]> ans) {
+        visited[px][py] = true;
+        boolean isNeighbor = false;
+        for (int d = 0; d < 4; d++) {
+            int x = px + dirs[d], y = py + dirs[d + 1];
+            if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '#' || visited[x][y]) {
+                continue;
+            }
+            if (x == bx && y == by) {
+                isNeighbor = true;
+                continue;
+            }
+            findNeighbor(x, y, bx, by, visited, ans);
+        }
+        if (isNeighbor) {
+            ans.add(new int[]{px, py, bx, by});
+        }
+    }
+
+    private int bfs(List<int[]> neighbors) {
+        Queue<int[]> q = new LinkedList<>();
+        boolean[][][][] visited = new boolean[m][n][m][n];
+        for (int[] p : neighbors) {
+            int px = p[0], py = p[1], bx = p[2], by = p[3];
+            visited[px][py][bx][by] = true;
+            q.add(p);
+        }
+        int ans = 0;
+        while (!q.isEmpty()) {
+            for (int i = q.size() - 1; i >= 0; i--) {
+                int[] p = q.poll();
+                int px = p[0], py = p[1], bx = p[2], by = p[3];
+                if (bx == tx && by == ty) {
+                    return ans;
+                }
+                int x = bx, y = by;
+                bx += bx - px;
+                by += by - py;
+                if (bx < 0 || bx >= m || by < 0 || by >= n || grid[bx][by] == '#') {
+                    continue;
+                }
+                List<int[]> list = new ArrayList<>();
+                findNeighbor(x, y, bx, by, new boolean[m][n], list);
+                for (int[] arr : list) {
+                    int nx = arr[0], ny = arr[1], nbx = arr[2], nby = arr[3];
+                    if (!visited[nx][ny][nbx][nby]) {
+                        q.add(arr);
+                        visited[nx][ny][nbx][nby] = true;
+                    }
+                }
+            }
+            ans++;
+        }
+        return -1;
+    }
+}
+
+class Problem1263MinimumMovesToMoveABoxToTheirTargetLocation2 {
+
+    char[][] grid;
+    static int INF = Integer.MAX_VALUE >> 1;
+    int m, n, tx, ty, ans;
+    int[] dirs = {-1, 0, 1, 0, -1};
+    int[][][][] memo;
+
+    public int minPushBox(char[][] grid) {
+        this.grid = grid;
+        m = grid.length;
+        n = grid[0].length;
+        int px = 0, py = 0, bx = 0, by = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char c = grid[i][j];
+                if (c == 'S') {
+                    px = i;
+                    py = j;
+                } else if (c == 'B') {
+                    bx = i;
+                    by = j;
+                } else if (c == 'T') {
+                    tx = i;
+                    ty = j;
+                }
+            }
+        }
+        List<int[]> neighbors = new ArrayList<>();
+        findNeighbor(px, py, bx, by, new boolean[m][n], neighbors);
+        memo = new int[m][n][m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int x = 0; x < m; x++) {
+                    for (int y = 0; y < n; y++) {
+                        memo[i][j][x][y] = INF;
+                    }
+                }
+            }
+        }
+        ans = INF;
+        for (int[] p : neighbors) {
+            dfs(p[0], p[1], bx, by, 0);
+        }
+        return ans == INF ? -1 : ans;
+    }
+
+    private void findNeighbor(int px, int py, int bx, int by, boolean[][] visited, List<int[]> ans) {
+        visited[px][py] = true;
+        boolean isNeighbor = false;
+        for (int d = 0; d < 4; d++) {
+            int x = px + dirs[d], y = py + dirs[d + 1];
+            if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '#' || visited[x][y]) {
+                continue;
+            }
+            if (x == bx && y == by) {
+                isNeighbor = true;
+                continue;
+            }
+            findNeighbor(x, y, bx, by, visited, ans);
+        }
+        if (isNeighbor) {
+            ans.add(new int[]{px, py});
+        }
+    }
+
+    private void dfs(int px, int py, int bx, int by, int count) {
+        if (count >= ans || count >= memo[px][py][bx][by]) {
+            return;
+        }
+        if (bx == tx && by == ty) {
+            ans = count;
+            return;
+        }
+        memo[px][py][bx][by] = count;
+        int x = bx, y = by;
+        bx += bx - px;
+        by += by - py;
+        if (bx < 0 || bx >= m || by < 0 || by >= n || grid[bx][by] == '#') {
+            return;
+        }
+        List<int[]> neighbors = new ArrayList<>();
+        findNeighbor(x, y, bx, by, new boolean[m][n], neighbors);
+        for (int[] p : neighbors) {
+            dfs(p[0], p[1], bx, by, count + 1);
+        }
+    }
+}

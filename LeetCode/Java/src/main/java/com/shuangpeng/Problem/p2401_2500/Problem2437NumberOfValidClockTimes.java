@@ -113,21 +113,20 @@ class Problem2437NumberOfValidClockTimes0 {
 
 class Problem2437NumberOfValidClockTimes1 {
 
-    public int countTime(String time) {
+    public int countTime0(String time) {
         char h1 = time.charAt(0), h2 = time.charAt(1);
         char m1 = time.charAt(3), m2 = time.charAt(4);
-        int c1 = 0, c2 = 0;
-        for (int i = 0; i < 24; i++) {
-            if (check(h1, h2, i)) {
-                c1++;
+        return getCount(h1, h2, 24) * getCount(m1, m2, 60);
+    }
+
+    private int getCount(char c1, char c2, int m) {
+        int ans = 0;
+        for (int i = 0; i < m; i++) {
+            if (check(c1, c2, i)) {
+                ans++;
             }
         }
-        for (int i = 0; i < 60; i++) {
-            if (check(m1, m2, i)) {
-                c2++;
-            }
-        }
-        return c1 * c2;
+        return ans;
     }
 
     private boolean check(char c1, char c2, int v) {
@@ -138,5 +137,34 @@ class Problem2437NumberOfValidClockTimes1 {
             return false;
         }
         return true;
+    }
+
+    public int countTime(String time) {
+        char h1 = time.charAt(0), h2 = time.charAt(1);
+        char m1 = time.charAt(3), m2 = time.charAt(4);
+        int c1 = 0, c2 = 0;
+        if (h1 == '?' && h2 == '?') {
+            c1 = 24;
+        } else if (h1 == '?') {
+            c1 = h2 < '4' ? 3 : 2;
+        } else if (h2 == '?') {
+            if (h1 <= '2') {
+                c1 = h1 < '2' ? 10 : 4;
+            }
+        } else if ((h1 - '0') * 10 + h2 - '0' < 24) {
+            c1 = 1;
+        }
+        if (m1 == '?' && m2 == '?') {
+            c2 = 60;
+        } else if (m1 == '?') {
+            c2 = 6;
+        } else if (m2 == '?') {
+            if (m1 < '6') {
+                c2 = 10;
+            }
+        } else if ((m1 - '0') * 10 + m2 - '0' < 60) {
+            c2 = 1;
+        }
+        return c1 * c2;
     }
 }

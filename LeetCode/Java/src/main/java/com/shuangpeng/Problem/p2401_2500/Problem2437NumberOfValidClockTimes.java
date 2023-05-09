@@ -71,3 +71,42 @@ public class Problem2437NumberOfValidClockTimes {
         return new int[]{c - '0', c - '0'};
     }
 }
+
+class Problem2437NumberOfValidClockTimes0 {
+
+    int ans;
+
+    public int countTime(String time) {
+        ans = 0;
+        dfs(time.toCharArray(), 0);
+        return ans;
+    }
+
+    private void dfs(char[] cs, int pos) {
+        if (pos == cs.length) {
+            if (check(cs)) {
+                ans++;
+            }
+            return;
+        }
+        if (cs[pos] == '?') {
+            for (char c = '0'; c <= '9'; c++) {
+                cs[pos] = c;
+                dfs(cs, pos + 1);
+                cs[pos] = '?';
+            }
+        } else {
+            dfs(cs, pos + 1);
+        }
+    }
+
+    private boolean check(char[] cs) {
+        if ((cs[0] - '0') * 10 + cs[1] - '0' > 23) {
+            return false;
+        }
+        if ((cs[3] - '0') * 10 + cs[4] - '0' > 59) {
+            return false;
+        }
+        return true;
+    }
+}

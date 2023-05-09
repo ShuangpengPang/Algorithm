@@ -31,10 +31,10 @@ public class Problem1105FillingBookcaseShelves {
             dp[i] = Integer.MAX_VALUE;
             for (int j = i, w = 0, h = 0; j >= 1; j--) {
                 w += books[j - 1][0];
-                h = Math.max(h, books[j - 1][1]);
                 if (w > shelfWidth) {
                     break;
                 }
+                h = Math.max(h, books[j - 1][1]);
                 dp[i] = Math.min(dp[i], dp[j - 1] + h);
             }
         }

@@ -57,7 +57,7 @@ public class Problem1048LongestStringChain {
         return true;
     }
 
-    public int longestStrChain(String[] words) {
+    public int longestStrChain1(String[] words) {
         Map<String, Integer> dp = new HashMap<>();
         int ans = 0;
         Arrays.sort(words, Comparator.comparingInt(a -> a.length()));
@@ -71,6 +71,29 @@ public class Problem1048LongestStringChain {
             count++;
             ans = Math.max(ans, count);
             dp.put(w, count);
+        }
+        return ans;
+    }
+
+    public int longestStrChain(String[] words) {
+        List<String>[] lists = new List[17];
+        Arrays.setAll(lists, i -> new ArrayList<>());
+        for (String w : words) {
+            lists[w.length()].add(w);
+        }
+        Map<String, Integer> map = new HashMap<>();
+        int ans = 0;
+        for (int i = 0; i <= 16; i++) {
+            for (String w : lists[i]) {
+                int m = w.length(), length = 0;
+                for (int j = 0; j < m; j++) {
+                    String s = w.substring(0, j) + w.substring(j + 1);
+                    length = Math.max(length, map.getOrDefault(s, 0));
+                }
+                length++;
+                ans = Math.max(ans, length);
+                map.put(w, length);
+            }
         }
         return ans;
     }

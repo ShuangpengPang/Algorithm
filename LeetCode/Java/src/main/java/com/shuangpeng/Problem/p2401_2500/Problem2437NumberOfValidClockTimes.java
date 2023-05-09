@@ -110,3 +110,33 @@ class Problem2437NumberOfValidClockTimes0 {
         return true;
     }
 }
+
+class Problem2437NumberOfValidClockTimes1 {
+
+    public int countTime(String time) {
+        char h1 = time.charAt(0), h2 = time.charAt(1);
+        char m1 = time.charAt(3), m2 = time.charAt(4);
+        int c1 = 0, c2 = 0;
+        for (int i = 0; i < 24; i++) {
+            if (check(h1, h2, i)) {
+                c1++;
+            }
+        }
+        for (int i = 0; i < 60; i++) {
+            if (check(m1, m2, i)) {
+                c2++;
+            }
+        }
+        return c1 * c2;
+    }
+
+    private boolean check(char c1, char c2, int v) {
+        if (c1 != '?' && c1 - '0' != v / 10) {
+            return false;
+        }
+        if (c2 != '?' && c2 - '0' != v % 10) {
+            return false;
+        }
+        return true;
+    }
+}

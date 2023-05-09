@@ -99,6 +99,49 @@ public class Problem1125SmallestSufficientTeam {
         return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 
+    public int[] smallestSufficientTeam2(String[] req_skills, List<List<String>> people) {
+        int n = req_skills.length, N = 1 << n, m = people.size();
+        Map<String, Integer> map = new HashMap<>(n);
+        for (int i = 0; i < n; i++) {
+            map.put(req_skills[i], i);
+        }
+        List<Integer>[][] dp = new List[2][N];
+        Arrays.setAll(dp, i -> new List[N]);
+        dp[0][0] = dp[1][0] = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            List<Integer>[] cur = dp[i & 1], pre = dp[(i & 1) ^ 1];
+            int h = 0;
+            for (String s : people.get(i)) {
+                h |= 1 << map.get(s);
+            }
+            for (int j = 0; j < N; j++) {
+                if (pre[j] == null) {
+                    continue;
+                }
+                int k = j | h;
+                if (cur[k] == null || cur[k].size() > pre[j].size() + 1) {
+                    if (cur[k] == null) {
+                        cur[k] = new ArrayList<>();
+                    }
+                    cur[k].clear();
+                    cur[k].addAll(pre[j]);
+                    cur[k].add(i);
+                }
+            }
+            for (int j = 0; j < N; j++) {
+                if (cur[j] == null) {
+                    continue;
+                }
+                if (pre[j] == null) {
+                    pre[j] = new ArrayList<>();
+                }
+                pre[j].clear();
+                pre[j].addAll(cur[j]);
+            }
+        }
+        return dp[(m - 1) & 1][N - 1].stream().mapToInt(Integer::intValue).toArray();
+    }
+
     public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
         int n = req_skills.length, m = people.size(), N = 1 << n;
         Map<String, Integer> map = new HashMap<>();

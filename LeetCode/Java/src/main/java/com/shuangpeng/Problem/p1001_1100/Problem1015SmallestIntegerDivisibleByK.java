@@ -33,7 +33,7 @@ public class Problem1015SmallestIntegerDivisibleByK {
         return s == 0 ? len : -1;
     }
 
-    public int smallestRepunitDivByK(int k) {
+    public int smallestRepunitDivByK1(int k) {
         boolean[] mod = new boolean[k];
         for (int i = 0, n = 0; !mod[n]; i++) {
             mod[n] = true;
@@ -43,5 +43,29 @@ public class Problem1015SmallestIntegerDivisibleByK {
             }
         }
         return -1;
+    }
+
+    public int smallestRepunitDivByK2(int k) {
+        if (k % 2 == 0 || k % 5 == 0) {
+            return -1;
+        }
+        int ans = 0, s = 0;
+        do {
+            s = (s * 10 + 1) % k;
+            ans++;
+        } while (s != 0);
+        return ans;
+    }
+
+    public int smallestRepunitDivByK(int k) {
+        if (k % 2 == 0 || k % 5 == 0) {
+            return -1;
+        }
+        int s = 1 % k, ans = 1;
+        while (s != 0) {
+            s = (s * 10 + 1) % k;
+            ans++;
+        }
+        return ans;
     }
 }

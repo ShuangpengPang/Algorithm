@@ -57,7 +57,7 @@ public class Problem1015SmallestIntegerDivisibleByK {
         return ans;
     }
 
-    public int smallestRepunitDivByK(int k) {
+    public int smallestRepunitDivByK3(int k) {
         if (k % 2 == 0 || k % 5 == 0) {
             return -1;
         }
@@ -65,6 +65,54 @@ public class Problem1015SmallestIntegerDivisibleByK {
         while (s != 0) {
             s = (s * 10 + 1) % k;
             ans++;
+        }
+        return ans;
+    }
+
+    public int smallestRepunitDivByK(int k) {
+        if (k % 2 == 0 || k % 5 == 0) {
+            return -1;
+        }
+        k *= 9;
+        int n = eulerFunction(k);
+        int ans = n;
+        for (int i = 1; i * i <= n; i++) {
+            if (n % i == 0) {
+                if (quickPower(10, i, k) == 1) {
+                    return i;
+                }
+                if (quickPower(10, n / i, k) == 1) {
+                    ans = n / i;
+                }
+            }
+        }
+        return ans;
+    }
+
+    private int quickPower(long a, long p, long m) {
+        long ans = 1L;
+        while (p > 0) {
+            if ((p & 1) == 1) {
+                ans = ans * a % m;
+            }
+            a = a * a % m;
+            p >>= 1;
+        }
+        return (int) ans;
+    }
+
+    private int eulerFunction(int n) {
+        int ans = n;
+        for (int i = 2; i * i <= n; i++) {
+            if (n % i == 0) {
+                ans = ans / i * (i - 1);
+                while (n % i == 0) {
+                    n /= i;
+                }
+            }
+        }
+        if (n > 1) {
+            ans = ans / n * (n - 1);
         }
         return ans;
     }

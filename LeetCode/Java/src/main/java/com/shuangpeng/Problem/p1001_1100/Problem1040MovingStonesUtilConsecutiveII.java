@@ -33,33 +33,38 @@ public class Problem1040MovingStonesUtilConsecutiveII {
         return new int[]{min, max};
     }
 
-    public int[] numMovesStonesII(int[] stones) {
+    public int[] numMovesStonesII1(int[] stones) {
         Arrays.sort(stones);
-        int n = stones.length;
-        if (stones[n - 1] - stones[0] == n - 1) {
-            return new int[2];
-        }
-        int min = n;
+        int n = stones.length, min = Integer.MAX_VALUE;
         for (int i = 0, j = 0; i < n && j < n; i++) {
             while (j < n && stones[j] <= stones[i] + n - 1) {
                 j++;
             }
-            if (j - i == n - 1 && stones[j - 1] != stones[i] + n - 1) {
-                min = Math.min(min, 2);
-            } else {
-                min = Math.min(min, n - j + i);
+            int count = n - (j - i);
+            if (count == 1 && stones[j - 1] != stones[i] + n - 1) {
+                count = 2;
             }
+            min = Math.min(min, count);
         }
-        return new int[]{min, Math.max(stones[n - 2] - stones[0], stones[n - 1] - stones[1]) + 1 - (n - 1)};
+        return new int[]{min, Math.max(stones[n - 1] - stones[1], stones[n - 2] - stones[0]) - n + 2};
     }
 
-
-
-
-
-
-
     public int[] numMovesStonesII(int[] stones) {
-
+        Arrays.sort(stones);
+        int n = stones.length;
+        int s1 = stones[n - 1] - stones[1] + 1 - (n - 1);
+        int s2 = stones[n - 2] - stones[0] + 1 - (n - 1);
+        int max = Math.max(s1, s2);
+        if (s1 == 0 || s2 == 0) {
+            return new int[]{Math.min(max, 2), max};
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0, j = 0; j < n; i++) {
+            while (j < n && stones[j] <= stones[i] + n - 1) {
+                j++;
+            }
+            min = Math.min(min, n - (j - i));
+        }
+        return new int[]{min, max};
     }
 }

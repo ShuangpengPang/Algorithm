@@ -1,8 +1,12 @@
 package com.shuangpeng.Problem.p1101_1200;
 
+/**
+ * @description: 最大的以1为边界的正方形
+ * @date 2023/5/12 12:08 AM
+ **/
 public class Problem1139Largest1BorderedSquare {
 
-    public int largest1BorderedSquare(int[][] grid) {
+    public int largest1BorderedSquare0(int[][] grid) {
         int m = grid.length, n = grid[0].length;
         int[][][] leftUp = new int[m][n][2];
         leftUp[0][0][0] = grid[0][0] == 1 ? 1 : 0;
@@ -68,5 +72,65 @@ public class Problem1139Largest1BorderedSquare {
             }
         }
         return ans;
+    }
+
+    public int largest1BorderedSquare1(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[][] row = new int[m + 1][n + 1], col = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (grid[i - 1][j - 1] == 1) {
+                    row[i][j] = row[i][j - 1] + 1;
+                }
+            }
+        }
+        for (int j = 1; j <= n; j++) {
+            for (int i = 1; i <= m; i++) {
+                if (grid[i - 1][j - 1] == 1) {
+                    col[i][j] = col[i - 1][j] + 1;
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                for (int x = i + ans, y = j + ans; x <= m && y <= n; x++, y++) {
+                    if (row[i][y] - row[i][j - 1] != y - j + 1) {
+                        break;
+                    }
+                    if (col[x][j] - col[i - 1][j] != x - i + 1) {
+                        break;
+                    }
+                    if (col[x][y] - col[i - 1][y] != x - i + 1) {
+                        continue;
+                    }
+                    if (row[x][y] - row[x][j - 1] != y - j + 1) {
+                        continue;
+                    }
+                    ans = x - i + 1;
+                }
+            }
+        }
+        return ans * ans;
+    }
+
+    public int largest1BorderedSquare(int[][] grid) {
+        int m = grid.length, n = grid[0].length, ans = 0;
+        int[][] row = new int[m + 1][n + 1], col = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (grid[i - 1][j - 1] == 0) {
+                    continue;
+                }
+                row[i][j] = row[i][j - 1] + 1;
+                col[i][j] = col[i - 1][j] + 1;
+                for (int k = ans; row[i][j] > k && col[i][j] > k; k++) {
+                    if (col[i][j - k] > k && row[i - k][j] > k) {
+                        ans = k + 1;
+                    }
+                }
+            }
+        }
+        return ans * ans;
     }
 }

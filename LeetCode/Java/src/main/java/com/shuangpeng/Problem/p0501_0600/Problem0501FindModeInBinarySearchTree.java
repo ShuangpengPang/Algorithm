@@ -50,94 +50,72 @@ public class Problem0501FindModeInBinarySearchTree {
     }
 
     public int[] findMode(TreeNode root) {
-        List<Integer> list = new ArrayList<>();
-        int prev = Integer.MIN_VALUE, maxFreq = 0, count = 0;
-        TreeNode cur = root;
-        while (cur != null) {
-            int val = cur.val;
-            if (cur.left != null) {
-                TreeNode node = cur.left;
-                while (node.right != null && node.right != cur) {
-                    node = node.right;
-                }
-                if (node.right == null) {
-                    node.right = cur;
-                    cur = cur.left;
-                } else {
-                    node.right = null;
-                    if (val != prev) {
-                        count = 0;
-                    }
-                    count++;
-                    if (count >= maxFreq) {
-                        if (count > maxFreq) {
-                            maxFreq = count;
-                            list.clear();
-                        }
-                        list.add(val);
-                    }
-                    prev = val;
+        int prev = Integer.MIN_VALUE, maxFreq = 0, freq = 0;
+        TreeNode node = root;
+        List<Integer> ans = new ArrayList<>();
+        while (node != null) {
+            if (node.left != null) {
+                TreeNode cur = node.left;
+                while (cur.right != null && cur.right != node) {
                     cur = cur.right;
                 }
-            } else {
-                if (val != prev) {
-                    count = 0;
+                if (cur.right == null) {
+                    cur.right = node;
+                    node = node.left;
+                    continue;
                 }
-                count++;
-                if (count >= maxFreq) {
-                    if (count > maxFreq) {
-                        maxFreq = count;
-                        list.clear();
-                    }
-                    list.add(val);
-                }
-                prev = val;
-                cur = cur.right;
+                cur.right = null;
             }
+            int val = node.val;
+            if (prev == val) {
+                freq++;
+            } else {
+                prev = val;
+                freq = 1;
+            }
+            if (freq >= maxFreq) {
+                if (freq > maxFreq) {
+                    maxFreq = freq;
+                    ans.clear();
+                }
+                ans.add(val);
+            }
+            node = node.right;
         }
-        return list.stream().mapToInt(Integer::intValue).toArray();
+        return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 }
 
 class Problem0501FindModeInBinarySearchTree0 {
 
-    List<Integer> list;
-    int prev, maxFreq, count;
-
     public int[] findMode(TreeNode root) {
-        prev = Integer.MIN_VALUE;
-        maxFreq = count = 0;
-        list = new ArrayList<>();
-        TreeNode cur = root;
+        int prev = Integer.MIN_VALUE, freq = 0, maxFreq = 0;
+        List<Integer> ans = new ArrayList<>();
         Deque<TreeNode> stack = new ArrayDeque<>();
-        while (cur != null || !stack.isEmpty()) {
-            if (cur == null) {
-                cur = stack.pop();
-                update(cur.val);
-                cur = cur.right;
-            } else if (cur.left != null) {
-                stack.push(cur);
-                cur = cur.left;
+        TreeNode node = root;
+        while (node != null || !stack.isEmpty()) {
+            if (node != null) {
+                stack.push(node);
+                node = node.left;
+                continue;
+            }
+            node = stack.pop();
+            int val = node.val;
+            if (val == prev) {
+                freq++;
             } else {
-                update(cur.val);
-                cur = cur.right;
+                prev = val;
+                freq = 1;
             }
-        }
-        return list.stream().mapToInt(Integer::intValue).toArray();
-    }
-
-    private void update(int val) {
-        if (val != prev) {
-            count = 0;
-        }
-        count++;
-        if (count >= maxFreq) {
-            if (count > maxFreq) {
-                maxFreq = count;
-                list.clear();
+            if (freq >= maxFreq) {
+                if (freq > maxFreq) {
+                    maxFreq = freq;
+                    ans.clear();
+                }
+                ans.add(val);
             }
-            list.add(val);
+            node = node.right;
         }
-        prev = val;
+        return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 }

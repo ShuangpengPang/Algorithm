@@ -52,4 +52,14 @@ public class Problem1040MovingStonesUtilConsecutiveII {
         }
         return new int[]{min, Math.max(stones[n - 2] - stones[0], stones[n - 1] - stones[1]) + 1 - (n - 1)};
     }
+
+
+
+
+
+
+
+    public int[] numMovesStonesII(int[] stones) {
+
+    }
 }

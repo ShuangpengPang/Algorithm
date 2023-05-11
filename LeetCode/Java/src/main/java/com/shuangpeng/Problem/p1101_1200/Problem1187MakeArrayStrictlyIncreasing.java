@@ -457,10 +457,3 @@ class Problem1187MakeArrayStrictlyIncreasing6 {
         return left - 1;
     }
 }
-
-class tmp {
-
-    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
-
-    }
-}

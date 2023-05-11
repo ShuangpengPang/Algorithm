@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1001_1100;
  */
 public class Problem1016BinaryStringWithSubstringsRepresenting1ToN {
 
-    public boolean queryString(String s, int n) {
+    public boolean queryString0(String s, int n) {
         int m = s.length(), count = 0;
         if (n >= 2048 || n > m * m) {
             return false;
@@ -25,6 +25,26 @@ public class Problem1016BinaryStringWithSubstringsRepresenting1ToN {
                     if (!has[num]) {
                         has[num] = true;
                         count++;
+                    }
+                }
+            }
+        }
+        return count == n;
+    }
+
+    public boolean queryString(String s, int n) {
+        int m = s.length(), count = 0;
+        if (n > (m + 1) * m >> 1) {
+            return false;
+        }
+        boolean[] has = new boolean[n + 1];
+        for (int i = 0; i < m; i++) {
+            for (int j = i, num = 0; j < m && num <= n; j++) {
+                num = (num << 1) + (s.charAt(j) - '0');
+                if (num > 0 && num <= n) {
+                    if (!has[num]) {
+                        count++;
+                        has[num] = true;
                     }
                 }
             }

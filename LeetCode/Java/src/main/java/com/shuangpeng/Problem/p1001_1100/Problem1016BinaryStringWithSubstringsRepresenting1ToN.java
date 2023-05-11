@@ -32,7 +32,7 @@ public class Problem1016BinaryStringWithSubstringsRepresenting1ToN {
         return count == n;
     }
 
-    public boolean queryString(String s, int n) {
+    public boolean queryString1(String s, int n) {
         int m = s.length(), count = 0;
         if (n > (m + 1) * m >> 1) {
             return false;
@@ -50,5 +50,56 @@ public class Problem1016BinaryStringWithSubstringsRepresenting1ToN {
             }
         }
         return count == n;
+    }
+}
+
+class Problem1016BinaryStringWithSubstringsRepresenting1ToN0 {
+
+    int count, n, m;
+    boolean[] visited;
+
+    public boolean queryString(String s, int n) {
+        this.n = n;
+        m = s.length();
+        if (n > (m + 1) * m >> 1) {
+            return false;
+        }
+        if (n == 1) {
+            return s.contains("1");
+        }
+        int k = getBitCount(n);
+        count = 0;
+        visited = new boolean[1 << k];
+        char[] cs = s.toCharArray();
+        check(cs, k);
+        check(cs, k - 1);
+        return count == n - (1 << (k - 2)) + 1;
+    }
+
+    private void check(char[] cs, int k) {
+        int num = 0, N = 1 << (k - 1), M = 1 << k;
+        for (int i = 0; i < k; i++) {
+            num = (num << 1) + cs[i] - '0';
+        }
+        if (num >= N && num <= n && !visited[num]) {
+            visited[num] = true;
+            count++;
+        }
+        for (int i = k; i < m; i++) {
+            num = (num << 1) + (cs[i] - '0') - (cs[i - k] - '0') * M;
+            if (num >= N && num <= n && !visited[num]) {
+                visited[num] = true;
+                count++;
+            }
+        }
+    }
+
+    private int getBitCount(int n) {
+        int v = 1, bit = 0;
+        while (v <= n) {
+            v <<= 1;
+            bit++;
+        }
+        return bit;
     }
 }

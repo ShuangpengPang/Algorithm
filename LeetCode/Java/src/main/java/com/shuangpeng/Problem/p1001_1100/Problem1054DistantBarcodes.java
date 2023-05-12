@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
  */
 public class Problem1054DistantBarcodes {
 
-    public int[] rearrangeBarcodes(int[] barcodes) {
+    public int[] rearrangeBarcodes0(int[] barcodes) {
         Map<Integer, Integer> countMap = new HashMap<>();
         for (int code : barcodes) {
             countMap.merge(code, 1, Integer::sum);
@@ -35,6 +35,32 @@ public class Problem1054DistantBarcodes {
                 q.add(a);
             }
             q.add(p);
+        }
+        return ans;
+    }
+
+    public int[] rearrangeBarcodes(int[] barcodes) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int code : barcodes) {
+            map.merge(code, 1, Integer::sum);
+        }
+        int n = barcodes.length, h = n >> 1;
+        int[] ans = new int[n];
+        int evenIndex = 0, oddIndex = 1;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int num = entry.getKey(), count = entry.getValue();
+            if (count <= h) {
+                while (oddIndex < n && count > 0) {
+                    ans[oddIndex] = num;
+                    oddIndex += 2;
+                    count--;
+                }
+            }
+            while (count > 0) {
+                ans[evenIndex] = num;
+                evenIndex += 2;
+                count--;
+            }
         }
         return ans;
     }

@@ -47,7 +47,7 @@ public class Problem2341MaximumNumberOfPairsInArray {
         return ans;
     }
 
-    public int[] numberOfPairs(int[] nums) {
+    public int[] numberOfPairs3(int[] nums) {
         int count = 0;
         int[] cnt = new int[101];
         for (int num : nums) {
@@ -56,5 +56,14 @@ public class Problem2341MaximumNumberOfPairsInArray {
             }
         }
         return new int[]{count, nums.length - (count << 1)};
+    }
+
+    public int[] numberOfPairs(int[] nums) {
+        int[] cnt = new int[101];
+        int ans = 0;
+        for (int num : nums) {
+            ans += (cnt[num] ^= 1) ^ 1;
+        }
+        return new int[]{ans, nums.length - (ans << 1)};
     }
 }

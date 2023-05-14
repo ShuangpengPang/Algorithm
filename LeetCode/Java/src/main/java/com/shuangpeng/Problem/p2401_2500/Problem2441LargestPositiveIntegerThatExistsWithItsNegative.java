@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p2401_2500;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,20 @@ import java.util.Set;
  * @date 2023/5/14 8:18 PM
  */
 public class Problem2441LargestPositiveIntegerThatExistsWithItsNegative {
+
+    public int findMaxK0(int[] nums) {
+        Arrays.sort(nums);
+        for (int i = 0, j = nums.length - 1; nums[i] < 0 && nums[j] > 0;) {
+            if (nums[i] < -nums[j]) {
+                i++;
+            } else if (nums[i] > -nums[j]) {
+                j--;
+            } else {
+                return nums[j];
+            }
+        }
+        return -1;
+    }
 
     public int findMaxK(int[] nums) {
         Set<Integer> set = new HashSet<>();

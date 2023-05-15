@@ -11,27 +11,25 @@ import java.util.Map;
  */
 public class Problem1072FlipColumnsForMaximumNumberOfEqualRows {
 
-    public int maxEqualRowsAfterFlips(int[][] matrix) {
+    public int maxEqualRowsAfterFlips0(int[][] matrix) {
         int m = matrix.length, n = matrix[0].length;
-        StringBuilder sb1 = new StringBuilder(n), sb2 = new StringBuilder(n);
         Map<String, Integer> map = new HashMap<>(m);
+        StringBuilder sb = new StringBuilder(n);
         int ans = 0;
         for (int[] r : matrix) {
-            sb1.setLength(0);
-            sb2.setLength(0);
-            for (int b : r) {
-                sb1.append(b);
-                sb2.append(b ^ 1);
-            }
-            String s1 = sb1.toString(), s2 = sb2.toString();
-            int count = 0;
-            if (map.containsKey(s2)) {
-                count = map.get(s2) + 1;
-                map.put(s2, count);
+            sb.setLength(0);
+            if (r[0] == 0) {
+                for (int b : r) {
+                    sb.append(b);
+                }
             } else {
-                count = map.getOrDefault(s1, 0) + 1;
-                map.put(s1, count);
+                for (int b : r) {
+                    sb.append(b ^ 1);
+                }
             }
+            String s = sb.toString();
+            int count = map.getOrDefault(s, 0) + 1;
+            map.put(s, count);
             ans = Math.max(ans, count);
         }
         return ans;

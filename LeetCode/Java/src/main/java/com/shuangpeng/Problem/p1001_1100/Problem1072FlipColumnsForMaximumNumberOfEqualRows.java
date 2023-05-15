@@ -18,12 +18,9 @@ public class Problem1072FlipColumnsForMaximumNumberOfEqualRows {
         int ans = 0;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                cs[j] = (char) ('0' + (matrix[i][j] ^ matrix[i][0]));
+                cs[j] = (char) (matrix[i][j] ^ matrix[i][0]);
             }
-            String s = new String(cs);
-            int count = map.getOrDefault(s, 0) + 1;
-            map.put(s, count);
-            ans = Math.max(ans, count);
+            ans = Math.max(ans, map.merge(new String(cs), 1, Integer::sum));
         }
         return ans;
     }

@@ -25,3 +25,36 @@ public class Problem1072FlipColumnsForMaximumNumberOfEqualRows {
         return ans;
     }
 }
+
+class Problem1072FlipColumnsForMaximumNumberOfEqualRows0 {
+
+    class Trie {
+        Trie left, right;
+        int cnt;
+    }
+
+    public int maxEqualRowsAfterFlips(int[][] matrix) {
+        Trie root = new Trie();
+        int m = matrix.length, n = matrix[0].length;
+        int ans = 0;
+        for (int i = 0; i < m; i++) {
+            Trie trie = root;
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == matrix[i][0]) {
+                    if (trie.left == null) {
+                        trie.left = new Trie();
+                    }
+                    trie = trie.left;
+                } else {
+                    if (trie.right == null) {
+                        trie.right = new Trie();
+                    }
+                    trie = trie.right;
+                }
+            }
+            trie.cnt++;
+            ans = Math.max(ans, trie.cnt);
+        }
+        return ans;
+    }
+}

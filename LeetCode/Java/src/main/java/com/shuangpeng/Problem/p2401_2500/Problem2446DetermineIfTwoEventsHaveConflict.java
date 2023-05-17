@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2401_2500;
  */
 public class Problem2446DetermineIfTwoEventsHaveConflict {
 
-    public boolean haveConflict(String[] event1, String[] event2) {
+    public boolean haveConflict0(String[] event1, String[] event2) {
         int s1 = hash(event1[0]), e1 = hash(event1[1]);
         int s2 = hash(event2[0]), e2 = hash(event2[1]);
         return s2 <= e1 && s1 <= e2;
@@ -16,5 +16,9 @@ public class Problem2446DetermineIfTwoEventsHaveConflict {
 
     private int hash(String s) {
         return Integer.parseInt(s.substring(0, 2)) * 60 + Integer.parseInt(s.substring(3));
+    }
+
+    public boolean haveConflict(String[] event1, String[] event2) {
+        return event1[0].compareTo(event2[1]) <= 0 && event1[1].compareTo(event2[0]) >= 0;
     }
 }

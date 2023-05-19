@@ -48,7 +48,7 @@ public class Problem1079LetterTilePossibilities {
 
 class Problem1079LetterTilePossibilities0 {
 
-    public int numTilePossibilities(String tiles) {
+    public int numTilePossibilities0(String tiles) {
         Map<Character, Integer> count = new HashMap<>();
         for (char c : tiles.toCharArray()) {
             count.merge(c, 1, Integer::sum);
@@ -68,6 +68,68 @@ class Problem1079LetterTilePossibilities0 {
                 ans += dfs(count, n - 1);
                 count.put(c, cnt);
             }
+        }
+        return ans;
+    }
+}
+
+class Problem1079LetterTilePossibilities1 {
+
+    public int numTilePossibilities(String tiles) {
+        Map<Character, Integer> count = new HashMap<>();
+        for (char c : tiles.toCharArray()) {
+            count.merge(c, 1, Integer::sum);
+        }
+        return dfs(count);
+    }
+
+    private int dfs(Map<Character, Integer> map) {
+        int ans = 0;
+        for (char c : map.keySet()) {
+            int cnt = map.get(c);
+            if (cnt > 0) {
+                ans++;
+                map.put(c, cnt - 1);
+                ans += dfs(map);
+                map.put(c, cnt);
+            }
+        }
+        return ans;
+    }
+}
+
+class Problem1079LetterTilePossibilities2 {
+
+    static final int N = 8;
+    static int[][] c = new int[8][N];
+    static {
+        for (int i = 0; i < 8; i++) {
+            c[i][0] = c[i][i] = 1;
+            for (int j = 1; j < i; j++) {
+                c[i][j] = c[i - 1][j] + c[i - 1][j - 1];
+            }
+        }
+    }
+
+    public int numTilePossibilities(String tiles) {
+        int[] cnt = new int[26];
+        for (char c : tiles.toCharArray()) {
+            cnt[c - 'A']++;
+        }
+        int n = tiles.length();
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 0, count = 0; i < 26; i++) {
+            count += cnt[i];
+            for (int j = count; j > 0; j--) {
+                for (int k = 1; k <= Math.min(j, cnt[i]); k++) {
+                    dp[j] += dp[j - k] * c[j][k];
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i <= n; i++) {
+            ans += dp[i];
         }
         return ans;
     }

@@ -31,3 +31,39 @@ public class Problem1373MaximumSumBSTInBinaryTree {
         return new int[]{1, sum, Math.min(root.val, left[2]), Math.max(root.val, right[3])};
     }
 }
+
+class Problem1373MaximumSumBSTInBinaryTree0 {
+
+    int ans;
+
+    public int maxSumBST(TreeNode root) {
+        ans = 0;
+        dfs(root);
+        return ans;
+    }
+
+    private int[] dfs(TreeNode root) {
+        if (root == null) {
+            return new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE, 0};
+        }
+        int[] left = dfs(root.left), right = dfs(root.right);
+        if (left == null || right == null || left[1] >= root.val || root.val >= right[0]) {
+            return null;
+        }
+        int sum = left[2] + right[2] + root.val;
+        ans = Math.max(ans, sum);
+        return new int[]{Math.min(root.val, left[0]), Math.max(root.val, right[1]), sum};
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

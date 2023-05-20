@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1201_1300;
  */
 public class Problem1234ReplaceTheSubstringForBalancedString {
 
-    public int balancedString(String s) {
+    public int balancedString0(String s) {
         int[] map = new int['W' + 1];
         char[] arr = {'Q', 'W', 'E', 'R'};
         for (int i = 0; i < arr.length; i++) {
@@ -39,6 +39,42 @@ public class Problem1234ReplaceTheSubstringForBalancedString {
         for (int i = 0; i < 4; i++) {
             int count = i == c ? cnt[i] + 1 : cnt[i];
             if (count > avg) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int balancedString(String s) {
+        char[] arr = {'Q', 'W', 'E', 'R'};
+        int[] ids = new int[26];
+        for (int i = 0; i < 4; i++) {
+            ids[arr[i] - 'A'] = i;
+        }
+        int[] cnt = new int[4];
+        char[] cs = s.toCharArray();
+        for (char c : cs) {
+            cnt[ids[c - 'A']]++;
+        }
+        int n = cs.length, m = n >> 2;
+        if (check(cnt, m)) {
+            return 0;
+        }
+        int ans = n;
+        for (int l = 0, r = 0; r < n; r++) {
+            cnt[ids[cs[r] - 'A']]--;
+            while (l <= r + 1 && check(cnt, m)) {
+                ans = Math.min(ans, r - l + 1);
+                cnt[ids[cs[l++] - 'A']]++;
+            }
+        }
+        return ans;
+    }
+
+    private boolean check(int[] cnt, int m) {
+        int n = cnt.length;
+        for (int i = 0; i < n; i++) {
+            if (cnt[i] > m) {
                 return false;
             }
         }

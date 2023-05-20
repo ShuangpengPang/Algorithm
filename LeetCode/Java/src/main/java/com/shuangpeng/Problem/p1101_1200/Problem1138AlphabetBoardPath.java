@@ -36,13 +36,39 @@ public class Problem1138AlphabetBoardPath {
         }
     }
 
-    public String alphabetBoardPath(String target) {
+    public String alphabetBoardPath0(String target) {
         StringBuilder sb = new StringBuilder();
         int n = target.length();
         for (int i = 0, j = 0; i < n; i++) {
             int c = target.charAt(i) - 'a';
             sb.append(step[j][c]);
             j = c;
+        }
+        return sb.toString();
+    }
+
+    public String alphabetBoardPath(String target) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0, x = 0, y = 0; i < target.length(); i++) {
+            int num = target.charAt(i) - 'a';
+            int nx = num / 5, ny = num % 5;
+            while (y > ny) {
+                sb.append('L');
+                y--;
+            }
+            while (x > nx) {
+                sb.append('U');
+                x--;
+            }
+            while (y < ny) {
+                sb.append('R');
+                y++;
+            }
+            while (x < nx) {
+                sb.append('D');
+                x++;
+            }
+            sb.append('!');
         }
         return sb.toString();
     }

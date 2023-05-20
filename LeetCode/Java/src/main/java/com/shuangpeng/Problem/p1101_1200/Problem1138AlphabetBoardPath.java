@@ -1,7 +1,5 @@
 package com.shuangpeng.Problem.p1101_1200;
 
-import java.util.Arrays;
-
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -13,7 +11,6 @@ public class Problem1138AlphabetBoardPath {
     static int N = 26;
     static String[][] step = new String[N][N];
     static {
-        Arrays.setAll(step, i -> new String[N]);
         for (int i = 0; i < N - 1; i++) {
             int x1 = i / 5, y1 = i % 5;
             for (int j = 0; j < N - 1; j++) {

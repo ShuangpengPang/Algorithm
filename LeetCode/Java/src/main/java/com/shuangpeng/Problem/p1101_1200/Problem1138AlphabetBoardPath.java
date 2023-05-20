@@ -11,26 +11,28 @@ public class Problem1138AlphabetBoardPath {
     static int N = 26;
     static String[][] step = new String[N][N];
     static {
-        for (int i = 0; i < N - 1; i++) {
+        for (int i = 0; i < N; i++) {
             int x1 = i / 5, y1 = i % 5;
-            for (int j = 0; j < N - 1; j++) {
+            for (int j = 0; j < N; j++) {
                 int x2 = j / 5, y2 = j % 5;
-                int n1 = Math.abs(x1 - x2), n2 = Math.abs(y1 - y2), n = n1 + n2;
+                int n1 = Math.abs(x1 - x2), n2 = Math.abs(y1 - y2), n = n1 + n2 + 1;
                 char[] cs = new char[n];
-                char v = x1 < x2 ? 'D' : 'U', h = y1 < y2 ? 'R' : 'L';
-                for (int k = 0; k < n1; k++) {
-                    cs[k] = v;
+                cs[n - 1] = '!';
+                int idx = 0;
+                for (int k = 0; k < y1 - y2; k++) {
+                    cs[idx++] = 'L';
                 }
-                for (int k = n1; k < n; k++) {
-                    cs[k] = h;
+                for (int k = 0; k < x1 - x2; k++) {
+                    cs[idx++] = 'U';
+                }
+                for (int k = 0; k < y2 - y1; k++) {
+                    cs[idx++] = 'R';
+                }
+                for (int k = 0; k < x2 - x1; k++) {
+                    cs[idx++] = 'D';
                 }
                 step[i][j] = new String(cs);
             }
-        }
-        step[N - 1][N - 1] = "";
-        for (int i = 0; i < N - 1; i++) {
-            step[i][N - 1] = step[i][N - 6] + 'D';
-            step[N - 1][i] = 'U' + step[N - 6][i];
         }
     }
 
@@ -39,7 +41,7 @@ public class Problem1138AlphabetBoardPath {
         int n = target.length();
         for (int i = 0, j = 0; i < n; i++) {
             int c = target.charAt(i) - 'a';
-            sb.append(step[j][c]).append('!');
+            sb.append(step[j][c]);
             j = c;
         }
         return sb.toString();

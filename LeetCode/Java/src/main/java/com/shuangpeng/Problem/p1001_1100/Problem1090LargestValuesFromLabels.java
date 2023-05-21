@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p1001_1100;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -12,7 +13,7 @@ import java.util.PriorityQueue;
  */
 public class Problem1090LargestValuesFromLabels {
 
-    public int largestValsFromLabels(int[] values, int[] labels, int numWanted, int useLimit) {
+    public int largestValsFromLabels0(int[] values, int[] labels, int numWanted, int useLimit) {
         Map<Integer, Integer> map = new HashMap<>();
         PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> b[0] - a[0]);
         int n = values.length;
@@ -30,5 +31,23 @@ public class Problem1090LargestValuesFromLabels {
             }
         }
         return sum;
+    }
+
+    public int largestValsFromLabels(int[] values, int[] labels, int numWanted, int useLimit) {
+        int n = values.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, (a, b) -> values[b] - values[a]);
+        Map<Integer, Integer> count = new HashMap<>();
+        int s = 0;
+        for (int i = 0, cnt = 0; cnt < numWanted && i < n; i++) {
+            int id = ids[i], l = labels[id];
+            if (count.getOrDefault(l, 0) < useLimit) {
+                s += values[id];
+                count.merge(l, 1, Integer::sum);
+                cnt++;
+            }
+        }
+        return s;
     }
 }

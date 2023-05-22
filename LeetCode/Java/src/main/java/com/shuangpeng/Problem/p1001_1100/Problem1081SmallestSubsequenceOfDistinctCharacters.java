@@ -1,8 +1,6 @@
 package com.shuangpeng.Problem.p1001_1100;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 /**
@@ -63,23 +61,21 @@ public class Problem1081SmallestSubsequenceOfDistinctCharacters {
         }
         int n = cs.length;
         boolean[] add = new boolean[26];
-        Deque<Integer> q = new ArrayDeque<>(n);
+        StringBuilder sb = new StringBuilder(n);
         for (int i = 0; i < n; i++) {
-            int c = cs[i] - 'a';
-            if (!add[c]) {
-                while (!q.isEmpty() && cs[q.peek()] >= cs[i] && cnt[cs[q.peek()] - 'a'] > 0) {
-                    add[cs[q.pop()] - 'a'] = false;
+            char c = cs[i];
+            if (!add[c - 'a']) {
+                char ch = sb.length() > 0 ? sb.charAt(sb.length() - 1) : ' ';
+                while (sb.length() > 0 && ch > c && cnt[ch - 'a'] > 0) {
+                    add[ch - 'a'] = false;
+                    sb.setLength(sb.length() - 1);
+                    ch = sb.length() > 0 ? sb.charAt(sb.length() - 1) : ' ';
                 }
-                add[c] = true;
-                q.push(i);
+                add[c - 'a'] = true;
+                sb.append(c);
             }
-            cnt[c]--;
+            cnt[c - 'a']--;
         }
-        int m = q.size();
-        char[] ans = new char[m];
-        for (int i = 0; i < m; i++) {
-            ans[i] = cs[q.pollLast()];
-        }
-        return new String(ans);
+        return sb.toString();
     }
 }

@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p1001_1100;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -35,6 +36,28 @@ public class Problem1054DistantBarcodes {
                 q.add(a);
             }
             q.add(p);
+        }
+        return ans;
+    }
+
+    public int[] rearrangeBarcodes1(int[] barcodes) {
+        int n = barcodes.length, max = 0;
+        Integer[] copy = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            int b = barcodes[i];
+            copy[i] = b;
+            max = Math.max(max, b);
+        }
+        int[] cnt = new int[max + 1];
+        for (int b : barcodes) {
+            cnt[b]++;
+        }
+        Arrays.sort(copy, (a, b) -> cnt[b] == cnt[a] ? a - b : cnt[b] - cnt[a]);
+        int[] ans = new int[n];
+        for (int i = 0, k = 0; k < 2; k++) {
+            for (int j = k; j < n; j += 2, i++) {
+                ans[j] = copy[i];
+            }
         }
         return ans;
     }

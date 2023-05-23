@@ -26,6 +26,19 @@ public class Problem2441LargestPositiveIntegerThatExistsWithItsNegative {
         return -1;
     }
 
+    public int findMaxK1(int[] nums) {
+        Arrays.sort(nums);
+        for (int i = 0, j = nums.length - 1; nums[j] > 0 && i < j; j--) {
+            while (nums[i] < -nums[j]) {
+                i++;
+            }
+            if (nums[i] == -nums[j]) {
+                return nums[j];
+            }
+        }
+        return -1;
+    }
+
     public int findMaxK(int[] nums) {
         Set<Integer> set = new HashSet<>();
         int ans = -1;

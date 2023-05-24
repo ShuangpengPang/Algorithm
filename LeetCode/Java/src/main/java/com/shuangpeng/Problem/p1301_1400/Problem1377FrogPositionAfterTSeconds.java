@@ -82,3 +82,39 @@ class Problem1377FrogPositionAfterTSeconds0 {
         return ans / m;
     }
 }
+
+class Problem1377FrogPositionAfterTSeconds1 {
+
+    int target;
+    List<Integer>[] g;
+
+    public double frogPosition(int n, int[][] edges, int t, int target) {
+        g = new List[n];
+        this.target = target - 1;
+        Arrays.setAll(g, i -> new ArrayList<>());
+        for (int[] edge : edges) {
+            int x = edge[0] - 1, y = edge[1] - 1;
+            g[x].add(y);
+            g[y].add(x);
+        }
+        g[0].add(-1);
+        long ans = dfs(0, t, -1);
+        return ans == 0 ? 0 : 1.0 / ans;
+    }
+
+    private long dfs(int x, int t, int p) {
+        int m = g[x].size() - 1;
+        if (t == 0 || m == 0) {
+            return x == target ? 1 : 0;
+        }
+        for (int y : g[x]) {
+            if (y != p) {
+                long value = dfs(y, t - 1, x);
+                if (value != 0) {
+                    return value * m;
+                }
+            }
+        }
+        return 0;
+    }
+}

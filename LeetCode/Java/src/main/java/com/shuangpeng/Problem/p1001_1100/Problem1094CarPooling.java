@@ -27,7 +27,10 @@ public class Problem1094CarPooling {
     }
 
     public boolean carPooling(int[][] trips, int capacity) {
-        int N = 1000;
+        int N = 0;
+        for (int[] t : trips) {
+            N = Math.max(N, t[2]);
+        }
         int[] diff = new int[N + 1];
         for (int[] t : trips) {
             diff[t[1]] += t[0];

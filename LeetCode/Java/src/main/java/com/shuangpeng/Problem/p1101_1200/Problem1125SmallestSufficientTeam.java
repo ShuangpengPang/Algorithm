@@ -142,6 +142,36 @@ public class Problem1125SmallestSufficientTeam {
         return dp[(m - 1) & 1][N - 1].stream().mapToInt(Integer::intValue).toArray();
     }
 
+    public int[] smallestSufficientTeam3(String[] req_skills, List<List<String>> people) {
+        int n = req_skills.length, N = 1 << n;
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            map.put(req_skills[i], i);
+        }
+        List<Integer>[] dp = new List[N];
+        dp[0] = new ArrayList<>();
+        for (int i = 0; i < people.size(); i++) {
+            int h = 0;
+            for (String s : people.get(i)) {
+                h |= 1 << map.get(s);
+            }
+            for (int j = 0; j < N; j++) {
+                if (dp[j] != null) {
+                    int k = j | h;
+                    if (dp[k] == null || dp[k].size() > dp[j].size() + 1) {
+                        if (dp[k] == null) {
+                            dp[k] = new ArrayList<>();
+                        }
+                        dp[k].clear();
+                        dp[k].addAll(dp[j]);
+                        dp[k].add(i);
+                    }
+                }
+            }
+        }
+        return dp[N - 1].stream().mapToInt(Integer::intValue).toArray();
+    }
+
     public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
         int n = req_skills.length, m = people.size(), N = 1 << n;
         Map<String, Integer> map = new HashMap<>();

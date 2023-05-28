@@ -1,8 +1,12 @@
 package com.shuangpeng.competition.第271到280场周赛.第271场周赛;
 
+/**
+ * @description: 摘水果
+ * @date 2023/5/28 8:24 PM
+ **/
 public class Problem2106MaximumFruitsHarvestedAfterAtMostKSteps {
 
-    public int maxTotalFruits(int[][] fruits, int startPos, int k) {
+    public int maxTotalFruits0(int[][] fruits, int startPos, int k) {
         int n = fruits.length;
         int[] preSum = new int[n + 1];
         for (int i = 0; i < n; ++i) {
@@ -43,5 +47,18 @@ public class Problem2106MaximumFruitsHarvestedAfterAtMostKSteps {
             }
         }
         return left;
+    }
+
+    public int maxTotalFruits(int[][] fruits, int startPos, int k) {
+        int n = fruits.length, ans = 0;
+        for (int i = 0, j = 0, cnt = 0; i < n && j < n; i++) {
+            int p = fruits[i][0], d = Math.abs(p - startPos);
+            while (j < n && Math.min(d, Math.abs(fruits[j][0] - startPos)) + fruits[j][0] - p <= k) {
+                cnt += fruits[j++][1];
+                ans = Math.max(ans, cnt);
+            }
+            cnt -= fruits[i][1];
+        }
+        return ans;
     }
 }

@@ -1,8 +1,12 @@
 package com.shuangpeng.Problem.p1101_1200;
 
+/**
+ * @description: 叶值的最小代价生成树
+ * @date 2023/5/31 2:53 PM
+ **/
 public class Problem1130MinimumCostTreeFromLeafValues {
 
-    public int mctFromLeafValues(int[] arr) {
+    public int mctFromLeafValues0(int[] arr) {
         int n = arr.length;
         int[][] dp = new int[n][n];
         int[][] maxes = new int[n][n];
@@ -22,6 +26,22 @@ public class Problem1130MinimumCostTreeFromLeafValues {
             }
         }
         return dp[0][n - 1];
+    }
+
+    public int mctFromLeafValues(int[] arr) {
+        int n = arr.length;
+        int[][][] dp = new int[n][n][2];
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i][i][0] = arr[i];
+            for (int j = i + 1; j < n; j++) {
+                dp[i][j][0] = Math.max(dp[i][j - 1][0], arr[j]);
+                dp[i][j][1] = Integer.MAX_VALUE;
+                for (int k = i; k < j; k++) {
+                    dp[i][j][1] = Math.min(dp[i][j][1], dp[i][k][1] + dp[k + 1][j][1] + dp[i][k][0] * dp[k + 1][j][0]);
+                }
+            }
+        }
+        return dp[0][n - 1][1];
     }
 
 //    public static void main(String[] args) {

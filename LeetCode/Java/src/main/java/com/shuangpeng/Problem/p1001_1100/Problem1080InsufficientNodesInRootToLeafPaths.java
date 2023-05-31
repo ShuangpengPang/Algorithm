@@ -11,28 +11,20 @@ import com.shuangpeng.common.TreeNode;
 public class Problem1080InsufficientNodesInRootToLeafPaths {
 
     public TreeNode sufficientSubset(TreeNode root, int limit) {
-        if (dfs(root, 0, limit) < limit) {
-            return null;
-        }
-        return root;
+        return dfs(root, 0, limit) < limit ? null : root;
     }
 
     private int dfs(TreeNode root, int sum, int limit) {
         if (root == null) {
-            return Integer.MIN_VALUE;
+            return Integer.MIN_VALUE >> 1;
         }
         sum += root.val;
         if (root.left == null && root.right == null) {
             return sum;
         }
-        int left = dfs(root.left, sum, limit);
-        int right = dfs(root.right, sum, limit);
-        if (left < limit) {
-            root.left = null;
-        }
-        if (right < limit) {
-            root.right = null;
-        }
+        int left = dfs(root.left, sum, limit), right = dfs(root.right, sum, limit);
+        root.left = left < limit ? null : root.left;
+        root.right = right < limit ? null : root.right;
         return Math.max(left, right);
     }
 }

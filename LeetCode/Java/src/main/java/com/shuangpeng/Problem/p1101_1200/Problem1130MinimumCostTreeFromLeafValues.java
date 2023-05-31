@@ -73,7 +73,7 @@ public class Problem1130MinimumCostTreeFromLeafValues {
         for (int num : arr) {
             while (q.peek() <= num) {
                 int x = q.pop();
-                ans += x * (q.peek() > num ? num : q.peek());
+                ans += x * Math.min(num, q.peek());
             }
             q.push(num);
         }

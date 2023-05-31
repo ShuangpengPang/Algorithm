@@ -39,15 +39,16 @@ public class Problem1090LargestValuesFromLabels {
         Arrays.setAll(ids, i -> i);
         Arrays.sort(ids, (a, b) -> values[b] - values[a]);
         Map<Integer, Integer> count = new HashMap<>();
-        int s = 0;
-        for (int i = 0, cnt = 0; cnt < numWanted && i < n; i++) {
-            int id = ids[i], l = labels[id];
-            if (count.getOrDefault(l, 0) < useLimit) {
-                s += values[id];
-                count.merge(l, 1, Integer::sum);
-                cnt++;
+        int ans = 0;
+        for (int i = 0; i < n && numWanted > 0; i++) {
+            int id = ids[i], label = labels[id];
+            int cnt = count.getOrDefault(label, 0) + 1;
+            if (cnt <= useLimit) {
+                ans += values[id];
+                count.put(label, cnt);
+                numWanted--;
             }
         }
-        return s;
+        return ans;
     }
 }

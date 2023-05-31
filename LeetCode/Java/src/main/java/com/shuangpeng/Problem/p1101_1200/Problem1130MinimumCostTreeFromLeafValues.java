@@ -1,6 +1,8 @@
 package com.shuangpeng.Problem.p1101_1200;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -47,7 +49,7 @@ public class Problem1130MinimumCostTreeFromLeafValues {
         return dp[0][n - 1][1];
     }
 
-    public int mctFromLeafValues(int[] arr) {
+    public int mctFromLeafValues2(int[] arr) {
         List<Integer> stack = new ArrayList<>();
         int ans = 0;
         for (int num : arr) {
@@ -60,6 +62,23 @@ public class Problem1130MinimumCostTreeFromLeafValues {
         }
         for (int i = stack.size() - 1; i > 0; i--) {
             ans += stack.get(i) * stack.get(i - 1);
+        }
+        return ans;
+    }
+
+    public int mctFromLeafValues(int[] arr) {
+        int ans = 0;
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(Integer.MAX_VALUE);
+        for (int num : arr) {
+            while (q.peek() <= num) {
+                int x = q.pop();
+                ans += x * (q.peek() > num ? num : q.peek());
+            }
+            q.push(num);
+        }
+        while (q.size() > 2) {
+            ans += q.pop() * q.peek();
         }
         return ans;
     }

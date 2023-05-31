@@ -91,6 +91,25 @@ public class Problem0373FindKPairsWithSmallestSums {
         return cnt;
     }
 
+//    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+//        int n1 = nums1.length, n2 = nums2.length;
+//        k = (int) Math.min(k, (long) n1 * n2);
+//        int[] next = new int[n1];
+//        List<List<Integer>> ans = new ArrayList<>(k);
+//        for (int i = 0; i < k; i++) {
+//            int sum = Integer.MAX_VALUE;
+//            int t = 0;
+//            for (int j = 0; j < n1; j++) {
+//                if (next[j] < n2 && nums1[j] + nums2[next[j]] < sum) {
+//                    t = j;
+//                    sum = nums1[j] + nums2[next[j]];
+//                }
+//            }
+//            ans.add(Arrays.asList(nums1[t], nums2[next[t]++]));
+//        }
+//        return ans;
+//    }
+
     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
         int n1 = nums1.length, n2 = nums2.length, m = Math.min(n1, k);
         PriorityQueue<int[]> pq = new PriorityQueue<>(k, Comparator.comparingInt(a -> nums1[a[0]] + nums2[a[1]]));

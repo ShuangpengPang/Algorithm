@@ -2,6 +2,7 @@ package com.shuangpeng.Problem.p1101_1200;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * @author ShuangPengPang
@@ -60,4 +61,34 @@ public class Problem1146SnapshotArray {
  * int param_2 = obj.snap();
  * int param_3 = obj.get(index,snap_id);
  */
+}
+
+class Problem1146SnapshotArray0 {
+
+    class SnapshotArray {
+
+        TreeMap<Integer, Integer>[] arr;
+        int snapId;
+
+        public SnapshotArray(int length) {
+            snapId = 0;
+            arr = new TreeMap[length];
+            for (int i = 0; i < length; i++) {
+                arr[i] = new TreeMap<>();
+                arr[i].put(0, 0);
+            }
+        }
+
+        public void set(int index, int val) {
+            arr[index].put(snapId, val);
+        }
+
+        public int snap() {
+            return snapId++;
+        }
+
+        public int get(int index, int snap_id) {
+            return arr[index].floorEntry(snap_id).getValue();
+        }
+    }
 }

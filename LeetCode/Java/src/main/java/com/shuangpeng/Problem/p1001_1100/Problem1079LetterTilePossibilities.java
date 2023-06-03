@@ -128,6 +128,7 @@ class Problem1079LetterTilePossibilities3 {
 
     static final int N = 8;
     static int[][] c = new int[8][N];
+
     static {
         for (int i = 0; i < 8; i++) {
             c[i][0] = c[i][i] = 1;
@@ -163,27 +164,30 @@ class Problem1079LetterTilePossibilities3 {
 
 class Problem1079LetterTilePossibilities4 {
 
-    class Trie{
+    class Trie {
         Trie children[];
-        public Trie(){
-            children=new Trie[26];
+
+        public Trie() {
+            children = new Trie[26];
         }
     }
 
-    int ans=0;
+    int ans = 0;
+
     public int numTilePossibilities(String tiles) {
-        find(0,new Trie(),tiles);
+        find(0, new Trie(), tiles);
         return ans;
     }
-    void find(int mask,Trie trie,String t){
-        for(int i=0;i<t.length();i++){
-            if((mask>>i&1)==0){
-                int a=t.charAt(i)-'A';
-                if(trie.children[a]==null){
+
+    void find(int mask, Trie trie, String t) {
+        for (int i = 0; i < t.length(); i++) {
+            if ((mask >> i & 1) == 0) {
+                int a = t.charAt(i) - 'A';
+                if (trie.children[a] == null) {
                     ans++;
-                    trie.children[a]=new Trie();
+                    trie.children[a] = new Trie();
                 }
-                find(mask^(1<<i),trie.children[a],t);
+                find(mask ^ (1 << i), trie.children[a], t);
             }
         }
     }

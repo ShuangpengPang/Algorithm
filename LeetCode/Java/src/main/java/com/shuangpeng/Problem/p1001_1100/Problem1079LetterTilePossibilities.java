@@ -100,6 +100,32 @@ class Problem1079LetterTilePossibilities1 {
 
 class Problem1079LetterTilePossibilities2 {
 
+    public int numTilePossibilities(String tiles) {
+        int[] cnt = new int[26];
+        for (char c : tiles.toCharArray()) {
+            cnt[c - 'A']++;
+        }
+        return dfs(cnt, tiles.length(), false);
+    }
+
+    private int dfs(int[] cnt, int n, boolean hasData) {
+        if (n == 0) {
+            return hasData ? 1 : 0;
+        }
+        int ans = hasData ? 0 : dfs(cnt, n - 1, false);
+        for (int i = 0; i < 26; i++) {
+            if (cnt[i] > 0) {
+                cnt[i]--;
+                ans += dfs(cnt, n - 1, true);
+                cnt[i]++;
+            }
+        }
+        return ans;
+    }
+}
+
+class Problem1079LetterTilePossibilities3 {
+
     static final int N = 8;
     static int[][] c = new int[8][N];
     static {

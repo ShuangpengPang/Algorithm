@@ -19,8 +19,8 @@ public class Problem1073AddingTwoNegabinaryNumbers {
             if (j >= 0) {
                 carry += arr2[j];
             }
-            arr[idx] = carry % (-2) == 0 ? 0 : 1;
-            carry = (carry - arr[idx]) / (-2);
+            arr[idx] = carry & 1;
+            carry = (carry - arr[idx]) / -2;
         }
         int i = 0;
         while (i < n - 1 && arr[i] == 0) {

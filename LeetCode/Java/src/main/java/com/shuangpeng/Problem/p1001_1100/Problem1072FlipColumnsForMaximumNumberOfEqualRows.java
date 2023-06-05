@@ -29,32 +29,61 @@ public class Problem1072FlipColumnsForMaximumNumberOfEqualRows {
 class Problem1072FlipColumnsForMaximumNumberOfEqualRows0 {
 
     class Trie {
-        Trie left, right;
-        int cnt;
+        Trie[] tries = new Trie[2];
+        int count;
     }
 
     public int maxEqualRowsAfterFlips(int[][] matrix) {
         Trie root = new Trie();
-        int m = matrix.length, n = matrix[0].length;
-        int ans = 0;
+        int m = matrix.length, n = matrix[0].length, ans = 0;
         for (int i = 0; i < m; i++) {
             Trie trie = root;
             for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == matrix[i][0]) {
-                    if (trie.left == null) {
-                        trie.left = new Trie();
-                    }
-                    trie = trie.left;
-                } else {
-                    if (trie.right == null) {
-                        trie.right = new Trie();
-                    }
-                    trie = trie.right;
+                int num = matrix[i][j] ^ matrix[i][0];
+                if (trie.tries[num] == null) {
+                    trie.tries[num] = new Trie();
                 }
+                trie = trie.tries[num];
             }
-            trie.cnt++;
-            ans = Math.max(ans, trie.cnt);
+            trie.count++;
+            ans = Math.max(ans, trie.count);
         }
         return ans;
+    }
+}
+
+class Problem1072FlipColumnsForMaximumNumberOfEqualRows1 {
+
+    public int maxEqualRowsAfterFlips(int[][] matrix) {
+
+        int len = matrix.length;
+        int[] index = new int[len];
+        for (int i = 0; i < len; i++) {
+            index[i] = i;
+        }
+        return radixSort(matrix, index, 0, len - 1, 1);
+    }
+
+    // base on the first element at each line
+    public int radixSort(int[][] arr, int[] index, int start, int end, int cur) {
+        if (start > end) return 0;
+        if (cur == arr[0].length) return end - start + 1;
+
+        int i = start, j = end;
+
+        while (i <= j) {
+            while(i <= j && arr[index[i]][cur] == arr[index[i]][0]) i++;
+            while(i <= j && arr[index[j]][cur] != arr[index[j]][0]) j--;
+            if (i > j) break;
+            // Swap.
+            int temp = index[i];
+            index[i] = index[j];
+            index[j] = temp;
+        }
+
+        return Math.max(
+                radixSort(arr, index, start, j, cur + 1),
+                radixSort(arr, index, i, end, cur + 1)
+        );
     }
 }

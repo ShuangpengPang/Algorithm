@@ -49,7 +49,7 @@ public class Problem2106MaximumFruitsHarvestedAfterAtMostKSteps {
         return left;
     }
 
-    public int maxTotalFruits(int[][] fruits, int startPos, int k) {
+    public int maxTotalFruits1(int[][] fruits, int startPos, int k) {
         int n = fruits.length, ans = 0;
         for (int i = 0, j = 0, cnt = 0; i < n && j < n; i++) {
             int p = fruits[i][0], d = Math.abs(p - startPos);
@@ -58,6 +58,19 @@ public class Problem2106MaximumFruitsHarvestedAfterAtMostKSteps {
                 ans = Math.max(ans, cnt);
             }
             cnt -= fruits[i][1];
+        }
+        return ans;
+    }
+
+    public int maxTotalFruits(int[][] fruits, int startPos, int k) {
+        int n = fruits.length, ans = 0;
+        for (int i = 0, j = 0, s = 0; i < n; i++) {
+            s += fruits[i][1];
+            int p = fruits[i][0], d = Math.abs(startPos - p);
+            while (j <= i && Math.min(d, Math.abs(startPos - fruits[j][0])) + p - fruits[j][0] > k) {
+                s -= fruits[j++][1];
+            }
+            ans = Math.max(ans, s);
         }
         return ans;
     }

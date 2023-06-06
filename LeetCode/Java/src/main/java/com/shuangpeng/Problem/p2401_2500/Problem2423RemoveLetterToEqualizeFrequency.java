@@ -9,19 +9,19 @@ package com.shuangpeng.Problem.p2401_2500;
 public class Problem2423RemoveLetterToEqualizeFrequency {
 
     public boolean equalFrequency(String word) {
+        int min = Integer.MAX_VALUE, max = 0;
         int[] cnt = new int[26];
-        int n = word.length();
-        for (int i = 0; i < n; i++) {
-            cnt[word.charAt(i) - 'a']++;
+        for (char c : word.toCharArray()) {
+            cnt[c - 'a']++;
         }
-        int count = 0, a = n, b = 0;
+        int n = word.length(), count = 0;
         for (int c : cnt) {
             if (c > 0) {
                 count++;
-                a = Math.min(a, c);
-                b = Math.max(b, c);
+                min = Math.min(min, c);
+                max = Math.max(max, c);
             }
         }
-        return b == 1 || b - a <= 1 && (b - 1) * count == n - 1 || a == 1 && b * (count - 1) == n - 1;
+        return min == 1 && n - 1 == (count - 1) * max || max - min <= 1 && n - 1 == count * (max - 1);
     }
 }

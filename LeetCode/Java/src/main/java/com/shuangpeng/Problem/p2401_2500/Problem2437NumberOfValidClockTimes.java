@@ -142,29 +142,21 @@ class Problem2437NumberOfValidClockTimes1 {
     public int countTime(String time) {
         char h1 = time.charAt(0), h2 = time.charAt(1);
         char m1 = time.charAt(3), m2 = time.charAt(4);
-        int c1 = 0, c2 = 0;
+        int cnt1 = 0, cnt2 = 0;
         if (h1 == '?' && h2 == '?') {
-            c1 = 24;
+            cnt1 = 24;
         } else if (h1 == '?') {
-            c1 = h2 < '4' ? 3 : 2;
+            cnt1 = h2 <= '3' ? 3 : 2;
         } else if (h2 == '?') {
-            if (h1 <= '2') {
-                c1 = h1 < '2' ? 10 : 4;
-            }
-        } else if ((h1 - '0') * 10 + h2 - '0' < 24) {
-            c1 = 1;
+            cnt1 = h1 == '2' ? 4 : (h1 < '2' ? 10 : 0);
+        } else if (h1 <= '2') {
+            cnt1 = h2 <= '3' || h1 != '2' ? 1 : 0;
         }
-        if (m1 == '?' && m2 == '?') {
-            c2 = 60;
-        } else if (m1 == '?') {
-            c2 = 6;
-        } else if (m2 == '?') {
-            if (m1 < '6') {
-                c2 = 10;
-            }
-        } else if ((m1 - '0') * 10 + m2 - '0' < 60) {
-            c2 = 1;
+        if (m1 == '?') {
+            cnt2 = m2 == '?' ? 60 : 6;
+        } else if (m1 <= '5') {
+            cnt2 = m2 == '?' ? 10 : 1;
         }
-        return c1 * c2;
+        return cnt1 * cnt2;
     }
 }

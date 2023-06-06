@@ -49,25 +49,6 @@ public class Problem1040MovingStonesUtilConsecutiveII {
         return new int[]{min, Math.max(stones[n - 1] - stones[1], stones[n - 2] - stones[0]) - n + 2};
     }
 
-    public int[] numMovesStonesII2(int[] stones) {
-        int n = stones.length, min = n;
-        Arrays.sort(stones);
-        for (int i = 0, j = 0; j < n; i++) {
-            while (j < n && stones[j] < stones[i] + n) {
-                j++;
-            }
-            int cnt = n - (j - i);
-            if (cnt == 1) {
-                if (stones[i] + n - 1 == stones[j - 1]) {
-                    min = Math.min(min, 1);
-                }
-            } else {
-                min = Math.min(min, cnt);
-            }
-        }
-        return new int[]{min, Math.max(stones[n - 1] - stones[1], stones[n - 2] - stones[0]) - n + 2};
-    }
-
     public int[] numMovesStonesII(int[] stones) {
         Arrays.sort(stones);
         int n = stones.length;

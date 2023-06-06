@@ -417,31 +417,68 @@ class Problem1187MakeArrayStrictlyIncreasing6 {
 
     public int makeArrayIncreasing(int[] arr1, int[] arr2) {
         Arrays.sort(arr2);
-        List<Integer> list = new ArrayList<>(arr2.length);
-        int prev = -1;
-        for (int num : arr2) {
-            if (num != prev) {
-                list.add(num);
-                prev = num;
-            }
-        }
-        int INF = Integer.MAX_VALUE >> 1, n = arr1.length;
-        int[] dp = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            int num = i < n ? arr1[i] : INF;
-            int p = binarySearch(list, num), count = p + 1 >= i ? i : INF;
-            if (arr1[i - 1] < num) {
-                count = Math.min(count, dp[i - 1]);
-            }
-            for (int j = 1; j < i && j <= p + 1; j++) {
-                int k = i - j - 1;
-                if (arr1[k] < list.get(p - j + 1)) {
-                    count = Math.min(count, dp[k] + j);
+        int n = arr1.length, m = Math.min(n, arr2.length), N = Integer.MAX_VALUE >> 1;
+        int[] dp = new int[m + 1];
+        Arrays.fill(dp, N);
+        dp[0] = -N;
+        for (int i = 0; i < n; i++) {
+            for (int j = Math.min(i + 1, m); j >= 0; j--) {
+                dp[j] = dp[j] < arr1[i] ? arr1[i] : N;
+                if (j > 0 && dp[j - 1] < dp[j]) {
+                    dp[j] = Math.min(dp[j], binarySearch(arr2, dp[j - 1]));
                 }
             }
-            dp[i] = count;
         }
-        return dp[n] == INF ? -1 : dp[n];
+        for (int i = 0; i <= m; i++) {
+            if (dp[i] != N) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int binarySearch(int[] arr, int num) {
+        int left = 0, right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[mid] <= num) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left == arr.length ? Integer.MAX_VALUE >> 1 : arr[left];
+    }
+}
+
+class Problem1187MakeArrayStrictlyIncreasing7 {
+
+    public int makeArrayIncreasing(int[] arr1, int[] arr2) {
+        Arrays.sort(arr2);
+        List<Integer> list = new ArrayList<>(arr2.length);
+        for (int i = 0, p = -1; i < arr2.length; i++) {
+            if (arr2[i] != p) {
+                p = arr2[i];
+                list.add(p);
+            }
+        }
+        int n = arr1.length, m = list.size(), N = Integer.MAX_VALUE >> 1;
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int num = i < n ? arr1[i] : N;
+            int idx = binarySearch(list, num);
+            int cnt = idx >= i ? i : N;
+            if (arr1[i - 1] < num) {
+                cnt = Math.min(cnt, dp[i - 1]);
+            }
+            for (int j = i - 2, k = idx - 1; j >= 0 && k >= 0; j--, k--) {
+                if (arr1[j] < list.get(k)) {
+                    cnt = Math.min(cnt, dp[j] + idx - k);
+                }
+            }
+            dp[i] = cnt;
+        }
+        return dp[n] == N ? -1 : dp[n];
     }
 
     private int binarySearch(List<Integer> list, int num) {
@@ -454,6 +491,6 @@ class Problem1187MakeArrayStrictlyIncreasing6 {
                 right = mid - 1;
             }
         }
-        return left - 1;
+        return left;
     }
 }

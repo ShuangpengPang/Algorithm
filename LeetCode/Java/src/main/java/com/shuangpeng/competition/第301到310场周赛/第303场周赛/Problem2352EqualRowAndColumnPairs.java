@@ -30,7 +30,7 @@ public class Problem2352EqualRowAndColumnPairs {
         return ans;
     }
 
-    public int equalPairs(int[][] grid) {
+    public int equalPairs1(int[][] grid) {
         int n = grid.length;
         Map<String, Integer> map1 = new HashMap<>(), map2 = new HashMap<>();
         for (int i = 0; i < n; i++) {
@@ -46,6 +46,32 @@ public class Problem2352EqualRowAndColumnPairs {
         int ans = 0;
         for (String s : map1.keySet()) {
             ans += map1.get(s) * map2.getOrDefault(s, 0);
+        }
+        return ans;
+    }
+
+    class Trie {
+        Map<Integer, Trie> tries = new HashMap<>();
+        int count;
+    }
+
+    public int equalPairs(int[][] grid) {
+        Trie root = new Trie();
+        int n = grid.length;
+        for (int i = 0; i < n; i++) {
+            Trie trie = root;
+            for (int j = 0; j < n; j++) {
+                trie = trie.tries.computeIfAbsent(grid[i][j], k -> new Trie());
+            }
+            trie.count++;
+        }
+        int ans = 0;
+        for (int j = 0; j < n; j++) {
+            Trie trie = root;
+            for (int i = 0; i < n && trie != null; i++) {
+                trie = trie.tries.get(grid[i][j]);
+            }
+            ans += trie == null ? 0 : trie.count;
         }
         return ans;
     }

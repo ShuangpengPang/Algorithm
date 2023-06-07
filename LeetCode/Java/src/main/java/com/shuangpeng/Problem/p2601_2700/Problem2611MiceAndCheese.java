@@ -11,6 +11,23 @@ import java.util.PriorityQueue;
  */
 public class Problem2611MiceAndCheese {
 
+    public int miceAndCheese0(int[] reward1, int[] reward2, int k) {
+        if (k == 0) {
+            return Arrays.stream(reward2).sum();
+        }
+        int n = reward1.length, sum = 0;
+        Integer[] diff = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            sum += reward2[i];
+            diff[i] = reward1[i] - reward2[i];
+        }
+        Arrays.sort(diff, (a, b) -> b - a);
+        for (int i = 0; i < k; i++) {
+            sum += diff[i];
+        }
+        return sum;
+    }
+
     public int miceAndCheese(int[] reward1, int[] reward2, int k) {
         if (k == 0) {
             return Arrays.stream(reward2).sum();

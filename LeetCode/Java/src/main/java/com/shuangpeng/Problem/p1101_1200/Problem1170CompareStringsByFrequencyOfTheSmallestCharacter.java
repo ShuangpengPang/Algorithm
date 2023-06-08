@@ -52,3 +52,36 @@ public class Problem1170CompareStringsByFrequencyOfTheSmallestCharacter {
         return f;
     }
 }
+
+class Problem1170CompareStringsByFrequencyOfTheSmallestCharacter0 {
+
+    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+        int[] cnt = new int[12];
+        for (String w : words) {
+            cnt[getFreq(w)]++;
+        }
+        for (int i = 9; i >= 0; i--) {
+            cnt[i] += cnt[i + 1];
+        }
+        int n = queries.length;
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[i] = cnt[getFreq(queries[i]) + 1];
+        }
+        return ans;
+    }
+
+    private int getFreq(String w) {
+        char c = 'z';
+        int freq = 0;
+        for (char ch : w.toCharArray()) {
+            if (ch < c) {
+                c = ch;
+                freq = 1;
+            } else if (ch == c) {
+                freq++;
+            }
+        }
+        return freq;
+    }
+}

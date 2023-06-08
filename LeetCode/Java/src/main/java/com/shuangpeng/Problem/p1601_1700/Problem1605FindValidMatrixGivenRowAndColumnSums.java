@@ -25,17 +25,16 @@ public class Problem1605FindValidMatrixGivenRowAndColumnSums {
     public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
         int m = rowSum.length, n = colSum.length;
         int[][] ans = new int[m][n];
-        int i = 0, j = 0;
-        while (i < m && j < n) {
-            int num = Math.min(rowSum[i], colSum[j]);
-            ans[i][j] = num;
-            rowSum[i] -= num;
-            colSum[j] -= num;
-            if (rowSum[i] == 0) {
-                i++;
-            }
-            if (colSum[j] == 0) {
-                j++;
+        int r = 0, c = 0;
+        while (r < m && c < n) {
+            if (rowSum[r] <= colSum[c]) {
+                ans[r][c] = rowSum[r];
+                colSum[c] -= rowSum[r];
+                r++;
+            } else {
+                ans[r][c] = colSum[c];
+                rowSum[r] -= colSum[c];
+                c++;
             }
         }
         return ans;

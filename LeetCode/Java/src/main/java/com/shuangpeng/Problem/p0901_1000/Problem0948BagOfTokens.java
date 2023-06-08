@@ -43,22 +43,6 @@ public class Problem0948BagOfTokens {
         return ans;
     }
 
-    public int bagOfTokensScore2(int[] tokens, int power) {
-        Arrays.sort(tokens);
-        int left = 0, right = tokens.length - 1, score = 0, ans = 0;
-        while (left <= right && (power >= tokens[left] || score > 0)) {
-            if (power >= tokens[left]) {
-                power -= tokens[left++];
-                score++;
-                ans = Math.max(ans, score);
-            } else {
-                power += tokens[right--];
-                score--;
-            }
-        }
-        return ans;
-    }
-
     public int bagOfTokensScore3(int[] tokens, int power) {
         Arrays.sort(tokens);
         int left = 0, right = tokens.length - 1, ans = 0;
@@ -86,6 +70,7 @@ public class Problem0948BagOfTokens {
             ans = Math.max(ans, r - i);
             power += tokens[--j];
         }
+        //  1100   1001
         return ans;
     }
 }

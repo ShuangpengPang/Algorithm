@@ -50,12 +50,12 @@ public class Problem0501FindModeInBinarySearchTree {
     }
 
     public int[] findMode(TreeNode root) {
-        int prev = Integer.MIN_VALUE, maxFreq = 0, freq = 0;
-        TreeNode node = root;
         List<Integer> ans = new ArrayList<>();
+        int count = 0, maxCount = 0, pre = Integer.MIN_VALUE;
+        TreeNode node = root;
         while (node != null) {
-            if (node.left != null) {
-                TreeNode cur = node.left;
+            TreeNode cur = node.left;
+            if (cur != null) {
                 while (cur.right != null && cur.right != node) {
                     cur = cur.right;
                 }
@@ -63,22 +63,18 @@ public class Problem0501FindModeInBinarySearchTree {
                     cur.right = node;
                     node = node.left;
                     continue;
+                } else {
+                    cur.right = null;
                 }
-                cur.right = null;
             }
-            int val = node.val;
-            if (prev == val) {
-                freq++;
-            } else {
-                prev = val;
-                freq = 1;
-            }
-            if (freq >= maxFreq) {
-                if (freq > maxFreq) {
-                    maxFreq = freq;
+            count = node.val == pre ? count + 1 : 1;
+            pre = node.val;
+            if (count >= maxCount) {
+                if (count > maxCount) {
+                    maxCount = count;
                     ans.clear();
                 }
-                ans.add(val);
+                ans.add(node.val);
             }
             node = node.right;
         }
@@ -89,32 +85,27 @@ public class Problem0501FindModeInBinarySearchTree {
 class Problem0501FindModeInBinarySearchTree0 {
 
     public int[] findMode(TreeNode root) {
-        int prev = Integer.MIN_VALUE, freq = 0, maxFreq = 0;
         List<Integer> ans = new ArrayList<>();
-        Deque<TreeNode> stack = new ArrayDeque<>();
+        int count = 0, maxCount = 0, pre = Integer.MIN_VALUE;
+        Deque<TreeNode> q = new ArrayDeque<>();
         TreeNode node = root;
-        while (node != null || !stack.isEmpty()) {
+        while (node != null || !q.isEmpty()) {
             if (node != null) {
-                stack.push(node);
+                q.push(node);
                 node = node.left;
-                continue;
-            }
-            node = stack.pop();
-            int val = node.val;
-            if (val == prev) {
-                freq++;
             } else {
-                prev = val;
-                freq = 1;
-            }
-            if (freq >= maxFreq) {
-                if (freq > maxFreq) {
-                    maxFreq = freq;
-                    ans.clear();
+                node = q.pop();
+                count = node.val == pre ? count + 1 : 1;
+                pre = node.val;
+                if (count >= maxCount) {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        ans.clear();
+                    }
+                    ans.add(node.val);
                 }
-                ans.add(val);
+                node = node.right;
             }
-            node = node.right;
         }
         return ans.stream().mapToInt(Integer::intValue).toArray();
     }

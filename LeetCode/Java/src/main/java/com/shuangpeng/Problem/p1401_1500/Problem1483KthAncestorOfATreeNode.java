@@ -1,6 +1,9 @@
 package com.shuangpeng.Problem.p1401_1500;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * @Description: Problem1483KthAncestorOfATreeNode（树节点的第K个祖先）
@@ -86,29 +89,108 @@ public class Problem1483KthAncestorOfATreeNode {
  */
 }
 
-class TreeAncestor {
-    private int[][] ST;
+class Problem1483KthAncestorOfATreeNode0 {
 
-    public TreeAncestor(int n, int[] parent) {
-        int maxIteration = 32 - Integer.numberOfLeadingZeros(n - 1);
-        ST = new int[n][maxIteration];
-        for (int i = 0; i < n; ++i){
-            ST[i][0] = parent[i];
+    class TreeAncestor {
+
+        List<Integer>[] g;
+        int index;
+        int[] levelMap, ids;
+        List<TreeMap<Integer, Integer>> list;
+
+        public TreeAncestor(int n, int[] parent) {
+            index = 0;
+            g = new List[n];
+            list = new ArrayList<>();
+            levelMap = new int[n];
+            ids = new int[n];
+            Arrays.setAll(g, i -> new ArrayList<>());
+            for (int i = 0; i < n; i++) {
+                if (parent[i] != -1) {
+                    g[parent[i]].add(i);
+                }
+            }
+            dfs(0, 0);
         }
-        for (int i = 0; i < n; ++i){
-            for (int j = 1; j < maxIteration; ++j){
-                ST[i][j] = ST[i][j - 1] == -1 ? -1 : ST[ST[i][j - 1]][j - 1];
+
+        public int getKthAncestor(int node, int k) {
+            int level = levelMap[node] - k;
+            if (level < 0) {
+                return -1;
+            }
+            return list.get(level).floorEntry(ids[node]).getValue();
+        }
+
+        private void dfs(int x, int level) {
+            if (list.size() == level) {
+                list.add(new TreeMap<>());
+            }
+            levelMap[x] = level;
+            ids[x] = index;
+            TreeMap<Integer, Integer> map = list.get(level);
+            map.put(index++, x);
+            for (int y : g[x]) {
+                dfs(y, level + 1);
             }
         }
     }
+}
 
-    public int getKthAncestor(int node, int k) {
-        if (node == -1 || k == 0){
+class Problem1483KthAncestorOfATreeNode1 {
+
+    class TreeAncestor {
+
+        int[][] dp;
+
+        public TreeAncestor(int n, int[] parent) {
+            int m = 32 - Integer.numberOfLeadingZeros(n);
+            dp = new int[n][m];
+            for (int i = 0; i < n; i++) {
+                Arrays.fill(dp[i], -1);
+                dp[i][0] = parent[i];
+            }
+            for (int i = 1; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dp[j][i - 1] != -1) {
+                        dp[j][i] = dp[dp[j][i - 1]][i - 1];
+                    }
+                }
+            }
+        }
+
+        public int getKthAncestor(int node, int k) {
+            for (int i = 0; k >= 1 << i && node != -1; i++) {
+                if ((k >> i & 1) == 1) {
+                    node = dp[node][i];
+                }
+            }
             return node;
         }
-        int highestBit = Integer.highestOneBit(k);
-        int power = Integer.numberOfTrailingZeros(highestBit);
-        return getKthAncestor(ST[node][power], k & (~highestBit));
     }
 }
 
+//class TreeAncestor {
+//    private int[][] ST;
+//
+//    public TreeAncestor(int n, int[] parent) {
+//        int maxIteration = 32 - Integer.numberOfLeadingZeros(n - 1);
+//        ST = new int[n][maxIteration];
+//        for (int i = 0; i < n; ++i){
+//            ST[i][0] = parent[i];
+//        }
+//        for (int i = 0; i < n; ++i){
+//            for (int j = 1; j < maxIteration; ++j){
+//                ST[i][j] = ST[i][j - 1] == -1 ? -1 : ST[ST[i][j - 1]][j - 1];
+//            }
+//        }
+//    }
+//
+//    public int getKthAncestor(int node, int k) {
+//        if (node == -1 || k == 0){
+//            return node;
+//        }
+//        int highestBit = Integer.highestOneBit(k);
+//        int power = Integer.numberOfTrailingZeros(highestBit);
+//        return getKthAncestor(ST[node][power], k & (~highestBit));
+//    }
+//}

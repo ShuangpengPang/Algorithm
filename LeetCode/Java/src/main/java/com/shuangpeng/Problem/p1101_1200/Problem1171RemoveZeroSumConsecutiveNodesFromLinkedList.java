@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class Problem1171RemoveZeroSumConsecutiveNodesFromLinkedList {
 
-    public ListNode removeZeroSumSublists(ListNode head) {
+    public ListNode removeZeroSumSublists0(ListNode head) {
         ListNode dummy = new ListNode();
         dummy.next = head;
         Map<Integer, ListNode> map = new HashMap<>();
@@ -36,6 +36,22 @@ public class Problem1171RemoveZeroSumConsecutiveNodesFromLinkedList {
                 q.push(sum);
             }
             head = head.next;
+        }
+        return dummy.next;
+    }
+
+    public ListNode removeZeroSumSublists(ListNode head) {
+        Map<Integer, ListNode> map = new HashMap<>();
+        ListNode dummy = new ListNode(0, head);
+        int sum = 0;
+        for (ListNode node = dummy; node != null; node = node.next) {
+            sum += node.val;
+            map.put(sum, node);
+        }
+        sum = 0;
+        for (ListNode node = dummy; node != null; node = node.next) {
+            sum += node.val;
+            node.next = map.get(sum).next;
         }
         return dummy.next;
     }

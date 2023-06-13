@@ -38,7 +38,7 @@ public class Problem2475NumberOfUnequalTriplesInArray {
         return ans;
     }
 
-    public int unequalTriplets(int[] nums) {
+    public int unequalTriplets2(int[] nums) {
         int max = 0;
         for (int num : nums) {
             max = Math.max(max, num);
@@ -55,5 +55,17 @@ public class Problem2475NumberOfUnequalTriplesInArray {
             }
         }
         return ans;
+    }
+
+    public int unequalTriplets(int[] nums) {
+        int res = 0, pairs = 0, i = 1, n = nums.length;
+        int[] cnt = new int[1001];
+        cnt[nums[0]] = 1;
+        do {
+            int count = cnt[nums[i]]++, others = i - count;
+            res += pairs - count * others;
+            pairs += others;
+        } while (++i < n);
+        return res;
     }
 }

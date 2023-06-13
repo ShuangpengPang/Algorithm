@@ -8,12 +8,16 @@ package com.shuangpeng.Problem.p1201_1300;
  */
 public class Problem1227AirPlaneSeatAssignmentProbability {
 
-    public double nthPersonGetsNthSeat(int n) {
+    public double nthPersonGetsNthSeat0(int n) {
         double p = 0, ans = 1.0 / n;
         for (int i = 1; i < n; i++) {
             p += i == 1 ? 1.0 / n : (1.0 - ans) / (n - i + 1);
             ans = 1.0 - p;
         }
         return ans;
+    }
+
+    public double nthPersonGetsNthSeat(int n) {
+        return n == 1 ? 1.0 : 0.5;
     }
 }

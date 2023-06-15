@@ -33,20 +33,20 @@ public class Problem1177CanMakePalindromeFromSubstring {
     }
 
     public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
-        int n = s.length();
+        char[] cs = s.toCharArray();
+        int n = cs.length;
         int[] dp = new int[n + 1];
         for (int i = 0; i < n; i++) {
-            dp[i + 1] = dp[i] ^ (1 << (s.charAt(i) - 'a'));
+            dp[i + 1] = 1 << cs[i] - 'a' ^ dp[i];
         }
         List<Boolean> ans = new ArrayList<>(queries.length);
         for (int[] q : queries) {
-            int left = q[0], right = q[1] + 1, k = q[2];
-            int num = dp[right] ^ dp[left], cnt = 0;
+            int num = dp[q[1] + 1] ^ dp[q[0]], cnt = 0;
             while (num != 0) {
                 num &= num - 1;
                 cnt++;
             }
-            ans.add((cnt >> 1) <= k);
+            ans.add(cnt >> 1 <= q[2]);
         }
         return ans;
     }

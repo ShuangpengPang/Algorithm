@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1201_1300;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -13,7 +14,7 @@ import java.util.PriorityQueue;
  */
 public class Problem1268SearchSuggestionsSystem {
 
-    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+    public List<List<String>> suggestedProducts0(String[] products, String searchWord) {
         char[] cs = searchWord.toCharArray();
         int n = cs.length;
         List<PriorityQueue<String>> list = new ArrayList<>(n);
@@ -34,6 +35,27 @@ public class Problem1268SearchSuggestionsSystem {
             List<String> t = new ArrayList<>(list.get(i));
             t.sort(String::compareTo);
             ans.add(t);
+        }
+        return ans;
+    }
+
+    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+        Arrays.sort(products);
+        int left = 0, right = products.length - 1, n = searchWord.length();
+        List<List<String>> ans = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            char c = searchWord.charAt(i);
+            while (left <= right && (products[left].length() <= i || products[left].charAt(i) != c)) {
+                left++;
+            }
+            while (left <= right && (products[right].length() <= i || products[right].charAt(i) != c)) {
+                right--;
+            }
+            List<String> list = new ArrayList<>();
+            for (int j = left; j <= right && j < left + 3; j++) {
+                list.add(products[j]);
+            }
+            ans.add(list);
         }
         return ans;
     }

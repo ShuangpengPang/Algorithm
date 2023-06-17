@@ -1,8 +1,6 @@
 package com.shuangpeng.Problem.p1201_1300;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author ShuangPengPang
@@ -51,20 +49,20 @@ public class Problem1267CountServersThatCommunicate {
     }
 
     public int countServers(int[][] grid) {
-        int m = grid.length, n = grid[0].length, N = 250;
-        Map<Integer, Integer> map = new HashMap<>();
+        int m = grid.length, n = grid[0].length;
+        int[] cnt1 = new int[m], cnt2 = new int[n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
-                    map.merge(i, 1, Integer::sum);
-                    map.merge(N + j, 1, Integer::sum);
+                    cnt1[i]++;
+                    cnt2[j]++;
                 }
             }
         }
         int ans = 0;
-        for (int i = 0 ; i < m; i++) {
+        for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1 && (map.get(i) > 1 || map.get(N + j) > 1)) {
+                if (grid[i][j] == 1 && (cnt1[i] > 1 || cnt2[j] > 1)) {
                     ans++;
                 }
             }

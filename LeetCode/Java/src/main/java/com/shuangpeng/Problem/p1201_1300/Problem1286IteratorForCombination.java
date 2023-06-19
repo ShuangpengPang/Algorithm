@@ -62,3 +62,39 @@ public class Problem1286IteratorForCombination {
  * boolean param_2 = obj.hasNext();
  */
 }
+
+class Problem1286IteratorForCombination0 {
+
+    class CombinationIterator {
+
+        char[] cs;
+        int hash, n, m, N;
+
+        public CombinationIterator(String characters, int combinationLength) {
+            cs = characters.toCharArray();
+            m = cs.length;
+            n = combinationLength;
+            N = (1 << n) - 1;
+            hash = N << m - n;
+        }
+
+        public String next() {
+            char[] ans = new char[n];
+            for (int i = 0, j = m - 1; i < n; i++, j--) {
+                while ((hash >> j & 1) == 0) {
+                    j--;
+                }
+                ans[i] = cs[m - j - 1];
+            }
+            hash--;
+            while (hash >= N && Integer.bitCount(hash) != n) {
+                hash--;
+            }
+            return new String(ans);
+        }
+
+        public boolean hasNext() {
+            return hash >= N;
+        }
+    }
+}

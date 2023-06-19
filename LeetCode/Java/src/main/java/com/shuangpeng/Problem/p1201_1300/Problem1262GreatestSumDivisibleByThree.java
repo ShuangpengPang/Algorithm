@@ -82,8 +82,7 @@ public class Problem1262GreatestSumDivisibleByThree {
             int idx = i & 1, pre = idx ^ 1;
             int num = nums[i - 1], m = num % 3;
             for (int j = 0; j < 3; j++) {
-                int k = (3 + j - m) % 3;
-                dp[idx][j] = Math.max(dp[pre][j], dp[pre][k] + num);
+                dp[idx][j] = Math.max(dp[pre][j], dp[pre][(j + m) % 3] + num);
             }
         }
         return dp[n & 1][0];

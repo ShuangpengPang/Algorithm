@@ -11,8 +11,7 @@ public class Problem1248CountNumberOfNiceSubarrays {
     public int numberOfSubarrays(int[] nums, int k) {
         int n = nums.length, ans = 0;
         for (int i = 0, p1 = 0, p2 = 0, c = 0; i < n; i++) {
-            c = (nums[i] & 1) == 0 ? c : c + 1;
-            if (c == k) {
+            if ((nums[i] & 1) == 1 && ++c == k) {
                 p1 = p2;
                 while ((nums[p2] & 1) == 0) {
                     p2++;

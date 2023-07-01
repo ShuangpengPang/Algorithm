@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2401_2500;
  */
 public class Problem2490CircularSentence {
 
-    public boolean isCircularSentence(String sentence) {
+    public boolean isCircularSentence0(String sentence) {
         int n = sentence.length();
         if (sentence.charAt(0) != sentence.charAt(n - 1)) {
             return false;
@@ -23,6 +23,19 @@ public class Problem2490CircularSentence {
                 last = c;
             }
             prev = c;
+        }
+        return true;
+    }
+
+    public boolean isCircularSentence(String sentence) {
+        int n = sentence.length();
+        if (sentence.charAt(0) != sentence.charAt(n - 1)) {
+            return false;
+        }
+        for (int i = 1; i < n - 1; i++) {
+            if (sentence.charAt(i) == ' ' && sentence.charAt(i - 1) != sentence.charAt(i + 1)) {
+                return false;
+            }
         }
         return true;
     }

@@ -1,8 +1,14 @@
 package com.shuangpeng.Problem.p0001_0100;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @description: 两数之和
+ * @date 2023/7/1 11:58 AM
+ **/
 public class Problem0001TwoSum {
 
     public static void quickSort(int[] array, int start, int end) {
@@ -78,7 +84,7 @@ public class Problem0001TwoSum {
         return null;
     }
 
-    public int[] twoSum(int[] nums, int target) {
+    public int[] twoSum1(int[] nums, int target) {
         int n = nums.length;
         Map<Integer, Integer> map = new HashMap<>(n);
         int[] ans = new int[2];
@@ -92,6 +98,36 @@ public class Problem0001TwoSum {
             map.put(nums[i], i);
         }
         return ans;
+    }
+
+    public int[] twoSum2(int[] nums, int target) {
+        int n = nums.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, Comparator.comparingInt(i -> nums[i]));
+        for (int i = 0, j = n - 1; i < j;) {
+            int sum = nums[ids[i]] + nums[ids[j]];
+            if (sum > target) {
+                j--;
+            } else if (sum < target) {
+                i++;
+            } else {
+                return new int[]{ids[i], ids[j]};
+            }
+        }
+        return new int[2];
+    }
+
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int j = map.getOrDefault(target - nums[i], -1);
+            if (j != -1) {
+                return new int[]{j, i};
+            }
+            map.put(nums[i], i);
+        }
+        return new int[2];
     }
 
 //    public static void main(String[] args) {

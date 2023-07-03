@@ -2,9 +2,13 @@ package com.shuangpeng.Problem.p0001_0100;
 
 import com.shuangpeng.common.ListNode;
 
+/**
+ * @description: 两数相加
+ * @date 2023/7/3 3:10 PM
+ **/
 public class Problem0002AddTwoNumber {
 
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    public ListNode addTwoNumbers0(ListNode l1, ListNode l2) {
         ListNode head = null;
         ListNode current = head;
         int carryBit = 0;
@@ -29,5 +33,18 @@ public class Problem0002AddTwoNumber {
             current = node;
         }
         return head;
+    }
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode();
+        int carry = 0;
+        for (ListNode node = dummy; l1 != null || l2 != null || carry > 0; carry /= 10, node = node.next) {
+            carry += l1 == null ? 0 : l1.val;
+            carry += l2 == null ? 0 : l2.val;
+            node.next = new ListNode(carry % 10);
+            l1 = l1 == null ? null : l1.next;
+            l2 = l2 == null ? null : l2.next;
+        }
+        return dummy.next;
     }
 }

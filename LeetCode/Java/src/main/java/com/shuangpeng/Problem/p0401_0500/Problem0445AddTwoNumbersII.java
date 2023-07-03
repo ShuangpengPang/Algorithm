@@ -21,25 +21,16 @@ public class Problem0445AddTwoNumbersII {
         for (ListNode node = l2; node != null; node = node.next) {
             list2.add(node.val);
         }
-        List<Integer> list = new ArrayList<>();
+        ListNode ans = null;
         int carry = 0;
-        for (int i = list1.size() - 1, j = list2.size() - 1; i >= 0 || j >= 0; i--, j--) {
-            if (i >= 0) {
-                carry += list1.get(i);
-            }
-            if (j >= 0) {
-                carry += list2.get(j);
-            }
-            list.add(carry % 10);
+        for (int i = list1.size() - 1, j = list2.size() - 1; i >= 0 || j >= 0 || carry > 0; i--, j--) {
+            carry += i >= 0 ? list1.get(i) : 0;
+            carry += j >= 0 ? list2.get(j) : 0;
+            ListNode node = new ListNode(carry % 10);
+            node.next = ans;
+            ans = node;
             carry /= 10;
         }
-        if (carry > 0) {
-            list.add(carry);
-        }
-        ListNode dummy = new ListNode(), node = dummy;
-        for (int i = list.size() - 1; i >= 0; i--, node = node.next) {
-            node.next = new ListNode(list.get(i));
-        }
-        return dummy.next;
+        return ans;
     }
 }

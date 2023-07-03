@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2401_2500;
  */
 public class Problem2485FindThePivotNumber {
 
-    public int pivotInteger(int n) {
+    public int pivotInteger0(int n) {
         int left = 1, right = n, sum = (n + 1) * n >> 1;
         while (left <= right) {
             int mid = left + (right - left >> 1);
@@ -20,6 +20,15 @@ public class Problem2485FindThePivotNumber {
             } else {
                 return mid;
             }
+        }
+        return -1;
+    }
+
+    public int pivotInteger(int n) {
+        int num = (n + 1) * n >> 1;
+        int x = (int) Math.sqrt(num);
+        if (x * x == num) {
+            return x;
         }
         return -1;
     }

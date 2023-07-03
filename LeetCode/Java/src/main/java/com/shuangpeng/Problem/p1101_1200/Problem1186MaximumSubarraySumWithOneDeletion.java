@@ -11,7 +11,7 @@ import java.util.Deque;
  */
 public class Problem1186MaximumSubarraySumWithOneDeletion {
 
-    public int maximumSum(int[] arr) {
+    public int maximumSum0(int[] arr) {
         int n = arr.length;
         int[] preSum = new int[n + 1];
         for (int i = 0; i < n; i++) {
@@ -49,6 +49,17 @@ public class Problem1186MaximumSubarraySumWithOneDeletion {
             if (right[i] - left[i] > 1) {
                 ans = Math.max(ans, preSum[right[i]] - preSum[left[i]] - arr[i]);
             }
+        }
+        return ans;
+    }
+
+    public int maximumSum(int[] arr) {
+        int n = arr.length, ans = arr[0], delete = Integer.MIN_VALUE >> 1, sum = arr[0];
+        for (int i = 1; i < n; i++) {
+            int s = sum;
+            sum = sum > 0 ? sum + arr[i] : arr[i];
+            delete = Math.max(s, delete + arr[i]);
+            ans = Math.max(ans, Math.max(sum, delete));
         }
         return ans;
     }

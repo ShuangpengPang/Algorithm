@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1401_1500;
  */
 public class Problem1401CircleAndRectangleOverlapping {
 
-    public boolean checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+    public boolean checkOverlap0(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
         if (xCenter >= x1 && xCenter <= x2 && yCenter >= y1 && yCenter <= y2) {
             return true;
         }
@@ -31,5 +31,11 @@ public class Problem1401CircleAndRectangleOverlapping {
     private boolean check(int x1, int y1, int x2, int y2, int s) {
         int x = x1 - x2, y = y1 - y2;
         return x * x + y * y <= s;
+    }
+
+    public boolean checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+        int x = xCenter < x1 ? x1 - xCenter : (xCenter > x2 ? xCenter - x2 : 0);
+        int y = yCenter < y1 ? y1 - yCenter : (yCenter > y2 ? yCenter - y2 : 0);
+        return x * x + y * y <= radius * radius;
     }
 }

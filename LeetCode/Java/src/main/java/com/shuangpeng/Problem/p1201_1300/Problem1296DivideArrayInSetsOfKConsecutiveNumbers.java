@@ -1,5 +1,8 @@
 package com.shuangpeng.Problem.p1201_1300;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -10,7 +13,7 @@ import java.util.TreeMap;
  */
 public class Problem1296DivideArrayInSetsOfKConsecutiveNumbers {
 
-    public boolean isPossibleDivide(int[] nums, int k) {
+    public boolean isPossibleDivide0(int[] nums, int k) {
         int n = nums.length;
         if (n % k != 0) {
             return false;
@@ -31,6 +34,33 @@ public class Problem1296DivideArrayInSetsOfKConsecutiveNumbers {
                     map.remove(key);
                 } else {
                     map.put(key, count);
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isPossibleDivide(int[] nums, int k) {
+        int n = nums.length;
+        if (n % k != 0) {
+            return false;
+        }
+        Arrays.sort(nums);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.merge(num, 1, Integer::sum);
+        }
+        for (int i = 0; i < n; i++) {
+            if (map.containsKey(nums[i])) {
+                for (int j = nums[i]; j < nums[i] + k; j++) {
+                    int count = map.getOrDefault(j, 0) - 1;
+                    if (count < 0) {
+                        return false;
+                    } else if (count == 0) {
+                        map.remove(j);
+                    } else {
+                        map.put(j, count);
+                    }
                 }
             }
         }

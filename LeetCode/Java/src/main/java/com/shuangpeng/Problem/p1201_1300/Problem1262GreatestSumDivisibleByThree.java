@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author ShuangPengPang
@@ -73,7 +74,7 @@ public class Problem1262GreatestSumDivisibleByThree {
         }
     }
 
-    public int maxSumDivThree(int[] nums) {
+    public int maxSumDivThree2(int[] nums) {
         int n = nums.length, N = Integer.MIN_VALUE;
         int[][] dp = new int[2][3];
         Arrays.fill(dp[0], N);
@@ -86,5 +87,57 @@ public class Problem1262GreatestSumDivisibleByThree {
             }
         }
         return dp[n & 1][0];
+    }
+
+    public int maxSumDivThree3(int[] nums) {
+        int[][] dp = new int[2][3];
+        dp[0][1] = dp[0][2] = Integer.MIN_VALUE;
+        int n = nums.length;
+        for (int i = 1; i <= n; i++) {
+            int idx = i & 1, p = idx ^ 1, num = nums[i - 1];
+            int m = num % 3;
+            for (int j = 0; j < 3; j++) {
+                dp[idx][j] = Math.max(dp[p][j], dp[p][(j - m + 3) % 3] + num);
+            }
+        }
+        return dp[n & 1][0];
+    }
+
+    public int maxSumDivThree(int[] nums) {
+        PriorityQueue<Integer> q1 = new PriorityQueue<>(3, Comparator.reverseOrder());
+        PriorityQueue<Integer> q2 = new PriorityQueue<>(3, Comparator.reverseOrder());
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+            int m = num % 3;
+            if (m != 0) {
+                PriorityQueue<Integer> q = m == 1 ? q1 : q2;
+                q.add(num);
+                if (q.size() > 2) {
+                    q.poll();
+                }
+            }
+        }
+        int m = sum % 3;
+        if (m == 1) {
+            sum -= Math.min(pollSum(q1, 1), pollSum(q2, 2));
+        } else if (m == 2) {
+            sum -= Math.min(pollSum(q1, 2), pollSum(q2, 1));
+        }
+        return Math.max(sum, 0);
+    }
+
+    private int pollSum(PriorityQueue<Integer> q, int count) {
+        if (q.size() < count) {
+            return Integer.MAX_VALUE;
+        }
+        while (q.size() > count) {
+            q.poll();
+        }
+        int sum = 0;
+        while (!q.isEmpty()) {
+            sum += q.poll();
+        }
+        return sum;
     }
 }

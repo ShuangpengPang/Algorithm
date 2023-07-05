@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1201_1300;
  */
 public class Problem1292MaximumSideLengthOfASquareWithSumLessThanOrEqualToThreshold {
 
-    public int maxSideLength(int[][] mat, int threshold) {
+    public int maxSideLength0(int[][] mat, int threshold) {
         int m = mat.length, n = mat[0].length;
         int[][] dp = new int[m + 1][n + 1];
         for (int i = 0; i < m; i++) {
@@ -40,5 +40,25 @@ public class Problem1292MaximumSideLengthOfASquareWithSumLessThanOrEqualToThresh
             }
         }
         return false;
+    }
+
+    public int maxSideLength(int[][] mat, int threshold) {
+        int m = mat.length, n = mat[0].length;
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0, s = 0; j < n; j++) {
+                s += mat[i][j];
+                dp[i + 1][j + 1] = dp[i][j + 1] + s;
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                while (i - ans > 0 && j - ans > 0 && dp[i][j] - dp[i - ans - 1][j] - dp[i][j - ans - 1] + dp[i - ans - 1][j - ans - 1] <= threshold) {
+                    ans++;
+                }
+            }
+        }
+        return ans;
     }
 }

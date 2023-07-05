@@ -3,6 +3,7 @@ package com.shuangpeng.Problem.p1201_1300;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.TreeMap;
 
 /**
@@ -40,7 +41,7 @@ public class Problem1296DivideArrayInSetsOfKConsecutiveNumbers {
         return true;
     }
 
-    public boolean isPossibleDivide(int[] nums, int k) {
+    public boolean isPossibleDivide1(int[] nums, int k) {
         int n = nums.length;
         if (n % k != 0) {
             return false;
@@ -61,6 +62,57 @@ public class Problem1296DivideArrayInSetsOfKConsecutiveNumbers {
                     } else {
                         map.put(j, count);
                     }
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isPossibleDivide2(int[] nums, int k) {
+        int n = nums.length;
+        if (n % k != 0) {
+            return false;
+        }
+        PriorityQueue<Integer> q = new PriorityQueue<>(n);
+        for (int num : nums) {
+            q.offer(num);
+        }
+        while (!q.isEmpty()) {
+            int num = q.peek(), max = num + k;
+            for (int i = num; i < max; i++) {
+                if (!q.remove(i)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isPossibleDivide(int[] nums, int k) {
+        int n = nums.length;
+        if (n % k != 0) {
+            return false;
+        }
+        Arrays.sort(nums);
+        int[] pos = new int[k + 1];
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != -1) {
+                pos[1] = Math.max(pos[1], i + 1);
+                for (int m = 1; m < k; m++) {
+                    int next = nums[i] + m, p = pos[m];
+                    for (; p < n; p++) {
+                        if (nums[p] > next) {
+                            return false;
+                        } else if (nums[p] == next) {
+                            nums[p] = -1;
+                            pos[m] = p + 1;
+                            break;
+                        }
+                    }
+                    if (p == n) {
+                        return false;
+                    }
+                    pos[m + 1] = Math.max(pos[m + 1], p + 1);
                 }
             }
         }

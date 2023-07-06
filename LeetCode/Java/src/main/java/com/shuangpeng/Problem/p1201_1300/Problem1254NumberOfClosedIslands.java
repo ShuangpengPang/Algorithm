@@ -83,3 +83,39 @@ class Problem1254NumberOfClosedIslands0 {
         }
     }
 }
+
+class Problem1254NumberOfClosedIslands1 {
+
+    static final int[] dirs = {-1, 0, 1, 0, -1};
+
+    public int closedIsland(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        for (int i = 0; i < m; i++) {
+            int s = i == 0 || i == m - 1 ? 1 : n - 1;
+            for (int j = 0; j < n; j += s) {
+                dfs(grid, i, j);
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i < m - 1; i++) {
+            for (int j = 1; j < n - 1; j++) {
+                if (grid[i][j] == 0) {
+                    dfs(grid, i, j);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+
+    private void dfs(int[][] grid, int x, int y) {
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length || grid[x][y] == 1) {
+            return;
+        }
+        grid[x][y] = 1;
+        for (int d = 0; d < 4; d++) {
+            int nx = x + dirs[d], ny = y + dirs[d + 1];
+            dfs(grid, nx, ny);
+        }
+    }
+}

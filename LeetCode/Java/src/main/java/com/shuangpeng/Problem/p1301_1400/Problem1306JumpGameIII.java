@@ -11,7 +11,7 @@ import java.util.Queue;
  */
 public class Problem1306JumpGameIII {
 
-    public boolean canReach(int[] arr, int start) {
+    public boolean canReach0(int[] arr, int start) {
         int n = arr.length;
         boolean[] visited = new boolean[n];
         Queue<Integer> q = new ArrayDeque<>(n);
@@ -32,5 +32,21 @@ public class Problem1306JumpGameIII {
             }
         }
         return false;
+    }
+
+    public boolean canReach(int[] arr, int start) {
+        return dfs(arr, new boolean[arr.length], start);
+    }
+
+    private boolean dfs(int[] arr, boolean[] visited, int x) {
+        if (arr[x] == 0) {
+            return true;
+        }
+        visited[x] = true;
+        int p1 = x - arr[x], p2 = x + arr[x];
+        if (p1 >= 0 && !visited[p1] && dfs(arr, visited, p1)) {
+            return true;
+        }
+        return p2 < arr.length && !visited[p2] && dfs(arr, visited, p2);
     }
 }

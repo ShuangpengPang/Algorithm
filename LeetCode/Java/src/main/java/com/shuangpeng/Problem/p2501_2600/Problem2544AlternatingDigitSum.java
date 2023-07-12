@@ -8,18 +8,21 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2544AlternatingDigitSum {
 
-    public int alternateDigitSum(int n) {
-        int m = n, s = 1;
-        while (m != 0) {
-            m /= 10;
-            s = -s;
+    public int alternateDigitSum0(int n) {
+        int sign = 1, sum = 0;
+        while (n != 0) {
+            sum += n % 10 * sign;
+            n /= 10;
+            sign = -sign;
         }
-        s = -s;
+        return -sum * sign;
+    }
+
+    public int alternateDigitSum(int n) {
         int sum = 0;
         while (n != 0) {
-            sum += n % 10 * s;
+            sum = n % 10 - sum;
             n /= 10;
-            s = -s;
         }
         return sum;
     }

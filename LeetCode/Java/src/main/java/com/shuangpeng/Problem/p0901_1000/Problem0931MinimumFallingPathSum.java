@@ -2,9 +2,13 @@ package com.shuangpeng.Problem.p0901_1000;
 
 import java.util.Arrays;
 
+/**
+ * @description:（下降路径最小和）
+ * @date 2023/7/13 11:11 AM
+ **/
 public class Problem0931MinimumFallingPathSum {
 
-    public int minFallingPathSum(int[][] matrix) {
+    public int minFallingPathSum0(int[][] matrix) {
         int n = matrix.length;
         for (int i = 1; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
@@ -19,5 +23,23 @@ public class Problem0931MinimumFallingPathSum {
             }
         }
         return Arrays.stream(matrix[n - 1]).min().getAsInt();
+    }
+
+    public int minFallingPathSum(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length, N = Integer.MAX_VALUE >> 1;
+        int[] dp = new int[n];
+        for (int i = 0; i < m; i++) {
+            int[] tmp = new int[n];
+            Arrays.fill(tmp, N);
+            for (int j = 0; j < n; j++) {
+                for (int k = j - 1; k <= j + 1; k++) {
+                    if (k >= 0 && k < n) {
+                        tmp[k] = Math.min(tmp[k], dp[j] + matrix[i][k]);
+                    }
+                }
+            }
+            dp = tmp;
+        }
+        return Arrays.stream(dp).min().getAsInt();
     }
 }

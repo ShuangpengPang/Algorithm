@@ -26,19 +26,15 @@ public class Problem0931MinimumFallingPathSum {
     }
 
     public int minFallingPathSum(int[][] matrix) {
-        int m = matrix.length, n = matrix[0].length, N = Integer.MAX_VALUE >> 1;
-        int[] dp = new int[n];
-        for (int i = 0; i < m; i++) {
-            int[] tmp = new int[n];
-            Arrays.fill(tmp, N);
-            for (int j = 0; j < n; j++) {
-                for (int k = j - 1; k <= j + 1; k++) {
-                    if (k >= 0 && k < n) {
-                        tmp[k] = Math.min(tmp[k], dp[j] + matrix[i][k]);
-                    }
-                }
+        int n = matrix.length;
+        int[] dp = new int[n + 2];
+        dp[0] = dp[n + 1] = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            for (int j = 1, prev = dp[0]; j <= n; j++) {
+                int p = prev;
+                prev = dp[j];
+                dp[j] = Math.min(Math.min(p, prev), dp[j + 1]) + matrix[i][j - 1];
             }
-            dp = tmp;
         }
         return Arrays.stream(dp).min().getAsInt();
     }

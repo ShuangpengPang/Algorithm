@@ -2,9 +2,13 @@ package com.shuangpeng.Problem.p0001_0100;
 
 import java.util.*;
 
+/**
+ * @description:（三数之和）
+ * @date 2023/7/14 3:09 PM
+ **/
 public class Problem0015ThreeSum {
 
-    public List<List<Integer>> threeSum(int[] nums) {
+    public List<List<Integer>> threeSum0(int[] nums) {
         if (nums == null || nums.length < 3) {
             return new ArrayList<>();
         }
@@ -112,5 +116,30 @@ public class Problem0015ThreeSum {
             array[j] = array[j] - array[i];
             array[i] = array[j] + array[i];
         }
+    }
+
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int k = n - 1;
+            for (int j = i + 1; j < k; j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int target = -(nums[i] + nums[j]);
+                while (j < k && nums[k] > target) {
+                    k--;
+                }
+                if (j < k && nums[k] == target) {
+                    ans.add(Arrays.asList(nums[i], nums[j], nums[k]));
+                }
+            }
+        }
+        return ans;
     }
 }

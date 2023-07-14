@@ -1,13 +1,9 @@
 package com.shuangpeng.Problem.p1301_1400;
 
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author ShuangPengPang
@@ -20,11 +16,11 @@ public class Problem1311GetWatchedVideosByYourFriends {
     public List<String> watchedVideosByFriends(List<List<String>> watchedVideos, int[][] friends, int id, int level) {
         int n = friends.length;
         boolean[] visited = new boolean[n];
-        Set<Integer> peoples = new HashSet<>();
+        List<Integer> peoples = new ArrayList<>();
         visited[id] = true;
         peoples.add(id);
         for (int i = 0; i < level; i++) {
-            Set<Integer> tmp = new HashSet<>();
+            List<Integer> tmp = new ArrayList<>();
             for (int p : peoples) {
                 for (int f : friends[p]) {
                     if (!visited[f]) {
@@ -41,15 +37,8 @@ public class Problem1311GetWatchedVideosByYourFriends {
                 freq.merge(v, 1, Integer::sum);
             }
         }
-        List<Pair<String, Integer>> list = new ArrayList<>(freq.size());
-        for (String key : freq.keySet()) {
-            list.add(new Pair<>(key, freq.get(key)));
-        }
-        list.sort((a, b) -> a.getValue() != b.getValue() ? a.getValue() - b.getValue() : a.getKey().compareTo(b.getKey()));
-        List<String> ans = new ArrayList<>(list.size());
-        for (Pair<String, Integer> pair : list) {
-            ans.add(pair.getKey());
-        }
+        List<String> ans = new ArrayList<>(freq.keySet());
+        ans.sort((a, b) -> freq.get(a).equals(freq.get(b)) ? a.compareTo(b) : freq.get(a) - freq.get(b));
         return ans;
     }
 }

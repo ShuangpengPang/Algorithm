@@ -5,6 +5,10 @@ import com.shuangpeng.common.TreeNode;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @description:（在二叉树中分配硬币）
+ * @date 2023/7/14 11:40 AM
+ **/
 public class Problem0979DistributeCoinsInBinaryTree {
 
     private int moveSteps = 0;
@@ -99,5 +103,25 @@ public class Problem0979DistributeCoinsInBinaryTree {
         int right = recurse(node.right);
         answer += Math.abs(left) + Math.abs(right);
         return left + right + node.val - 1;
+    }
+}
+
+class Problem0979DistributeCoinsInBinaryTree0 {
+
+    int ans;
+
+    public int distributeCoins(TreeNode root) {
+        ans = 0;
+        dfs(root);
+        return ans;
+    }
+
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int d = dfs(root.left) + dfs(root.right) + root.val - 1;
+        ans += Math.abs(d);
+        return d;
     }
 }

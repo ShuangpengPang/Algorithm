@@ -1,8 +1,13 @@
 package com.shuangpeng.Problem.p0801_0900;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @description:（树中距离之和）
+ * @date 2023/7/17 4:05 PM
+ **/
 public class Problem0834SumOfDistanceInTree {
 
     public int[] sumOfDistancesInTree0(int N, int[][] edges) {
@@ -115,5 +120,52 @@ public class Problem0834SumOfDistanceInTree {
                 size[v] = sv;
             }
         }
+    }
+}
+
+class Problem0834SumOfDistanceInTree0 {
+
+    public int[] sumOfDistancesInTree(int n, int[][] edges) {
+        List<Integer>[] g = new List[n];
+        Arrays.setAll(g, i -> new ArrayList<>());
+        for (int[] e : edges) {
+            g[e[0]].add(e[1]);
+            g[e[1]].add(e[0]);
+        }
+        int[] cnt = new int[n];
+        getCount(g, 0, -1, cnt);
+        int d = getDistance(g, 0, -1, cnt);
+        int[] ans = new int[n];
+        dfs(g, 0, -1, d + n, cnt, ans);
+        return ans;
+    }
+
+    private void dfs(List<Integer>[] g, int x, int p, int s, int[] cnt, int[] ans) {
+        ans[x] = s + cnt.length - (cnt[x] << 1);
+        for (int y : g[x]) {
+            if (y != p) {
+                dfs(g, y, x, ans[x], cnt, ans);
+            }
+        }
+    }
+
+    private int getCount(List<Integer>[] g, int x, int p, int[] cnt) {
+        int ans = 1;
+        for (int y : g[x]) {
+            if (y != p) {
+                ans += getCount(g, y, x, cnt);
+            }
+        }
+        return cnt[x] = ans;
+    }
+
+    private int getDistance(List<Integer>[] g, int x, int p, int[] cnt) {
+        int ans = 0;
+        for (int y : g[x]) {
+            if (y != p) {
+                ans += getDistance(g, y, x, cnt) + cnt[y];
+            }
+        }
+        return ans;
     }
 }

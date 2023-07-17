@@ -89,3 +89,16 @@ FROM (
 ) t2
 WHERE visited_on >= DATE_ADD((SELECT MIN(visited_on) FROM Customer), INTERVAL 6 DAY)
 ;
+
+WITH t1 AS (
+    SELECT SUM(amount) AS amount, visited_on
+    FROM Customer
+    GROUP BY visited_on
+), t2 AS (
+    SELECT visited_on, SUM(amount) OVER (ORDER BY visited_on ASC RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) AS amount
+    FROM t1
+)
+SELECT t.visited_on, t.amount, ROUND(t.amount / 7, 2) AS average_amount
+FROM t2 t, (SELECT MIN(visited_on) AS visited_on FROM t1) m
+WHERE DATEDIFF(t.visited_on, m.visited_on) >= 6
+;

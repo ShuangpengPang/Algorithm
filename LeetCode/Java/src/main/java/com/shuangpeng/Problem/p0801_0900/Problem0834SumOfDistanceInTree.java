@@ -125,47 +125,40 @@ public class Problem0834SumOfDistanceInTree {
 
 class Problem0834SumOfDistanceInTree0 {
 
+    List<Integer>[] g;
+    int[] size, ans;
+
     public int[] sumOfDistancesInTree(int n, int[][] edges) {
-        List<Integer>[] g = new List[n];
+        g = new List[n];
         Arrays.setAll(g, i -> new ArrayList<>());
         for (int[] e : edges) {
             g[e[0]].add(e[1]);
             g[e[1]].add(e[0]);
         }
-        int[] cnt = new int[n];
-        getCount(g, 0, -1, cnt);
-        int d = getDistance(g, 0, -1, cnt);
-        int[] ans = new int[n];
-        dfs(g, 0, -1, d + n, cnt, ans);
+        size = new int[n];
+        ans = new int[n];
+        dfsDp(0, -1, 0);
+        dfs(0, -1, ans[0] + n);
         return ans;
     }
 
-    private void dfs(List<Integer>[] g, int x, int p, int s, int[] cnt, int[] ans) {
-        ans[x] = s + cnt.length - (cnt[x] << 1);
+    private void dfs(int x, int p, int s) {
+        ans[x] = s + ans.length - (size[x] << 1);
         for (int y : g[x]) {
             if (y != p) {
-                dfs(g, y, x, ans[x], cnt, ans);
+                dfs(y, x, ans[x]);
             }
         }
     }
 
-    private int getCount(List<Integer>[] g, int x, int p, int[] cnt) {
-        int ans = 1;
+    private void dfsDp(int x, int p, int d) {
+        ans[0] += d;
+        size[x] = 1;
         for (int y : g[x]) {
             if (y != p) {
-                ans += getCount(g, y, x, cnt);
+                dfsDp(y, x, d + 1);
+                size[x] += size[y];
             }
         }
-        return cnt[x] = ans;
-    }
-
-    private int getDistance(List<Integer>[] g, int x, int p, int[] cnt) {
-        int ans = 0;
-        for (int y : g[x]) {
-            if (y != p) {
-                ans += getDistance(g, y, x, cnt) + cnt[y];
-            }
-        }
-        return ans;
     }
 }

@@ -119,7 +119,7 @@ public class Problem1851MinimumIntervalToIncludeEachQuery {
         return ans;
     }
 
-    public int[] minInterval(int[][] intervals, int[] queries) {
+    public int[] minInterval2(int[][] intervals, int[] queries) {
         Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
         int m = intervals.length, n = queries.length;
         Integer[] ids = new Integer[n];
@@ -131,9 +131,30 @@ public class Problem1851MinimumIntervalToIncludeEachQuery {
             int id = ids[i], num = queries[id];
             while (j < m && intervals[j][0] <= num) {
                 if (intervals[j][1] >= num) {
-                    q.offer(new int[]{intervals[j][0], intervals[j][1]});
+                    q.offer(intervals[j]);
                 }
                 j++;
+            }
+            while (!q.isEmpty() && q.peek()[1] < num) {
+                q.poll();
+            }
+            ans[id] = q.isEmpty() ? -1 : q.peek()[1] - q.peek()[0] + 1;
+        }
+        return ans;
+    }
+
+    public int[] minInterval(int[][] intervals, int[] queries) {
+        int m = intervals.length, n = queries.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, Comparator.comparingInt(a -> queries[a]));
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        PriorityQueue<int[]> q = new PriorityQueue<>(Comparator.comparingInt(a -> a[1] - a[0]));
+        int[] ans = new int[n];
+        for (int i = 0, j = 0; i < n; i++) {
+            int id = ids[i], num = queries[id];
+            while (j < m && intervals[j][0] <= num) {
+                q.offer(intervals[j++]);
             }
             while (!q.isEmpty() && q.peek()[1] < num) {
                 q.poll();

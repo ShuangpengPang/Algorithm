@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0701_0800;
  */
 public class Problem0771JewelsAndStones {
 
-    public int numJewelsInStones(String jewels, String stones) {
+    public int numJewelsInStones0(String jewels, String stones) {
         boolean[] set = new boolean[58];
         for (char c : jewels.toCharArray()) {
             set[c - 'A'] = true;
@@ -20,5 +20,17 @@ public class Problem0771JewelsAndStones {
             }
         }
         return ans;
+    }
+
+    public int numJewelsInStones(String jewels, String stones) {
+        long set = 0;
+        for (char c : jewels.toCharArray()) {
+            set |= 1L << (c - 'A');
+        }
+        int cnt = 0;
+        for (char c : stones.toCharArray()) {
+            cnt += set >> (c - 'A') & 1;
+        }
+        return cnt;
     }
 }

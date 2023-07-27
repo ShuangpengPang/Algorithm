@@ -25,7 +25,7 @@ public class Problem0931MinimumFallingPathSum {
         return Arrays.stream(matrix[n - 1]).min().getAsInt();
     }
 
-    public int minFallingPathSum(int[][] matrix) {
+    public int minFallingPathSum1(int[][] matrix) {
         int n = matrix.length;
         int[] dp = new int[n + 2];
         dp[0] = dp[n + 1] = Integer.MAX_VALUE;
@@ -37,5 +37,15 @@ public class Problem0931MinimumFallingPathSum {
             }
         }
         return Arrays.stream(dp).min().getAsInt();
+    }
+
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length, N = Integer.MAX_VALUE;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] += Math.min(Math.min(j > 0 ? matrix[i - 1][j - 1] : N, matrix[i - 1][j]), j + 1 < n ? matrix[i - 1][j + 1] : N);
+            }
+        }
+        return Arrays.stream(matrix[n - 1]).min().getAsInt();
     }
 }

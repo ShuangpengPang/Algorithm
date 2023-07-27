@@ -25,11 +25,11 @@ public class Problem0771JewelsAndStones {
     public int numJewelsInStones(String jewels, String stones) {
         long set = 0;
         for (char c : jewels.toCharArray()) {
-            set |= 1L << (c - 'A');
+            set |= 1L << (c & 63);
         }
         int cnt = 0;
         for (char c : stones.toCharArray()) {
-            cnt += set >> (c - 'A') & 1;
+            cnt += set >> (c & 63) & 1;
         }
         return cnt;
     }

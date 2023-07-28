@@ -47,9 +47,8 @@ public class Problem1911MaximumAlternatingSubsequenceSum {
         int n = nums.length;
         long even = Integer.MIN_VALUE >> 1, odd = 0;
         for (int i = 0; i < n; i++) {
-            long tmp = even;
             even = Math.max(even, odd + nums[i]);
-            odd = Math.max(odd, tmp - nums[i]);
+            odd = Math.max(odd, even - nums[i]);
         }
         return even;
     }

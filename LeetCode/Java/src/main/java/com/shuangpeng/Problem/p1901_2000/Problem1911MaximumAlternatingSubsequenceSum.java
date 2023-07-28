@@ -43,6 +43,17 @@ public class Problem1911MaximumAlternatingSubsequenceSum {
         return sum;
     }
 
+    public long maxAlternatingSum2(int[] nums) {
+        long sum = 0;
+        for (int i = 0, p = 0; i < nums.length; i++) {
+            if (nums[i] > p) {
+                sum += nums[i] - p;
+            }
+            p = nums[i];
+        }
+        return sum;
+    }
+
     public long maxAlternatingSum(int[] nums) {
         int n = nums.length;
         long even = Integer.MIN_VALUE >> 1, odd = 0;

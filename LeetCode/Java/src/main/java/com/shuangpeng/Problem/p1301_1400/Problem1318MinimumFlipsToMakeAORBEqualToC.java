@@ -31,7 +31,7 @@ public class Problem1318MinimumFlipsToMakeAORBEqualToC {
         return cnt;
     }
 
-    public int minFlips(int a, int b, int c) {
+    public int minFlips2(int a, int b, int c) {
         int cnt = 0;
         while (a != 0 || b != 0 || c != 0) {
             if ((c & 1) == 0) {
@@ -44,5 +44,18 @@ public class Problem1318MinimumFlipsToMakeAORBEqualToC {
             c >>= 1;
         }
         return cnt;
+    }
+
+    public int minFlips(int a, int b, int c) {
+        int x = (a | b) ^ c, ans = 0;
+        while (x != 0) {
+            int bit = x & -x;
+            ans++;
+            if ((c & bit) == 0 && (a & b & bit) != 0) {
+                ans++;
+            }
+            x ^= bit;
+        }
+        return ans;
     }
 }

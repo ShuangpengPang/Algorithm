@@ -11,25 +11,48 @@ import java.util.Map;
  */
 public class Problem1297MaximumNumberOfOccurrencesOfASubstring {
 
-    public int maxFreq(String s, int maxLetters, int minSize, int maxSize) {
-        Map<String, Integer> map = new HashMap<>();
+    public int maxFreq0(String s, int maxLetters, int minSize, int maxSize) {
         int[] cnt = new int[26];
-        int count = 0, ans = 0, n = s.length();
+        int n = s.length(), count = 0, ans = 0;
+        Map<String, Integer> freq = new HashMap<>();
         for (int i = 0; i < n; i++) {
-            int c = s.charAt(i) - 'a';
-            if (++cnt[c] == 1) {
+            if (cnt[s.charAt(i) - 'a']++ == 0) {
                 count++;
             }
+            if (i >= minSize && --cnt[s.charAt(i - minSize) - 'a'] == 0) {
+                count--;
+            }
+            if (count <= maxLetters && i >= minSize - 1) {
+                ans = Math.max(ans, freq.merge(s.substring(i - minSize + 1, i + 1), 1, Integer::sum));
+            }
+        }
+        return ans;
+    }
+
+    public int maxFreq(String s, int maxLetters, int minSize, int maxSize) {
+        long M = (long) 1e9 + 7, b = 27, h = 1;
+        for (int i = 0; i < minSize; i++) {
+            h = h * b % M;
+        }
+        Map<Long, Integer> freq = new HashMap<>();
+        long num = 0;
+        int[] cnt = new int[26];
+        int ans = 0, count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int c = s.charAt(i) - 'a';
+            if (cnt[c]++ == 0) {
+                count++;
+            }
+            num = (num * b + c + 1) % M;
             if (i >= minSize) {
-                if (--cnt[s.charAt(i - minSize) - 'a'] == 0) {
+                int ch = s.charAt(i - minSize) - 'a';
+                if (--cnt[ch] == 0) {
                     count--;
                 }
+                num = ((num - (ch + 1) * h) % M + M) % M;
             }
             if (i >= minSize - 1 && count <= maxLetters) {
-                String str = s.substring(i - minSize + 1, i + 1);
-                int freq = map.getOrDefault(str, 0) + 1;
-                map.put(str, freq);
-                ans = Math.max(ans, freq);
+                ans = Math.max(ans, freq.merge(num, 1, Integer::sum));
             }
         }
         return ans;

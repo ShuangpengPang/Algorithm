@@ -139,18 +139,4 @@ public class Problem1296DivideArrayInSetsOfKConsecutiveNumbers {
         }
         return true;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -88,34 +88,69 @@ public class Problem1296DivideArrayInSetsOfKConsecutiveNumbers {
         return true;
     }
 
+    public boolean isPossibleDivide3(int[] nums, int k) {
+        int n = nums.length;
+        if (n % k != 0) {
+            return false;
+        }
+        Arrays.sort(nums);
+        Map<Integer, Integer> map = new HashMap<>(n);
+        for (int num : nums) {
+            map.merge(num, 1, Integer::sum);
+        }
+        for (int i = 0; i < n; i++) {
+            if (map.get(nums[i]) > 0) {
+                for (int num = nums[i]; num < nums[i] + k; num++) {
+                    if (map.merge(num, -1, Integer::sum) < 0) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean isPossibleDivide(int[] nums, int k) {
         int n = nums.length;
         if (n % k != 0) {
             return false;
         }
         Arrays.sort(nums);
-        int[] pos = new int[k + 1];
+        int[] pos = new int[n + 1];
         for (int i = 0; i < n; i++) {
             if (nums[i] != -1) {
                 pos[1] = Math.max(pos[1], i + 1);
-                for (int m = 1; m < k; m++) {
-                    int next = nums[i] + m, p = pos[m];
-                    for (; p < n; p++) {
-                        if (nums[p] > next) {
+                for (int j = 1; j < k; j++) {
+                    int target = nums[i] + j, p = pos[j];
+                    while (p < n && nums[p] != target) {
+                        if (nums[p] > target) {
                             return false;
-                        } else if (nums[p] == next) {
-                            nums[p] = -1;
-                            pos[m] = p + 1;
-                            break;
                         }
+                        p++;
                     }
                     if (p == n) {
                         return false;
                     }
-                    pos[m + 1] = Math.max(pos[m + 1], p + 1);
+                    nums[p] = -1;
+                    pos[j] = p + 1;
+                    pos[j + 1] = Math.max(pos[j + 1], pos[j]);
                 }
             }
         }
         return true;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -43,11 +43,10 @@ public class Problem1291SequentialDigits {
     }
 
     public List<Integer> sequentialDigits(int low, int high) {
-        int n1 = getLength(low), n2 = getLength(high);
+        int n1 = getDigit(low), n2 = getDigit(high);
         List<Integer> ans = new ArrayList<>();
-        for (int len = n1; len <= n2; len++) {
-            int num = 0;
-            for (int i = 1; i <= 10 - len && num < high; i++) {
+        for (int len = n1, num = 0; len <= n2 && num < high; len++) {
+            for (int i = 1; i + len <= 10 && num < high; i++) {
                 num = 0;
                 for (int j = i; j < i + len; j++) {
                     num = num * 10 + j;
@@ -60,15 +59,12 @@ public class Problem1291SequentialDigits {
         return ans;
     }
 
-    private int getLength(int num) {
-        if (num == 0) {
-            return 1;
-        }
+    private int getDigit(int x) {
         int ans = 0;
-        while (num != 0) {
+        while (x != 0) {
             ans++;
-            num /= 10;
+            x /= 10;
         }
-        return ans;
+        return Math.max(ans, 1);
     }
 }

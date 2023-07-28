@@ -120,7 +120,7 @@ public class Problem1300SumOfMutatedArrayClosestToTarget {
         return ans;
     }
 
-    public int findBestValue(int[] arr, int target) {
+    public int findBestValue4(int[] arr, int target) {
         Arrays.sort(arr);
         int n = arr.length;
         int[] prefix = new int[n + 1];
@@ -154,5 +154,54 @@ public class Problem1300SumOfMutatedArrayClosestToTarget {
             ret += Math.min(num, x);
         }
         return ret;
+    }
+
+    public int findBestValue5(int[] arr, int target) {
+        Arrays.sort(arr);
+        int n = arr.length, sum = 0;
+        for (int num : arr) {
+            sum += num;
+        }
+        int i = n - 1, ans = arr[n - 1];
+        while (i >= 0 && sum > target) {
+            int diff = Math.min(i > 0 ? arr[i] - arr[i - 1] : arr[i], (sum - target) / (n - i) + 1);
+            sum -= diff * (n - i);
+            ans = arr[i] - diff;
+            i--;
+        }
+        return i == n - 1 ? ans : (target - sum <= sum + n - i - target - 1 ? ans : ans + 1);
+    }
+
+    public int findBestValue(int[] arr, int target) {
+        Arrays.sort(arr);
+        int n = arr.length;
+        int[] preSum = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            preSum[i + 1] = preSum[i] + arr[i];
+        }
+        int left = 0, right = arr[n - 1];
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            int sum = getSum(arr, preSum, mid);
+            if (sum < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return Math.abs(getSum(arr, preSum, left - 1) - target) <= Math.abs(getSum(arr, preSum, left) - target) ? left - 1 : left;
+    }
+
+    private int getSum(int[] arr, int[] preSum, int num) {
+        int n = arr.length, left = 0, right = n - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[mid] < num) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return preSum[left] + num * (n - left);
     }
 }

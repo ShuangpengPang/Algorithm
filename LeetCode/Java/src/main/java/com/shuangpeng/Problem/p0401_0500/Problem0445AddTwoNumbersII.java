@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Problem0445AddTwoNumbersII {
 
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    public ListNode addTwoNumbers0(ListNode l1, ListNode l2) {
         List<Integer> list1 = new ArrayList<>(), list2 = new ArrayList<>();
         for (ListNode node = l1; node != null; node = node.next) {
             list1.add(node.val);
@@ -32,5 +32,34 @@ public class Problem0445AddTwoNumbersII {
             carry /= 10;
         }
         return ans;
+    }
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode r1 = reverseList(l1), r2 = reverseList(l2);
+        ListNode head = null;
+        int carry = 0;
+        while (r1 != null || r2 != null || carry > 0) {
+            if (r1 != null) {
+                carry += r1.val;
+                r1 = r1.next;
+            }
+            if (r2 != null) {
+                carry += r2.val;
+                r2 = r2.next;
+            }
+            head = new ListNode(carry % 10, head);
+            carry /= 10;
+        }
+        return head;
+    }
+
+    private ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        for (ListNode node = head, tmp = null; node != null; node = tmp) {
+            tmp = node.next;
+            node.next = prev;
+            prev = node;
+        }
+        return prev;
     }
 }

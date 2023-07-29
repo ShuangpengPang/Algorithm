@@ -5,21 +5,23 @@ import com.shuangpeng.common.ListNode;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @description:（环形链表）
+ * @date 2023/7/29 11:43 AM
+ **/
 public class Problem0141LinkedListCycle {
 
     public boolean hasCycle0(ListNode head) {
-        Set<ListNode> set = new HashSet<>();
-        while (head != null) {
-            if (set.contains(head)) {
+        Set<ListNode> visited = new HashSet<>();
+        for (ListNode node = head; node != null; node = node.next) {
+            if (!visited.add(node)) {
                 return true;
             }
-            set.add(head);
-            head = head.next;
         }
         return false;
     }
 
-    public boolean hasCycle(ListNode head) {
+    public boolean hasCycle1(ListNode head) {
         if (head == null || head.next == null) {
             return false;
         }
@@ -33,5 +35,17 @@ public class Problem0141LinkedListCycle {
             fast = fast.next.next;
         }
         return false;
+    }
+
+    public boolean hasCycle(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        ListNode slow = head, fast = head.next;
+        while (slow != fast && fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return fast != null && fast.next != null && slow == fast;
     }
 }

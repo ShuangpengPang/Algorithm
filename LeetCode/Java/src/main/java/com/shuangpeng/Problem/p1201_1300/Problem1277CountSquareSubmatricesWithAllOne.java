@@ -23,7 +23,7 @@ public class Problem1277CountSquareSubmatricesWithAllOne {
         return ans;
     }
 
-    public int countSquares(int[][] matrix) {
+    public int countSquares1(int[][] matrix) {
         int m = matrix.length, n = matrix[0].length, ans = 0;
         int[] dp = new int[n];
         for (int i = 0; i < m; i++) {
@@ -35,6 +35,20 @@ public class Problem1277CountSquareSubmatricesWithAllOne {
                 }
                 p = dp[j];
                 dp[j] = c;
+            }
+        }
+        return ans;
+    }
+
+    public int countSquares(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length, ans = 0;
+        int[] dp = new int[n + 1];
+        for (int i = 0; i < m; i++) {
+            for (int j = 1, tmp = 0; j <= n; j++) {
+                int length = matrix[i][j - 1] == 0 ? 0 : Math.min(dp[j], Math.min(tmp, dp[j - 1])) + 1;
+                ans += length;
+                tmp = dp[j];
+                dp[j] = length;
             }
         }
         return ans;

@@ -17,7 +17,7 @@ public class Problem0142LinkedListCycle2 {
             slow = slow.next;
             fast = fast.next.next;
         }
-        if (slow != fast) {
+        if (fast == null || fast.next == null) {
             return null;
         }
         int cnt = 1;
@@ -37,7 +37,7 @@ public class Problem0142LinkedListCycle2 {
         return slow;
     }
 
-    public ListNode detectCycle(ListNode head) {
+    public ListNode detectCycle1(ListNode head) {
         if (head == null || head.next == null) {
             return null;
         }
@@ -52,6 +52,26 @@ public class Problem0142LinkedListCycle2 {
         }
         slow = slow.next;
         while (head != slow) {
+            head = head.next;
+            slow = slow.next;
+        }
+        return head;
+    }
+
+    public ListNode detectCycle(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode slow = head, fast = head.next;
+        while (fast != null && fast.next != null && slow != fast) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        if (fast == null || fast.next == null) {
+            return null;
+        }
+        slow = slow.next;
+        while (slow != head) {
             head = head.next;
             slow = slow.next;
         }

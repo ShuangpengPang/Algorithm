@@ -76,20 +76,20 @@ public class Problem0143ReorderList {
     }
 
     public void reorderList(ListNode head) {
-        ListNode middle = getMiddleNode(head);
-        ListNode right = reverseList(middle);
-        ListNode left = head;
-        while (left != middle && right != middle) {
-            ListNode leftNext = left.next;
-            ListNode rightNext = right.next;
+        ListNode middle = getMidNode(head);
+        ListNode left = head, right = reverse(middle);
+        while (left != middle) {
+            ListNode nextLeft = left.next, nextRight = right.next;
             left.next = right;
-            right.next = leftNext;
-            left = leftNext;
-            right = rightNext;
+            if (nextLeft != right) {
+                right.next = nextLeft;
+            }
+            left = nextLeft;
+            right = nextRight;
         }
     }
 
-    private ListNode getMiddleNode(ListNode head) {
+    private ListNode getMidNode(ListNode head) {
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
@@ -98,14 +98,14 @@ public class Problem0143ReorderList {
         return slow;
     }
 
-    private ListNode reverseList(ListNode head) {
-        ListNode pre = null;
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
         while (head != null) {
             ListNode next = head.next;
-            head.next = pre;
-            pre = head;
+            head.next = prev;
+            prev = head;
             head = next;
         }
-        return pre;
+        return prev;
     }
 }

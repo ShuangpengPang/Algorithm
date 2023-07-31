@@ -5,6 +5,10 @@ import com.shuangpeng.common.ListNode;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @description:（重排链表）
+ * @date 2023/7/31 11:01 AM
+ **/
 public class Problem0143ReorderList {
 
     public void reorderList0(ListNode head) {
@@ -47,13 +51,28 @@ public class Problem0143ReorderList {
             head = head.next;
         }
         int i = 0, j = list.size() - 1;
-        while (i < j - 1) {
+        while (i < j) {
             list.get(i).next = list.get(j);
-            list.get(j).next = list.get(i + 1);
-            ++i;
-            --j;
+            if (i + 1 < j) {
+                list.get(j).next = list.get(i + 1);
+            }
+            i++;
+            j--;
         }
-        list.get(j).next = null;
+        list.get(i).next = null;
+    }
+
+    public void reorderList2(ListNode head) {
+        List<ListNode> list = new ArrayList<>();
+        while (head != null) {
+            list.add(head);
+            head = head.next;
+        }
+        int n = list.size();
+        for (int i = 0; i < n; i++) {
+            int j = i <= n - 1 >> 1 ? n - i - 1 : n - i;
+            list.get(i).next = i == j ? null : list.get(j);
+        }
     }
 
     public void reorderList(ListNode head) {

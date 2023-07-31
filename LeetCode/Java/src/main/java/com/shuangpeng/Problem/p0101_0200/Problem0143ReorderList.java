@@ -109,3 +109,30 @@ public class Problem0143ReorderList {
         return prev;
     }
 }
+
+class Problem0143ReorderList0 {
+    ListNode cur, prev;
+    public void reorderList(ListNode head) {
+        reorderList(head, head);
+    }
+    public void reorderList(ListNode slow, ListNode fast) {
+        if (fast == null) { //处理链表长度为偶数的情况
+            cur = slow; //需要插入的第一个节点的前一个节点
+            prev = null;
+            return;
+        }
+        if (fast.next == null) { //处理链表长度为奇数的情况
+            cur = slow.next; //需要插入的第一个节点
+            slow.next = null;
+            prev = slow; //重排后的最后一个节点
+            return;
+        }
+        reorderList(slow.next, fast.next.next);
+        ListNode next = cur.next;
+        //节点交换
+        slow.next = cur;
+        cur.next = prev;
+        prev = slow;
+        cur = next;
+    }
+}

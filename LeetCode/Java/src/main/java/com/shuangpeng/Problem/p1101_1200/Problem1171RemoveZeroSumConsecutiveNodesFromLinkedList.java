@@ -16,26 +16,23 @@ import java.util.Map;
 public class Problem1171RemoveZeroSumConsecutiveNodesFromLinkedList {
 
     public ListNode removeZeroSumSublists0(ListNode head) {
-        ListNode dummy = new ListNode();
-        dummy.next = head;
+        ListNode dummy = new ListNode(0, head);
         Map<Integer, ListNode> map = new HashMap<>();
-        map.put(0, dummy);
         Deque<Integer> q = new ArrayDeque<>();
         q.push(0);
+        map.put(0, dummy);
         int sum = 0;
-        while (head != null) {
-            sum += head.val;
-            ListNode node = map.get(sum);
-            if (node != null) {
-                while (map.get(q.peek()) != node) {
+        for (ListNode node = head; node != null; node = node.next) {
+            sum += node.val;
+            if (map.containsKey(sum)) {
+                while (q.peek() != sum) {
                     map.remove(q.pop());
                 }
-                node.next = head.next;
+                map.get(sum).next = node.next;
             } else {
-                map.put(sum, head);
+                map.put(sum, node);
                 q.push(sum);
             }
-            head = head.next;
         }
         return dummy.next;
     }

@@ -53,12 +53,23 @@ public class Problem1186MaximumSubarraySumWithOneDeletion {
         return ans;
     }
 
-    public int maximumSum(int[] arr) {
+    public int maximumSum1(int[] arr) {
         int n = arr.length, ans = arr[0], delete = 0, sum = arr[0];
         for (int i = 1; i < n; i++) {
             delete = Math.max(sum, delete + arr[i]);
             sum = sum > 0 ? sum + arr[i] : arr[i];
             ans = Math.max(ans, Math.max(sum, delete));
+        }
+        return ans;
+    }
+
+    public int maximumSum(int[] arr) {
+        int N = Integer.MIN_VALUE >> 1;
+        int ans = N, a = N, b = N;
+        for (int num : arr) {
+            b = Math.max(b + num, a);
+            a = Math.max(0, a) + num;
+            ans = Math.max(ans, Math.max(a, b));
         }
         return ans;
     }

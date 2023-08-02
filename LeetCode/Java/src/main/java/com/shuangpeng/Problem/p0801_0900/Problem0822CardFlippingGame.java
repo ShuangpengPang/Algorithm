@@ -13,24 +13,21 @@ public class Problem0822CardFlippingGame {
         for (int i = 0; i < n; i++) {
             max = Math.max(max, Math.max(fronts[i], backs[i]));
         }
-        int[] arr = new int[max + 1];
+        boolean[] invalid = new boolean[max + 1];
         for (int i = 0; i < n; i++) {
             if (fronts[i] == backs[i]) {
-                arr[fronts[i]] = -1;
-            } else {
-                if (arr[fronts[i]] != -1) {
-                    arr[fronts[i]] = 1;
-                }
-                if (arr[backs[i]] != -1) {
-                    arr[backs[i]] = 1;
-                }
+                invalid[fronts[i]] = true;
             }
         }
-        for (int i = 0; i <= max; i++) {
-            if (arr[i] == 1) {
-                return i;
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            if (!invalid[fronts[i]]) {
+                ans = Math.min(ans, fronts[i]);
+            }
+            if (!invalid[backs[i]]) {
+                ans = Math.min(ans, backs[i]);
             }
         }
-        return 0;
+        return ans % Integer.MAX_VALUE;
     }
 }

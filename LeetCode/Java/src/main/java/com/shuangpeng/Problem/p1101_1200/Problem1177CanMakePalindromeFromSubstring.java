@@ -32,7 +32,7 @@ public class Problem1177CanMakePalindromeFromSubstring {
         return ans;
     }
 
-    public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
+    public List<Boolean> canMakePaliQueries1(String s, int[][] queries) {
         char[] cs = s.toCharArray();
         int n = cs.length;
         int[] dp = new int[n + 1];
@@ -47,6 +47,21 @@ public class Problem1177CanMakePalindromeFromSubstring {
                 cnt++;
             }
             ans.add(cnt >> 1 <= q[2]);
+        }
+        return ans;
+    }
+
+    public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
+        int n = s.length();
+        int[] preSum = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            preSum[i + 1] = preSum[i] ^ 1 << s.charAt(i) - 'a';
+        }
+        int m = queries.length;
+        List<Boolean> ans = new ArrayList<>(m);
+        for (int i = 0; i < m; i++) {
+            int num = preSum[queries[i][1] + 1] ^ preSum[queries[i][0]];
+            ans.add(Integer.bitCount(num) >> 1 <= queries[i][2]);
         }
         return ans;
     }

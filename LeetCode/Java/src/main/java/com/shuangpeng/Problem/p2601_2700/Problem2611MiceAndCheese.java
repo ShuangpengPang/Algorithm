@@ -28,7 +28,7 @@ public class Problem2611MiceAndCheese {
         return sum;
     }
 
-    public int miceAndCheese(int[] reward1, int[] reward2, int k) {
+    public int miceAndCheese1(int[] reward1, int[] reward2, int k) {
         if (k == 0) {
             return Arrays.stream(reward2).sum();
         }
@@ -46,5 +46,19 @@ public class Problem2611MiceAndCheese {
             }
         }
         return ans;
+    }
+
+    public int miceAndCheese(int[] reward1, int[] reward2, int k) {
+        PriorityQueue<Integer> q = new PriorityQueue<>(k + 1);
+        int n = reward1.length, sum = 0;
+        for (int i = 0; i < n; i++) {
+            int diff = reward1[i] - reward2[i];
+            sum += reward2[i] + diff;
+            q.offer(diff);
+            if (q.size() > k) {
+                sum -= q.poll();
+            }
+        }
+        return sum;
     }
 }

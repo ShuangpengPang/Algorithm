@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Problem2788SplitStringsBySeparator {
 
-    public List<String> splitWordsBySeparator(List<String> words, char separator) {
+    public List<String> splitWordsBySeparator0(List<String> words, char separator) {
         List<String> ans = new ArrayList<>();
         for (String w : words) {
             String[] strs = w.split("\\" + separator);
@@ -19,6 +19,30 @@ public class Problem2788SplitStringsBySeparator {
                 if (!s.isEmpty()) {
                     ans.add(s);
                 }
+            }
+        }
+        return ans;
+    }
+
+    public List<String> splitWordsBySeparator(List<String> words, char separator) {
+        List<String> ans = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for (String w : words) {
+            int m = w.length();
+            for (int i = 0; i < m; i++) {
+                char c = w.charAt(i);
+                if (c == separator) {
+                    if (sb.length() > 0) {
+                        ans.add(sb.toString());
+                        sb.setLength(0);
+                    }
+                } else {
+                    sb.append(c);
+                }
+            }
+            if (sb.length() > 0) {
+                ans.add(sb.toString());
+                sb.setLength(0);
             }
         }
         return ans;

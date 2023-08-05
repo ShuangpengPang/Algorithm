@@ -2,10 +2,14 @@ package com.shuangpeng.Problem.p0001_0100;
 
 import com.shuangpeng.common.ListNode;
 
+/**
+ * @description:（合并两个有序链表）
+ * @date 2023/8/5 7:16 PM
+ **/
 public class Problem0021MergeTwoSortedList {
 
     // 递归解法
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    public ListNode mergeTwoLists0(ListNode l1, ListNode l2) {
         if (l1 == null) {
             return l2;
         }
@@ -21,7 +25,7 @@ public class Problem0021MergeTwoSortedList {
         }
     }
 
-    public ListNode mergeTwoLists0(ListNode l1, ListNode l2) {
+    public ListNode mergeTwoLists1(ListNode l1, ListNode l2) {
         if (l1 == null) {
             return l2;
         }
@@ -62,6 +66,21 @@ public class Problem0021MergeTwoSortedList {
             } else {
                 current2 = current2.next;
             }
+        }
+        return dummy.next;
+    }
+
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(0), node = dummy;
+        while (list1 != null || list2 != null) {
+            if (list2 == null || list1 != null && list1.val <= list2.val) {
+                node.next = list1;
+                list1 = list1.next;
+            } else {
+                node.next = list2;
+                list2 = list2.next;
+            }
+            node = node.next;
         }
         return dummy.next;
     }

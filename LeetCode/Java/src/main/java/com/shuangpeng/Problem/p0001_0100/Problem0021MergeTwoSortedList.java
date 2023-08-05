@@ -17,10 +17,10 @@ public class Problem0021MergeTwoSortedList {
             return l1;
         }
         if (l1.val < l2.val) {
-            l1.next = mergeTwoLists(l1.next, l2);
+            l1.next = mergeTwoLists0(l1.next, l2);
             return l1;
         } else {
-            l2.next = mergeTwoLists(l1, l2.next);
+            l2.next = mergeTwoLists0(l1, l2.next);
             return l2;
         }
     }
@@ -68,6 +68,25 @@ public class Problem0021MergeTwoSortedList {
             }
         }
         return dummy.next;
+    }
+
+    public ListNode mergeTwoLists2(ListNode list1, ListNode list2) {
+        return dfs(list1, list2);
+    }
+
+    private ListNode dfs(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        }
+        if (list2 == null) {
+            return list1;
+        }
+        if (list1.val <= list2.val) {
+            list1.next = dfs(list1.next, list2);
+            return list1;
+        }
+        list2.next = dfs(list1, list2.next);
+        return list2;
     }
 
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {

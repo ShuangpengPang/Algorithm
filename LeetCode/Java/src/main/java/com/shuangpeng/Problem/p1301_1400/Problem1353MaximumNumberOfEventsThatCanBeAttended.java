@@ -1,6 +1,10 @@
 package com.shuangpeng.Problem.p1301_1400;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author ShuangPengPang
@@ -46,12 +50,67 @@ public class Problem1353MaximumNumberOfEventsThatCanBeAttended {
         }
     }
 
-    public int maxEvents(int[][] events) {
+    public int maxEvents0(int[][] events) {
         Arrays.sort(events, (a, b) -> a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]);
         Segment root = new Segment(0, events[events.length - 1][1]);
         int ans = 0;
         for (int[] e : events) {
             if (root.add(e[0], e[1])) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public int maxEvents1(int[][] events) {
+        int max = 0, n = events.length;
+        for (int[] e : events) {
+            max = Math.max(max, e[1]);
+        }
+        max += 2;
+        List<Integer>[] in = new List[max], out = new List[max];
+        for (int i = 0; i < max; i++) {
+            in[i] = new ArrayList<>();
+            out[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < n; i++) {
+            in[events[i][0]].add(i);
+            out[events[i][1] + 1].add(i);
+        }
+        boolean[] delete = new boolean[n];
+        PriorityQueue<Integer> q = new PriorityQueue<>(n, Comparator.comparingInt(a -> events[a][1]));
+        int ans = 0;
+        for (int i = 0; i < max; i++) {
+            for (int e : in[i]) {
+                q.offer(e);
+            }
+            for (int e : out[i]) {
+                delete[e] = true;
+            }
+            while (!q.isEmpty() && delete[q.peek()]) {
+                q.poll();
+            }
+            if (!q.isEmpty()) {
+                delete[q.poll()] = true;
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public int maxEvents(int[][] events) {
+        Arrays.sort(events, (a, b) -> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+        PriorityQueue<Integer> q = new PriorityQueue<>(Comparator.comparingInt(a -> a));
+        int n = events.length, time = 0, ans = 0;
+        for (int i = 0; i < n || !q.isEmpty(); time++) {
+            while (i < n && events[i][0] == time) {
+                q.offer(events[i++][1]);
+            }
+            while (!q.isEmpty() && q.peek() < time) {
+                q.poll();
+            }
+            if (!q.isEmpty()) {
+                q.poll();
                 ans++;
             }
         }

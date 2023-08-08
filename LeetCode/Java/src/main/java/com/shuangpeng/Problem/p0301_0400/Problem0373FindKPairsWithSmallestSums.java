@@ -110,7 +110,7 @@ public class Problem0373FindKPairsWithSmallestSums {
 //        return ans;
 //    }
 
-    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    public List<List<Integer>> kSmallestPairs2(int[] nums1, int[] nums2, int k) {
         int n1 = nums1.length, n2 = nums2.length, m = Math.min(n1, k);
         PriorityQueue<int[]> pq = new PriorityQueue<>(k, Comparator.comparingInt(a -> nums1[a[0]] + nums2[a[1]]));
         for (int i = 0; i < m; i++) {
@@ -122,6 +122,24 @@ public class Problem0373FindKPairsWithSmallestSums {
             ans.add(Arrays.asList(nums1[p[0]], nums2[p[1]]));
             if (++p[1] < n2) {
                 pq.offer(p);
+            }
+        }
+        return ans;
+    }
+
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        int n1 = nums1.length, n2 = nums2.length;
+        PriorityQueue<int[]> q = new PriorityQueue<>(k, Comparator.comparingInt(a -> nums1[a[0]] + nums2[a[1]]));
+        q.offer(new int[]{0, 0});
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < k && !q.isEmpty(); i++) {
+            int[] p = q.poll();
+            ans.add(Arrays.asList(nums1[p[0]], nums2[p[1]]));
+            if (p[1] == 0 && p[0] < n1 - 1) {
+                q.offer(new int[]{p[0] + 1, 0});
+            }
+            if (++p[1] < n2) {
+                q.offer(p);
             }
         }
         return ans;

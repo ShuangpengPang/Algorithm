@@ -34,7 +34,7 @@ public class Problem2451OddStringDifference {
         return null;
     }
 
-    public String oddString(String[] words) {
+    public String oddString1(String[] words) {
         int[] diff0 = get(words[0]), diff1 = get(words[1]);
         if (Arrays.equals(diff0, diff1)) {
             for (int i = 2; i < words.length; i++) {
@@ -53,5 +53,28 @@ public class Problem2451OddStringDifference {
             ans[i] = w.charAt(i + 1) - w.charAt(i);
         }
         return ans;
+    }
+
+    public String oddString(String[] words) {
+        int n = words.length;
+        if (!check(words[0], words[1])) {
+            return check(words[0], words[2]) ? words[1] : words[0];
+        }
+        for (int i = 2; i < n; i++) {
+            if (!check(words[0], words[i])) {
+                return words[i];
+            }
+        }
+        return "";
+    }
+
+    private boolean check(String w1, String w2) {
+        int n = w1.length();
+        for (int i = 1; i < n; i++) {
+            if (w1.charAt(i) - w1.charAt(i - 1) != w2.charAt(i) - w2.charAt(i - 1)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -10,6 +10,44 @@ import java.util.Arrays;
  */
 public class Problem1361ValidateBinaryTreeNodes {
 
+    public boolean validateBinaryTreeNodes0(int n, int[] leftChild, int[] rightChild) {
+        boolean[] visited = new boolean[n];
+        int[] parent = new int[n];
+        Arrays.setAll(parent, i -> i);
+        int cnt = n;
+        for (int i = 0; i < n; i++) {
+            int left = leftChild[i], right = rightChild[i];
+            if (left != -1) {
+                if (visited[left] || !union(parent, i, left)) {
+                    return false;
+                }
+                visited[left] = true;
+                cnt--;
+            }
+            if (right != -1) {
+                if (visited[right] || !union(parent, i, right)) {
+                    return false;
+                }
+                visited[right] = true;
+                cnt--;
+            }
+        }
+        return cnt == 1;
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = x == parent[x] ? x : find(parent, parent[x]);
+    }
+
+    private boolean union(int[] parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px == py) {
+            return false;
+        }
+        parent[py] = px;
+        return true;
+    }
+
     public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
         boolean[] visited = new boolean[n];
         int cnt = n;

@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1001_1100;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,6 +52,56 @@ public class Problem1081SmallestSubsequenceOfDistinctCharacters {
             }
         }
         return new String(cs);
+    }
+
+    public String smallestSubsequence1(String s) {
+        List<Integer>[] idx = new List[26];
+        Arrays.setAll(idx, i -> new ArrayList<>());
+        int n = s.length(), cnt = 0;
+        for (int i = 0; i < n; i++) {
+            int c = s.charAt(i) - 'a';
+            if (idx[c].isEmpty()) {
+                cnt++;
+            }
+            idx[c].add(i);
+        }
+        char[] cs = new char[cnt];
+        boolean[] visited = new boolean[26];
+        for (int i = 0, index = 0; i < cnt; i++) {
+            int c = 0;
+            while (c < 26) {
+                if (!visited[c] && !idx[c].isEmpty()) {
+                    List<Integer> list = idx[c];
+                    int pos = list.get(binarySearch(list, index)), count = 0;
+                    for (int j = 0; j < 26 && count < cnt - i; j++) {
+                        if (!visited[j] && !idx[j].isEmpty() && idx[j].get(idx[j].size() - 1) >= pos) {
+                            count++;
+                        }
+                    }
+                    if (count == cnt - i) {
+                        index = pos + 1;
+                        break;
+                    }
+                }
+                c++;
+            }
+            cs[i] = (char) ('a' + c);
+            visited[c] = true;
+        }
+        return new String(cs);
+    }
+
+    private int binarySearch(List<Integer> list, int index) {
+        int left = 0, right = list.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (list.get(mid) < index) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left;
     }
 
     public String smallestSubsequence(String s) {

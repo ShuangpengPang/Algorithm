@@ -112,3 +112,44 @@ public class Problem1381DesignAStackWithIncrementOperation {
  * obj.increment(k,val);
  */
 }
+
+class Problem1381DesignAStackWithIncrementOperation0 {
+
+    class CustomStack {
+
+        int top = 0, maxSize;
+        int[] stack, add;
+
+        public CustomStack(int maxSize) {
+            this.maxSize = maxSize;
+            stack = new int[maxSize];
+            add = new int[maxSize];
+            top = 0;
+        }
+
+        public void push(int x) {
+            if (top < maxSize) {
+                stack[top++] = x;
+            }
+        }
+
+        public int pop() {
+            if (top == 0) {
+                return -1;
+            }
+            if (top >= 2) {
+                add[top - 2] += add[top - 1];
+            }
+            int ans = stack[top - 1] + add[top - 1];
+            add[top - 1] = 0;
+            top--;
+            return ans;
+        }
+
+        public void increment(int k, int val) {
+            if (top > 0) {
+                add[Math.min(top, k) - 1] += val;
+            }
+        }
+    }
+}

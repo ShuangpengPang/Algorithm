@@ -13,9 +13,6 @@ public class Problem1572MatrixDiagonalSum {
         for (int i = 0; i < n; i++) {
             sum += mat[i][i] + mat[i][n - i - 1];
         }
-        if ((n & 1) == 1) {
-            sum -= mat[h][h];
-        }
-        return sum;
+        return sum - mat[h][h] * (n & 1);
     }
 }

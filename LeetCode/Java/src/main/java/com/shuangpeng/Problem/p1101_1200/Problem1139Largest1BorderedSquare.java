@@ -114,7 +114,7 @@ public class Problem1139Largest1BorderedSquare {
         return ans * ans;
     }
 
-    public int largest1BorderedSquare(int[][] grid) {
+    public int largest1BorderedSquare2(int[][] grid) {
         int m = grid.length, n = grid[0].length, ans = 0;
         int[][] row = new int[m + 1][n + 1], col = new int[m + 1][n + 1];
         for (int i = 1; i <= m; i++) {
@@ -127,6 +127,30 @@ public class Problem1139Largest1BorderedSquare {
                 for (int k = ans; row[i][j] > k && col[i][j] > k; k++) {
                     if (col[i][j - k] > k && row[i - k][j] > k) {
                         ans = k + 1;
+                    }
+                }
+            }
+        }
+        return ans * ans;
+    }
+
+    public int largest1BorderedSquare(int[][] grid) {
+        int m = grid.length, n = grid[0].length, ans = 0;
+        int[][] row = new int[m + 1][n + 1];
+        int[] col = new int[n + 1];
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (grid[i - 1][j - 1] == 0) {
+                    row[i][j] = 0;
+                    col[j] = 0;
+                } else {
+                    row[i][j] = row[i][j - 1] + 1;
+                    col[j]++;
+                }
+                int length = Math.min(row[i][j], col[j]);
+                for (int k = ans + 1; k <= length; k++) {
+                    if (col[j - k + 1] >= k && row[i - k + 1][j] >= k) {
+                        ans = k;
                     }
                 }
             }

@@ -99,7 +99,7 @@ class Problem1376TimeNeededToInformAllEmployees0 {
         return informTime[x];
     }
 
-    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+    public int numOfMinutes2(int n, int headID, int[] manager, int[] informTime) {
         int ans = 0;
         for (int i = 0; i < n; i++) {
             int x = i, s = 0;
@@ -116,6 +116,31 @@ class Problem1376TimeNeededToInformAllEmployees0 {
                 manager[x] = -1;
                 s -= t;
                 x = p;
+            }
+        }
+        return ans;
+    }
+
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (informTime[i] >= 0) {
+                int time = informTime[i], j = i;
+                while (manager[j] != -1 && informTime[manager[j]] >= 0) {
+                    j = manager[j];
+                    time += informTime[j];
+                }
+                if (manager[j] != -1) {
+                    time -= informTime[manager[j]];
+                }
+                ans = Math.max(ans, time);
+                j = i;
+                while (j != -1 && informTime[j] >= 0) {
+                    int tmp = informTime[j];
+                    informTime[j] = -time;
+                    time -= tmp;
+                    j = manager[j];
+                }
             }
         }
         return ans;

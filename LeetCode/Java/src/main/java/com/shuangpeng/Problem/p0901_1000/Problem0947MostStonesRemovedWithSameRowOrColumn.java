@@ -250,3 +250,102 @@ class Problem0947MostStonesRemovedWithSameRowOrColumn1 {
 //        }
 //    }
 //}
+
+class Problem0947MostStonesRemovedWithSameRowOrColumn2 {
+
+    public int removeStones(int[][] stones) {
+        Map<Integer, Integer> parent = new HashMap<>();
+        for (int[] s : stones) {
+            union(parent, s[0], s[1] + 1 << 15);
+        }
+        int cnt = 0;
+        for (Map.Entry<Integer, Integer> entry : parent.entrySet()) {
+            if (entry.getKey().equals(entry.getValue())) {
+                cnt++;
+            }
+        }
+        return stones.length - cnt;
+    }
+
+    private int find(Map<Integer, Integer> parent, int x) {
+        if (!parent.containsKey(x)) {
+            parent.put(x, x);
+            return x;
+        }
+        int p = parent.get(x);
+        if (p != x) {
+            p = find(parent, p);
+            parent.put(x, p);
+        }
+        return p;
+    }
+
+    private void union(Map<Integer, Integer> parent, int x, int y) {
+        int px = find(parent, x), py = find(parent, y);
+        if (px != py) {
+            parent.put(py, px);
+        }
+    }
+}
+
+class Problem0947MostStonesRemovedWithSameRowOrColumn3 {
+
+    public int removeStones(int[][] stones) {
+        int N = (int) 1e4 + 1, ans = 0;
+        Map<Integer, Integer> parent = new HashMap<>();
+        for (int[] s : stones) {
+            int x = s[0], y = s[1] + N;
+            ans += union(parent, x, y);
+        }
+        return ans;
+    }
+
+    private int find(Map<Integer, Integer> parent, int x) {
+        int p = parent.getOrDefault(x, x);
+        if (p != x) {
+            p = find(parent, p);
+        }
+        parent.put(x, p);
+        return p;
+    }
+
+    private int union(Map<Integer, Integer> parent, int x, int y) {
+        boolean hasX = parent.containsKey(x), hasY = parent.containsKey(y);
+        int px = find(parent, x), py = find(parent, y);
+        int ans = !hasX && !hasY ? 0 : 1;
+        if (px != py) {
+            parent.put(py, px);
+            ans = hasX && hasY ? ans + 1 : ans;
+        }
+        return ans;
+    }
+}
+
+//class tmp {
+//
+//    public int removeStones(int[][] stones) {
+//        int n = stones.length, N = (int) 1e4 + 1, ans = 0;
+//        int[] parent = new int[n], rows = new int[N], cols = new int[N];
+//        Arrays.setAll(parent, i -> i);
+//        Arrays.fill(rows, -1);
+//        Arrays.fill(cols, -1);
+//        for (int i = 0; i < n; i++) {
+//            int x = stones[i][0], y = stones[i][1];
+//            int r = rows[x] == -1 ? i : rows[x];
+//            int c = cols[y] == -1 ? i : cols[y];
+//            int px = find(parent, r), py = find(parent, c);
+//            if (px == py) {
+//                ans += px == i ? 0 : 1;
+//            } else {
+//                ans += px == i || py == i ? 1 : 2;
+//                parent[py] = px;
+//            }
+//            rows[x] = cols[y] = px;
+//        }
+//        return ans;
+//    }
+//
+//    private int find(int[] parent, int x) {
+//        return parent[x] = x == parent[x] ? x : find(parent, parent[x]);
+//    }
+//}

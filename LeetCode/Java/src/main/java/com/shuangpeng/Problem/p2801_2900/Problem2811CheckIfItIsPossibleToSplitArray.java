@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Problem2811CheckIfItIsPossibleToSplitArray {
 
-    public boolean canSplitArray(List<Integer> nums, int m) {
+    public boolean canSplitArray0(List<Integer> nums, int m) {
         int n = nums.size();
         boolean[][] dp = new boolean[n][n];
         for (int i = n - 1; i >= 0; i--) {
@@ -26,5 +26,18 @@ public class Problem2811CheckIfItIsPossibleToSplitArray {
             }
         }
         return dp[0][n - 1];
+    }
+
+    public boolean canSplitArray(List<Integer> nums, int m) {
+        int n = nums.size();
+        if (n <= 2) {
+            return true;
+        }
+        for (int i = 1; i < n; i++) {
+            if (nums.get(i) + nums.get(i - 1) >= m) {
+                return true;
+            }
+        }
+        return false;
     }
 }

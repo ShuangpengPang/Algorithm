@@ -45,7 +45,7 @@ public class Problem1234ReplaceTheSubstringForBalancedString {
         return true;
     }
 
-    public int balancedString(String s) {
+    public int balancedString1(String s) {
         char[] arr = {'Q', 'W', 'E', 'R'};
         int[] ids = new int[26];
         for (int i = 0; i < 4; i++) {
@@ -75,6 +75,40 @@ public class Problem1234ReplaceTheSubstringForBalancedString {
         int n = cnt.length;
         for (int i = 0; i < n; i++) {
             if (cnt[i] > m) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int balancedString(String s) {
+        int n = s.length(), q = n >> 2;
+        int[] cnt = new int[4];
+        String str = "QWER";
+        for (int i = 0; i < n; i++) {
+            cnt[str.indexOf(s.charAt(i))]++;
+        }
+        for (int i = 0; i < 4; i++) {
+            cnt[i] -= q;
+        }
+        int ans = Integer.MAX_VALUE;
+        int[] tmp = new int[4];
+        for (int i = 0, j = 0; i < n; i++) {
+            tmp[str.indexOf(s.charAt(i))]++;
+            while (j <= i && check(cnt, tmp)) {
+                ans = Math.min(ans, i - j + 1);
+                tmp[str.indexOf(s.charAt(j++))]--;
+            }
+            if (j > i && check(cnt, tmp)) {
+                return 0;
+            }
+        }
+        return ans;
+    }
+
+    private boolean check(int[] cnt, int[] tmp) {
+        for (int i = 0; i < 4; i++) {
+            if (tmp[i] < cnt[i]) {
                 return false;
             }
         }

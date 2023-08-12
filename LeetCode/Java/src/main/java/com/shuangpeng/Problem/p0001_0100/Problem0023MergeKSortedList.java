@@ -6,6 +6,11 @@ import javafx.util.Pair;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+
+/**
+ * @description:（合并K个排序链表）
+ * @date 2023/8/12 11:28 AM
+ **/
 public class Problem0023MergeKSortedList {
 
     public ListNode mergeKLists0(ListNode[] lists) {
@@ -147,25 +152,20 @@ public class Problem0023MergeKSortedList {
     }
 
     public ListNode mergeKLists(ListNode[] lists) {
-        if (lists == null || lists.length == 0) {
-            return null;
-        }
-        PriorityQueue<ListNode> queue = new PriorityQueue<>(Comparator.comparingInt(a -> a.val));
-        int length = lists.length;
-        for (int i = 0; i < length; i++) {
-            if (lists[i] != null) {
-                queue.offer(lists[i]);
+        PriorityQueue<ListNode> q = new PriorityQueue<>(Comparator.comparingInt(a -> a.val));
+        for (ListNode node : lists) {
+            if (node != null) {
+                q.offer(node);
             }
         }
-        ListNode dummy = new ListNode();
-        ListNode current = dummy;
-        while (!queue.isEmpty()) {
-            ListNode listNode = queue.poll();
-            if (listNode.next != null) {
-                queue.offer(listNode.next);
+        ListNode dummy = new ListNode(), node = dummy;
+        while (!q.isEmpty()) {
+            ListNode cur = q.poll();
+            node.next = cur;
+            if (cur.next != null) {
+                q.offer(cur.next);
             }
-            current.next = listNode;
-            current = listNode;
+            node = cur;
         }
         return dummy.next;
     }

@@ -73,3 +73,42 @@ public class Problem1138AlphabetBoardPath {
         return sb.toString();
     }
 }
+
+class Problem1138AlphabetBoardPath0 {
+
+    static String[][] paths = new String[26][26];
+    static {
+        for (int i = 0; i < 25; i++) {
+            int x1 = i / 5, y1 = i % 5;
+            for (int j = 0; j < 25; j++) {
+                StringBuilder sb = new StringBuilder();
+                int x2 = j / 5, y2 = j % 5;
+                char c1 = x1 < x2 ? 'D' : 'U', c2 = y1 < y2 ? 'R' : 'L';
+                int cnt1 = Math.abs(x2 - x1), cnt2 = Math.abs(y2 - y1);
+                for (int k = 0; k < cnt1; k++) {
+                    sb.append(c1);
+                }
+                for (int k = 0; k < cnt2; k++) {
+                    sb.append(c2);
+                }
+                paths[i][j] = sb.toString();
+            }
+        }
+        paths[25][25] = "";
+        for (int i = 0; i < 25; i++) {
+            paths[i][25] = paths[i][20] + 'D';
+            paths[25][i] = 'U' + paths[20][i];
+        }
+    }
+
+    public String alphabetBoardPath(String target) {
+        int n = target.length(), prev = 0;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            int c = target.charAt(i) - 'a';
+            sb.append(paths[prev][c]).append('!');
+            prev = c;
+        }
+        return sb.toString();
+    }
+}

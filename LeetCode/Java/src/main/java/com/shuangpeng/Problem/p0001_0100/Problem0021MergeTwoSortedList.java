@@ -89,7 +89,7 @@ public class Problem0021MergeTwoSortedList {
         return list2;
     }
 
-    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+    public ListNode mergeTwoLists3(ListNode list1, ListNode list2) {
         ListNode dummy = new ListNode(0), node = dummy;
         while (list1 != null || list2 != null) {
             if (list2 == null || list1 != null && list1.val <= list2.val) {
@@ -101,6 +101,22 @@ public class Problem0021MergeTwoSortedList {
             }
             node = node.next;
         }
+        return dummy.next;
+    }
+
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(), node = dummy;
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                node.next = list1;
+                list1 = list1.next;
+            } else {
+                node.next = list2;
+                list2 = list2.next;
+            }
+            node = node.next;
+        }
+        node.next = list1 == null ? list2 : list1;
         return dummy.next;
     }
 }

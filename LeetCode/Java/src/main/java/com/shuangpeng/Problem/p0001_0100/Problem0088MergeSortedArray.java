@@ -1,5 +1,9 @@
 package com.shuangpeng.Problem.p0001_0100;
 
+/**
+ * @description:（合并两个有序数组）
+ * @date 2023/8/13 8:01 PM
+ **/
 public class Problem0088MergeSortedArray {
 
     public void merge0(int[] nums1, int m, int[] nums2, int n) {
@@ -59,7 +63,7 @@ public class Problem0088MergeSortedArray {
         }
     }
 
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
+    public void merge2(int[] nums1, int m, int[] nums2, int n) {
         if (n == 0) {
             return;
         }
@@ -75,6 +79,12 @@ public class Problem0088MergeSortedArray {
         }
         while (j >= 0) {
             nums1[p--] = nums2[j--];
+        }
+    }
+
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        for (int i = m + n - 1, j = m - 1, k = n - 1; i >= 0; i--) {
+            nums1[i] = k < 0 || j >= 0 && nums1[j] >= nums2[k] ? nums1[j--] : nums2[k--];
         }
     }
 }

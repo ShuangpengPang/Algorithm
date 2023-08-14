@@ -5,6 +5,10 @@ import com.shuangpeng.common.TreeNode;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * @description:（合并二叉树）
+ * @date 2023/8/14 10:47 AM
+ **/
 public class Problem0617MergeTwoBinaryTrees {
 
     // 递归（深度优先）
@@ -27,7 +31,7 @@ public class Problem0617MergeTwoBinaryTrees {
     }
 
     // 广度优先
-    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+    public TreeNode mergeTrees1(TreeNode t1, TreeNode t2) {
         if (t1 == null) {
             return t2;
         }
@@ -56,5 +60,22 @@ public class Problem0617MergeTwoBinaryTrees {
             }
         }
         return t1;
+    }
+
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        return dfs(root1, root2);
+    }
+
+    private TreeNode dfs(TreeNode root1, TreeNode root2) {
+        if (root1 == null) {
+            return root2;
+        }
+        if (root2 == null) {
+            return root1;
+        }
+        root1.val += root2.val;
+        root1.left = dfs(root1.left, root2.left);
+        root1.right = dfs(root1.right, root2.right);
+        return root1;
     }
 }

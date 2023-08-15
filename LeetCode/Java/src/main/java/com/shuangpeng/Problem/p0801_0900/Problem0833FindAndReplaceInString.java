@@ -1,7 +1,11 @@
 package com.shuangpeng.Problem.p0801_0900;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: Problem0833FindAndReplaceInString（字符串中的查找与替换）
@@ -44,7 +48,48 @@ public class Problem0833FindAndReplaceInString {
         return true;
     }
 
-    public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
+    public String findReplaceString1(String s, int[] indices, String[] sources, String[] targets) {
+        int n = s.length(), m = indices.length;
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            map.computeIfAbsent(indices[i], k -> new ArrayList<>()).add(i);
+        }
+        StringBuilder sb = new StringBuilder();
+        int idx = 0;
+        while (idx < n) {
+            List<Integer> list = map.get(idx);
+            boolean success = false;
+            if (list != null) {
+                for (int index : list) {
+                    if (check(s, idx, sources[index])) {
+                        success = true;
+                        sb.append(targets[index]);
+                        idx += sources[index].length();
+                        break;
+                    }
+                }
+            }
+            if (!success) {
+                sb.append(s.charAt(idx++));
+            }
+        }
+        return sb.toString();
+    }
+
+    private boolean check(String s, int start, String t) {
+        int n = s.length(), m = t.length();
+        if (n - start < m) {
+            return false;
+        }
+        for (int i = 0; i < m; i++) {
+            if (s.charAt(i + start) != t.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String findReplaceString2(String s, int[] indices, String[] sources, String[] targets) {
         int n = s.length(), m = indices.length;
         int[] match = new int[n];
         Arrays.fill(match, -1);
@@ -62,6 +107,24 @@ public class Problem0833FindAndReplaceInString {
             } else {
                 sb.append(s.charAt(i++));
             }
+        }
+        return sb.toString();
+    }
+
+    public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
+        int n = s.length(), m = indices.length;
+        String[] replaceStr = new String[n];
+        int[] replaceLen = new int[n];
+        Arrays.fill(replaceLen, 1);
+        for (int i = 0; i < m; i++) {
+            if (s.startsWith(sources[i], indices[i])) {
+                replaceStr[indices[i]] = targets[i];
+                replaceLen[indices[i]] = sources[i].length();
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i += replaceLen[i]) {
+            sb.append(replaceStr[i] == null ? s.charAt(i) : replaceStr[i]);
         }
         return sb.toString();
     }

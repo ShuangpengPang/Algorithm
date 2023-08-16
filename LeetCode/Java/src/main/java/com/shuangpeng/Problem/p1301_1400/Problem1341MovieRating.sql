@@ -70,3 +70,25 @@ FROM (
 ) T
 WHERE T.RANKING = 1
 ;
+
+SELECT results
+FROM (
+    SELECT u.name AS results
+    FROM MovieRating m
+        LEFT JOIN Users u ON u.user_id = m.user_id
+    GROUP BY u.name
+    ORDER BY COUNT(*) DESC, u.name ASC
+    LIMIT 1
+) t
+UNION ALL
+SELECT results
+FROM (
+    SELECT m.title AS results
+    FROM MovieRating r
+        LEFT JOIN Movies m ON m.movie_id = r.movie_id
+    WHERE DATE_FORMAT(r.created_at, '%Y-%m') = '2020-02'
+    GROUP BY m.title
+    ORDER BY SUM(r.rating) / COUNT(r.user_id) DESC, m.title ASC
+    LIMIT 1
+) t
+;

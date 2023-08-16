@@ -13,9 +13,14 @@ public class Problem1344AngleBetweenHandsOfAClock {
         return Math.min(ans, 360 - ans);
     }
 
-    public double angleClock(int hour, int minutes) {
+    public double angleClock1(int hour, int minutes) {
         double minuteAngle = 6, hourAngle = 30;
         double angle = Math.abs(minutes * minuteAngle - (hour % 12 + minutes / 60.0) * hourAngle);
         return Math.min(angle, 360 - angle);
+    }
+
+    public double angleClock(int hour, int minutes) {
+        double diff = Math.abs(6.0 * minutes - (hour + minutes / 60.0) * 30.0);
+        return Math.min(diff, 360 - diff);
     }
 }

@@ -8,6 +8,28 @@ package com.shuangpeng.Problem.p0801_0900;
  */
 public class Problem0822CardFlippingGame {
 
+    public int flipgame0(int[] fronts, int[] backs) {
+        int n = fronts.length, max = 0;
+        for (int i = 0; i < n; i++) {
+            max = Math.max(max, Math.max(fronts[i], backs[i]));
+        }
+        int[] visited = new int[max + 1];
+        for (int i = 0; i < n; i++) {
+            if (fronts[i] == backs[i]) {
+                visited[fronts[i]] = 2;
+            } else {
+                visited[fronts[i]] = Math.max(visited[fronts[i]], 1);
+                visited[backs[i]] = Math.max(visited[backs[i]], 1);
+            }
+        }
+        for (int i = 0; i <= max; i++) {
+            if (visited[i] == 1) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public int flipgame(int[] fronts, int[] backs) {
         int max = 0, n = fronts.length;
         for (int i = 0; i < n; i++) {

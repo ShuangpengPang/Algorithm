@@ -35,7 +35,7 @@ public class Problem1388PizzaWith3nSlices {
         return dp[n - 1][cnt - 1];
     }
 
-    public int maxSizeSlices(int[] slices) {
+    public int maxSizeSlices1(int[] slices) {
         int n = slices.length;
         // 使用数组模拟双向链表
         int[] linkL = new int[n];
@@ -81,5 +81,27 @@ public class Problem1388PizzaWith3nSlices {
         }
         return ans;
     }
-}
 
+    public int maxSizeSlices(int[] slices) {
+        int n = slices.length, m = n / 3;
+        return Math.max(rangeSlice(slices, 0, n - 2, m), rangeSlice(slices, 1, n - 1, m));
+    }
+
+    public int rangeSlice(int[] slices, int start, int end, int m) {
+        int n = end - start + 1, M = Integer.MIN_VALUE >> 1;
+        int[] dp = new int[n + 1];
+        dp[0] = M;
+        for (int i = 0; i < n; i++) {
+            dp[i + 1] = Math.max(dp[i], slices[i + start]);
+        }
+        for (int i = 2; i <= m; i++) {
+            for (int p1 = M, p2 = M, j = 1; j <= n; j++) {
+                int t = dp[j];
+                dp[j] = Math.max(dp[j - 1], p1 + slices[j + start - 1]);
+                p1 = p2;
+                p2 = t;
+            }
+        }
+        return dp[n];
+    }
+}

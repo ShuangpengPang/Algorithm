@@ -11,13 +11,6 @@ import com.shuangpeng.common.TreeNode;
 public class Problem2236RootEqualsSumOfChildren {
 
     public boolean checkTree(TreeNode root) {
-        return root.val == dfs(root.left) + dfs(root.right);
-    }
-
-    private int dfs(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        return root.val + dfs(root.left) + dfs(root.right);
+        return root.val == root.left.val + root.right.val;
     }
 }

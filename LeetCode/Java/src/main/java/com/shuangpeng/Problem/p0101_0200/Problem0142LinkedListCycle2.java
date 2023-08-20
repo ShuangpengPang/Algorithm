@@ -67,7 +67,7 @@ public class Problem0142LinkedListCycle2 {
             slow = slow.next;
             fast = fast.next.next;
         }
-        if (fast == null || fast.next == null) {
+        if (slow != fast) {
             return null;
         }
         slow = slow.next;

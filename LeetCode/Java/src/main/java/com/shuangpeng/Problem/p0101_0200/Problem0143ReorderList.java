@@ -111,6 +111,7 @@ public class Problem0143ReorderList {
 }
 
 class Problem0143ReorderList0 {
+
     ListNode cur, prev;
     public void reorderList(ListNode head) {
         reorderList(head, head);
@@ -134,5 +135,41 @@ class Problem0143ReorderList0 {
         cur.next = prev;
         prev = slow;
         cur = next;
+    }
+}
+
+class Problem0143ReorderList1 {
+
+    public void reorderList(ListNode head) {
+        ListNode mid = getMid(head), node2 = reverse(mid.next);
+        mid.next = null;
+        ListNode node1 = head;
+        while (node2 != null) {
+            ListNode next1 = node1.next, next2 = node2.next;
+            node1.next = node2;
+            node2.next = next1;
+            node1 = next1;
+            node2 = next2;
+        }
+    }
+
+    private ListNode getMid(ListNode head) {
+        ListNode slow = head, fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
     }
 }

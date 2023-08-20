@@ -173,3 +173,30 @@ class Problem0143ReorderList1 {
         return prev;
     }
 }
+
+class Problem0143ReorderList2 {
+
+    ListNode cur;
+
+    public void reorderList(ListNode head) {
+        dfs(head, head);
+    }
+
+    private ListNode dfs(ListNode slow, ListNode fast) {
+        if (fast == null) {
+            cur = slow;
+            return null;
+        }
+        if (fast.next == null) {
+            cur = slow.next;
+            slow.next = null;
+            return slow;
+        }
+        ListNode prev = dfs(slow.next, fast.next.next);
+        slow.next = cur;
+        ListNode next = cur.next;
+        cur.next = prev;
+        cur = next;
+        return slow;
+    }
+}

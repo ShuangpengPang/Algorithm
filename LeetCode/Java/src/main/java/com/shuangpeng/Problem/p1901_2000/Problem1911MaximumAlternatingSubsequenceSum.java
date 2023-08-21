@@ -54,7 +54,7 @@ public class Problem1911MaximumAlternatingSubsequenceSum {
         return sum;
     }
 
-    public long maxAlternatingSum(int[] nums) {
+    public long maxAlternatingSum3(int[] nums) {
         int n = nums.length;
         long even = Integer.MIN_VALUE >> 1, odd = 0;
         for (int i = 0; i < n; i++) {
@@ -62,5 +62,19 @@ public class Problem1911MaximumAlternatingSubsequenceSum {
             odd = Math.max(odd, even - nums[i]);
         }
         return even;
+    }
+
+
+    public long maxAlternatingSum(int[] nums) {
+        long ans = 0, min = 0, max = 0;
+        for (int num : nums) {
+            long tmpMax = num - min, tmpMin = num - max;
+            if (tmpMax > max) {
+                max = tmpMax;
+                ans = tmpMax;
+            }
+            min = Math.min(min, tmpMin);
+        }
+        return ans;
     }
 }

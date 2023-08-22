@@ -33,9 +33,15 @@ public class Problem1401CircleAndRectangleOverlapping {
         return x * x + y * y <= s;
     }
 
-    public boolean checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+    public boolean checkOverlap1(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
         int x = xCenter < x1 ? x1 - xCenter : (xCenter > x2 ? xCenter - x2 : 0);
         int y = yCenter < y1 ? y1 - yCenter : (yCenter > y2 ? yCenter - y2 : 0);
+        return x * x + y * y <= radius * radius;
+    }
+
+    public boolean checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+        int x = (Math.abs(xCenter - x1) + Math.abs(xCenter - x2) + x1 - x2) >> 1;
+        int y = (Math.abs(yCenter - y1) + Math.abs(yCenter - y2) + y1 - y2) >> 1;
         return x * x + y * y <= radius * radius;
     }
 }

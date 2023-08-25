@@ -64,7 +64,7 @@ public class Problem1209RemoveAllAdjacentDuplicatesInStringII {
         return sb.toString();
     }
 
-    public String removeDuplicates(String s, int k) {
+    public String removeDuplicates2(String s, int k) {
         char[] cs = s.toCharArray();
         int n = cs.length, j = 0;
         Deque<Integer> q = new ArrayDeque<>();
@@ -83,5 +83,23 @@ public class Problem1209RemoveAllAdjacentDuplicatesInStringII {
             }
         }
         return new String(cs, 0, j);
+    }
+
+    public String removeDuplicates(String s, int k) {
+        char[] cs = s.toCharArray();
+        int n = cs.length;
+        Deque<Integer> q = new ArrayDeque<>();
+        int last = 0;
+        for (int i = 0; i < n; i++) {
+            if (q.isEmpty() || cs[i] != cs[q.peek()]) {
+                q.push(last);
+                cs[last++] = cs[i];
+            } else if (last - q.peek() == k - 1) {
+                last = q.pop();
+            } else {
+                cs[last++] = cs[i];
+            }
+        }
+        return new String(cs, 0, last);
     }
 }

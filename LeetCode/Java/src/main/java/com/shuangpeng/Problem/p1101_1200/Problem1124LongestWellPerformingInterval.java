@@ -52,7 +52,7 @@ public class Problem1124LongestWellPerformingInterval {
         return ans;
     }
 
-    public int longestWPI(int[] hours) {
+    public int longestWPI2(int[] hours) {
         int n = hours.length;
         int[] map = new int[(n << 1) + 2];
         Arrays.fill(map, n);
@@ -62,6 +62,22 @@ public class Problem1124LongestWellPerformingInterval {
             s += hours[i - 1] > 8 ? 1 : -1;
             ans = Math.max(ans, s > 0 ? i : i - map[s + n]);
             map[s + n + 1] = Math.min(map[s + n + 1], i);
+        }
+        return ans;
+    }
+
+    public int longestWPI(int[] hours) {
+        int n = hours.length;
+        int[] map = new int[n + 2];
+        Arrays.fill(map, n);
+        map[0] = 0;
+        int ans = 0;
+        for (int i = 1, s = 0; i <= n; i++) {
+            s += hours[i - 1] > 8 ? 1 : -1;
+            ans = Math.max(ans, s > 0 ? i : i - map[1 - s]);
+            if (s < 0) {
+                map[-s] = Math.min(map[-s], i);
+            }
         }
         return ans;
     }

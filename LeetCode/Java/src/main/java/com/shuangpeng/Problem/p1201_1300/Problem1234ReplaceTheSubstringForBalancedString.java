@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p1201_1300;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -81,7 +83,7 @@ public class Problem1234ReplaceTheSubstringForBalancedString {
         return true;
     }
 
-    public int balancedString(String s) {
+    public int balancedString2(String s) {
         int n = s.length(), q = n >> 2;
         int[] cnt = new int[4];
         String str = "QWER";
@@ -113,5 +115,32 @@ public class Problem1234ReplaceTheSubstringForBalancedString {
             }
         }
         return true;
+    }
+
+    public int balancedString(String s) {
+        int n = s.length(), t = n >> 2;
+        int[] cnt = new int[26];
+        Arrays.fill(cnt, -t);
+        int ans = n, count = 0;
+        for (int i = 0; i < n; i++) {
+            if (cnt[s.charAt(i) - 'A']++ == 0) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            return 0;
+        }
+        for (int p = 0, i = 0; i < n; i++) {
+            if (--cnt[s.charAt(i) - 'A'] == 0) {
+                count--;
+            }
+            while (p <= i && count == 0) {
+                ans = Math.min(ans, i - p + 1);
+                if (cnt[s.charAt(p++) - 'A']++ == 0) {
+                    count++;
+                }
+            }
+        }
+        return ans;
     }
 }

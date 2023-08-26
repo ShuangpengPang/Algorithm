@@ -76,6 +76,21 @@ public class Problem0948BagOfTokens {
         return ans;
     }
 
+    public int bagOfTokensScore4(int[] tokens, int power) {
+        Arrays.sort(tokens);
+        int n = tokens.length, ans = 0;
+        for (int p = 0, i = 0, j = n - 1; i <= j && (p < i || power >= tokens[i]); i++) {
+            if (power >= tokens[i]) {
+                power -= tokens[i];
+                ans = Math.max(ans, i - p + 1);
+            } else {
+                power += tokens[j--] - tokens[i];
+                p++;
+            }
+        }
+        return ans;
+    }
+
     public int bagOfTokensScore(int[] tokens, int power) {
         Arrays.sort(tokens);
         int n = tokens.length, ans = 0;

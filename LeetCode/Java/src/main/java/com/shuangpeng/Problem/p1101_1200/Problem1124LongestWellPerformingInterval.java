@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p1101_1200;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class Problem1124LongestWellPerformingInterval {
         return ans;
     }
 
-    public int longestWPI(int[] hours) {
+    public int longestWPI1(int[] hours) {
         int n = hours.length;
         Map<Integer, Integer> map = new HashMap<>();
         int sum = 0, ans = 0;
@@ -47,6 +48,20 @@ public class Problem1124LongestWellPerformingInterval {
                 ans = Math.max(ans, i - map.getOrDefault(sum - 1, n));
                 map.put(sum, Math.min(i, map.getOrDefault(sum, n)));
             }
+        }
+        return ans;
+    }
+
+    public int longestWPI(int[] hours) {
+        int n = hours.length;
+        int[] map = new int[(n << 1) + 2];
+        Arrays.fill(map, n);
+        map[n + 1] = 0;
+        int ans = 0;
+        for (int s = 0, i = 1; i <= n; i++) {
+            s += hours[i - 1] > 8 ? 1 : -1;
+            ans = Math.max(ans, s > 0 ? i : i - map[s + n]);
+            map[s + n + 1] = Math.min(map[s + n + 1], i);
         }
         return ans;
     }

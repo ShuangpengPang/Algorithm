@@ -1,11 +1,17 @@
 package com.shuangpeng.Problem.p0001_0100;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
+/**
+ * @description:（合并区间）
+ * @date 2023/8/27 5:47 PM
+ **/
 public class Problem0056MergeInterval {
 
-    public int[][] merge(int[][] intervals) {
+    public int[][] merge0(int[][] intervals) {
         if (intervals == null || intervals.length < 2 || intervals[0].length < 2) {
             return intervals;
         }
@@ -29,5 +35,21 @@ public class Problem0056MergeInterval {
             result[i][1] = temp[i][1];
         }
         return result;
+    }
+
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        List<int[]> list = new ArrayList<>();
+        int n = intervals.length, i = 0;
+        while (i < n) {
+            int start = intervals[i][0], end = intervals[i][1];
+            i++;
+            while (i < n && intervals[i][0] <= end) {
+                end = Math.max(end, intervals[i][1]);
+                i++;
+            }
+            list.add(new int[]{start, end});
+        }
+        return list.toArray(new int[list.size()][]);
     }
 }

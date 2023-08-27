@@ -9,8 +9,7 @@ package com.shuangpeng.Problem.p1401_1500;
 public class Problem1423MaximumPointsYouCanObtainFromCards {
 
     public int maxScore(int[] cardPoints, int k) {
-        int n = cardPoints.length, m = n - k;
-        int sum = 0, minSum = Integer.MAX_VALUE;
+        int n = cardPoints.length, sum = 0, minValue = Integer.MAX_VALUE, m = n - k;
         for (int i = 0, s = 0; i < n; i++) {
             sum += cardPoints[i];
             s += cardPoints[i];
@@ -18,9 +17,9 @@ public class Problem1423MaximumPointsYouCanObtainFromCards {
                 s -= cardPoints[i - m];
             }
             if (i >= m - 1) {
-                minSum = Math.min(minSum, s);
+                minValue = Math.min(minValue, s);
             }
         }
-        return sum - minSum;
+        return sum - Math.min(minValue, sum);
     }
 }

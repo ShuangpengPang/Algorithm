@@ -38,7 +38,7 @@ public class Problem0228SummaryRanges {
         return ans;
     }
 
-    public List<String> summaryRanges(int[] nums) {
+    public List<String> summaryRanges2(int[] nums) {
         List<String> ans = new ArrayList<>();
         int n = nums.length, p = 0;
         if (n == 0) {
@@ -52,5 +52,19 @@ public class Problem0228SummaryRanges {
         }
         ans.add(p == n - 1 ? String.valueOf(nums[p]) : nums[p] + "->" + nums[n - 1]);
         return ans;
+    }
+
+    public List<String> summaryRanges(int[] nums) {
+        List<String> list = new ArrayList<>();
+        int n = nums.length, i = 0;
+        while (i < n) {
+            int start = nums[i], end = start;
+            i++;
+            while (i < n && nums[i] == nums[i - 1] + 1) {
+                end = nums[i++];
+            }
+            list.add(start == end ? String.valueOf(start) : start + "->" + end);
+        }
+        return list;
     }
 }

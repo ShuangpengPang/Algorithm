@@ -43,7 +43,7 @@ public class Problem1386CinemaSeatAllocation {
         return true;
     }
 
-    public int maxNumberOfFamilies(int n, int[][] reservedSeats) {
+    public int maxNumberOfFamilies1(int n, int[][] reservedSeats) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int[] r : reservedSeats) {
             if (r[1] >= 2 && r[1] <= 9) {
@@ -55,6 +55,23 @@ public class Problem1386CinemaSeatAllocation {
         for (int hash : map.values()) {
             if ((hash | a) == a || (hash | b) == b || (hash | c) == c) {
                 ans++;
+            }
+        }
+        return ans;
+    }
+
+    public int maxNumberOfFamilies(int n, int[][] reservedSeats) {
+        int ans = n << 1, m = (1 << 4) - 1;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int[] r : reservedSeats) {
+            if (r[1] >= 2 && r[1] <= 9) {
+                map.put(r[0], map.getOrDefault(r[0], 0) | 1 << (r[1] - 2));
+            }
+        }
+        ans -= map.size();
+        for (int hash : map.values()) {
+            if ((hash & m) != 0 && (hash >> 2 & m) != 0 && (hash >> 4 & m) != 0) {
+                ans--;
             }
         }
         return ans;

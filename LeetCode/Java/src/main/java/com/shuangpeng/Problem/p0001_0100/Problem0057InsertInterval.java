@@ -3,9 +3,13 @@ package com.shuangpeng.Problem.p0001_0100;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @description:（插入区间）
+ * @date 2023/8/28 11:14 AM
+ **/
 public class Problem0057InsertInterval {
 
-    public int[][] insert(int[][] intervals, int[] newInterval) {
+    public int[][] insert0(int[][] intervals, int[] newInterval) {
         int s = newInterval[0], e = newInterval[1];
         List<int[]> list = new ArrayList<>();
         int left = s, right = e;
@@ -33,5 +37,30 @@ public class Problem0057InsertInterval {
             ans[i] = list.get(i);
         }
         return ans;
+    }
+
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> list = new ArrayList<>();
+        int start = newInterval[0], end = newInterval[1], n = intervals.length;
+        boolean add = false;
+        for (int i = 0; i < n; i++) {
+            int s = intervals[i][0], e = intervals[i][1];
+            if (e < start) {
+                list.add(intervals[i]);
+            } else if (end < s) {
+                if (!add) {
+                    list.add(new int[]{start, end});
+                    add = true;
+                }
+                list.add(intervals[i]);
+            } else {
+                start = Math.min(start, s);
+                end = Math.max(end, e);
+            }
+        }
+        if (!add) {
+            list.add(new int[]{start, end});
+        }
+        return list.toArray(new int[0][]);
     }
 }

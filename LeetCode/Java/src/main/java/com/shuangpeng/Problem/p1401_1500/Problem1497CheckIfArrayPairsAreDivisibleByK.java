@@ -18,6 +18,6 @@ public class Problem1497CheckIfArrayPairsAreDivisibleByK {
                 return false;
             }
         }
-        return (k & 1) == 1 || (cnt[k >> 1] & 1) == 0;
+        return (cnt[0] & 1) == 0;
     }
 }

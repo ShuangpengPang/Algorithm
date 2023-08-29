@@ -42,7 +42,7 @@ public class Problem1289MinimumFallingPathSumII {
         return Arrays.stream(grid[n - 1]).min().getAsInt();
     }
 
-    public int minFallingPathSum(int[][] grid) {
+    public int minFallingPathSum2(int[][] grid) {
         int n = grid.length, N = Integer.MAX_VALUE, firstIndex = -1, secondMin = N;
         for (int i = 0; i < n; i++) {
             if (firstIndex == -1 || grid[0][i] <= grid[0][firstIndex]) {
@@ -71,5 +71,35 @@ public class Problem1289MinimumFallingPathSumII {
             secondMin = tmpSecond;
         }
         return Arrays.stream(grid[n - 1]).min().getAsInt();
+    }
+
+    public int minFallingPathSum(int[][] grid) {
+        int n = grid.length, N = Integer.MAX_VALUE >> 1;
+        int m1 = N, m2 = N;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            dp[i] = grid[0][i];
+            if (dp[i] < m1) {
+                m2 = m1;
+                m1 = dp[i];
+            } else if (dp[i] < m2) {
+                m2 = dp[i];
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            int t1 = N, t2 = N;
+            for (int j = 0; j < n; j++) {
+                dp[j] = grid[i][j] + (dp[j] == m1 ? m2 : m1);
+                if (dp[j] < t1) {
+                    t2 = t1;
+                    t1 = dp[j];
+                } else if (dp[j] < t2) {
+                    t2 = dp[j];
+                }
+            }
+            m1 = t1;
+            m2 = t2;
+        }
+        return m1;
     }
 }

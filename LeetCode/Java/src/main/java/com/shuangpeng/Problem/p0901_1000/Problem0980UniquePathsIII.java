@@ -1,7 +1,10 @@
 package com.shuangpeng.Problem.p0901_1000;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * @Description: Problem0980UniquePathsIII
+ * @Description: Problem0980UniquePathsIII（不同路径III）
  * @Date 2022/4/28 11:29 AM
  * @Version 1.0
  */
@@ -105,6 +108,56 @@ public class Problem0980UniquePathsIII {
             }
         }
         memo[r][c][todo] = ans;
+        return ans;
+    }
+}
+
+class Problem0980UniquePathsIII0 {
+
+    int t, mask, m, n;
+    Map<Integer, Integer> memo;
+    int[] dirs = {-1, 0, 1, 0, -1};
+
+    public int uniquePathsIII(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        mask = 0;
+        int s = 0;
+        for (int i = 0, k = 0; i < m; i++) {
+            for (int j = 0; j < n; j++, k++) {
+                if (grid[i][j] == 1) {
+                    s = k;
+                } else if (grid[i][j] == 2) {
+                    t = k;
+                }
+                if (grid[i][j] != -1) {
+                    mask |= 1 << k;
+                }
+            }
+        }
+        memo = new HashMap<>();
+        return dfs(grid, (1 << s) << 5 | s);
+    }
+
+    private int dfs(int[][] grid, int hash) {
+        int v1 = hash & ((1 << 5) - 1), v2 = hash >> 5;
+        if (v1 == t) {
+            return v2 == mask ? 1 : 0;
+        }
+        if (memo.containsKey(hash)) {
+            return memo.get(hash);
+        }
+        int x = v1 / n, y = v1 % n, ans = 0;
+        for (int d = 0; d < 4; d++) {
+            int nx = x + dirs[d], ny = y + dirs[d + 1];
+            if (nx >= 0 && nx < m && ny >= 0 && ny < n && grid[nx][ny] != -1) {
+                int v = nx * n + ny;
+                if ((v2 & 1 << v) == 0) {
+                    ans += dfs(grid, (v2 | 1 << v) << 5 | v);
+                }
+            }
+        }
+        memo.put(hash, ans);
         return ans;
     }
 }

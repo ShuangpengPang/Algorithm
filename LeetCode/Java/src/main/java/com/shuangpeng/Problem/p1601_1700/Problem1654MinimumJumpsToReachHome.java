@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class Problem1654MinimumJumpsToReachHome {
 
-    public int minimumJumps(int[] forbidden, int a, int b, int x) {
+    public int minimumJumps0(int[] forbidden, int a, int b, int x) {
         Set<Integer> set = new HashSet<>();
         int max = 0;
         for (int f : forbidden) {
@@ -42,6 +42,40 @@ public class Problem1654MinimumJumpsToReachHome {
                 if (right <= max && !visited[0].contains(right) && !set.contains(right)) {
                     visited[0].add(right);
                     q.offer(new int[]{0, right});
+                }
+            }
+            jumps++;
+        }
+        return -1;
+    }
+
+    public int minimumJumps(int[] forbidden, int a, int b, int x) {
+        Set<Integer> set = new HashSet<>();
+        int max = 0;
+        for (int f : forbidden) {
+            set.add(f);
+            max = Math.max(max, f);
+        }
+        max = Math.max(max + a, x) + b;
+        Set<Integer> visited = new HashSet<>();
+        Queue<int[]> q = new ArrayDeque<>();
+        q.offer(new int[]{1, 0});
+        visited.add(0);
+        int jumps = 0;
+        while (!q.isEmpty()) {
+            for (int i = q.size() - 1; i >= 0; i--) {
+                int[] p = q.poll();
+                if (p[1] == x) {
+                    return jumps;
+                }
+                int left = p[1] - b, right = p[1] + a;
+                if (p[0] == 1 && left > 0 && !set.contains(left) && !visited.contains(-left)) {
+                    visited.add(-left);
+                    q.offer(new int[]{-1, left});
+                }
+                if (right <= max && !visited.contains(right) && !set.contains(right)) {
+                    visited.add(right);
+                    q.offer(new int[]{1, right});
                 }
             }
             jumps++;

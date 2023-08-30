@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p1501_1600;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -10,8 +11,45 @@ import java.util.PriorityQueue;
  */
 public class Problem1509MinimumDifferenceBetweenLargestAndSmallestValueInThreeMoves {
 
+    public int minDifference0(int[] nums) {
+        if (nums.length <= 4) {
+            return 0;
+        }
+        int N = Integer.MAX_VALUE;
+        int[] maxN = new int[4], minN = new int[4];
+        Arrays.fill(maxN, -N);
+        Arrays.fill(minN, N);
+        for (int num : nums) {
+            int index = 0;
+            while (index < 4 && num <= maxN[index]) {
+                index++;
+            }
+            if (index < 4) {
+                for (int i = 2; i >= index; i--) {
+                    maxN[i + 1] = maxN[i];
+                }
+                maxN[index] = num;
+            }
+            index = 0;
+            while (index < 4 && num >= minN[index]) {
+                index++;
+            }
+            if (index < 4) {
+                for (int i = 2; i >= index; i--) {
+                    minN[i + 1] = minN[i];
+                }
+                minN[index] = num;
+            }
+        }
+        int ans = N;
+        for (int i = 0; i < 4; i++) {
+            ans = Math.min(ans, maxN[i] - minN[3 - i]);
+        }
+        return ans;
+    }
+
     public int minDifference(int[] nums) {
-        if (nums.length <= 3) {
+        if (nums.length <= 4) {
             return 0;
         }
         PriorityQueue<Integer> maxQ = new PriorityQueue<>((a, b) -> b - a), minQ = new PriorityQueue<>();

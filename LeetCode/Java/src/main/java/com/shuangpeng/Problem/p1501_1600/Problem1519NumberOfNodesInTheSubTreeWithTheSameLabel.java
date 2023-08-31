@@ -41,3 +41,58 @@ public class Problem1519NumberOfNodesInTheSubTreeWithTheSameLabel {
         }
     }
 }
+
+
+class Problem1519NumberOfNodesInTheSubTreeWithTheSameLabel0 {
+
+    // 边的编号
+    int idx;
+    // e[idx]：编号为idx所指向的节点
+    int[] e;
+    // ne[idx]: 编号为idx的边的上一条边
+    int[] ne;
+    // h[x]: x节点的最后一条边
+    int[] h;
+    int[] cs;
+
+    public int[] countSubTrees(int n, int[][] edges, String labels) {
+        int N = n - 1 << 1;
+        idx = 0;
+        e = new int[N];
+        ne = new int[N];
+        h = new int[n];
+        Arrays.fill(h, -1);
+        for (int[] p : edges) {
+            add(p[0], p[1]);
+            add(p[1], p[0]);
+        }
+        cs = new int[n];
+        for (int i = 0; i < n; i++) {
+            cs[i] = labels.charAt(i) - 'a';
+        }
+        int[] ans = new int[n];
+        dfs(0, -1, ans);
+        return ans;
+    }
+
+    private void add(int x, int y) {
+        e[idx] = y;
+        ne[idx] = h[x];
+        h[x] = idx++;
+    }
+
+    private int[] dfs(int x, int p, int[] ans) {
+        int[] cnt = new int[26];
+        for (int i = h[x]; i != -1; i = ne[i]) {
+            int y = e[i];
+            if (y != p) {
+                int[] tmp = dfs(y, x, ans);
+                for (int j = 0; j < 26; j++) {
+                    cnt[j] += tmp[j];
+                }
+            }
+        }
+        ans[x] = ++cnt[cs[x]];
+        return cnt;
+    }
+}

@@ -63,7 +63,7 @@ public class Problem1249MinimumRemoveToMakeValidParentheses {
         return sb.toString();
     }
 
-    public String minRemoveToMakeValid(String s) {
+    public String minRemoveToMakeValid2(String s) {
         int n = s.length(), cnt = 0, cur = 0;
         for (int i = 0; i < n; i++) {
             char c = s.charAt(i);
@@ -91,5 +91,38 @@ public class Problem1249MinimumRemoveToMakeValidParentheses {
             }
         }
         return sb.toString();
+    }
+
+    public String minRemoveToMakeValid(String s) {
+        int n = s.length(), total = 0, cnt = 0;
+        char[] cs = s.toCharArray();
+        for (char c : cs) {
+            if (c == '(') {
+                total++;
+                cnt++;
+            } else if (c == ')' && cnt > 0) {
+                cnt--;
+            }
+        }
+        total -= cnt;
+        cnt = 0;
+        int p = 0;
+        for (int i = 0; i < n; i++) {
+            if (cs[i] == '(') {
+                if (total > 0) {
+                    total--;
+                    cnt++;
+                    cs[p++] = cs[i];
+                }
+            } else if (cs[i] == ')') {
+                if (cnt > 0) {
+                    cnt--;
+                    cs[p++] = cs[i];
+                }
+            } else {
+                cs[p++] = cs[i];
+            }
+        }
+        return new String(cs, 0, p);
     }
 }

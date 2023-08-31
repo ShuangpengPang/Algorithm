@@ -72,4 +72,3 @@ public class Problem1761MinimumDegreeOfAConnectedTrioInAGraph {
         return ans == Integer.MAX_VALUE ? -1 : ans;
     }
 }
-

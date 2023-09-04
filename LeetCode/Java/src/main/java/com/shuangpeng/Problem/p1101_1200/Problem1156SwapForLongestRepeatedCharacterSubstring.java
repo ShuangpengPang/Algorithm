@@ -49,24 +49,21 @@ public class Problem1156SwapForLongestRepeatedCharacterSubstring {
     }
 
     public int maxRepOpt1(String text) {
-        char[] cs = text.toCharArray();
+        int n = text.length(), ans = 0;
         int[] cnt = new int[26];
-        for (char c : cs) {
-            cnt[c - 'a']++;
+        for (int i = 0; i < n; i++) {
+            cnt[text.charAt(i) - 'a']++;
         }
-        int ans = 0, n = cs.length;
-        for (int i = 0, j = 0; i < n; i = j) {
-            char c = cs[i];
-            j = i;
-            while (j < n && cs[j] == c) {
+        for (int i = 0, p = 0; i < n; i = p) {
+            char c = text.charAt(i);
+            while (p < n && text.charAt(p) == c) {
+                p++;
+            }
+            int j = p + 1;
+            while (j < n && text.charAt(j) == c) {
                 j++;
             }
-            int length = j < n || i > 0 ? j - i + 1 : j - i;
-            int k = j + 1;
-            while (k < n && cs[k] == c) {
-                k++;
-            }
-            ans = Math.max(ans, Math.min(cnt[c - 'a'], length + k - j - 1));
+            ans = Math.max(ans, Math.min(cnt[c - 'a'], j - i));
         }
         return ans;
     }

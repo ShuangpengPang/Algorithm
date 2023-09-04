@@ -8,6 +8,17 @@ package com.shuangpeng.Problem.p1401_1500;
  */
 public class Problem1492TheKthFactorOfN {
 
+    public int kthFactor0(int n, int k) {
+        int ans = 0;
+        for (int i = 0; i < k && ans <= n; i++) {
+            ans++;
+            while (ans <= n && n % ans != 0) {
+                ans++;
+            }
+        }
+        return ans <= n ? ans : -1;
+    }
+
     public int kthFactor(int n, int k) {
         for (int i = 1; i <= n; i++) {
             if (n % i == 0 && --k == 0) {

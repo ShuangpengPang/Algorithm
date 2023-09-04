@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0801_0900;
  */
 public class Problem0849MaximizeDistanceToClosestPerson {
 
-    public int maxDistToClosest(int[] seats) {
+    public int maxDistToClosest0(int[] seats) {
         int n = seats.length, first = -1, last = -1, max = 0;
         for (int i = 0; i < n; i++) {
             if (seats[i] == 1) {
@@ -20,5 +20,16 @@ public class Problem0849MaximizeDistanceToClosestPerson {
             }
         }
         return Math.max(first, Math.max(max >> 1, n - last - 1));
+    }
+
+    public int maxDistToClosest(int[] seats) {
+        int ans = 0, n = seats.length, p = -1;
+        for (int i = 0; i < n; i++) {
+            if (seats[i] == 1) {
+                ans = Math.max(ans, p == -1 ? i : i - p >> 1);
+                p = i;
+            }
+        }
+        return Math.max(ans, n - p - 1);
     }
 }

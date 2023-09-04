@@ -19,11 +19,30 @@ public class Problem1492TheKthFactorOfN {
         return ans <= n ? ans : -1;
     }
 
-    public int kthFactor(int n, int k) {
+    public int kthFactor1(int n, int k) {
         for (int i = 1; i <= n; i++) {
             if (n % i == 0 && --k == 0) {
                 return i;
             }
+        }
+        return -1;
+    }
+
+    public int kthFactor(int n, int k) {
+        int ans = 1;
+        while (ans * ans <= n) {
+            if (n % ans == 0 && --k == 0) {
+                return ans;
+            }
+            ans++;
+        }
+        ans--;
+        ans = ans * ans == n ? ans - 1 : ans;
+        while (ans > 0) {
+            if (n % ans == 0 && --k == 0) {
+                return n / ans;
+            }
+            ans--;
         }
         return -1;
     }

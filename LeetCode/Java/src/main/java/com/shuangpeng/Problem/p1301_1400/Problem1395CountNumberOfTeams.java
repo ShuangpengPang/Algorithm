@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p1301_1400;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * @author ShuangPengPang
@@ -10,7 +11,7 @@ import java.util.Arrays;
  */
 public class Problem1395CountNumberOfTeams {
 
-    public int numTeams(int[] rating) {
+    public int numTeams0(int[] rating) {
         int n = rating.length, max = 0;
         for (int r : rating) {
             max = Math.max(max, r);
@@ -35,6 +36,30 @@ public class Problem1395CountNumberOfTeams {
                  x -= x & -x;
             }
             ans += cnt * (n - i - 1 - (idx - cnt - 1)) + (idx - cnt - 1) * (i - cnt);
+        }
+        return ans;
+    }
+
+    public int numTeams(int[] rating) {
+        int n = rating.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, Comparator.comparingInt(a -> rating[a]));
+        int[] bit = new int[n + 1];
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int id = ids[i], x = id + 1;
+            while (x <= n) {
+                bit[x]++;
+                x += x & -x;
+            }
+            x = id;
+            int cnt = 0;
+            while (x != 0) {
+                cnt += bit[x];
+                x ^= x & -x;
+            }
+            ans += cnt * (n - i - 1 - (id - cnt)) + (id - cnt) * (i - cnt);
         }
         return ans;
     }

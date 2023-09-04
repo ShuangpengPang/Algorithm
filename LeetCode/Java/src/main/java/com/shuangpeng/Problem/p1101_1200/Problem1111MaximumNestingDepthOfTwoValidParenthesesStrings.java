@@ -36,7 +36,7 @@ public class Problem1111MaximumNestingDepthOfTwoValidParenthesesStrings {
         int n = seq.length();
         int[] ans = new int[n];
         for (int i = 0; i < n; i++) {
-            ans[i] = i & 1 ^ (seq.charAt(i) - '(');
+            ans[i] = seq.charAt(i) - '(' ^ i & 1;
         }
         return ans;
     }

@@ -140,7 +140,7 @@ public class Problem1353MaximumNumberOfEventsThatCanBeAttended {
         return ans;
     }
 
-    public int maxEvents(int[][] events) {
+    public int maxEvents4(int[][] events) {
         Arrays.sort(events, Comparator.comparingInt(a -> a[0]));
         PriorityQueue<Integer> q = new PriorityQueue<>(Comparator.comparingInt(a -> events[a][1]));
         int n = events.length, i = 0, ans = 0, maxEnd = 0;
@@ -161,6 +161,30 @@ public class Problem1353MaximumNumberOfEventsThatCanBeAttended {
                 }
             }
             i = j;
+        }
+        return ans;
+    }
+
+    public int maxEvents(int[][] events) {
+        Arrays.sort(events, Comparator.comparingInt(a -> a[0]));
+        int n = events.length, N = Integer.MAX_VALUE;
+        PriorityQueue<Integer> q = new PriorityQueue<>();
+        int i = 0, ans = 0;
+        while (i < n) {
+            int start = events[i][0];
+            while (i < n && events[i][0] == start) {
+                q.offer(events[i++][1]);
+            }
+            int end = i < n ? events[i][0] : N;
+            for (int d = start; d < end && !q.isEmpty(); d++) {
+                while (!q.isEmpty() && q.peek() < d) {
+                    q.poll();
+                }
+                if (!q.isEmpty()) {
+                    q.poll();
+                    ans++;
+                }
+            }
         }
         return ans;
     }

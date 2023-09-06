@@ -49,7 +49,7 @@ public class Problem1654MinimumJumpsToReachHome {
         return -1;
     }
 
-    public int minimumJumps(int[] forbidden, int a, int b, int x) {
+    public int minimumJumps1(int[] forbidden, int a, int b, int x) {
         Set<Integer> set = new HashSet<>();
         int max = 0;
         for (int f : forbidden) {
@@ -79,6 +79,39 @@ public class Problem1654MinimumJumpsToReachHome {
                 }
             }
             jumps++;
+        }
+        return -1;
+    }
+
+    public int minimumJumps(int[] forbidden, int a, int b, int x) {
+        int max = x;
+        Set<Integer> set = new HashSet<>();
+        for (int f : forbidden) {
+            set.add(f);
+            max = Math.max(max, f);
+        }
+        max += a + b;
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> q = new ArrayDeque<>();
+        q.offer(0);
+        visited.add(0);
+        int jump = 0;
+        while (!q.isEmpty()) {
+            for (int i = q.size() - 1; i >= 0; i--) {
+                int num = q.poll(), d = num >= 0 ? 1 : -1;
+                num = d == 1 ? num : -num;
+                if (num == x) {
+                    return jump;
+                }
+                int left = num - b, right = num + a;
+                if (right <= max && !set.contains(right) && visited.add(right)) {
+                    q.offer(right);
+                }
+                if (d == 1 && left > 0 && !set.contains(left) && visited.add(-left)) {
+                    q.offer(-left);
+                }
+            }
+            jump++;
         }
         return -1;
     }

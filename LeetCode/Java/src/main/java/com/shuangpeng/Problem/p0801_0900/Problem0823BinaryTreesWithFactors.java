@@ -57,7 +57,7 @@ public class Problem0823BinaryTreesWithFactors {
         return ans;
     }
 
-    public int numFactoredBinaryTrees(int[] arr) {
+    public int numFactoredBinaryTrees2(int[] arr) {
         Arrays.sort(arr);
         int n = arr.length, N = (int) 1e9 + 7, ans = 0;
         int[] dp = new int[n];
@@ -77,5 +77,27 @@ public class Problem0823BinaryTreesWithFactors {
             ans = (ans + dp[i]) % N;
         }
         return ans;
+    }
+
+    public int numFactoredBinaryTrees(int[] arr) {
+        Arrays.sort(arr);
+        int n = arr.length;
+        long ans = 0, N = (long) 1e9 + 7;
+        Map<Integer, Long> dp = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            long cnt = 1;
+            for (int j = 0; j < i && (long) arr[j] * arr[j] <= arr[i]; j++) {
+                if (arr[i] % arr[j] == 0 && dp.containsKey(arr[i] / arr[j])) {
+                    long count = dp.get(arr[j]) * dp.get(arr[i] / arr[j]);
+                    if (arr[j] != arr[i] / arr[j]) {
+                        count <<= 1;
+                    }
+                    cnt = (cnt + count) % N;
+                }
+            }
+            dp.put(arr[i], cnt);
+            ans = (ans + cnt) % N;
+        }
+        return (int) ans;
     }
 }

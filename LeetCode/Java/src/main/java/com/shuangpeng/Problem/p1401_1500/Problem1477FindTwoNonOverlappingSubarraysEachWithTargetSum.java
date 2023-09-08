@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class Problem1477FindTwoNonOverlappingSubarraysEachWithTargetSum {
 
-    public int minSumOfLengths(int[] arr, int target) {
+    public int minSumOfLengths0(int[] arr, int target) {
         int n = arr.length, N = Integer.MAX_VALUE >> 1;
         Map<Integer, Integer> map = new HashMap<>();
         int[] minLength = new int[n + 1];
@@ -28,6 +28,24 @@ public class Problem1477FindTwoNonOverlappingSubarraysEachWithTargetSum {
                 minLength[i] = Math.min(minLength[i], i - idx);
             }
             map.put(s, i);
+        }
+        return ans == N ? -1 : ans;
+    }
+
+    public int minSumOfLengths(int[] arr, int target) {
+        int n = arr.length, N = Integer.MAX_VALUE >> 1, ans = N;
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, N);
+        for (int p = 0, s = 0, i = 0; i < n; i++) {
+            dp[i + 1] = dp[i];
+            s += arr[i];
+            while (s > target) {
+                s -= arr[p++];
+            }
+            if (s == target) {
+                ans = Math.min(ans, dp[p] + i - p + 1);
+                dp[i + 1] = Math.min(dp[i + 1], i - p + 1);
+            }
         }
         return ans == N ? -1 : ans;
     }

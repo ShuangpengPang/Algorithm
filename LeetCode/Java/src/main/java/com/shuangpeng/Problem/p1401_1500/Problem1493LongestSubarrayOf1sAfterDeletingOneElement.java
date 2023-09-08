@@ -9,30 +9,6 @@ package com.shuangpeng.Problem.p1401_1500;
 public class Problem1493LongestSubarrayOf1sAfterDeletingOneElement {
 
     public int longestSubarray0(int[] nums) {
-        int n = nums.length, ans = 0, idx = 0;
-        while (idx < n && nums[idx] == 1) {
-            idx++;
-        }
-        if (idx == n) {
-            return n - 1;
-        }
-        for (int i = 0; i < n; i++) {
-            if (nums[i] == 1) {
-                int p = i;
-                while (i < n && nums[i] == 1) {
-                    i++;
-                }
-                int j = i + 1;
-                while (j < n && nums[j] == 1) {
-                    j++;
-                }
-                ans = Math.max(ans, j - p - 1);
-            }
-        }
-        return ans;
-    }
-
-    public int longestSubarray(int[] nums) {
         int n = nums.length, ans = 0;
         for (int i = 0; i < n; i++) {
             if (nums[i] == 0) {
@@ -53,5 +29,23 @@ public class Problem1493LongestSubarrayOf1sAfterDeletingOneElement {
             ans = Math.max(ans, j - s);
         }
         return Math.max(ans - 1, 0);
+    }
+
+    public int longestSubarray(int[] nums) {
+        int n = nums.length, ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 1) {
+                int p = i;
+                while (i < n && nums[i] == 1) {
+                    i++;
+                }
+                int j = i + 1;
+                while (j < n && nums[j] == 1) {
+                    j++;
+                }
+                ans = Math.max(ans, j - p - 1);
+            }
+        }
+        return Math.min(ans, n - 1);
     }
 }

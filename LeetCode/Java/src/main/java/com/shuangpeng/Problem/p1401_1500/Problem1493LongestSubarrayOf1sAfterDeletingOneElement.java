@@ -64,7 +64,7 @@ public class Problem1493LongestSubarrayOf1sAfterDeletingOneElement {
         return Math.min(ans, nums.length - 1);
     }
 
-    public int longestSubarray(int[] nums) {
+    public int longestSubarray3(int[] nums) {
         int n = nums.length, sum = 0;
         int l = 0, r = 0;
         for (r = 0; r < n; r++) {
@@ -74,5 +74,21 @@ public class Problem1493LongestSubarrayOf1sAfterDeletingOneElement {
             }
         }
         return r - l - 1;
+    }
+
+    public int longestSubarray(int[] nums) {
+        int n = nums.length, ans = 0, cnt = 0;
+        for (int l = 0, r = 0; r < n; r++) {
+            if (nums[r] == 0) {
+                cnt++;
+            }
+            while (cnt > 1) {
+                if (nums[l++] == 0) {
+                    cnt--;
+                }
+            }
+            ans = Math.max(ans, r - l);
+        }
+        return ans;
     }
 }

@@ -39,7 +39,7 @@ public class Problem0057InsertInterval {
         return ans;
     }
 
-    public int[][] insert(int[][] intervals, int[] newInterval) {
+    public int[][] insert1(int[][] intervals, int[] newInterval) {
         List<int[]> list = new ArrayList<>();
         int start = newInterval[0], end = newInterval[1], n = intervals.length;
         boolean add = false;
@@ -62,5 +62,25 @@ public class Problem0057InsertInterval {
             list.add(new int[]{start, end});
         }
         return list.toArray(new int[0][]);
+    }
+
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int n = intervals.length, start = newInterval[0], end = newInterval[1];
+        List<int[]> list = new ArrayList<>();
+        int i = 0;
+        while (i < n && intervals[i][1] < start) {
+            list.add(intervals[i]);
+            i++;
+        }
+        while (i < n && intervals[i][0] <= end) {
+            start = Math.min(start, intervals[i][0]);
+            end = Math.max(end, intervals[i][1]);
+            i++;
+        }
+        list.add(new int[]{start, end});
+        while (i < n) {
+            list.add(intervals[i++]);
+        }
+        return list.toArray(new int[list.size()][]);
     }
 }

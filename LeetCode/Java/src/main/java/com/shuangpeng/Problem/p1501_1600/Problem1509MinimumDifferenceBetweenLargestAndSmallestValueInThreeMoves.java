@@ -1,6 +1,5 @@
 package com.shuangpeng.Problem.p1501_1600;
 
-import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -12,38 +11,32 @@ import java.util.PriorityQueue;
 public class Problem1509MinimumDifferenceBetweenLargestAndSmallestValueInThreeMoves {
 
     public int minDifference0(int[] nums) {
-        if (nums.length <= 4) {
+        int n = nums.length, N = Integer.MAX_VALUE;
+        if (n <= 4) {
             return 0;
         }
-        int N = Integer.MAX_VALUE;
-        int[] maxN = new int[4], minN = new int[4];
-        Arrays.fill(maxN, -N);
-        Arrays.fill(minN, N);
+        int[] m1 = new int[5], m2 = new int[5];
+        for (int i = 0; i < 4; i++) {
+            m1[i] = N;
+            m2[i] = -N;
+        }
         for (int num : nums) {
-            int index = 0;
-            while (index < 4 && num <= maxN[index]) {
-                index++;
+            int idx = 3;
+            while (idx >= 0 && num < m1[idx]) {
+                m1[idx + 1] = m1[idx];
+                idx--;
             }
-            if (index < 4) {
-                for (int i = 2; i >= index; i--) {
-                    maxN[i + 1] = maxN[i];
-                }
-                maxN[index] = num;
+            m1[idx + 1] = num;
+            idx = 3;
+            while (idx >= 0 && num > m2[idx]) {
+                m2[idx + 1] = m2[idx];
+                idx--;
             }
-            index = 0;
-            while (index < 4 && num >= minN[index]) {
-                index++;
-            }
-            if (index < 4) {
-                for (int i = 2; i >= index; i--) {
-                    minN[i + 1] = minN[i];
-                }
-                minN[index] = num;
-            }
+            m2[idx + 1] = num;
         }
         int ans = N;
         for (int i = 0; i < 4; i++) {
-            ans = Math.min(ans, maxN[i] - minN[3 - i]);
+            ans = Math.min(ans, m2[3- i] - m1[i]);
         }
         return ans;
     }

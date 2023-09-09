@@ -65,3 +65,42 @@ public class Problem1390FourDivisors {
         return ans;
     }
 }
+
+class Problem1390FourDivisors0 {
+
+    static int N = (int) 1e5;
+    static int[] sum = new int[N + 1];
+    static {
+        boolean[] visited = new boolean[N + 1];
+        int[] prime = new int[N + 1];
+        int count = 0;
+        for (int i = 2; i <= N; i++) {
+            if (!visited[i]) {
+                prime[count++] = i;
+            }
+            for (int j = 0; j < count && (long) prime[j] * i <= N; j++) {
+                visited[prime[j] * i] = true;
+                if (i % prime[j] == 0) {
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            int p = prime[i];
+            if ((long) p * p * p <= N) {
+                sum[p * p * p] = 1 + p + p * p + p * p * p;
+            }
+            for (int j = i + 1; j < count && (long) p * prime[j] <= N; j++) {
+                sum[p * prime[j]] = 1 + p + prime[j] + p * prime[j];
+            }
+        }
+    }
+
+    public int sumFourDivisors(int[] nums) {
+        int ans = 0;
+        for (int num : nums) {
+            ans += sum[num];
+        }
+        return ans;
+    }
+}

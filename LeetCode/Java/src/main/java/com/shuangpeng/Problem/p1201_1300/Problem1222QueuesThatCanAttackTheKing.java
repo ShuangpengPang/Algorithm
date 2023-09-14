@@ -2,8 +2,10 @@ package com.shuangpeng.Problem.p1201_1300;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -35,7 +37,7 @@ public class Problem1222QueuesThatCanAttackTheKing {
         return ans;
     }
 
-    public List<List<Integer>> queensAttacktheKing(int[][] queens, int[] king) {
+    public List<List<Integer>> queensAttacktheKing1(int[][] queens, int[] king) {
         int N = 8;
         boolean[][] board = new boolean[N][N];
         for (int[] q : queens) {
@@ -56,5 +58,27 @@ public class Problem1222QueuesThatCanAttackTheKing {
             }
         }
         return ans;
+    }
+
+    public List<List<Integer>> queensAttacktheKing(int[][] queens, int[] king) {
+        Map<Integer, int[]> map = new HashMap<>();
+        for (int[] q : queens) {
+            int x = q[0] - king[0], y = q[1] - king[1];
+            if (x == 0 || y == 0 || Math.abs(x) == Math.abs(y)) {
+                int k = sign(x) * 10 + sign(y), d = Math.abs(x) + Math.abs(y);
+                if (!map.containsKey(k) || map.get(k)[2] > d) {
+                    map.put(k, new int[]{q[0], q[1], d});
+                }
+            }
+        }
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int[] p : map.values()) {
+            ans.add(Arrays.asList(p[0], p[1]));
+        }
+        return ans;
+    }
+
+    private int sign(int x) {
+        return x == 0 ? 0 : x > 0 ? 1 : -1;
     }
 }

@@ -37,27 +37,32 @@ public class Problem0901OnlineStockSpan {
  */
 }
 
-class StockSpanner {
+class Problem0901OnlineStockSpan0 {
 
-    Deque<int[]> stack;
-    int idx;
+    class StockSpanner {
 
-    public StockSpanner() {
-        stack = new ArrayDeque<>();
-        idx = 0;
-    }
+        private Deque<int[]> q;
+        private int day;
 
-    public int next(int price) {
-        while (!stack.isEmpty() && stack.peek()[1] <= price) {
-            stack.pop();
+        public StockSpanner() {
+            q = new ArrayDeque<>();
+            q.offerLast(new int[]{Integer.MAX_VALUE, 0});
+            day = 0;
         }
-        int ans = stack.isEmpty() ? idx + 1 : idx - stack.peek()[0];
-        stack.push(new int[]{idx++, price});
-        return ans;
+
+        public int next(int price) {
+            while (q.peekLast()[0] <= price) {
+                q.pollLast();
+            }
+            day++;
+            int span = day - q.peekLast()[1];
+            q.offerLast(new int[]{price, day});
+            return span;
+        }
     }
 }
 
-class Problem0901OnlineStockSpan0 {
+class Problem0901OnlineStockSpan1 {
     static class StockSpanner {
 
         static int N = (int) 1e4, idx = 0, size = 100;

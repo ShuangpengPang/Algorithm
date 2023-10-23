@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2601_2700;
  */
 public class Problem2678NumberOfSeniorCitizens {
 
-    public int countSeniors(String[] details) {
+    public int countSeniors0(String[] details) {
         int cnt = 0;
         for (String d : details) {
             if (Integer.parseInt(d.substring(11, 13)) > 60) {
@@ -16,5 +16,15 @@ public class Problem2678NumberOfSeniorCitizens {
             }
         }
         return cnt;
+    }
+
+    public int countSeniors(String[] details) {
+        int ans = 0;
+        for (String detail : details) {
+            if ((detail.charAt(11) - '0') * 10 + detail.charAt(12) - '0' > 60) {
+                ans++;
+            }
+        }
+        return ans;
     }
 }

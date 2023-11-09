@@ -20,11 +20,10 @@ public class Problem1906MinimumAbsoluteDifferenceQueries {
         int[] ans = new int[m];
         for (int i = 0; i < m; i++) {
             int start = queries[i][0], end = queries[i][1] + 1;
-            int[] cnt = new int[101];
             int d = N, last = -N;
             for (int j = 0; j <= 100; j++) {
-                cnt[j] = preSum[end][j] - preSum[start][j];
-                if (cnt[j] > 0) {
+                int cnt = preSum[end][j] - preSum[start][j];
+                if (cnt > 0) {
                     d = Math.min(d, j - last);
                     last = j;
                 }

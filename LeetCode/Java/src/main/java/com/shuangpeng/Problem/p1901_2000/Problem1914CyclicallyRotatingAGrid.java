@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1901_2000;
  */
 public class Problem1914CyclicallyRotatingAGrid {
 
-    public int[][] rotateGrid(int[][] grid, int k) {
+    public int[][] rotateGrid0(int[][] grid, int k) {
         int m = grid.length, n = grid[0].length;
         int[][] ans = new int[m][n];
         int r1 = 0, r2 = m - 1, c1 = 0, c2 = n - 1;
@@ -48,5 +48,39 @@ public class Problem1914CyclicallyRotatingAGrid {
                 ans[x][y] = grid[i][j];
             }
         }
+    }
+
+    public int[][] rotateGrid(int[][] grid, int k) {
+        int m = grid.length, n = grid[0].length, total = (m + n << 1) - 4;
+        int layers = Math.min(m, n) >> 1;
+        for (int layer = 0; layer < layers; layer++, total -= 8) {
+            int[] r = new int[total], c = new int[total], v = new int[total];
+            int idx = 0;
+            for (int i = layer; i < m - layer - 1; i++, idx++) {
+                r[idx] = i;
+                c[idx] = layer;
+                v[idx] = grid[i][layer];
+            }
+            for (int i = layer; i < n - layer - 1; i++, idx++) {
+                r[idx] = m - layer - 1;
+                c[idx] = i;
+                v[idx] = grid[m - layer - 1][i];
+            }
+            for (int i = m - layer - 1; i > layer; i--, idx++) {
+                r[idx] = i;
+                c[idx] = n - layer - 1;
+                v[idx] = grid[i][n - layer - 1];
+            }
+            for (int i = n - layer - 1; i > layer; i--, idx++) {
+                r[idx] = layer;
+                c[idx] = i;
+                v[idx] = grid[layer][i];
+            }
+            for (int i = 0; i < total; i++) {
+                int index = (i + k) % total;
+                grid[r[index]][c[index]] = v[i];
+            }
+        }
+        return grid;
     }
 }

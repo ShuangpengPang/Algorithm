@@ -9,25 +9,28 @@ package com.shuangpeng.Problem.P2201_2300;
 public class Problem2212MaximumPointsInAnArcheryCompetition {
 
     public int[] maximumBobPoints(int numArrows, int[] aliceArrows) {
-        int maxScore = 0, n = aliceArrows.length, N = 1 << n;
-        int[] ans = aliceArrows, arr = new int[n];
+        int maxScore = 0, n = aliceArrows.length, N = 1 << n, state = 0;
         for (int m = N - 1; m > 0; m--) {
             int num = numArrows, score = 0;
             for (int i = 0; i < n && num >= 0; i++) {
                 if (((m >> i) & 1) == 1) {
-                    arr[i] = aliceArrows[i] + 1;
-                    num -= arr[i];
+                    num -= aliceArrows[i] + 1;
                     score += i;
-                } else {
-                    arr[i] = 0;
                 }
             }
             if (num >= 0 && score > maxScore) {
                 maxScore = score;
-                arr[0] += num;
-                ans = arr.clone();
+                state = m;
             }
         }
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            if (((state >> i) & 1) == 1) {
+                ans[i] = aliceArrows[i] + 1;
+                numArrows -= ans[i];
+            }
+        }
+        ans[0] += numArrows;
         return ans;
     }
 }

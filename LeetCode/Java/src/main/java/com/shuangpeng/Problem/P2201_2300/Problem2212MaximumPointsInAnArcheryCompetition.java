@@ -10,21 +10,22 @@ public class Problem2212MaximumPointsInAnArcheryCompetition {
 
     public int[] maximumBobPoints(int numArrows, int[] aliceArrows) {
         int maxScore = 0, n = aliceArrows.length, N = 1 << n;
-        int[] ans = aliceArrows;
-        for (int m = 1; m < N; m++) {
+        int[] ans = aliceArrows, arr = new int[n];
+        for (int m = N - 1; m > 0; m--) {
             int num = numArrows, score = 0;
-            int[] arr = new int[n];
             for (int i = 0; i < n && num >= 0; i++) {
                 if (((m >> i) & 1) == 1) {
                     arr[i] = aliceArrows[i] + 1;
                     num -= arr[i];
                     score += i;
+                } else {
+                    arr[i] = 0;
                 }
             }
             if (num >= 0 && score > maxScore) {
                 maxScore = score;
                 arr[0] += num;
-                ans = arr;
+                ans = arr.clone();
             }
         }
         return ans;

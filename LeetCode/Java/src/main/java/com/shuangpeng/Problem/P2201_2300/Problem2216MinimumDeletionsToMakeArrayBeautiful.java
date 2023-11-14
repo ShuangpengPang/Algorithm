@@ -9,7 +9,7 @@ package com.shuangpeng.Problem.P2201_2300;
 public class Problem2216MinimumDeletionsToMakeArrayBeautiful {
 
     // 证明：https://leetcode.cn/problems/minimum-deletions-to-make-array-beautiful/solutions/1372292/by-newhar-st2d/
-    public int minDeletion(int[] nums) {
+    public int minDeletion0(int[] nums) {
         int n = nums.length, ans = 0;
         boolean odd = false;
         int prev = -1;
@@ -26,5 +26,18 @@ public class Problem2216MinimumDeletionsToMakeArrayBeautiful {
             }
         }
         return odd ? ans + 1 : ans;
+    }
+
+    public int minDeletion(int[] nums) {
+        int n = nums.length, ans = 0;
+        int i = 0, j = 1;
+        while (j < n) {
+            if (nums[i] != nums[j]) {
+                ans += j - i - 1;
+                i = j + 1;
+            }
+            j++;
+        }
+        return ans + j - i;
     }
 }

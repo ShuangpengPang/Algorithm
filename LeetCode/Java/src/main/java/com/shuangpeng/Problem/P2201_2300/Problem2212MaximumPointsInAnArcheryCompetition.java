@@ -31,3 +31,36 @@ public class Problem2212MaximumPointsInAnArcheryCompetition {
         return ans;
     }
 }
+
+class Problem2212MaximumPointsInAnArcheryCompetition0 {
+
+    int[] ans;
+    int maxScore;
+
+    public int[] maximumBobPoints(int numArrows, int[] aliceArrows) {
+        ans = aliceArrows;
+        maxScore = 0;
+        dfs(aliceArrows, new int[aliceArrows.length], 0, numArrows, 0);
+        return ans;
+    }
+
+    private void dfs(int[] aliceArrows, int[] arr, int index, int num, int score) {
+        if (index == aliceArrows.length - 1) {
+            arr[index] = num;
+            if (aliceArrows[index] < num) {
+                score += index;
+            }
+            if (score > maxScore) {
+                maxScore = score;
+                ans = arr.clone();
+            }
+            return;
+        }
+        if (num > aliceArrows[index]) {
+            arr[index] = aliceArrows[index] + 1;
+            dfs(aliceArrows, arr, index + 1, num - arr[index], score + index);
+        }
+        arr[index] = 0;
+        dfs(aliceArrows, arr, index + 1, num, score);
+    }
+}

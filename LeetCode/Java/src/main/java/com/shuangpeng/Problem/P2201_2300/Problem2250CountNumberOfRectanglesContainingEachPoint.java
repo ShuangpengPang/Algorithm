@@ -74,3 +74,39 @@ public class Problem2250CountNumberOfRectanglesContainingEachPoint {
         return ans;
     }
 }
+
+class Problem2250CountNumberOfRectanglesContainingEachPoint0 {
+
+    public int[] countRectangles(int[][] rectangles, int[][] points) {
+        int n = points.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, (a, b) -> points[b][0] - points[a][0]);
+        Arrays.sort(rectangles, (a, b) -> b[0] - a[0]);
+        int[] ans = new int[n], bit = new int[101];
+        int index = 0;
+        for (int id : ids) {
+            while (index < rectangles.length && rectangles[index][0] >= points[id][0]) {
+                update(bit, rectangles[index++][1], 1);
+            }
+            ans[id] = index - query(bit, points[id][1] - 1);
+        }
+        return ans;
+    }
+
+    private void update(int[] bit, int x, int value) {
+        while (x < bit.length) {
+            bit[x] += value;
+            x += x & -x;
+        }
+    }
+
+    private int query(int[] bit, int x) {
+        int ans = 0;
+        while (x > 0) {
+            ans += bit[x];
+            x ^= x & -x;
+        }
+        return ans;
+    }
+}

@@ -11,7 +11,7 @@ import java.util.Deque;
  */
 public class Problem2434UsingARobotToPrintTheLexicographicallySmallestString {
 
-    public String robotWithString(String s) {
+    public String robotWithString0(String s) {
         int n = s.length(), N = 26;
         int[] cnt = new int[N];
         for (int i = 0; i < n; i++) {
@@ -32,6 +32,24 @@ public class Problem2434UsingARobotToPrintTheLexicographicallySmallestString {
             }
             while (!stack.isEmpty() && stack.peekLast() <= (char) (index + 'a')) {
                 sb.append(stack.pollLast());
+            }
+        }
+        return sb.toString();
+    }
+
+    public String robotWithString(String s) {
+        int n = s.length();
+        char[] cs = new char[n + 1];
+        cs[n] = 'z';
+        for (int i = n - 1; i >= 0; i--) {
+            cs[i] = (char) Math.min(cs[i + 1], s.charAt(i));
+        }
+        Deque<Character> q = new ArrayDeque<>(n);
+        StringBuilder sb = new StringBuilder(n);
+        for (int i = 0; i < n; i++) {
+            q.offerLast(s.charAt(i));
+            while (!q.isEmpty() && q.peekLast() <= cs[i + 1]) {
+                sb.append(q.pollLast());
             }
         }
         return sb.toString();

@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem2545SortTheStudentsByTheirKthScore {
 
-    public int[][] sortTheStudents(int[][] score, int k) {
+    public int[][] sortTheStudents0(int[][] score, int k) {
         int m = score.length, n = score[0].length;
         Integer[] ids = new Integer[m];
         Arrays.setAll(ids, i -> i);
@@ -20,5 +20,10 @@ public class Problem2545SortTheStudentsByTheirKthScore {
             ans[i] = score[ids[i]].clone();
         }
         return ans;
+    }
+
+    public int[][] sortTheStudents(int[][] score, int k) {
+        Arrays.sort(score, (a, b) -> b[k] - a[k]);
+        return score;
     }
 }

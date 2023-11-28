@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
  */
 public class Problem2542MaximumSubsequenceScore {
 
-    public long maxScore(int[] nums1, int[] nums2, int k) {
+    public long maxScore0(int[] nums1, int[] nums2, int k) {
         int n = nums1.length;
         Integer[] ids = new Integer[n];
         Arrays.setAll(ids, i -> i);
@@ -66,6 +66,34 @@ public class Problem2542MaximumSubsequenceScore {
             if (q1.size() == k && q1.peek() == id) {
                 ans = Math.max(ans, sum * nums2[id]);
             }
+        }
+        return ans;
+    }
+
+    public long maxScore(int[] nums1, int[] nums2, int k) {
+        int n = nums1.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, (a, b) -> {
+            if (nums2[a] != nums2[b]) {
+                return nums2[b] - nums2[a];
+            }
+            if (nums1[a] != nums1[b]) {
+                return nums1[b] - nums1[a];
+            }
+            return b - a;
+        });
+        PriorityQueue<Integer> q = new PriorityQueue<>(k);
+        long ans = 0, sum = 0;
+        for (int i = 0; i < k - 1; i++) {
+            q.offer(nums1[ids[i]]);
+            sum += nums1[ids[i]];
+        }
+        for (int i = k - 1; i < n; i++) {
+            q.offer(nums1[ids[i]]);
+            sum += nums1[ids[i]];
+            ans = Math.max(ans, sum * nums2[ids[i]]);
+            sum -= q.poll();
         }
         return ans;
     }

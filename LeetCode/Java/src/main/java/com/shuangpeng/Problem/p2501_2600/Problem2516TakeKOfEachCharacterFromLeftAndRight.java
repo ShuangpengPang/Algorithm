@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p2501_2600;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -8,7 +10,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2516TakeKOfEachCharacterFromLeftAndRight {
 
-    public int takeCharacters(String s, int k) {
+    public int takeCharacters0(String s, int k) {
         int n = s.length();
         if (n < 3 * k) {
             return -1;
@@ -42,5 +44,38 @@ public class Problem2516TakeKOfEachCharacterFromLeftAndRight {
             }
         }
         return true;
+    }
+
+    public int takeCharacters(String s, int k) {
+        if (k == 0) {
+            return 0;
+        }
+        int n = s.length(), count = 0;
+        if (n < 3 * k) {
+            return -1;
+        }
+        int[] cnt = new int[3];
+        Arrays.fill(cnt, -k);
+        for (int i = 0; i < n; i++) {
+            if (++cnt[s.charAt(i) - 'a'] == 0) {
+                count++;
+            }
+        }
+        if (count != 3) {
+            return -1;
+        }
+        int ans = n;
+        for (int i = 0, j = 0; i < n && j < n; i++) {
+            while (j < n && count == 3 && cnt[s.charAt(j) - 'a'] > 0) {
+                cnt[s.charAt(j++) - 'a']--;
+            }
+            if (count == 3) {
+                ans = Math.min(ans, n - j + i);
+            }
+            if (++cnt[s.charAt(i) - 'a'] == 0) {
+                count++;
+            }
+        }
+        return ans;
     }
 }

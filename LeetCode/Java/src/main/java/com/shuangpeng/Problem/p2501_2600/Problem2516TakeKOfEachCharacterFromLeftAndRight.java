@@ -46,7 +46,7 @@ public class Problem2516TakeKOfEachCharacterFromLeftAndRight {
         return true;
     }
 
-    public int takeCharacters(String s, int k) {
+    public int takeCharacters1(String s, int k) {
         if (k == 0) {
             return 0;
         }
@@ -77,5 +77,33 @@ public class Problem2516TakeKOfEachCharacterFromLeftAndRight {
             }
         }
         return ans;
+    }
+
+    public int takeCharacters(String s, int k) {
+        int n = s.length();
+        if (n < 3 * k) {
+            return -1;
+        }
+        int[] cnt = new int[3];
+        for (int i = 0; i < n; i++) {
+            cnt[s.charAt(i) - 'a']++;
+        }
+        for (int i = 0; i < 3; i++) {
+            if (cnt[i] < k) {
+                return -1;
+            }
+            cnt[i] -= k;
+        }
+        int max = 0;
+        for (int i = 0, j = 0, c = 0; j < n; j++) {
+            if (cnt[s.charAt(j) - 'a']-- == 0) {
+                c++;
+            }
+            if (c != 0 && ++cnt[s.charAt(i++) - 'a'] == 0) {
+                c--;
+            }
+            max = Math.max(max, j - i + 1);
+        }
+        return n - max;
     }
 }

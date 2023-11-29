@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2546ApplyBitwiseOperationsToMakeStringsEqual {
 
-    public boolean makeStringsEqual(String s, String target) {
+    public boolean makeStringsEqual0(String s, String target) {
         int n = s.length();
         boolean b1 = false, b2 = false;
         for (int i = 0; i < n && (!b1 || !b2); i++) {
@@ -20,5 +20,9 @@ public class Problem2546ApplyBitwiseOperationsToMakeStringsEqual {
             }
         }
         return b1 == b2;
+    }
+
+    public boolean makeStringsEqual(String s, String target) {
+        return s.contains("1") == target.contains("1");
     }
 }

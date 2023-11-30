@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2555MaximizeWinFromTwoSegments {
 
-    public int maximizeWin(int[] prizePositions, int k) {
+    public int maximizeWin0(int[] prizePositions, int k) {
         int n = prizePositions.length;
         int[] dp = new int[n + 1];
         for (int i = n - 1, j = n - 1; i >= 0; i--) {
@@ -23,6 +23,19 @@ public class Problem2555MaximizeWinFromTwoSegments {
                 j++;
             }
             ans = Math.max(ans, j - i + dp[j]);
+        }
+        return ans;
+    }
+
+    public int maximizeWin(int[] prizePositions, int k) {
+        int n = prizePositions.length, ans = 0;
+        int[] dp = new int[n + 1];
+        for (int i = 0, j = 0; j < n; j++) {
+            while (prizePositions[i] < prizePositions[j] - k) {
+                i++;
+            }
+            ans = Math.max(ans, dp[i] + j - i + 1);
+            dp[j + 1] = Math.max(dp[j], j - i + 1);
         }
         return ans;
     }

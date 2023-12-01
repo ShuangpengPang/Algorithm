@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Problem2564SubstringXORQueries {
 
-    public int[][] substringXorQueries(String s, int[][] queries) {
+    public int[][] substringXorQueries0(String s, int[][] queries) {
         Map<Integer, List<Integer>> indexMap = new HashMap<>();
         int m = s.length(), n = queries.length;
         int[][] ans = new int[n][2];
@@ -43,6 +43,28 @@ public class Problem2564SubstringXORQueries {
             for (int idx : indexMap.get(0)) {
                 ans[idx][0] = ans[idx][1] = index;
             }
+        }
+        return ans;
+    }
+
+    public int[][] substringXorQueries(String s, int[][] queries) {
+        Map<Integer, int[]> map = new HashMap<>();
+        int[] notFound = {-1, -1};
+        int index = s.indexOf('0');
+        map.put(0, new int[]{index, index});
+        for (int i = 0, n = s.length(); i < n; i++) {
+            if (s.charAt(i) == '1') {
+                int num = 0;
+                for (int j = i; j < Math.min(i + 30, n); j++) {
+                    num = num << 1 | s.charAt(j) - '0';
+                    map.putIfAbsent(num, new int[]{i, j});
+                }
+            }
+        }
+        int n = queries.length;
+        int[][] ans = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            ans[i] = map.getOrDefault(queries[i][0] ^ queries[i][1], notFound);
         }
         return ans;
     }

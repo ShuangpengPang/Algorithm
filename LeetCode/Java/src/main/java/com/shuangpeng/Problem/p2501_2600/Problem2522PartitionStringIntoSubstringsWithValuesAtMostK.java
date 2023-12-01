@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2522PartitionStringIntoSubstringsWithValuesAtMostK {
 
-    public int minimumPartition(String s, int k) {
+    public int minimumPartition0(String s, int k) {
         int n = s.length(), ans = 0;
         for (int i = 0; i < n;) {
             long num = 0;
@@ -21,5 +21,22 @@ public class Problem2522PartitionStringIntoSubstringsWithValuesAtMostK {
             ans++;
         }
         return ans;
+    }
+
+    public int minimumPartition(String s, int k) {
+        int n = s.length(), ans = 0;
+        long num = 0;
+        for (int i = 0; i < n; i++) {
+            int j = s.charAt(i) - '0';
+            if (j > k) {
+                return -1;
+            }
+            num = num * 10 + j;
+            if (num > k) {
+                ans++;
+                num %= 10;
+            }
+        }
+        return ans + 1;
     }
 }

@@ -26,7 +26,7 @@ public class Problem2563CountTheNumberOfFairPairs {
         return ans;
     }
 
-    public long countFairPairs(int[] nums, int lower, int upper) {
+    public long countFairPairs1(int[] nums, int lower, int upper) {
         Arrays.sort(nums);
         int n = nums.length;
         long ans = 0;
@@ -38,6 +38,22 @@ public class Problem2563CountTheNumberOfFairPairs {
                 s++;
             }
             ans += Math.min(i, e) - s;
+        }
+        return ans;
+    }
+
+    public long countFairPairs(int[] nums, int lower, int upper) {
+        Arrays.sort(nums);
+        return getCount(nums, upper) - getCount(nums, lower - 1);
+    }
+
+    private long getCount(int[] nums, int upper) {
+        long ans = 0;
+        for (int i = 0, j = nums.length - 1; i < j; i++) {
+            while (i < j && nums[i] + nums[j] > upper) {
+                j--;
+            }
+            ans += j - i;
         }
         return ans;
     }

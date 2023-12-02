@@ -29,14 +29,26 @@ public class Problem2568MinimumImpossibleOR {
         return num;
     }
 
-    public int minImpossibleOR(int[] nums) {
-        int ans = 0;
+    public int minImpossibleOR1(int[] nums) {
+        Set<Integer> set = new HashSet<>();
         for (int num : nums) {
-            if ((num & (num - 1)) == 0) {
-                ans |= num;
+            set.add(num);
+        }
+        for (int i = 1; ; i <<= 1) {
+            if (!set.contains(i)) {
+                return i;
             }
         }
-        ans++;
-        return ans & -ans;
+    }
+
+    public int minImpossibleOR(int[] nums) {
+        int mask = 0;
+        for (int num : nums) {
+            if ((num & (num - 1)) == 0) {
+                mask |= num;
+            }
+        }
+        mask = ~mask;
+        return mask & -mask;
     }
 }

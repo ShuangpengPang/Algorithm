@@ -11,24 +11,29 @@ import java.util.Comparator;
  */
 public class Problem2580CountWaysToGroupOverlappingRanges {
 
-    public int countWays(int[][] ranges) {
+    public int countWays0(int[][] ranges) {
         Arrays.sort(ranges, Comparator.comparingInt(a -> a[0]));
-        int n = ranges.length, g = 0, N = (int) 1e9 + 7;
+        int n = ranges.length, N = (int) 1e9 + 7;
+        int ans = 1;
         for (int i = 0, j = 0; i < n; i = j) {
             int end = ranges[i][1];
             while (j < n && ranges[j][0] <= end) {
                 end = Math.max(end, ranges[j++][1]);
             }
-            g++;
+            ans = (ans << 1) % N;
         }
-        long ans = 1, p = 2;
-        while (g > 0) {
-            if ((g & 1) == 1) {
-                ans = ans * p % N;
+        return ans;
+    }
+
+    public int countWays(int[][] ranges) {
+        Arrays.sort(ranges, Comparator.comparingInt(a -> a[0]));
+        int ans = 1, end = -1, N = (int) 1e9 + 7;
+        for (int[] r : ranges) {
+            if (end < r[0]) {
+                ans = (ans << 1) % N;
             }
-            p = (p * p) % N;
-            g >>= 1;
+            end = Math.max(end, r[1]);
         }
-        return (int) ans;
+        return ans;
     }
 }

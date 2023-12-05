@@ -41,3 +41,55 @@ public class Problem2587RearrangeArrayToMaximizePrefixScore {
         return n - i - 1;
     }
 }
+
+class Problem2587RearrangeArrayToMaximizePrefixScore0 {
+
+    int len = 0;
+    int[] heap;
+
+    public int maxScore(int[] nums) {
+        int n = nums.length, count = 0;
+        heap = new int[n + 1];
+        len = 0;
+        long sum = 0;
+        for (int num : nums) {
+            if (num > 0) {
+                sum += num;
+                count++;
+            } else {
+                add(num);
+            }
+        }
+        while (len > 0 && sum + heap[1] > 0) {
+            sum += poll();
+            count++;
+        }
+        return count;
+    }
+
+    private void add(int num) {
+        int idx = ++len, parent = idx >> 1;
+        while (idx > 1 && num > heap[parent]) {
+            heap[idx] = heap[parent];
+            idx = parent;
+            parent = idx >> 1;
+        }
+        heap[idx] = num;
+    }
+
+    private int poll() {
+        int ans = heap[1], idx = 1;
+        int num = heap[len--];
+        while (idx << 1 <= len) {
+            int left = idx << 1, right = left + 1;
+            int child = right <= len && heap[right] > heap[left] ? right : left;
+            if (num >= heap[child]) {
+                break;
+            }
+            heap[idx] = heap[child];
+            idx = child;
+        }
+        heap[idx] = num;
+        return ans;
+    }
+}

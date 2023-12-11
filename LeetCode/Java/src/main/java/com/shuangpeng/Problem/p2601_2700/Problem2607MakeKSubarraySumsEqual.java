@@ -59,3 +59,32 @@ public class Problem2607MakeKSubarraySumsEqual {
         }
     }
 }
+
+class Problem2607MakeKSubarraySumsEqual0 {
+
+    public long makeSubKSumEqual(int[] arr, int k) {
+        int n = arr.length, g = gcd(n, k), m = n / g;
+        long ans = 0;
+        for (int i = 0; i < g; i++) {
+            int[] nums = new int[m];
+            for (int j = 0, id = i; j < m; j++, id += g) {
+                nums[j] = arr[id];
+            }
+            Arrays.sort(nums);
+            int t = nums[m >> 1];
+            for (int j = 0; j < m; j++) {
+                ans += Math.abs(nums[j] - t);
+            }
+        }
+        return ans;
+    }
+
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int tmp = b;
+            b = a % b;
+            a = tmp;
+        }
+        return a;
+    }
+}

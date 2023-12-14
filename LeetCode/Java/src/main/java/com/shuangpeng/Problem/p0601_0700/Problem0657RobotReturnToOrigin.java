@@ -9,19 +9,19 @@ package com.shuangpeng.Problem.p0601_0700;
 public class Problem0657RobotReturnToOrigin {
 
     public boolean judgeCircle(String moves) {
-        int offset1 = 0, offset2 = 0, n = moves.length();
+        int x = 0, y = 0, n = moves.length();
         for (int i = 0; i < n; i++) {
             char m = moves.charAt(i);
             if (m == 'U') {
-                offset1 += 1;
+                x += 1;
             } else if (m == 'D') {
-                offset1 -= 1;
+                x -= 1;
             } else if (m == 'L') {
-                offset2 += 1;
+                y += 1;
             } else {
-                offset2 -= 1;
+                y -= 1;
             }
         }
-        return offset1 == 0 && offset2 == 0;
+        return x == 0 && y == 0;
     }
 }

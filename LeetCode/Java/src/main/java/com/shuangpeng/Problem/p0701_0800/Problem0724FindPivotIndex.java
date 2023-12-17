@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0701_0800;
  */
 public class Problem0724FindPivotIndex {
 
-    public int pivotIndex(int[] nums) {
+    public int pivotIndex0(int[] nums) {
         int n = nums.length, left = 0;
         for (int num : nums) {
             left += num;
@@ -22,5 +22,19 @@ public class Problem0724FindPivotIndex {
             right += nums[i];
         }
         return idx;
+    }
+
+    public int pivotIndex(int[] nums) {
+        int n = nums.length, sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        for (int i = 0, left = 0; i < n; i++) {
+            if ((left << 1) + nums[i] == sum) {
+                return i;
+            }
+            left += nums[i];
+        }
+        return -1;
     }
 }

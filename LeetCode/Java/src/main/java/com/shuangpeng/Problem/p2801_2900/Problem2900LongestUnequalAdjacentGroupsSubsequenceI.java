@@ -11,13 +11,23 @@ import java.util.List;
  */
 public class Problem2900LongestUnequalAdjacentGroupsSubsequenceI {
 
-    public List<String> getWordsInLongestSubsequence(int n, String[] words, int[] groups) {
+    public List<String> getWordsInLongestSubsequence0(int n, String[] words, int[] groups) {
         List<String> ans = new ArrayList<>();
         ans.add(words[0]);
         for (int i = 1, g = groups[0]; i < n; i++) {
             if (groups[i] != g) {
                 ans.add(words[i]);
                 g = groups[i];
+            }
+        }
+        return ans;
+    }
+
+    public List<String> getWordsInLongestSubsequence(int n, String[] words, int[] groups) {
+        List<String> ans = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (i == 0 || groups[i] != groups[i - 1]) {
+                ans.add(words[i]);
             }
         }
         return ans;

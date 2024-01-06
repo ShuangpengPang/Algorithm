@@ -12,12 +12,13 @@ import java.util.List;
 public class Problem2915LengthOfTheLongestSubsequenceThatSumsToTarget {
 
     public int lengthOfLongestSubsequence(List<Integer> nums, int target) {
-        int n = nums.size();
         int[] dp = new int[target + 1];
         Arrays.fill(dp, Integer.MIN_VALUE);
         dp[0] = 0;
+        int s = 0;
         for (int num : nums) {
-            for (int i = target; i >= num; i--) {
+            s = Math.min(s + num, target);
+            for (int i = s; i >= num; i--) {
                 dp[i] = Math.max(dp[i], dp[i - num] + 1);
             }
         }

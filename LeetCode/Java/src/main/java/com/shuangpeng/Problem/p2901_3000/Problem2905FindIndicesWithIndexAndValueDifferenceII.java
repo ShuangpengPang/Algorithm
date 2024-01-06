@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
  */
 public class Problem2905FindIndicesWithIndexAndValueDifferenceII {
 
-    public int[] findIndices(int[] nums, int indexDifference, int valueDifference) {
+    public int[] findIndices0(int[] nums, int indexDifference, int valueDifference) {
         int[] ans = {-1, -1};
         int n = nums.length;
         if (indexDifference >= n) {
@@ -40,5 +40,23 @@ public class Problem2905FindIndicesWithIndexAndValueDifferenceII {
             }
         }
         return ans;
+    }
+
+    public int[] findIndices(int[] nums, int indexDifference, int valueDifference) {
+        int N = Integer.MAX_VALUE, maxIndex = 0, minIndex = 0;
+        for (int i = indexDifference, j = 0; i < nums.length; i++, j++) {
+            if (nums[j] > nums[maxIndex]) {
+                maxIndex = j;
+            } else if (nums[j] < nums[minIndex]) {
+                minIndex = j;
+            }
+            if (nums[maxIndex] - nums[i] >= valueDifference) {
+                return new int[]{maxIndex, i};
+            }
+            if (nums[i] - nums[minIndex] >= valueDifference) {
+                return new int[]{minIndex, i};
+            }
+        }
+        return new int[]{-1, -1};
     }
 }

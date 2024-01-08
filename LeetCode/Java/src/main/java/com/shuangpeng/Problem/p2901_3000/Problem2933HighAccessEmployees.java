@@ -43,3 +43,35 @@ public class Problem2933HighAccessEmployees {
         return Integer.parseInt(s.substring(0, 2)) * 60 + Integer.parseInt(s.substring(2, 4));
     }
 }
+
+class Problem2933HighAccessEmployees0 {
+
+    public List<String> findHighAccessEmployees(List<List<String>> access_times) {
+        access_times.sort((a, b) -> {
+            if (!a.get(0).equals(b.get(0))) {
+                return a.get(0).compareTo(b.get(0));
+            }
+            return a.get(1).compareTo(b.get(1));
+        });
+        List<String> ans = new ArrayList<>();
+        int n = access_times.size();
+        for (int i = 0, j = 0; j < n; j++) {
+            String name = access_times.get(j).get(0);
+            int time = getTime(access_times.get(j).get(1)) - 60;
+            while (!access_times.get(i).get(0).equals(name) || getTime(access_times.get(i).get(1)) <= time) {
+                i++;
+            }
+            if (j - i >= 2) {
+                ans.add(name);
+                while (j + 1 < n && access_times.get(j + 1).get(0).equals(name)) {
+                    j++;
+                }
+            }
+        }
+        return ans;
+    }
+
+    private int getTime(String s) {
+        return Integer.parseInt(s.substring(0, 2)) * 60 + Integer.parseInt(s.substring(2, 4));
+    }
+}

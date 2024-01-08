@@ -16,12 +16,9 @@ public class Problem0941ValidMountainArray {
         if (i == 0 || i == n - 1) {
             return false;
         }
-        while (i + 1 < n) {
-            if (arr[i] <= arr[i + 1]) {
-                return false;
-            }
+        while (i + 1 < n && arr[i] > arr[i + 1]) {
             i++;
         }
-        return true;
+        return i == n - 1;
     }
 }

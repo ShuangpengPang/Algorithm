@@ -10,6 +10,18 @@ import com.shuangpeng.common.ListNode;
  */
 public class Problem0876MiddleOfTheLinkedList {
 
+    public ListNode middleNode0(ListNode head) {
+        int cnt = 0;
+        for (ListNode node = head; node != null; node = node.next) {
+            cnt++;
+        }
+        ListNode node = head;
+        for (int i = 0; i < cnt >> 1; i++) {
+            node = node.next;
+        }
+        return node;
+    }
+
     public ListNode middleNode(ListNode head) {
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {

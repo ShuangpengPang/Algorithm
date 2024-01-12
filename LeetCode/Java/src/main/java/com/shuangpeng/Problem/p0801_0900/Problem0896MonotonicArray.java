@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p0801_0900;
  */
 public class Problem0896MonotonicArray {
 
-    public boolean isMonotonic(int[] nums) {
+    public boolean isMonotonic0(int[] nums) {
         int n = nums.length, i = 1;
         while (i < n && nums[i] >= nums[i - 1]) {
             i++;
@@ -21,5 +21,17 @@ public class Problem0896MonotonicArray {
             i++;
         }
         return i == n;
+    }
+
+    public boolean isMonotonic(int[] nums) {
+        boolean inc = true, desc = true;
+        for (int i = 1, n = nums.length; i < n && (inc || desc); i++) {
+            if (nums[i - 1] < nums[i]) {
+                desc = false;
+            } else if (nums[i - 1] > nums[i]) {
+                inc = false;
+            }
+        }
+        return inc || desc;
     }
 }

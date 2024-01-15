@@ -51,3 +51,32 @@ public class Problem2998MinimumNumberOfOperationsToMakeXAndYEqual {
         }
     }
 }
+
+class Problem2998MinimumNumberOfOperationsToMakeXAndYEqual0 {
+
+    private static final int N = Integer.MAX_VALUE >> 1;
+    private int ans;
+
+    public int minimumOperationsToMakeEqual(int x, int y) {
+        ans = N;
+        dfs(x, y, 0, new HashMap<>());
+        return ans;
+    }
+
+    private void dfs(int x, int y, int cnt, Map<Integer, Integer> memo) {
+        if (cnt >= ans || cnt > memo.getOrDefault(x, N)) {
+            return;
+        }
+        if (x <= y) {
+            ans = Math.min(ans, cnt + y - x);
+            return;
+        }
+        ans = Math.min(ans, cnt + x - y);
+        memo.put(x, cnt);
+        int m1 = x % 11, m2 = x % 5;
+        dfs((x - m1) / 11, y, cnt + m1 + 1, memo);
+        dfs((x - m1 + 11) / 11, y, cnt - m1 + 12,  memo);
+        dfs((x - m2) / 5, y, cnt + m2 + 1, memo);
+        dfs((x - m2 + 5) / 5, y, cnt - m2 + 6, memo);
+    }
+}

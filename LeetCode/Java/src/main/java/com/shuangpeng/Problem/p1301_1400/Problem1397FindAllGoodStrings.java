@@ -60,3 +60,48 @@ public class Problem1397FindAllGoodStrings {
         return memo[f1][f2][idx][match] = ans;
     }
 }
+
+class Problem1397FindAllGoodStrings0 {
+    int n;
+    int[][] dp;
+    int[] next;
+    int MOD = (int)1e9 + 7;
+
+    public int findGoodStrings(int n, String s1, String s2, String evil) {
+        this.n = n;
+        int len = evil.length();
+        dp = new int[n][len];
+        for(int i = 0; i < n; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+
+        next = new int[len];
+        for(int j = 0, i = 1; i < len; i++) {
+            while(j > 0 && evil.charAt(i) != evil.charAt(j)) j = next[j - 1];
+            if(evil.charAt(i) == evil.charAt(j)) j++;
+            next[i] = j;
+        }
+
+        return dfs(s1, s2, evil, 0, 0, true, true);
+    }
+
+    public int dfs(String s1, String s2, String evil, int i, int j, boolean downLimited, boolean upLimited) {
+        // 代表字符串中出现了 evil
+        if(j == evil.length()) return 0;
+        if(i == n) return 1;
+        if(!downLimited && !upLimited && dp[i][j] != -1) return dp[i][j];
+
+        long ans = 0;
+        char down = downLimited ? s1.charAt(i) : 'a', up = upLimited ? s2.charAt(i) : 'z';
+        for(char k = down; k <= up; k++) {
+            int nj = j;
+            while(nj > 0 && k != evil.charAt(nj)) nj = next[nj - 1];
+            // 此处要注意，当 nj == 0 的时候，会存在 k != evil.charAt(nj) 的情况
+            // 若直接 nj + 1 进入递归，是认为此时的两个字符一定是匹配上了，实际上可能并没有
+            if(nj == 0 && k != evil.charAt(nj)) nj = -1;
+            ans = (ans + dfs(s1, s2, evil, i + 1, nj + 1, downLimited && k == down, upLimited && k == up)) % MOD;
+        }
+        if(!downLimited && !upLimited) dp[i][j] = (int)ans;
+        return (int)ans;
+    }
+}

@@ -51,7 +51,7 @@ public class Problem2509CycleLengthQueriesInATree {
         return ans;
     }
 
-    public int[] cycleLengthQueries(int n, int[][] queries) {
+    public int[] cycleLengthQueries2(int n, int[][] queries) {
         int m = queries.length;
         int[] ans = new int[m];
         for (int i = 0; i < m; i++) {
@@ -68,6 +68,22 @@ public class Problem2509CycleLengthQueriesInATree {
                 k--;
             }
             ans[i] = j + k + 3;
+        }
+        return ans;
+    }
+
+    public int[] cycleLengthQueries(int n, int[][] queries) {
+        int m = queries.length;
+        int[] ans = new int[m];
+        for (int i = 0; i < m; i++) {
+            int a = queries[i][0], b = queries[i][1];
+            if (a > b) {
+                a = a ^ b;
+                b = a ^ b;
+                a = a ^ b;
+            }
+            int d = Integer.numberOfLeadingZeros(a) - Integer.numberOfLeadingZeros(b);
+            ans[i] = d + (32 - Integer.numberOfLeadingZeros((a ^ (b >> d)))) * 2 + 1;
         }
         return ans;
     }

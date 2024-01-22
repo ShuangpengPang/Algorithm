@@ -2,6 +2,9 @@ package com.shuangpeng.Problem.p0501_0600;
 
 import com.shuangpeng.common.TreeNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -70,5 +73,45 @@ class Problem0572SubtreeOfAnotherTree0 {
             return false;
         }
         return check(root.left, subRoot.left) && check(root.right, subRoot.right);
+    }
+}
+
+class Problem0572SubtreeOfAnotherTree1 {
+
+    private static final int N1 = Integer.MAX_VALUE, N2 = N1 - 1;
+
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        List<Integer> s = new ArrayList<>(), t = new ArrayList<>();
+        dfs(root, s, true);
+        dfs(subRoot, t, true);
+        int n = t.size(), m = s.size();
+        int[] next = new int[n];
+        for (int i = 1, j = 0; i < n; i++) {
+            int num = t.get(i);
+            while (j > 0 && t.get(j) != num) {
+                j = next[j - 1];
+            }
+            next[i] = j = t.get(j) == num ? j + 1 : j;
+        }
+        for (int i = 0, j = 0; i < m; i++) {
+            int num = s.get(i);
+            while (j > 0 && t.get(j) != num) {
+                j = next[j - 1];
+            }
+            if (t.get(j) == num && ++j == n) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void dfs(TreeNode root, List<Integer> list, boolean isLeft) {
+        if (root == null) {
+            list.add(isLeft ? N1 : N2);
+            return;
+        }
+        list.add(root.val);
+        dfs(root.left, list, true);
+        dfs(root.right, list, false);
     }
 }

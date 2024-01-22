@@ -3,7 +3,9 @@ package com.shuangpeng.Problem.p0501_0600;
 import com.shuangpeng.common.TreeNode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ShuangPengPang
@@ -113,5 +115,55 @@ class Problem0572SubtreeOfAnotherTree1 {
         list.add(root.val);
         dfs(root.left, list, true);
         dfs(root.right, list, false);
+    }
+}
+
+class Problem0572SubtreeOfAnotherTree2 {
+
+    private static final int N1 = 31, N2 = 179, N = 2001;
+    private static int[] primes = new int[N + 1];
+    private static int cnt = 0;
+
+    static {
+        int M = (int) 1e5;
+        boolean[] vis = new boolean[M];
+        for (int i = 2; cnt < N; i++) {
+            if (!vis[i]) {
+                primes[cnt++] = i;
+            }
+            for (int j = 0; j < cnt && (long) i * primes[j] < M; j++) {
+                vis[i * primes[j]] = true;
+                if (i % primes[j] == 0) {
+                    break;
+                }
+            }
+        }
+    }
+
+    private Set<Integer> hash;
+
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        hash = new HashSet<>();
+        dfs1(root);
+        return hash.contains(dfs2(subRoot)[0]);
+    }
+
+    private int[] dfs1(TreeNode root) {
+        if (root == null) {
+            return new int[]{0, 0};
+        }
+        int[] left = dfs1(root.left), right = dfs1(root.right);
+        int h = root.val + N1 * left[0] * primes[left[1]] + N2 * right[0] * primes[right[1]];
+        hash.add(h);
+        return new int[]{h, left[1] + right[1] + 1};
+    }
+
+    private int[] dfs2(TreeNode root) {
+        if (root == null) {
+            return new int[]{0, 0};
+        }
+        int[] left = dfs2(root.left), right = dfs2(root.right);
+        int h = root.val + N1 * left[0] * primes[left[1]] + N2 * right[0] * primes[right[1]];
+        return new int[]{h, left[1] + right[1] + 1};
     }
 }

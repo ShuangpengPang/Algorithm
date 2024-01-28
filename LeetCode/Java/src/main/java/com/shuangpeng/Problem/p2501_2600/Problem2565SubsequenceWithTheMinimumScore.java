@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2565SubsequenceWithTheMinimumScore {
 
-    public int minimumScore(String s, String t) {
+    public int minimumScore0(String s, String t) {
         char[] cs = s.toCharArray(), ct = t.toCharArray();
         int n1 = cs.length, n2 = ct.length;
         int[] index1 = new int[n2], index2 = new int[n2];
@@ -38,6 +38,26 @@ public class Problem2565SubsequenceWithTheMinimumScore {
                 j++;
             }
             ans = Math.min(ans, j - i - 1);
+        }
+        return ans;
+    }
+
+    public int minimumScore(String s, String t) {
+        char[] cs = s.toCharArray(), ct = t.toCharArray();
+        int n1 = cs.length, n2 = ct.length;
+        int[] suf = new int[n1 + 1];
+        suf[n1] = n2;
+        for (int i = n1 - 1, j = n2 - 1; i >= 0; i--) {
+            suf[i] = j >= 0 && cs[i] == ct[j] ? j-- : j + 1;
+        }
+        int ans = suf[0];
+        if (ans == 0) {
+            return 0;
+        }
+        for (int i = 0, j = 0; i < n1; i++) {
+            if (cs[i] == ct[j]) {
+                ans = Math.min(ans, suf[i + 1] - ++j);
+            }
         }
         return ans;
     }

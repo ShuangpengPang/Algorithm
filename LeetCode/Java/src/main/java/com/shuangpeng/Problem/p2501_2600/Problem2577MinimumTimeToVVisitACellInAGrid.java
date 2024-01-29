@@ -81,11 +81,9 @@ class Problem2577MinimumTimeToVVisitACellInAGrid0 {
             for (int d = 0; d < 4; d++) {
                 int nx = x + dirs[d], ny = y + dirs[d + 1];
                 if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
-                    int t = p[2] + 1;
-                    if (t < grid[nx][ny]) {
-                        t = grid[nx][ny] + ((t ^ grid[nx][ny]) & 1);
-                    }
-                    if (time[nx][ny] > t) {
+                    int t = Math.max(p[2] + 1, grid[nx][ny]);
+                    t += (t - nx - ny) & 1;
+                    if (t < time[nx][ny]) {
                         time[nx][ny] = t;
                         pq.offer(new int[]{nx, ny, t});
                     }

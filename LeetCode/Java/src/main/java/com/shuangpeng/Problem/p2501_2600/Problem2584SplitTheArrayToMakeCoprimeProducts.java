@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class Problem2584SplitTheArrayToMakeCoprimeProducts {
 
-    public int findValidSplit(int[] nums) {
+    public int findValidSplit0(int[] nums) {
         int n = nums.length;
         List<Integer>[] primes = new List[n];
         Arrays.setAll(primes, i -> new ArrayList());
@@ -48,6 +48,42 @@ public class Problem2584SplitTheArrayToMakeCoprimeProducts {
             }
             if (cnt == set.size()) {
                 return i;
+            }
+        }
+        return -1;
+    }
+
+    public int findValidSplit(int[] nums) {
+        int n = nums.length;
+        List<Integer>[] primes = new List[n];
+        Arrays.setAll(primes, i -> new ArrayList<>());
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = n - 1; i >= 0; i--) {
+            int x = nums[i];
+            for (int j = 2; j * j <= x; j++) {
+                if (x % j == 0) {
+                    while (x % j == 0) {
+                        x /= j;
+                    }
+                    if (!map.containsKey(j)) {
+                        map.put(j, i);
+                    }
+                    primes[i].add(j);
+                }
+            }
+            if (x > 1) {
+                if (!map.containsKey(x)) {
+                    map.put(x, i);
+                }
+                primes[i].add(x);
+            }
+        }
+        for (int i = 0, last = 0; i < n; i++) {
+            if (last < i) {
+                return last;
+            }
+            for (int j : primes[i]) {
+                last = Math.max(last, map.get(j));
             }
         }
         return -1;

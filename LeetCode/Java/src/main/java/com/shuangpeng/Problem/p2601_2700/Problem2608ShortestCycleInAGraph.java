@@ -85,3 +85,47 @@ public class Problem2608ShortestCycleInAGraph {
         return false;
     }
 }
+
+class Problem2608ShortestCycleInAGraph0 {
+
+    public int findShortestCycle(int n, int[][] edges) {
+        List<Integer>[] graph = new List[n];
+        Arrays.setAll(graph, i -> new ArrayList<>());
+        for (int[] e : edges) {
+            graph[e[0]].add(e[1]);
+            graph[e[1]].add(e[0]);
+        }
+        int N = n + 1, cnt = N;
+        for (int i = 0; i < n; i++) {
+            cnt = Math.min(cnt, getStep(graph, i, cnt + 1 >> 1));
+        }
+        return cnt == N ? -1 : cnt;
+    }
+
+    private int getStep(List<Integer>[] graph, int x, int step) {
+        int n = graph.length, cnt = step << 1;
+        int[] dis = new int[n];
+        Arrays.fill(dis, -1);
+        Queue<int[]> q = new ArrayDeque<>();
+        q.offer(new int[]{x, -1});
+        dis[x] = 0;
+        for (int s = 0; s < step && !q.isEmpty(); s++) {
+            for (int i = q.size() - 1; i >= 0; i--) {
+                int[] arr = q.poll();
+                int u = arr[0], p = arr[1];
+                for (int v : graph[u]) {
+                    if (v == p) {
+                        continue;
+                    }
+                    if (dis[v] == -1) {
+                        dis[v] = s + 1;
+                        q.offer(new int[]{v, u});
+                    } else {
+                        cnt = Math.min(cnt, s + dis[v] + 1);
+                    }
+                }
+            }
+        }
+        return cnt;
+    }
+}

@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1301_1400;
  */
 public class Problem1309DecryptStringFromAlphabetToIntegerMapping {
 
-    public String freqAlphabets(String s) {
+    public String freqAlphabets0(String s) {
         char[] cs = s.toCharArray();
         StringBuilder sb = new StringBuilder();
         int i = cs.length - 1;
@@ -23,5 +23,21 @@ public class Problem1309DecryptStringFromAlphabetToIntegerMapping {
             }
         }
         return sb.reverse().toString();
+    }
+
+    public String freqAlphabets(String s) {
+        char[] cs = s.toCharArray();
+        int n = cs.length, i = 0;
+        StringBuilder sb = new StringBuilder();
+        while (i < n) {
+            if (i + 2 < n && cs[i + 2] == '#') {
+                sb.append((char) ((cs[i] - '0') * 10 + cs[i + 1] - '1' + 'a'));
+                i += 3;
+            } else {
+                sb.append((char) (cs[i] - '1' + 'a'));
+                i++;
+            }
+        }
+        return sb.toString();
     }
 }

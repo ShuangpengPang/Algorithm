@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3001_3100;
  */
 public class Problem3019NumberOfChangingKeys {
 
-    public int countKeyChanges(String s) {
+    public int countKeyChanges0(String s) {
         int cnt = 0, n = s.length();
         for (int i = 1; i < n; i++) {
             int k = s.charAt(i) - s.charAt(i - 1);
@@ -17,5 +17,15 @@ public class Problem3019NumberOfChangingKeys {
             }
         }
         return cnt;
+    }
+
+    public int countKeyChanges(String s) {
+        int ans = 0;
+        for (int i = 1; i < s.length(); i++) {
+            if ((s.charAt(i - 1) & 31) != (s.charAt(i) & 31)) {
+                ans++;
+            }
+        }
+        return ans;
     }
 }

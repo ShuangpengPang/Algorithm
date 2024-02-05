@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem3005CountElementsWithMaximumFrequency {
 
-    public int maxFrequencyElements(int[] nums) {
+    public int maxFrequencyElements0(int[] nums) {
         Map<Integer, Integer> freq = new HashMap<>();
         int maxFreq = 0;
         for (int num : nums) {
@@ -24,5 +24,19 @@ public class Problem3005CountElementsWithMaximumFrequency {
             }
         }
         return sum;
+    }
+
+    public int maxFrequencyElements(int[] nums) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        int maxFreq = 0, ans = 0;
+        for (int num : nums) {
+            int f = freq.merge(num, 1, Integer::sum);
+            if (f > maxFreq) {
+                ans = maxFreq = f;
+            } else if (f == maxFreq) {
+                ans += f;
+            }
+        }
+        return ans;
     }
 }

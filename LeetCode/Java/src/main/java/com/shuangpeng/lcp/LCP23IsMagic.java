@@ -52,3 +52,52 @@ public class LCP23IsMagic {
         return check(arr3, arr4, k);
     }
 }
+
+class LCP23IsMagic0 {
+
+    public boolean isMagic(int[] target) {
+        int n = target.length;
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = i + 1;
+        }
+        int[] shuffle = shuffle(arr, 0);
+        int k = 0, t = 0;
+        while (t < n && shuffle[k] == target[t]) {
+            k++;
+            t++;
+        }
+        if (k == n) {
+            return true;
+        }
+        if (k == 0)
+            return false;
+        int p = k;
+        while (shuffle.length > 0) {
+            shuffle = shuffle(shuffle, p);
+            p = 0;
+            while (p < Math.min(k, shuffle.length)) {
+                if (shuffle[p] != target[t]) {
+                    return false;
+                }
+                p++;
+                t++;
+            }
+        }
+        return true;
+    }
+
+    private int[] shuffle(int[] arr, int start) {
+        int len = arr.length - start;
+        int[] ans = new int[len];
+        for (int i = start, f = 0, e = 0, o = len >> 1; i < arr.length; i++, f ^= 1) {
+            int num = arr[i];
+            if ((f & 1) == 0) {
+                ans[o++] = num;
+            } else {
+                ans[e++] = num;
+            }
+        }
+        return ans;
+    }
+}

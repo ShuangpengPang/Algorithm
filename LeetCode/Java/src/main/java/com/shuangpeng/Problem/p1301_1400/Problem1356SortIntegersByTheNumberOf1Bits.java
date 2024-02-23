@@ -34,3 +34,30 @@ public class Problem1356SortIntegersByTheNumberOf1Bits {
         return i & 0x3f;
     }
 }
+
+class Problem1356SortIntegersByTheNumberOf1Bits0 {
+
+    public int[] sortByBits(int[] arr) {
+        int n = arr.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+        Arrays.sort(ids, (a, b) -> {
+            int c1 = bitCount(arr[a]), c2 = bitCount(arr[b]);
+            return c1 != c2 ? c1 - c2 : arr[a] - arr[b];
+        });
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[i] = arr[ids[i]];
+        }
+        return ans;
+    }
+
+    private int bitCount(int i) {
+        int cnt = 0;
+        while (i != 0) {
+            i ^= i & -i;
+            cnt++;
+        }
+        return cnt;
+    }
+}

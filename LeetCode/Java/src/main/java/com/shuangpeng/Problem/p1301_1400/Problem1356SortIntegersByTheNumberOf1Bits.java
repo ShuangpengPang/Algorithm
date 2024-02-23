@@ -61,3 +61,26 @@ class Problem1356SortIntegersByTheNumberOf1Bits0 {
         return cnt;
     }
 }
+
+class Problem1356SortIntegersByTheNumberOf1Bits01 {
+
+    private static int N = 10000;
+    private static int[] bit = new int[N + 1];
+    static {
+        for (int i = 1; i <= N; i++) {
+            bit[i] = bit[i >> 1] + (i & 1);
+        }
+    }
+
+    public int[] sortByBits(int[] arr) {
+        int n = arr.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> arr[i]);
+        Arrays.sort(ids, (a, b) -> bit[a] != bit[b] ? bit[a] - bit[b] : a - b);
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[i] = ids[i];
+        }
+        return ans;
+    }
+}

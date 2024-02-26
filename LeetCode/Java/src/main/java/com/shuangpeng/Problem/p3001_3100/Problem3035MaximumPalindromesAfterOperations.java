@@ -49,7 +49,7 @@ public class Problem3035MaximumPalindromesAfterOperations {
         return ans;
     }
 
-    public int maxPalindromesAfterOperations(String[] words) {
+    public int maxPalindromesAfterOperations1(String[] words) {
         int total = 0, mask = 0;
         for (String w : words) {
             total += w.length();
@@ -66,6 +66,27 @@ public class Problem3035MaximumPalindromesAfterOperations {
                 break;
             }
             ans++;
+        }
+        return ans;
+    }
+
+    public int maxPalindromesAfterOperations(String[] words) {
+        int oddCnt = 0, mask = 0;
+        for (String w : words) {
+            oddCnt += w.length() & 1;
+            for (char c : w.toCharArray()) {
+                mask ^= 1 << c - 'a';
+            }
+        }
+        int left = Integer.bitCount(mask) - oddCnt;
+        Arrays.sort(words, (a, b) -> b.length() - a.length());
+        int ans = words.length;
+        for (String w : words) {
+            if (left <= 0) {
+                break;
+            }
+            left -= w.length() >> 1 << 1;
+            ans--;
         }
         return ans;
     }

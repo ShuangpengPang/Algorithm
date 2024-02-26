@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 public class Problem3035MaximumPalindromesAfterOperations {
 
-    public int maxPalindromesAfterOperations(String[] words) {
+    public int maxPalindromesAfterOperations0(String[] words) {
         int[] cnt = new int[26];
         for (String w : words) {
             for (char c : w.toCharArray()) {
@@ -44,6 +44,27 @@ public class Problem3035MaximumPalindromesAfterOperations {
                 }
             }
             cnt[index]--;
+            ans++;
+        }
+        return ans;
+    }
+
+    public int maxPalindromesAfterOperations(String[] words) {
+        int total = 0, mask = 0;
+        for (String w : words) {
+            total += w.length();
+            for (char c : w.toCharArray()) {
+                mask ^= 1 << c - 'a';
+            }
+        }
+        total -= Integer.bitCount(mask);
+        Arrays.sort(words, Comparator.comparingInt(a -> a.length()));
+        int ans = 0;
+        for (String w : words) {
+            total -= w.length() >> 1 << 1;
+            if (total < 0) {
+                break;
+            }
             ans++;
         }
         return ans;

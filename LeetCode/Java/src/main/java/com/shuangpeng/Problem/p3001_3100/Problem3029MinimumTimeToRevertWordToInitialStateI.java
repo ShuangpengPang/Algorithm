@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3001_3100;
  */
 public class Problem3029MinimumTimeToRevertWordToInitialStateI {
 
-    public int minimumTimeToInitialState(String word, int k) {
+    public int minimumTimeToInitialState0(String word, int k) {
         char[] cs = word.toCharArray();
         int n = cs.length;
         int[] next = new int[n];
@@ -23,5 +23,24 @@ public class Problem3029MinimumTimeToRevertWordToInitialStateI {
             j = next[j - 1];
         }
         return (j % k == m ? n - j : n + k - 1) / k;
+    }
+
+    public int minimumTimeToInitialState(String word, int k) {
+        char[] cs = word.toCharArray();
+        int n = cs.length;
+        int[] z = new int[n];
+        for (int i = 1, l = 0, r = 0; i < n; i++) {
+            if (i <= r) {
+                z[i] = Math.min(z[i - l], r - i + 1);
+            }
+            while (i + z[i] < n && cs[i + z[i]] == cs[z[i]]) {
+                l = i;
+                r = i + z[i]++;
+            }
+            if (z[i] == n - i && i % k == 0) {
+                return i / k;
+            }
+        }
+        return (n + k - 1) / k;
     }
 }

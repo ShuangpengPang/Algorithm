@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem3026MaximumGoodSubarraySum {
 
-    public long maximumSubarraySum(int[] nums, int k) {
+    public long maximumSubarraySum0(int[] nums, int k) {
         int n = nums.length;
         long[] preSum = new long[n + 1];
         Map<Integer, Integer> map = new HashMap<>();
@@ -28,6 +28,22 @@ public class Problem3026MaximumGoodSubarraySum {
             if (j == -1 || preSum[j] > preSum[i]) {
                 map.put(nums[i], i);
             }
+        }
+        return ans == Long.MIN_VALUE ? 0 : ans;
+    }
+
+    public long maximumSubarraySum(int[] nums, int k) {
+        Map<Integer, Long> map = new HashMap<>();
+        long sum = 0, ans = Long.MIN_VALUE;
+        for (int num : nums) {
+            if (map.containsKey(num - k)) {
+                ans = Math.max(ans, sum + num - map.get(num - k));
+            }
+            if (map.containsKey(num + k)) {
+                ans = Math.max(ans, sum + num - map.get(num + k));
+            }
+            map.merge(num, sum, Math::min);
+            sum += num;
         }
         return ans == Long.MIN_VALUE ? 0 : ans;
     }

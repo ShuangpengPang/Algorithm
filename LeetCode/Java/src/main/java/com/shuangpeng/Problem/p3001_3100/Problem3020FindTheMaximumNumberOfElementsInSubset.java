@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem3020FindTheMaximumNumberOfElementsInSubset {
 
-    public int maximumLength(int[] nums) {
+    public int maximumLength0(int[] nums) {
         Map<Long, Integer> map = new HashMap<>();
         for (long num : nums) {
             map.merge(num, 1, Integer::sum);
@@ -28,6 +28,23 @@ public class Problem3020FindTheMaximumNumberOfElementsInSubset {
                 cnt += 2;
             }
             ans = Math.max(ans, cnt);
+        }
+        return ans;
+    }
+
+    public int maximumLength(int[] nums) {
+        Map<Long, Integer> map = new HashMap<>();
+        for (long num : nums) {
+            map.merge(num, 1, Integer::sum);
+        }
+        Integer c = map.remove(1L);
+        int ans = c == null ? 0 : c - 1 | 1;
+        for (long num : map.keySet()) {
+            int cnt = 0;
+            for (; map.getOrDefault(num, 0) > 1; num *= num) {
+                cnt += 2;
+            }
+            ans = Math.max(ans, cnt + map.getOrDefault(num, -1));
         }
         return ans;
     }

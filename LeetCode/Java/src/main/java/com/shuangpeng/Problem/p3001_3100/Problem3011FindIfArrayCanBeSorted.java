@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3001_3100;
  */
 public class Problem3011FindIfArrayCanBeSorted {
 
-    public boolean canSortArray(int[] nums) {
+    public boolean canSortArray0(int[] nums) {
         int preMax = 0, min = 0, max = 0, cnt = 0;
         for (int num : nums) {
             int c = Integer.bitCount(num);
@@ -23,6 +23,22 @@ public class Problem3011FindIfArrayCanBeSorted {
             if (min < preMax) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    public boolean canSortArray(int[] nums) {
+        int n = nums.length, preMax = 0;
+        int i = 0;
+        while (i < n) {
+            int ones = Integer.bitCount(nums[i]), max = 0;
+            while (i < n && Integer.bitCount(nums[i]) == ones) {
+                if (nums[i] < preMax) {
+                    return false;
+                }
+                max = Math.max(max, nums[i++]);
+            }
+            preMax = max;
         }
         return true;
     }

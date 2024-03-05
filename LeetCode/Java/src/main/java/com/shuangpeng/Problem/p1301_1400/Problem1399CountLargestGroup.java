@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem1399CountLargestGroup {
 
-    public int countLargestGroup(int n) {
+    public int countLargestGroup0(int n) {
         Map<Integer, Integer> map = new HashMap<>();
         int maxCnt = 0, ans = 0;
         for (int i = 1; i <= n; i++) {
@@ -33,5 +33,35 @@ public class Problem1399CountLargestGroup {
             x /= 10;
         }
         return sum;
+    }
+
+    public int countLargestGroup(int n) {
+        int[] cnt = new int[37];
+        if (n == 10000) {
+            cnt[1]++;
+        }
+        int c = 0;
+        r: for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                for (int x = 0; x < 10; x++) {
+                    for (int y = 0; y < 10; y++) {
+                        cnt[i + j + x + y]++;
+                        if (c++ == n) {
+                            break r;
+                        }
+                    }
+                }
+            }
+        }
+        int maxCnt = 0, ans = 0;
+        for (int i = 1; i < 37; i++) {
+            if (cnt[i] > maxCnt) {
+                maxCnt = cnt[i];
+                ans = 1;
+            } else if (cnt[i] == maxCnt) {
+                ans++;
+            }
+        }
+        return ans;
     }
 }

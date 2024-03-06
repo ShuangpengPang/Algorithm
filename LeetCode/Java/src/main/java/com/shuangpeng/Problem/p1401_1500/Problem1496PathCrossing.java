@@ -1,6 +1,8 @@
 package com.shuangpeng.Problem.p1401_1500;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -37,5 +39,32 @@ public class Problem1496PathCrossing {
             nx--;
         }
         return !visited.add(nx << 15 | ny);
+    }
+}
+
+class Problem1496PathCrossing0 {
+
+    private static final int[][] dirs = new int[26][];
+
+    static {
+        dirs['N' - 'A'] = new int[]{0, 1};
+        dirs['S' - 'A'] = new int[]{0, -1};
+        dirs['W' - 'A'] = new int[]{-1, 0};
+        dirs['E' - 'A'] = new int[]{1, 0};
+    }
+
+    public boolean isPathCrossing(String path) {
+        Map<Integer, Set<Integer>> visited = new HashMap<>();
+        visited.computeIfAbsent(0, k -> new HashSet<>()).add(0);
+        int x = 0, y = 0;
+        for (char c : path.toCharArray()) {
+            x += dirs[c - 'A'][0];
+            y += dirs[c - 'A'][1];
+            if (visited.containsKey(x) && visited.get(x).contains(y)) {
+                return true;
+            }
+            visited.computeIfAbsent(x, k -> new HashSet<>()).add(y);
+        }
+        return false;
     }
 }

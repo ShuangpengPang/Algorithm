@@ -18,7 +18,7 @@ public class Problem3066MinimumOperationsToExceedThresholdValueII {
         int ans = 0;
         while (pq.peek() < k) {
             long x = pq.poll(), y = pq.poll();
-            pq.offer((Math.min(x, y) << 1) + Math.max(x, y));
+            pq.offer((x << 1) + y);
             ans++;
         }
         return ans;

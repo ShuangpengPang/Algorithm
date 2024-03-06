@@ -22,7 +22,7 @@ public class Problem1502CanMakeArithmeticProgressionFromSequence {
         return true;
     }
 
-    public boolean canMakeArithmeticProgression(int[] arr) {
+    public boolean canMakeArithmeticProgression1(int[] arr) {
         Set<Integer> set = new HashSet<>();
         int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (int num : arr) {
@@ -41,6 +41,29 @@ public class Problem1502CanMakeArithmeticProgressionFromSequence {
             if (!set.contains(i)) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    public boolean canMakeArithmeticProgression(int[] arr) {
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int num : arr) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+        if (min == max) {
+            return true;
+        }
+        int n = arr.length, d = (max - min) / (n - 1);
+        if (min + d * (n - 1) != max) {
+            return false;
+        }
+        boolean[] visited = new boolean[n];
+        for (int num : arr) {
+            if ((num - min) % d != 0 || visited[(num - min) / d]) {
+                return false;
+            }
+            visited[(num - min) / d] = true;
         }
         return true;
     }

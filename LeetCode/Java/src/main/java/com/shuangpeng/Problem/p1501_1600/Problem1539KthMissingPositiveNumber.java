@@ -8,6 +8,16 @@ package com.shuangpeng.Problem.p1501_1600;
  */
 public class Problem1539KthMissingPositiveNumber {
 
+    public int findKthPositive0(int[] arr, int k) {
+        int n = arr.length;
+        for (int i = 0; i < n; i++) {
+            if (i + k < arr[i]) {
+                return i + k;
+            }
+        }
+        return n + k;
+    }
+
     public int findKthPositive(int[] arr, int k) {
         int left = 0, right = arr.length - 1;
         while (left <= right) {

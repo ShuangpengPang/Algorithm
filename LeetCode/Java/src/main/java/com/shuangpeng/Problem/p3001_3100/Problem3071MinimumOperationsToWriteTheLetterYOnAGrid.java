@@ -20,15 +20,14 @@ public class Problem3071MinimumOperationsToWriteTheLetterYOnAGrid {
                 }
             }
         }
-        int ans = Integer.MAX_VALUE, count = n * n - n - h;
+        int count = 0;
         for (int i = 0; i < 3; i++) {
-            int c = n + h - cnt1[i] + count;
             for (int j = 0; j < 3; j++) {
                 if (i != j) {
-                    ans = Math.min(ans, c - cnt2[j]);
+                    count = Math.max(count, cnt1[i] + cnt2[j]);
                 }
             }
         }
-        return ans;
+        return n * n - count;
     }
 }

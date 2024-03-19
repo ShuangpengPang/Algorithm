@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p1801_1900;
  */
 public class Problem1869LongerContiguousSegmentsOfOnesThanZeros {
 
-    public boolean checkZeroOnes(String s) {
+    public boolean checkZeroOnes0(String s) {
         int[] cnt = new int[2];
         int n = s.length();
         for (int i = 0, count = 0; i < n; i++) {
@@ -18,6 +18,21 @@ public class Problem1869LongerContiguousSegmentsOfOnesThanZeros {
                 cnt[c - '0'] = Math.max(cnt[c - '0'], count);
                 count = 0;
             }
+        }
+        return cnt[1] > cnt[0];
+    }
+
+    public boolean checkZeroOnes(String s) {
+        char[] cs = s.toCharArray();
+        int[] cnt = new int[2];
+        int n = cs.length, i = 0;
+        while (i < n) {
+            int start = i;
+            char c = cs[start];
+            while (i < n && cs[i] == c) {
+                i++;
+            }
+            cnt[c - '0'] = Math.max(cnt[c - '0'], i - start);
         }
         return cnt[1] > cnt[0];
     }

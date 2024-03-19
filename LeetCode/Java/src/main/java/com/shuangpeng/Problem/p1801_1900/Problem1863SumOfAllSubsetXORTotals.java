@@ -11,7 +11,27 @@ import java.util.List;
  */
 public class Problem1863SumOfAllSubsetXORTotals {
 
+    private int sum = 0;
+
     public int subsetXORSum(int[] nums) {
+        sum = 0;
+        dfs(nums, 0, 0);
+        return sum;
+    }
+
+    private void dfs(int[] nums, int index, int s) {
+        if (index == nums.length) {
+            sum += s;
+            return;
+        }
+        dfs(nums, index + 1, s);
+        dfs(nums, index + 1, s ^ nums[index]);
+    }
+}
+
+class Problem1863SumOfAllSubsetXORTotals0 {
+
+    public int subsetXORSum0(int[] nums) {
         List<Integer> list = new ArrayList<>();
         list.add(0);
         int sum = 0;
@@ -23,5 +43,24 @@ public class Problem1863SumOfAllSubsetXORTotals {
             }
         }
         return sum;
+    }
+
+    public int subsetXORSum1(int[] nums) {
+        int n = nums.length, N = 1 << n;
+        int[] dp = new int[N];
+        int sum = 0;
+        for (int i = 1; i < N; i++) {
+            dp[i] = nums[Integer.numberOfTrailingZeros(i)] ^ dp[i ^ (i & -i)];
+            sum += dp[i];
+        }
+        return sum;
+    }
+
+    public int subsetXORSum(int[] nums) {
+        int ans = 0;
+        for (int num : nums) {
+            ans |= num;
+        }
+        return ans << nums.length - 1;
     }
 }

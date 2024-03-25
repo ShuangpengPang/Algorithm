@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3001_3100;
  */
 public class Problem3084CountSubstringsStartingAndEndingWithGivenCharacter {
 
-    public long countSubstrings(String s, char c) {
+    public long countSubstrings0(String s, char c) {
         long cnt = 0;
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == c) {
@@ -16,5 +16,15 @@ public class Problem3084CountSubstringsStartingAndEndingWithGivenCharacter {
             }
         }
         return cnt * (cnt + 1) >> 1;
+    }
+
+    public long countSubstrings(String s, char c) {
+        long ans = 0, cnt = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == c) {
+                ans += ++cnt;
+            }
+        }
+        return ans;
     }
 }

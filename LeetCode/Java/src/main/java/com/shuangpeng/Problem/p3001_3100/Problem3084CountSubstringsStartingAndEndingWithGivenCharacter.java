@@ -15,6 +15,7 @@ public class Problem3084CountSubstringsStartingAndEndingWithGivenCharacter {
                 cnt++;
             }
         }
+        s.chars();
         return cnt * (cnt + 1) >> 1;
     }
 

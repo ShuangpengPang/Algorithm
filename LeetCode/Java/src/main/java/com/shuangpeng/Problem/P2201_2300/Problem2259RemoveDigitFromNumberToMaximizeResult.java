@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.P2201_2300;
  */
 public class Problem2259RemoveDigitFromNumberToMaximizeResult {
 
-    public String removeDigit(String number, char digit) {
+    public String removeDigit0(String number, char digit) {
         char[] cs = number.toCharArray();
         int n = number.length(), cnt = 0;
         for (char c : cs) {
@@ -25,6 +25,23 @@ public class Problem2259RemoveDigitFromNumberToMaximizeResult {
                 cs[j++] = cs[i];
                 cnt--;
             }
+        }
+        return new String(cs, 0, n - 1);
+    }
+
+    public String removeDigit(String number, char digit) {
+        char[] cs = number.toCharArray();
+        int n = cs.length, last = 0;
+        for (int i = 0; i < n; i++) {
+            if (cs[i] == digit) {
+                last = i;
+                if (i < n - 1 && cs[i] < cs[i + 1]) {
+                    break;
+                }
+            }
+        }
+        for (int i = last; i < n - 1; i++) {
+            cs[i] = cs[i + 1];
         }
         return new String(cs, 0, n - 1);
     }

@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 public class Problem2164SortEvenAndOddIndicesIndependently {
 
-    public int[] sortEvenOdd(int[] nums) {
+    public int[] sortEvenOdd0(int[] nums) {
         int n = nums.length, m2 = n >> 1, m1 = n - m2;
         Integer[] cnt1 = new Integer[m1], cnt2 = new Integer[m2];
         for (int i = 0, j = 0, k = 0; i < n; i++) {
@@ -30,6 +30,28 @@ public class Problem2164SortEvenAndOddIndicesIndependently {
             } else {
                 ans[i] = cnt2[k++];
             }
+        }
+        return ans;
+    }
+
+    public int[] sortEvenOdd(int[] nums) {
+        int n = nums.length, evenCount = n + 1 >> 1, oddCount = n - evenCount;
+        int[] even = new int[evenCount], odd = new int[oddCount];
+        for (int i = 0, j = 0, k = 0; i < n; i++) {
+            if ((i & 1) == 0) {
+                even[j++] = nums[i];
+            } else {
+                odd[k++] = nums[i];
+            }
+        }
+        Arrays.sort(even);
+        Arrays.sort(odd);
+        int[] ans = new int[n];
+        for (int i = 0; i < evenCount; i++) {
+            ans[i << 1] = even[i];
+        }
+        for (int i = 0; i < oddCount; i++) {
+            ans[(i << 1) + 1] = odd[oddCount - i - 1];
         }
         return ans;
     }

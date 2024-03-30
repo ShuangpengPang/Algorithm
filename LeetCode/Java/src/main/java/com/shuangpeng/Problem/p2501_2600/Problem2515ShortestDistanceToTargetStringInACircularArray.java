@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2515ShortestDistanceToTargetStringInACircularArray {
 
-    public int closetTarget(String[] words, String target, int startIndex) {
+    public int closetTarget0(String[] words, String target, int startIndex) {
         int n = words.length, ans = n;
         for (int i = startIndex, j = 0; j < n; i++, j++) {
             if (i == n) {
@@ -26,6 +26,17 @@ public class Problem2515ShortestDistanceToTargetStringInACircularArray {
             if (words[i].equals(target)) {
                 ans = Math.min(ans, j);
                 break;
+            }
+        }
+        return ans == n ? -1 : ans;
+    }
+
+    public int closetTarget(String[] words, String target, int startIndex) {
+        int n = words.length, ans = n;
+        for (int i = 0; i < n; i++) {
+            if (words[i].equals(target)) {
+                int diff = Math.abs(i - startIndex);
+                ans = Math.min(ans, Math.min(diff, n - diff));
             }
         }
         return ans == n ? -1 : ans;

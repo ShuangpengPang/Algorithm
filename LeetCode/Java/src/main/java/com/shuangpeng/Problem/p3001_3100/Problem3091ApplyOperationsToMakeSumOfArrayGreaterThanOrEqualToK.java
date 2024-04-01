@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3001_3100;
  */
 public class Problem3091ApplyOperationsToMakeSumOfArrayGreaterThanOrEqualToK {
 
-    public int minOperations(int k) {
+    public int minOperations0(int k) {
         int left = 0, right = k - 1;
         while (left <= right) {
             int mid = left + (right - left >> 1);
@@ -28,5 +28,20 @@ public class Problem3091ApplyOperationsToMakeSumOfArrayGreaterThanOrEqualToK {
             }
         }
         return false;
+    }
+
+    public int minOperations1(int k) {
+        int ans = k - 1;
+        for (int i = 0; i < k; i++) {
+            ans = Math.min(ans, i + (k - 1) / (i + 1));
+        }
+        return ans;
+        // m - 1 + (k - 1) / m
+        // -1 + m + (k - 1) / m
+    }
+
+    public int minOperations(int k) {
+        int m = Math.max((int) Math.sqrt(k - 1), 1);
+        return Math.min(m + (k - 1) / m, m + 1 + (k - 1) / (m + 1)) - 1;
     }
 }

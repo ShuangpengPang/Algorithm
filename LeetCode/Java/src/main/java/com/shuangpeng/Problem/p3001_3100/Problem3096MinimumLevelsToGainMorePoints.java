@@ -40,7 +40,7 @@ public class Problem3096MinimumLevelsToGainMorePoints {
     public int minimumLevels(int[] possible) {
         int n = possible.length, sum = 0;
         for (int p : possible) {
-            sum += (p << 1) - 1;
+            sum += p;
         }
         sum = (sum << 1) - n;
         for (int i = 0, s = 0; i < n - 1; i++) {

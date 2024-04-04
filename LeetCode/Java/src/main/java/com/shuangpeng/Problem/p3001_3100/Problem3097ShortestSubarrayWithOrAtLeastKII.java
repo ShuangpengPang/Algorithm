@@ -42,7 +42,7 @@ public class Problem3097ShortestSubarrayWithOrAtLeastKII {
         return ans == n + 1 ? -1 : ans;
     }
 
-    public int minimumSubarrayLength(int[] nums, int k) {
+    public int minimumSubarrayLength1(int[] nums, int k) {
         int n = nums.length, ans = n + 1;
         List<int[]> ors = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -60,6 +60,33 @@ public class Problem3097ShortestSubarrayWithOrAtLeastKII {
                 }
             }
             ors.subList(j + 1, ors.size()).clear();
+        }
+        return ans == n + 1 ? -1 : ans;
+    }
+
+    public int minimumSubarrayLength(int[] nums, int k) {
+        int n = nums.length, ans = n + 1, top = 0;
+        int[][] ors = new int[32][2];
+        for (int i = 0; i < n; i++) {
+            ors[top][0] = 0;
+            ors[top][1] = i;
+            top++;
+            int j = 0;
+            for (int x = 0; x < top; x++) {
+                int[] o = ors[x];
+                o[0] |= nums[i];
+                if (o[0] >= k) {
+                    ans = Math.min(ans, i - o[1] + 1);
+                }
+                if (o[0] == ors[j][0]) {
+                    ors[j][1] = o[1];
+                } else {
+                    int[] t = ors[++j];
+                    t[0] = o[0];
+                    t[1] = o[1];
+                }
+            }
+            top = j + 1;
         }
         return ans == n + 1 ? -1 : ans;
     }

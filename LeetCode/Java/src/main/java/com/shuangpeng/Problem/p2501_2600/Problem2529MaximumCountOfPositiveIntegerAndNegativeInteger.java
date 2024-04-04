@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2529MaximumCountOfPositiveIntegerAndNegativeInteger {
 
-    public int maximumCount(int[] nums) {
+    public int maximumCount0(int[] nums) {
         int n = nums.length, i = 0;
         while (i < n && nums[i] < 0) {
             i++;
@@ -18,5 +18,51 @@ public class Problem2529MaximumCountOfPositiveIntegerAndNegativeInteger {
             j++;
         }
         return Math.max(i, n - j);
+    }
+
+    public int maximumCount1(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (nums[mid] < 0) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        int count = left;
+        right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (nums[mid] == 0) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return Math.max(count, nums.length - left);
+    }
+
+    public int maximumCount(int[] nums) {
+        int n = nums.length, left = 0, right = n;
+        while (left < right) {
+            int mid = left + (right - left >> 1);
+            if (nums[mid] < 0) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        int count = left;
+        right = n;
+        while (left < right) {
+            int mid = left + (right - left >> 1);
+            if (nums[mid] == 0) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return Math.max(count, n - left);
     }
 }

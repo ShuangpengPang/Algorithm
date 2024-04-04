@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2501_2600;
  */
 public class Problem2535DifferenceBetweenElementSumAndDigitSumOfAnArray {
 
-    public int differenceOfSum(int[] nums) {
+    public int differenceOfSum0(int[] nums) {
         int s1 = 0, s2 = 0;
         for (int num : nums) {
             s1 += num;
@@ -18,5 +18,17 @@ public class Problem2535DifferenceBetweenElementSumAndDigitSumOfAnArray {
             }
         }
         return Math.abs(s1 - s2);
+    }
+
+    public int differenceOfSum(int[] nums) {
+        int ans = 0;
+        for (int num : nums) {
+            ans += num;
+            while (num != 0) {
+                ans -= num % 10;
+                num /= 10;
+            }
+        }
+        return ans;
     }
 }

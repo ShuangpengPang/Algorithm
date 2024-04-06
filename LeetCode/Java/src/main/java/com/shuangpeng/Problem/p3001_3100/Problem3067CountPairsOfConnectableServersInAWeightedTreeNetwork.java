@@ -96,3 +96,73 @@ class Problem3067CountPairsOfConnectableServersInAWeightedTreeNetwork0 {
         return memo[root][p];
     }
 }
+
+class Problem3067CountPairsOfConnectableServersInAWeightedTreeNetwork1 {
+
+    Map<Integer, Integer>[] maps;
+    int signalSpeed;
+
+    public int[] countPairsOfConnectableServers(int[][] edges, int signalSpeed) {
+        int n = edges.length + 1;
+        List<int[]>[] graph = new List[n];
+        Arrays.setAll(graph, i -> new ArrayList<>());
+        for (int[] edge : edges) {
+            int a = edge[0], b = edge[1], w = edge[2];
+            graph[a].add(new int[]{b, w});
+            graph[b].add(new int[]{a, w});
+        }
+        maps = new Map[n];
+        Arrays.setAll(maps, i -> new HashMap<>());
+        this.signalSpeed = signalSpeed;
+        dfs(graph, 0, -1);
+        int[] ans = new int[n];
+        dfs1(graph, 0, -1, new HashMap<>(), ans);
+        for (int i = 0; i < n; i++) {
+            ans[i] >>= 1;
+        }
+        return ans;
+    }
+
+    private void dfs(List<int[]>[] graph, int x, int p) {
+        for (int[] a : graph[x]) {
+            if (a[0] != p) {
+                dfs(graph, a[0], x);
+                maps[x].merge(a[1] % signalSpeed, 1, Integer::sum);
+                for (Map.Entry<Integer, Integer> entry : maps[a[0]].entrySet()) {
+                    maps[x].merge((entry.getKey() + a[1]) % signalSpeed, entry.getValue(), Integer::sum);
+                }
+            }
+        }
+    }
+
+    private void dfs1(List<int[]>[] graph, int x, int p, Map<Integer, Integer> map, int[] ans) {
+        int cnt = map.getOrDefault(0, 0);
+        ans[x] = cnt * maps[x].getOrDefault(0, 0);
+        for (Map.Entry<Integer, Integer> entry : maps[x].entrySet()) {
+            map.merge(entry.getKey(), entry.getValue(), Integer::sum);
+        }
+        for (int[] a : graph[x]) {
+            if (a[0] != p) {
+                int count = maps[a[0]].getOrDefault((signalSpeed - a[1] % signalSpeed) % signalSpeed, 0);
+                if (a[1] % signalSpeed == 0) {
+                    count++;
+                }
+                ans[x] += count * (maps[x].getOrDefault(0, 0) - count + cnt);
+                for (Map.Entry<Integer, Integer> entry : maps[a[0]].entrySet()) {
+                    map.merge((entry.getKey() + a[1]) % signalSpeed, -entry.getValue(), Integer::sum);
+                }
+                map.merge(a[1] % signalSpeed, -1, Integer::sum);
+                Map<Integer, Integer> tmp = new HashMap<>(map.size());
+                for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                    tmp.put((entry.getKey() + a[1]) % signalSpeed, entry.getValue());
+                }
+                tmp.merge(a[1] % signalSpeed, 1, Integer::sum);
+                dfs1(graph, a[0], x, tmp, ans);
+                for (Map.Entry<Integer, Integer> entry : maps[a[0]].entrySet()) {
+                    map.merge((entry.getKey() + a[1]) % signalSpeed, entry.getValue(), Integer::sum);
+                }
+                map.merge(a[1] % signalSpeed, 1, Integer::sum);
+            }
+        }
+    }
+}

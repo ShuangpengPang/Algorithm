@@ -1,5 +1,6 @@
 package com.shuangpeng.Problem.p3001_3100;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -42,5 +43,61 @@ public class Problem3081ReplaceQuestionMarksInStringToMinimizeItsValue {
             }
         }
         return new String(cs);
+    }
+}
+
+class Problem3081ReplaceQuestionMarksInStringToMinimizeItsValue0 {
+
+    public String minimizeStringValue(String S) {
+        char[] s = S.toCharArray();
+        int[] freq = new int[27];
+        freq[26] = Integer.MAX_VALUE / 26; // 哨兵
+        int q = 0;
+        for (char c : s) {
+            if (c != '?') {
+                freq[c - 'a']++;
+            } else {
+                q++;
+            }
+        }
+
+        int[] f = freq.clone();
+        Arrays.sort(f);
+
+        int limit, extra;
+        for (int i = 1; ; i++) {
+            int sum = i * (f[i] - f[i - 1]);
+            if (q <= sum) {
+                limit = f[i - 1] + q / i;
+                extra = q % i;
+                break;
+            }
+            q -= sum;
+        }
+
+        int[] target = freq.clone();
+        for (int j = 0; j < 26; j++) {
+            if (freq[j] > limit) {
+                continue;
+            }
+            target[j] = limit;
+            if (extra > 0) { // 还可以多分配一个
+                extra--;
+                target[j]++;
+            }
+        }
+
+        int j = 0;
+        for (int i = 0; i < s.length; i++) {
+            if (s[i] != '?') {
+                continue;
+            }
+            while (freq[j] == target[j]) {
+                j++;
+            }
+            freq[j]++;
+            s[i] = (char) ('a' + j);
+        }
+        return new String(s);
     }
 }

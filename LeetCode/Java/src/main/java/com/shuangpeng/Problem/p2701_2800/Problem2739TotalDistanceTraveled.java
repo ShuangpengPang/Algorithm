@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2701_2800;
  */
 public class Problem2739TotalDistanceTraveled {
 
-    public int distanceTraveled(int mainTank, int additionalTank) {
+    public int distanceTraveled0(int mainTank, int additionalTank) {
         int ans = 0;
         while (additionalTank > 0 && mainTank >= 5) {
             int num = Math.min(additionalTank, mainTank / 5);
@@ -17,5 +17,9 @@ public class Problem2739TotalDistanceTraveled {
             additionalTank -= num;
         }
         return (ans + mainTank) * 10;
+    }
+
+    public int distanceTraveled(int mainTank, int additionalTank) {
+        return (mainTank + Math.min(additionalTank, mainTank - 1 >> 2)) * 10;
     }
 }

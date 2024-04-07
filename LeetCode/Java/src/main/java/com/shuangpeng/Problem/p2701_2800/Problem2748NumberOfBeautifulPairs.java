@@ -39,3 +39,48 @@ public class Problem2748NumberOfBeautifulPairs {
         return a;
     }
 }
+
+class Problem2748NumberOfBeautifulPairs0 {
+
+    static final int N = 10;
+    static final boolean[][] arr = new boolean[N][N];
+
+    static {
+        for (int i = 1; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                arr[i][j] = arr[j][i] = gcd(i, j) == 1;
+            }
+        }
+    }
+
+    public int countBeautifulPairs(int[] nums) {
+        int[] cnt = new int[N];
+        int ans = 0;
+        for (int num : nums) {
+            int d = num % 10;
+            for (int i = 1; i < N; i++) {
+                if (arr[i][d]) {
+                    ans += cnt[i];
+                }
+            }
+            cnt[getFirstDigit(num)]++;
+        }
+        return ans;
+    }
+
+    private static int gcd(int a, int b) {
+        while (b != 0) {
+            int t = b;
+            b = a % b;
+            a = t;
+        }
+        return a;
+    }
+
+    private int getFirstDigit(int x) {
+        while (x > 9) {
+            x /= 10;
+        }
+        return x;
+    }
+}

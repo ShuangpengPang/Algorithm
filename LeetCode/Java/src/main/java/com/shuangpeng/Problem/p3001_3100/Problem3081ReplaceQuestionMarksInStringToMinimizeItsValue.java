@@ -101,3 +101,51 @@ class Problem3081ReplaceQuestionMarksInStringToMinimizeItsValue0 {
         return new String(s);
     }
 }
+
+class Problem3081ReplaceQuestionMarksInStringToMinimizeItsValue1 {
+
+    public String minimizeStringValue(String s) {
+
+        char[] cs = s.toCharArray();
+        int n = cs.length, m = 0;
+
+        int[] count1 = new int[26];
+        int[] que = new int[n];
+
+        for (int i = 0; i < n; ++i) {
+            if (cs[i] != '?')
+                count1[cs[i] - 'a']++;
+            else
+                que[m++] = i;
+        }
+
+        if (m == 0)
+            return new String(cs);
+
+        int[] count2 = count1.clone();
+        int average = 0;
+        while (m > 0) {
+            average += m < 26 ? 1 : m / 26;
+            for (int i = 0; i < 26 && m > 0; ++i) {
+                if (count2[i] >= average)
+                    continue;
+
+                m -= average - count2[i];
+                count2[i] = average;
+            }
+        }
+
+        int[] count = new int[26];
+        for (int i = 0; i < 26; ++i)
+            count[i] = count2[i] - count1[i];
+
+        int index = 0;
+        for (int i = 0; i < 26; ++i) {
+            int c = count[i];
+            while (c-- > 0)
+                cs[que[index++]] = (char) (i + 'a');
+        }
+
+        return new String(cs);
+    }
+}

@@ -44,7 +44,7 @@ public class Problem2784CheckIfArrayIsGood {
         return true;
     }
 
-    public boolean isGood(int[] nums) {
+    public boolean isGood1(int[] nums) {
         int n = nums.length - 1, cnt = 0;
         Set<Integer> set = new HashSet<>(n);
         for (int num : nums) {
@@ -57,5 +57,26 @@ public class Problem2784CheckIfArrayIsGood {
             }
         }
         return cnt == 2;
+    }
+
+    public boolean isGood(int[] nums) {
+        int n = nums.length - 1;
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            while (num != i + 1) {
+                if (num <= n && nums[num - 1] != num && nums[num - 1] <= n && nums[num - 1] > i) {
+                    int tmp = nums[num - 1];
+                    nums[num - 1] = num;
+                    num = tmp;
+                } else if (num == n && nums[n] < n && nums[n] > i) {
+                    num = nums[n];
+                    nums[n] = n;
+                } else {
+                    return false;
+                }
+            }
+            nums[i] = num;
+        }
+        return nums[n] == n;
     }
 }

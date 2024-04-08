@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p3001_3100;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -51,6 +53,79 @@ public class Problem3048EarliestSecondToMarkIndicesI {
             }
         }
         return index == n;
+    }
+}
+
+class Problem3048EarliestSecondToMarkIndicesI0 {
+
+    public int earliestSecondToMarkIndices(int[] nums, int[] changeIndices) {
+        int n = changeIndices.length, left = nums.length, right = n;
+        int[] lastTime = new int[nums.length];
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (!check(nums, changeIndices, mid, lastTime)) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left <= n ? left : -1;
+    }
+
+    private boolean check(int[] nums, int[] changeIndices, int m, int[] lastTime) {
+        Arrays.fill(lastTime, -1);
+        for (int i = 0; i < m; i++) {
+            lastTime[changeIndices[i] - 1] = i;
+        }
+        for (int t : lastTime) {
+            if (t == -1) {
+                return false;
+            }
+        }
+        for (int i = 0, cnt = 0; i < m; i++) {
+            int idx = changeIndices[i] - 1;
+            if (lastTime[idx] == i) {
+                if (cnt < nums[idx]) {
+                    return false;
+                }
+                cnt -= nums[idx];
+            } else {
+                cnt++;
+            }
+        }
+        return true;
+    }
+}
+
+class Problem3048EarliestSecondToMarkIndicesI1 {
+
+    public int earliestSecondToMarkIndices(int[] nums, int[] changeIndices) {
+        int n = changeIndices.length, left = nums.length, right = n;
+        int[] lastTime = new int[nums.length];
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (!check(nums, changeIndices, mid, lastTime)) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left <= n ? left : -1;
+    }
+
+    private boolean check(int[] nums, int[] changeIndices, int m, int[] lastTime) {
+        int total = 0, cnt = 0;
+        for (int i = m - 1; i >= 0 && total <= i + 1; i--) {
+            int idx = changeIndices[i] - 1;
+            if (lastTime[idx] != m) {
+                lastTime[idx] = m;
+                total += nums[idx];
+                cnt++;
+            } else if (total > 0) {
+                total--;
+            }
+        }
+        return total == 0 && cnt == nums.length;
     }
 }
 

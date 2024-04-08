@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem3107MinimumOperationsToMakeMedianOfArrayEqualToK {
 
-    public long minOperationsToMakeMedianK(int[] nums, int k) {
+    public long minOperationsToMakeMedianK0(int[] nums, int k) {
         Arrays.sort(nums);
         int n = nums.length, m = n >> 1;
         long ans = 0;
@@ -22,6 +22,19 @@ public class Problem3107MinimumOperationsToMakeMedianOfArrayEqualToK {
             for (int i = m; i < n && nums[i] < k; i++) {
                 ans += k - nums[i];
             }
+        }
+        return ans;
+    }
+
+    public long minOperationsToMakeMedianK(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length, m = n >> 1;
+        long ans = 0;
+        for (int i = m; i >= 0 && nums[i] > k; i--) {
+            ans += nums[i] - k;
+        }
+        for (int i = m; i < n && nums[i] < k; i++) {
+            ans += k - nums[i];
         }
         return ans;
     }

@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3101_3200;
  */
 public class Problem3101CountAlternatingSubarrays {
 
-    public long countAlternatingSubarrays(int[] nums) {
+    public long countAlternatingSubarrays0(int[] nums) {
         long ans = 0;
         int n = nums.length, i = 0;
         while (i < n) {
@@ -18,6 +18,15 @@ public class Problem3101CountAlternatingSubarrays {
             }
             ans += (long) (j - i + 1) * (j - i) >> 1;
             i = j;
+        }
+        return ans;
+    }
+
+    public long countAlternatingSubarrays(int[] nums) {
+        long ans = 0;
+        for (int n = nums.length, cnt = 0, i = 0; i < n; i++) {
+            cnt = i > 0 && nums[i] != nums[i - 1] ? cnt + 1 : 1;
+            ans += cnt;
         }
         return ans;
     }

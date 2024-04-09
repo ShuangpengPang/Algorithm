@@ -31,7 +31,7 @@ public class Problem2855MinimumRightShiftsToSortTheArray {
         return left == 0 ? 0 : n - left;
     }
 
-    public int minimumRightShifts(List<Integer> nums) {
+    public int minimumRightShifts1(List<Integer> nums) {
         int n = nums.size(), i = 1;
         while (i < n && nums.get(i - 1) < nums.get(i)) {
             i++;
@@ -42,5 +42,17 @@ public class Problem2855MinimumRightShiftsToSortTheArray {
             }
         }
         return n - i;
+    }
+
+    public int minimumRightShifts(List<Integer> nums) {
+        int n = nums.size();
+        int[] preSum = new int[n << 1];
+        for (int i = 1; i < n << 1; i++) {
+            preSum[i] = preSum[i - 1] + (nums.get(i % n) - nums.get((n + i - 1) % n) > 0 ? 1 : -1);
+            if (i >= n - 1 && preSum[i] - preSum[i - n + 1] == n - 1) {
+                return i == n - 1 ? 0 : n - (i - (n - 1));
+            }
+        }
+        return -1;
     }
 }

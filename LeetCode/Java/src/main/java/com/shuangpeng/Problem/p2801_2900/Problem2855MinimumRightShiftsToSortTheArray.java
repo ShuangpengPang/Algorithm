@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Problem2855MinimumRightShiftsToSortTheArray {
 
-    public int minimumRightShifts(List<Integer> nums) {
+    public int minimumRightShifts0(List<Integer> nums) {
         int n = nums.size(), left = 0, right = n - 1;
         while (left < right && nums.get(left) > nums.get(right)) {
             int mid = left + (right - left >> 1);
@@ -29,5 +29,18 @@ public class Problem2855MinimumRightShiftsToSortTheArray {
             prev = num;
         }
         return left == 0 ? 0 : n - left;
+    }
+
+    public int minimumRightShifts(List<Integer> nums) {
+        int n = nums.size(), i = 1;
+        while (i < n && nums.get(i - 1) < nums.get(i)) {
+            i++;
+        }
+        for (int j = i; j < n; j++) {
+            if (nums.get(j) > nums.get(0) || j > i && nums.get(j - 1) > nums.get(j)) {
+                return -1;
+            }
+        }
+        return n - i;
     }
 }

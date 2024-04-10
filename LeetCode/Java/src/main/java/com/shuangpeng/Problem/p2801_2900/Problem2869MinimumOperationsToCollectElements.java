@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Problem2869MinimumOperationsToCollectElements {
 
-    public int minOperations(List<Integer> nums, int k) {
+    public int minOperations0(List<Integer> nums, int k) {
         int n = nums.size(), minIndex = n;
         boolean[] set = new boolean[k + 1];
         for (int i = n - 1; i >= 0; i--) {
@@ -21,5 +21,16 @@ public class Problem2869MinimumOperationsToCollectElements {
             }
         }
         return n - minIndex;
+    }
+
+    public int minOperations(List<Integer> nums, int k) {
+        int n = nums.size();
+        long m = 0, t = (2L << k) - 2;
+        for (int i = n - 1; i >= 0; i--) {
+            if ((m = (m | (1L << nums.get(i))) & t) == t) {
+                return n - i;
+            }
+        }
+        return n;
     }
 }

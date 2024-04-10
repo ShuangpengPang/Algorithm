@@ -22,7 +22,7 @@ public class Problem2873MaximumValueOfAnOrderedTripletI {
         return ans;
     }
 
-    public long maximumTripletValue(int[] nums) {
+    public long maximumTripletValue1(int[] nums) {
         int n = nums.length;
         long minValue = Math.min(nums[0], nums[1]), maxValue = Math.max(nums[0], nums[1]);
         long minDiff = nums[0] - nums[1], maxDiff = minDiff;
@@ -34,6 +34,17 @@ public class Problem2873MaximumValueOfAnOrderedTripletI {
             maxDiff = Math.max(maxDiff, Math.max(d1, d2));
             minValue = Math.min(minValue, nums[i]);
             maxValue = Math.max(maxValue, nums[i]);
+        }
+        return ans;
+    }
+
+    public long maximumTripletValue(int[] nums) {
+        long ans = 0;
+        int maxDiff = 0, preMax = 0;
+        for (int x : nums) {
+            ans = Math.max(ans, (long) maxDiff * x);
+            maxDiff = Math.max(maxDiff, preMax - x);
+            preMax = Math.max(preMax, x);
         }
         return ans;
     }

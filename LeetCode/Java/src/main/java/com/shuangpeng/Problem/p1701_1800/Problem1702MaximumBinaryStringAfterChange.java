@@ -28,7 +28,7 @@ public class Problem1702MaximumBinaryStringAfterChange {
         return new String(cs);
     }
 
-    public String maximumBinaryString(String binary) {
+    public String maximumBinaryString1(String binary) {
         char[] cs = binary.toCharArray();
         int n = cs.length, j = 0;
         for (int i = 0; i < n; i++) {
@@ -42,6 +42,23 @@ public class Problem1702MaximumBinaryStringAfterChange {
                 }
             }
         }
+        return new String(cs);
+    }
+
+    public String maximumBinaryString(String binary) {
+        char[] cs = binary.toCharArray();
+        int n = cs.length, firstZero = -1, cnt = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            if (cs[i] == '0') {
+                firstZero = i;
+                cnt++;
+                cs[i] = '1';
+            }
+        }
+        if (cnt == 0) {
+            return binary;
+        }
+        cs[firstZero + cnt - 1] = '0';
         return new String(cs);
     }
 }

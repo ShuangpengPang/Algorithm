@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p2901_3000;
  */
 public class Problem2903FindIndicesWithIndexAndValueDifferenceI {
 
-    public int[] findIndices(int[] nums, int indexDifference, int valueDifference) {
+    public int[] findIndices0(int[] nums, int indexDifference, int valueDifference) {
         int n = nums.length, minIndex = 0, maxIndex = 0;
         for (int i = indexDifference, j = 0; i < n; i++, j++) {
             if (nums[j] < nums[minIndex]) {
@@ -21,6 +21,24 @@ public class Problem2903FindIndicesWithIndexAndValueDifferenceI {
                 return new int[]{minIndex, i};
             }
             if (Math.abs(nums[maxIndex] - nums[i]) >= valueDifference) {
+                return new int[]{maxIndex, i};
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    public int[] findIndices(int[] nums, int indexDifference, int valueDifference) {
+        int n = nums.length, minIndex = 0, maxIndex = 0;
+        for (int i = indexDifference, j = 0; i < n; i++, j++) {
+            if (nums[j] < nums[minIndex]) {
+                minIndex = j;
+            } else if (nums[j] > nums[maxIndex]) {
+                maxIndex = j;
+            }
+            if (nums[i] - nums[minIndex] >= valueDifference) {
+                return new int[]{minIndex, i};
+            }
+            if (nums[maxIndex] - nums[i] >= valueDifference) {
                 return new int[]{maxIndex, i};
             }
         }

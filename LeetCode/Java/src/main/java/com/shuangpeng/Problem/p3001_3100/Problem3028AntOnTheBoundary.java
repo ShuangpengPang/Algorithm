@@ -10,7 +10,7 @@ public class Problem3028AntOnTheBoundary {
 
     public int returnToBoundaryCount(int[] nums) {
         int ans = 0;
-        for (int n = nums.length, i = 1, s = nums[0]; i < n; i++) {
+        for (int n = nums.length, i = 0, s = 0; i < n; i++) {
             if ((s += nums[i]) == 0) {
                 ans++;
             }

@@ -39,7 +39,7 @@ public class Problem3042CountPrefixAndSufixPairsI {
         return 1;
     }
 
-    public int countPrefixSuffixPairs(String[] words) {
+    public int countPrefixSuffixPairs1(String[] words) {
         Map<String, Integer> map = new HashMap<>();
         int ans = 0;
         for (String w : words) {
@@ -65,5 +65,39 @@ public class Problem3042CountPrefixAndSufixPairsI {
             next[i] = cs[i] == cs[j] ? ++j : j;
         }
         return next;
+    }
+
+    class Trie {
+        Trie[] tries = new Trie[26];
+        int count = 0;
+    }
+
+    public int countPrefixSuffixPairs(String[] words) {
+        Trie root = new Trie();
+        int ans = 0;
+        for (String w : words) {
+            char[] cs = w.toCharArray();
+            int n = cs.length;
+            int[] z = new int[n];
+            for (int i = 1, l = 0, r = 0; i < n; i++) {
+                z[i] = r >= i ? Math.min(z[i - l], r - i + 1) : 0;
+                while (i + z[i] < n && cs[z[i]] == cs[i + z[i]]) {
+                    l = i;
+                    r = i + z[i]++;
+                }
+            }
+            Trie trie = root;
+            for (int i = 0; i < n; i++) {
+                if (trie.tries[cs[i] - 'a'] == null) {
+                    trie.tries[cs[i] - 'a'] = new Trie();
+                }
+                trie = trie.tries[cs[i] - 'a'];
+                if (z[n - i - 1] == i + 1) {
+                    ans += trie.count;
+                }
+            }
+            ans += trie.count++;
+        }
+        return ans;
     }
 }

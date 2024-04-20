@@ -101,3 +101,58 @@ public class Problem3042CountPrefixAndSufixPairsI {
         return ans;
     }
 }
+
+class Problem3042CountPrefixAndSufixPairsI0 {
+
+    class Trie {
+        Trie[] tries = new Trie[26];
+        int count = 0;
+    }
+
+    public int countPrefixSuffixPairs(String[] words) {
+        Trie root = new Trie();
+        int ans = 0;
+        for (String w : words) {
+            char[] cs = w.toCharArray();
+            Trie trie = root;
+            for (int i = 0, n = cs.length; i < n; i++) {
+                int c1 = cs[i] - 'a', c2 = cs[n - i - 1] - 'a';
+                if (trie.tries[c1] == null) {
+                    trie.tries[c1] = new Trie();
+                }
+                trie = trie.tries[c1];
+                if (trie.tries[c2] == null) {
+                    trie.tries[c2] = new Trie();
+                }
+                trie = trie.tries[c2];
+                ans += trie.count;
+            }
+            trie.count++;
+        }
+        return ans;
+    }
+}
+
+class Problem3042CountPrefixAndSufixPairsI1 {
+
+    class Trie {
+        Map<Integer, Trie> trieMap = new HashMap<>();
+        int cnt = 0;
+    }
+
+    public int countPrefixSuffixPairs(String[] words) {
+        int ans = 0;
+        Trie root = new Trie();
+        for (String w : words) {
+            char[] cs = w.toCharArray();
+            Trie trie = root;
+            for (int n = cs.length, i = 0; i < n; i++) {
+                int m = cs[i] - 'a' << 5 | cs[n - i - 1] - 'a';
+                trie = trie.trieMap.computeIfAbsent(m, k -> new Trie());
+                ans += trie.cnt;
+            }
+            trie.cnt++;
+        }
+        return ans;
+    }
+}

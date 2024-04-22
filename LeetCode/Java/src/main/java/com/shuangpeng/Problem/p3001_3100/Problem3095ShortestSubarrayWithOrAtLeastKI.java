@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Problem3095ShortestSubarrayWithOrAtLeastKI {
 
-    public int minimumSubarrayLength(int[] nums, int k) {
+    public int minimumSubarrayLength0(int[] nums, int k) {
         int n = nums.length, N = Integer.MAX_VALUE, ans = N;
         List<int[]> list = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -30,6 +30,22 @@ public class Problem3095ShortestSubarrayWithOrAtLeastKI {
                 list.get(j)[1] = arr[1];
             }
             list.subList(j + 1, list.size()).clear();
+        }
+        return ans == N ? -1 : ans;
+    }
+
+    public int minimumSubarrayLength(int[] nums, int k) {
+        int n = nums.length, N = Integer.MAX_VALUE, ans = N;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] >= k) {
+                return 1;
+            }
+            for (int j = i - 1; j >= 0 && (nums[j] | nums[i]) != nums[j]; j--) {
+                nums[j] |= nums[i];
+                if (nums[j] >= k) {
+                    ans = Math.min(ans, i - j + 1);
+                }
+            }
         }
         return ans == N ? -1 : ans;
     }

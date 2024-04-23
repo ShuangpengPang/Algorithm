@@ -30,7 +30,7 @@ public class Problem3105LongestStrictlyIncreasingOrStrictlyDecreasingSubarray {
         return ans;
     }
 
-    public int longestMonotonicSubarray(int[] nums) {
+    public int longestMonotonicSubarray1(int[] nums) {
         int n = nums.length, ans = 1, i = 0;
         while (i < n - 1) {
             if (nums[i] == nums[i + 1]) {
@@ -45,6 +45,16 @@ public class Problem3105LongestStrictlyIncreasingOrStrictlyDecreasingSubarray {
             }
             ans = Math.max(ans, i - start);
             i--;
+        }
+        return ans;
+    }
+
+    public int longestMonotonicSubarray(int[] nums) {
+        int n = nums.length, asc = 1, desc = 1, ans = 1;
+        for (int i = 1; i < n; i++) {
+            asc = nums[i - 1] < nums[i] ? asc + 1 : 1;
+            desc = nums[i - 1] > nums[i] ? desc + 1 : 1;
+            ans = Math.max(ans, Math.max(asc, desc));
         }
         return ans;
     }

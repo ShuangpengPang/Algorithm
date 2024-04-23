@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p3001_3100;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -7,6 +9,11 @@ package com.shuangpeng.Problem.p3001_3100;
  * @date 2024/4/24 12:06 AM
  */
 public class Problem3010DivideAnArrayIntoSubarraysWithMinimumCostI {
+
+    public int minimumCost0(int[] nums) {
+        Arrays.sort(nums, 1, nums.length);
+        return nums[0] + nums[1] + nums[2];
+    }
 
     public int minimumCost(int[] nums) {
         int n = nums.length, first = Integer.MAX_VALUE, second = first;

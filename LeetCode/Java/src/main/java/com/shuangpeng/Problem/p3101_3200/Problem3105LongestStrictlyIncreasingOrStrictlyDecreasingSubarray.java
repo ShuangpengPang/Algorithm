@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3101_3200;
  */
 public class Problem3105LongestStrictlyIncreasingOrStrictlyDecreasingSubarray {
 
-    public int longestMonotonicSubarray(int[] nums) {
+    public int longestMonotonicSubarray0(int[] nums) {
         int n = nums.length, i = 1, ans = 1;
         while (i < n) {
             int m = 1;
@@ -26,6 +26,25 @@ public class Problem3105LongestStrictlyIncreasingOrStrictlyDecreasingSubarray {
                 m++;
             }
             ans = Math.max(ans, m);
+        }
+        return ans;
+    }
+
+    public int longestMonotonicSubarray(int[] nums) {
+        int n = nums.length, ans = 1, i = 0;
+        while (i < n - 1) {
+            if (nums[i] == nums[i + 1]) {
+                i++;
+                continue;
+            }
+            boolean inc = nums[i] < nums[i + 1];
+            int start = i;
+            i += 2;
+            while (i < n && nums[i] != nums[i - 1] && nums[i - 1] < nums[i] == inc) {
+                i++;
+            }
+            ans = Math.max(ans, i - start);
+            i--;
         }
         return ans;
     }

@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem3014MinimumNumberOfPushesToTypeWordI {
 
-    public int minimumPushes(String word) {
+    public int minimumPushes0(String word) {
         char[] cs = word.toCharArray();
         int[] cnt = new int[26];
         for (char c : cs) {
@@ -22,5 +22,11 @@ public class Problem3014MinimumNumberOfPushesToTypeWordI {
             ans += cnt[i] * ((26 - i + 7) / 8);
         }
         return ans;
+    }
+
+    public int minimumPushes(String word) {
+        int n = word.length();
+        int cnt = n / 8, m = n % 8;
+        return 4 * (cnt + 1) * cnt + (cnt + 1) * m;
     }
 }

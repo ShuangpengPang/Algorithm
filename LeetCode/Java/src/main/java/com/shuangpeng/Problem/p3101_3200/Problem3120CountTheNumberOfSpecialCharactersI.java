@@ -8,6 +8,14 @@ package com.shuangpeng.Problem.p3101_3200;
  */
 public class Problem3120CountTheNumberOfSpecialCharactersI {
 
+    public int numberOfSpecialChars0(String word) {
+        int[] mask = new int[2];
+        for (char c : word.toCharArray()) {
+            mask[c >> 5 & 1] |= 1 << (c & 31);
+        }
+        return Integer.bitCount(mask[0] & mask[1]);
+    }
+
     public int numberOfSpecialChars(String word) {
         long mask = 0;
         for (char c : word.toCharArray()) {

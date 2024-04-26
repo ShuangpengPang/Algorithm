@@ -8,7 +8,7 @@ package com.shuangpeng.lcp;
  */
 public class LCP17Calculate {
 
-    public int calculate(String s) {
+    public int calculate0(String s) {
         int x = 1, y = 0;
         for (char c : s.toCharArray()) {
             if (c == 'A') {
@@ -18,5 +18,9 @@ public class LCP17Calculate {
             }
         }
         return x + y;
+    }
+
+    public int calculate(String s) {
+        return 1 << s.length();
     }
 }

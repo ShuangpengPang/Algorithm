@@ -11,11 +11,29 @@ import java.util.Set;
  */
 public class LCR120FindRepeatDocument {
 
-    public int findRepeatDocument(int[] documents) {
+    public int findRepeatDocument0(int[] documents) {
         Set<Integer> set = new HashSet<>();
         for (int id : documents) {
             if (!set.add(id)) {
                 return id;
+            }
+        }
+        return 0;
+    }
+
+    public int findRepeatDocument(int[] documents) {
+        for (int n = documents.length, i = 0; i < n; i++) {
+            int id = documents[i];
+            if (id != i) {
+                while (id != i && id != documents[id]) {
+                    int tmp = documents[id];
+                    documents[id] = id;
+                    id = tmp;
+                }
+                if (id != i) {
+                    return id;
+                }
+                documents[i] = i;
             }
         }
         return 0;

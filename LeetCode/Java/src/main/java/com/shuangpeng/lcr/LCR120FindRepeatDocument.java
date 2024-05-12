@@ -21,6 +21,20 @@ public class LCR120FindRepeatDocument {
         return 0;
     }
 
+    public int findRepeatDocument1(int[] documents) {
+        for (int n = documents.length, i = 0; i < n; i++) {
+            while (documents[i] != i) {
+                int id = documents[i];
+                if (documents[id] == id) {
+                    return id;
+                }
+                documents[i] = documents[id];
+                documents[id] = id;
+            }
+        }
+        return -1;
+    }
+
     public int findRepeatDocument(int[] documents) {
         for (int n = documents.length, i = 0; i < n; i++) {
             int id = documents[i];

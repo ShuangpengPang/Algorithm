@@ -10,27 +10,26 @@ import java.util.Queue;
  * @date 2024/5/13 6:22 PM
  */
 public class LCR125BookManagementII {
-}
 
-class CQueue {
+    class CQueue {
 
-    Queue<Integer> q;
+        Queue<Integer> q;
 
-    public CQueue() {
-        q = new ArrayDeque<>();
-    }
-
-    public void appendTail(int value) {
-        q.offer(value);
-    }
-
-    public int deleteHead() {
-        if (q.isEmpty()) {
-            return -1;
+        public CQueue() {
+            q = new ArrayDeque<>();
         }
-        return q.poll();
+
+        public void appendTail(int value) {
+            q.offer(value);
+        }
+
+        public int deleteHead() {
+            if (q.isEmpty()) {
+                return -1;
+            }
+            return q.poll();
+        }
     }
-}
 
 /**
  * Your CQueue object will be instantiated and called as such:
@@ -38,3 +37,4 @@ class CQueue {
  * obj.appendTail(value);
  * int param_2 = obj.deleteHead();
  */
+}

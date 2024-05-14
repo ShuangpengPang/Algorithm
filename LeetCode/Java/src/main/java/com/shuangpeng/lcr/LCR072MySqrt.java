@@ -12,7 +12,15 @@ public class LCR072MySqrt {
         return (int) Math.sqrt(x);
     }
 
-    public int mySqrt(int x) {
+    public int mySqrt1(int x) {
+        if (x <= 0) {
+            return 0;
+        }
+        int num = (int) Math.exp(Math.log(x) / 2);
+        return (long) (num + 1) * (num + 1) <= x ? num + 1 : num;
+    }
+
+    public int mySqrt2(int x) {
         int left = 0, right = x;
         while (left <= right) {
             int mid = left + (right - left >> 1);
@@ -23,5 +31,38 @@ public class LCR072MySqrt {
             }
         }
         return left - 1;
+    }
+
+    public int mySqrt3(int x) {
+        if (x == 0) {
+            return 0;
+        }
+
+        double C = x, x0 = x;
+        while (true) {
+            double xi = 0.5 * (x0 + C / x0);
+            if (Math.abs(x0 - xi) < 1e-7) {
+                break;
+            }
+            x0 = xi;
+        }
+        return (int) x0;
+    }
+
+    public int mySqrt4(int x) {
+        double eps = 1e-6;
+        double x0 = x;
+        while (x0 * x0 - x > eps) {
+            x0 = (x - x0 * x0) / (2 * x0) + x0;
+        }
+        return (int) x0;
+    }
+
+    public int mySqrt(int x) {
+        long x0 = x;
+        while (x0 * x0 > x) {
+            x0 = (x0 * x0 + x) / (2 * x0);
+        }
+        return (int) x0;
     }
 }

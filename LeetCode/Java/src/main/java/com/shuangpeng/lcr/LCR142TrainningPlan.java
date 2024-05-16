@@ -10,6 +10,24 @@ import com.shuangpeng.common.ListNode;
  */
 public class LCR142TrainningPlan {
 
+    public ListNode trainningPlan0(ListNode l1, ListNode l2) {
+        return recurse(l1, l2);
+    }
+
+    private ListNode recurse(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        } else if (l2 == null) {
+            return l1;
+        } else if (l1.val <= l2.val) {
+            l1.next = recurse(l1.next, l2);
+            return l1;
+        } else {
+            l2.next = recurse(l1, l2.next);
+            return l2;
+        }
+    }
+
     public ListNode trainningPlan(ListNode l1, ListNode l2) {
         ListNode dummy = new ListNode(), node = dummy;
         while (l1 != null && l2 != null) {

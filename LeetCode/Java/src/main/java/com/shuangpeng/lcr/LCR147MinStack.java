@@ -13,26 +13,25 @@ public class LCR147MinStack {
 
     class MinStack {
 
-        private Deque<Integer> stack;
-        private Deque<int[]> indexDeque;
+        private Deque<Integer> stack, minStack;
 
         /** initialize your data structure here. */
         public MinStack() {
             stack = new ArrayDeque<>();
-            indexDeque = new ArrayDeque<>();
+            minStack = new ArrayDeque<>();
         }
 
         public void push(int x) {
-            if (indexDeque.isEmpty() || x < indexDeque.peekLast()[1]) {
-                indexDeque.offerLast(new int[]{stack.size(), x});
+            if (minStack.isEmpty() || x <= minStack.peekLast()) {
+                minStack.offerLast(x);
             }
             stack.offerLast(x);
         }
 
         public void pop() {
-            stack.pollLast();
-            if (indexDeque.peekLast()[0] == stack.size()) {
-                indexDeque.pollLast();
+            int num = stack.pollLast();
+            if (num == minStack.peekLast()) {
+                minStack.pollLast();
             }
         }
 
@@ -41,7 +40,7 @@ public class LCR147MinStack {
         }
 
         public int getMin() {
-            return indexDeque.peekLast()[1];
+            return minStack.peekLast();
         }
     }
 
@@ -60,24 +59,24 @@ class LCR147MinStack0 {
     static class MinStack {
 
         private static int N = (int) (3 * 1e4);
-        private static int[] stack = new int[N], indexStack = new int[N];
-        private static int top = 0, indexTop = 0;
+        private static int[] stack = new int[N], minStack = new int[N];
+        private static int top = 0, minTop = 0;
 
         /** initialize your data structure here. */
         public MinStack() {
-            top = indexTop = 0;
+            top = minTop = 0;
         }
 
         public void push(int x) {
-            if (indexTop == 0 || stack[indexStack[indexTop - 1]] > x) {
-                indexStack[indexTop++] = top;
+            if (minTop == 0 || minStack[minTop - 1] >= x) {
+                minStack[minTop++] = x;
             }
             stack[top++] = x;
         }
 
         public void pop() {
-            if (indexStack[indexTop - 1] == --top) {
-                indexTop--;
+            if (minStack[minTop - 1] == stack[--top]) {
+                minTop--;
             }
         }
 
@@ -86,7 +85,40 @@ class LCR147MinStack0 {
         }
 
         public int getMin() {
-            return stack[indexStack[indexTop - 1]];
+            return minStack[minTop - 1];
         }
+    }
+}
+
+class MinStack {
+
+    private static int N = (int) (3 * 1e4);
+    private static int[] stack = new int[N], minStack = new int[N];
+    private static int top = 0, minTop = 0;
+
+    /** initialize your data structure here. */
+    public MinStack() {
+        top = minTop = 0;
+    }
+
+    public void push(int x) {
+        if (minTop == 0 || minStack[minTop - 1] >= x) {
+            minStack[minTop++] = x;
+        }
+        stack[top++] = x;
+    }
+
+    public void pop() {
+        if (minStack[minTop - 1] == stack[--top]) {
+            minTop--;
+        }
+    }
+
+    public int top() {
+        return stack[top - 1];
+    }
+
+    public int getMin() {
+        return minStack[minTop - 1];
     }
 }

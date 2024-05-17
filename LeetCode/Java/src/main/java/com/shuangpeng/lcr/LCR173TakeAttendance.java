@@ -8,7 +8,7 @@ package com.shuangpeng.lcr;
  */
 public class LCR173TakeAttendance {
 
-    public int takeAttendance(int[] records) {
+    public int takeAttendance0(int[] records) {
         int n = records.length;
         for (int i = 0; i < n; i++) {
             int r = records[i];
@@ -25,5 +25,18 @@ public class LCR173TakeAttendance {
             }
         }
         return n;
+    }
+
+    public int takeAttendance(int[] records) {
+        int left = 0, right = records.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (records[mid] == mid) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left;
     }
 }

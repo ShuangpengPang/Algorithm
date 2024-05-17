@@ -3,7 +3,9 @@ package com.shuangpeng.lcr;
 import com.shuangpeng.common.TreeNode;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 /**
  * @author ShuangPengPang
@@ -12,6 +14,33 @@ import java.util.Deque;
  * @date 2024/5/16 7:04 PM
  */
 public class LCR056FindTarget {
+
+    public boolean findTarget0(TreeNode root, int k) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        List<Integer> list = new ArrayList<>();
+        TreeNode node = root;
+        while (!stack.isEmpty() || node != null) {
+            while (node != null) {
+                stack.offerLast(node);
+                node = node.left;
+            }
+            node = stack.pollLast();
+            list.add(node.val);
+            node = node.right;
+        }
+        int i = 0, j = list.size() - 1;
+        while (i < j) {
+            int sum = list.get(i) + list.get(j);
+            if (sum < k) {
+                i++;
+            } else if (sum > k) {
+                j--;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean findTarget(TreeNode root, int k) {
         Deque<TreeNode> leftStack = new ArrayDeque<>(), rightStack = new ArrayDeque<>();

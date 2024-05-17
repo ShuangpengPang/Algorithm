@@ -2,6 +2,9 @@ package com.shuangpeng.lcr;
 
 import com.shuangpeng.common.TreeNode;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -12,7 +15,7 @@ public class LCR052IncreasingBST {
 
     private TreeNode dummy, parent;
 
-    public TreeNode increasingBST(TreeNode root) {
+    public TreeNode increasingBST0(TreeNode root) {
         dummy = new TreeNode();
         parent = dummy;
         inorder(root);
@@ -27,5 +30,23 @@ public class LCR052IncreasingBST {
         parent.right = new TreeNode(root.val);
         parent = parent.right;
         inorder(root.right);
+    }
+
+    public TreeNode increasingBST(TreeNode root) {
+        TreeNode dummy = new TreeNode(), parent = dummy;
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        TreeNode node = root;
+        while (!stack.isEmpty() || node != null) {
+            while (node != null) {
+                stack.offerLast(node);
+                node = node.left;
+            }
+            node = stack.pollLast();
+            node.left = null;
+            parent.right = node;
+            parent = node;
+            node = node.right;
+        }
+        return dummy.right;
     }
 }

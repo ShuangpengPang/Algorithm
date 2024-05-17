@@ -20,7 +20,7 @@ public class LCR159InventoryManagement {
     private int[] heap;
     private int n;
 
-    public int[] inventoryManagement(int[] stock, int cnt) {
+    public int[] inventoryManagement1(int[] stock, int cnt) {
         this.n = cnt;
         heap = new int[cnt];
         if (cnt == 0) {
@@ -55,5 +55,45 @@ public class LCR159InventoryManagement {
             i = j;
         }
         heap[i] = num;
+    }
+
+    public int[] inventoryManagement(int[] stock, int cnt) {
+        int left = 0, right = stock.length - 1;
+        while (left < right) {
+            int p = partition(stock, left, right);
+            if (p < cnt - 1) {
+                left = p + 1;
+            } else if (p > cnt) {
+                right = p - 1;
+            } else {
+                break;
+            }
+        }
+        int[] ans = new int[cnt];
+        System.arraycopy(stock, 0, ans, 0, cnt);
+        return ans;
+    }
+
+    private int partition(int[] stock, int left, int right) {
+        int index = left + (int) ((right - left + 1) * Math.random());
+        int pivot = stock[index];
+        stock[index] = stock[right];
+        int p = left;
+        for (int i = left; i < right; i++) {
+            if (stock[i] < pivot) {
+                swap(stock, i, p++);
+            }
+        }
+        stock[right] = stock[p];
+        stock[p] = pivot;
+        return p;
+    }
+
+    private void swap(int[] stock, int i, int j) {
+        if (i != j) {
+            stock[i] = stock[i] ^ stock[j];
+            stock[j] = stock[i] ^ stock[j];
+            stock[i] = stock[i] ^ stock[j];
+        }
     }
 }

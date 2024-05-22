@@ -16,7 +16,7 @@ public class LCS001LeastMinutes {
         return ans;
     }
 
-    public int leastMinutes(int n) {
+    public int leastMinutes1(int n) {
         int x = (int) (Math.log(n * Math.log(2)) / Math.log(2));
         return Math.min(getCount(n, x), getCount(n, x + 1));
     }
@@ -24,5 +24,9 @@ public class LCS001LeastMinutes {
     private int getCount(int n, int x) {
         int p = (int) Math.pow(2, x);
         return x + (n + p - 1) / p;
+    }
+
+    public int leastMinutes(int n) {
+        return 33 - Integer.numberOfLeadingZeros(n - 1);
     }
 }

@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class LCS002HalfQuestions {
 
-    public int halfQuestions(int[] questions) {
+    public int halfQuestions0(int[] questions) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int q : questions) {
             map.merge(q, 1, Integer::sum);
@@ -28,6 +28,24 @@ public class LCS002HalfQuestions {
         while (m > 0) {
             types++;
             m -= cnt[p--];
+        }
+        return types;
+    }
+
+    public int halfQuestions(int[] questions) {
+        int max = 0;
+        for (int q : questions) {
+            max = Math.max(max, q);
+        }
+        int[] cnt = new int[max + 1];
+        for (int q : questions) {
+            cnt[q]++;
+        }
+        Arrays.sort(cnt);
+        int index = max, n = questions.length >> 1, types = 0;
+        while (n > 0) {
+            types++;
+            n -= cnt[index--];
         }
         return types;
     }

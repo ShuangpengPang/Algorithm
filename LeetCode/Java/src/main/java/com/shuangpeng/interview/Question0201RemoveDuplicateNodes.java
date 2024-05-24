@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class Question0201RemoveDuplicateNodes {
 
-    public ListNode removeDuplicateNodes(ListNode head) {
+    public ListNode removeDuplicateNodes0(ListNode head) {
         ListNode dummy = new ListNode(0, head);
         Set<Integer> set = new HashSet<>();
         ListNode prev = dummy;
@@ -24,6 +24,23 @@ public class Question0201RemoveDuplicateNodes {
             }
         }
         prev.next = null;
+        return dummy.next;
+    }
+
+    public ListNode removeDuplicateNodes(ListNode head) {
+        ListNode dummy = new ListNode(0, head);
+        Set<Integer> set = new HashSet<>();
+        ListNode prev = dummy, node = head;
+        while (prev != null) {
+            while (node != null && !set.add(node.val)) {
+                node = node.next;
+            }
+            prev.next = node;
+            prev = node;
+            if (node != null) {
+                node = node.next;
+            }
+        }
         return dummy.next;
     }
 }

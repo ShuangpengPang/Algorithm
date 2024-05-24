@@ -8,7 +8,7 @@ package com.shuangpeng.interview;
  */
 public class Question0103ReplaceSpaces {
 
-    public String replaceSpaces(String S, int length) {
+    public String replaceSpaces0(String S, int length) {
         char[] cs = S.toCharArray();
         int n = cs.length, space = 0;
         for (int i = 0; i < length; i++) {
@@ -28,5 +28,20 @@ public class Question0103ReplaceSpaces {
             }
         }
         return new String(cs, 0, m);
+    }
+
+    public String replaceSpaces(String S, int length) {
+        char[] cs = S.toCharArray();
+        int n = cs.length, j = n - 1;
+        for (int i = length - 1; i >= 0; i--) {
+            if (cs[i] == ' ') {
+                cs[j--] = '0';
+                cs[j--] = '2';
+                cs[j--] = '%';
+            } else {
+                cs[j--] = cs[i];
+            }
+        }
+        return new String(cs, j + 1, n - j - 1);
     }
 }

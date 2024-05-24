@@ -27,7 +27,7 @@ public class Question0201RemoveDuplicateNodes {
         return dummy.next;
     }
 
-    public ListNode removeDuplicateNodes(ListNode head) {
+    public ListNode removeDuplicateNodes1(ListNode head) {
         ListNode dummy = new ListNode(0, head);
         Set<Integer> set = new HashSet<>();
         ListNode prev = dummy, node = head;
@@ -42,5 +42,22 @@ public class Question0201RemoveDuplicateNodes {
             }
         }
         return dummy.next;
+    }
+
+    public ListNode removeDuplicateNodes(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        Set<Integer> set = new HashSet<>();
+        ListNode node = head;
+        set.add(head.val);
+        while (node.next != null) {
+            if (!set.add(node.next.val)) {
+                node.next = node.next.next;
+            } else {
+                node = node.next;
+            }
+        }
+        return head;
     }
 }

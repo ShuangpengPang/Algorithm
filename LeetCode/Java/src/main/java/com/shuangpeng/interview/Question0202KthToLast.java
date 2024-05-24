@@ -10,7 +10,7 @@ import com.shuangpeng.common.ListNode;
  */
 public class Question0202KthToLast {
 
-    public int kthToLast(ListNode head, int k) {
+    public int kthToLast0(ListNode head, int k) {
         int cnt = 0;
         ListNode node = head;
         while (node != null) {
@@ -24,5 +24,18 @@ public class Question0202KthToLast {
             cnt--;
         }
         return node.val;
+    }
+
+    public int kthToLast(ListNode head, int k) {
+        ListNode right = head;
+        for (int i = 0; i < k; i++) {
+            right = right.next;
+        }
+        ListNode left = head;
+        while (right != null) {
+            left = left.next;
+            right = right.next;
+        }
+        return left.val;
     }
 }

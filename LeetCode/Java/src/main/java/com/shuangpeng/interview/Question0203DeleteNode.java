@@ -24,7 +24,7 @@ public class Question0203DeleteNode {
 //        prev.next = prev.next.next;
 //    }
 
-    public void deleteNode(ListNode node) {
+    public void deleteNode0(ListNode node) {
         ListNode prev = null;
         while (node.next != null) {
             prev = node;
@@ -32,5 +32,10 @@ public class Question0203DeleteNode {
             node = node.next;
         }
         prev.next = null;
+    }
+
+    public void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
     }
 }

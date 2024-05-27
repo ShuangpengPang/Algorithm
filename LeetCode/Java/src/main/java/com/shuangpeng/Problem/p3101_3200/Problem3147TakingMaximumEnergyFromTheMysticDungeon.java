@@ -11,7 +11,7 @@ import java.util.Deque;
  */
 public class Problem3147TakingMaximumEnergyFromTheMysticDungeon {
 
-    public int maximumEnergy(int[] energy, int k) {
+    public int maximumEnergy0(int[] energy, int k) {
         Deque<Integer> q = new ArrayDeque<>(k + 1);
         int n = energy.length;
         for (int i = 0; i < k; i++) {
@@ -23,6 +23,17 @@ public class Problem3147TakingMaximumEnergyFromTheMysticDungeon {
         int ans = Integer.MIN_VALUE;
         while (!q.isEmpty()) {
             ans = Math.max(ans, q.pollFirst());
+        }
+        return ans;
+    }
+
+    public int maximumEnergy(int[] energy, int k) {
+        int ans = Integer.MIN_VALUE;
+        for (int n = energy.length, i = n - k; i < n; i++) {
+            int sum = 0;
+            for (int j = i; j >= 0; j -= k) {
+                ans = Math.max(ans, sum += energy[j]);
+            }
         }
         return ans;
     }

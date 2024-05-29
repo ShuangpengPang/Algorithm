@@ -11,23 +11,11 @@ import com.shuangpeng.common.ListNode;
 public class Question0207GetIntersectionNode {
 
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) {
-            return null;
+        ListNode pA = headA, pB = headB;
+        while (pA != pB) {
+            pA = pA == null ? headB : pA.next;
+            pB = pB == null ? headA : pB.next;
         }
-        ListNode node1 = headA, node2 = headB;
-        int cnt = 0;
-        while (node1 != null && node2 != null && node1 != node2) {
-            node1 = node1.next;
-            if (node1 == null && cnt < 2) {
-                node1 = headB;
-                cnt++;
-            }
-            node2 = node2.next;
-            if (node2 == null && cnt < 2) {
-                node2 = headA;
-                cnt++;
-            }
-        }
-        return node1;
+        return pA;
     }
 }

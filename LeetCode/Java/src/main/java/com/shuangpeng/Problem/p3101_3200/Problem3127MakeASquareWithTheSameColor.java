@@ -31,3 +31,27 @@ public class Problem3127MakeASquareWithTheSameColor {
         return cnt != 2;
     }
 }
+
+class Problem3127MakeASquareWithTheSameColor0 {
+
+    public boolean canMakeSquare(char[][] grid) {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (check(grid, i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean check(char[][] grid, int x, int y) {
+        int[] cnt = new int[2];
+        for (int i = x; i < x + 2; i++) {
+            for (int j = y; j < y + 2; j++) {
+                cnt[grid[i][j] & 1]++;
+            }
+        }
+        return cnt[0] != 2;
+    }
+}

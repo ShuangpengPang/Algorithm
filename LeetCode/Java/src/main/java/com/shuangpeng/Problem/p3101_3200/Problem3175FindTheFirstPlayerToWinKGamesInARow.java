@@ -9,17 +9,13 @@ package com.shuangpeng.Problem.p3101_3200;
 public class Problem3175FindTheFirstPlayerToWinKGamesInARow {
 
     public int findWinningPlayer(int[] skills, int k) {
-        int n = skills.length, idx = 0, cnt = 0;
-        for (int i = 1; i < n; i++) {
-            if (skills[idx] > skills[i]) {
-                cnt++;
-            } else {
+        int n = skills.length, idx = 0, win = 0;
+        for (int i = 1; i < n && win < k; i++) {
+            if (skills[idx] < skills[i]) {
                 idx = i;
-                cnt = 1;
+                win = 0;
             }
-            if (cnt == k) {
-                return idx;
-            }
+            win++;
         }
         return idx;
     }

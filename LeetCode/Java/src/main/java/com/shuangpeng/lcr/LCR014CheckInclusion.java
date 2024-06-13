@@ -8,7 +8,7 @@ package com.shuangpeng.lcr;
  */
 public class LCR014CheckInclusion {
 
-    public boolean checkInclusion(String s1, String s2) {
+    public boolean checkInclusion0(String s1, String s2) {
         int n1 = s1.length(), n2 = s2.length(), count = 0;
         if (n1 > n2) {
             return false;
@@ -45,5 +45,29 @@ public class LCR014CheckInclusion {
             }
         }
         return count == 0;
+    }
+
+    public boolean checkInclusion(String s1, String s2) {
+        int n1 = s1.length(), n2 = s2.length();
+        if (n1 > n2) {
+            return false;
+        }
+        int[] cnt = new int[26];
+        char[] cs1 = s1.toCharArray(), cs2 = s2.toCharArray();
+        for (int i = 0; i < n1; i++) {
+            cnt[cs1[i] - 'a']--;
+        }
+        int left = 0;
+        for (int right = 0; right < n2; right++) {
+            int c = cs2[right] - 'a';
+            cnt[c]++;
+            while (cnt[c] > 0) {
+                cnt[cs2[left++] - 'a']--;
+            }
+            if (right - left + 1 == n1) {
+                return true;
+            }
+        }
+        return false;
     }
 }

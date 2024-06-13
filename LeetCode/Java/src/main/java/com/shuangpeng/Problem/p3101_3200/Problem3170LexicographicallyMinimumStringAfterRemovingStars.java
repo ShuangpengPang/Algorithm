@@ -40,7 +40,7 @@ public class Problem3170LexicographicallyMinimumStringAfterRemovingStars {
         return new String(cs, 0, last);
     }
 
-    public String clearStars(String s) {
+    public String clearStars1(String s) {
         char[] cs = s.toCharArray();
         List<Integer>[] indices = new List[26];
         Arrays.setAll(indices, i -> new ArrayList<>());
@@ -66,5 +66,38 @@ public class Problem3170LexicographicallyMinimumStringAfterRemovingStars {
             }
         }
         return new String(cs, 0, p);
+    }
+
+    public String clearStars(String s) {
+        int len = s.length();
+        boolean[] isCleared = new boolean[len];
+        int clearCount = 0;
+        int[] prevIndices = new int[len];
+        int[] lastIndices = new int[26];
+        Arrays.fill(lastIndices, -1);
+        for(int i = 0; i < len; i++) {
+            char c = s.charAt(i);
+            if(c == '*') {
+                int j = 0;
+                for(; lastIndices[j] < 0; j++);
+                isCleared[i] = true;
+                isCleared[lastIndices[j]] = true;
+                clearCount += 2;
+                lastIndices[j] = prevIndices[lastIndices[j]];
+            } else {
+                int j = c - 'a';
+                prevIndices[i] = lastIndices[j];
+                lastIndices[j] = i;
+            }
+        }
+
+        char[] result = new char[len - clearCount];
+        for(int i = 0, j = 0; i < len; i++) {
+            if(isCleared[i]) {
+                continue;
+            }
+            result[j++] = s.charAt(i);
+        }
+        return new String(result);
     }
 }

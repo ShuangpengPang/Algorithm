@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Problem3170LexicographicallyMinimumStringAfterRemovingStars {
 
-    public String clearStars(String s) {
+    public String clearStars0(String s) {
         char[] cs = s.toCharArray();
         List<Integer>[] indices = new List[26];
         Arrays.setAll(indices, i -> new ArrayList<>());
@@ -38,5 +38,33 @@ public class Problem3170LexicographicallyMinimumStringAfterRemovingStars {
             }
         }
         return new String(cs, 0, last);
+    }
+
+    public String clearStars(String s) {
+        char[] cs = s.toCharArray();
+        List<Integer>[] indices = new List[26];
+        Arrays.setAll(indices, i -> new ArrayList<>());
+        int n = cs.length, mask = 0;
+        for (int i = 0; i < n; i++) {
+            if (cs[i] == '*')  {
+                if (mask != 0) {
+                    int idx = Integer.numberOfTrailingZeros(mask);
+                    cs[indices[idx].remove(indices[idx].size() - 1)] = '*';
+                    if (indices[idx].isEmpty()) {
+                        mask ^= 1 << idx;
+                    }
+                }
+            } else {
+                indices[cs[i] - 'a'].add(i);
+                mask |= 1 << cs[i] - 'a';
+            }
+        }
+        int p = 0;
+        for (int i = 0; i < n; i++) {
+            if (cs[i] != '*') {
+                cs[p++] = cs[i];
+            }
+        }
+        return new String(cs, 0, p);
     }
 }

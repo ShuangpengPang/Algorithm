@@ -10,24 +10,15 @@ import java.util.Arrays;
  */
 public class Problem3179FindTheNthValueAfterKSeconds {
 
-    private static int N = (int) 1e9 + 7;
-
     public int valueAfterKSeconds(int n, int k) {
-        // f(n, k) = f(n, k - 1) + f(n - 1, k);
-        int[][] memo = new int[n + 1][k + 1];
-        for (int i = 1; i <= n; i++) {
-            Arrays.fill(memo[i], -1);
+        int N = (int) 1e9 + 7;
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        for (int s = 0; s < k; s++) {
+            for (int i = 1; i < n; i++) {
+                dp[i] = (dp[i] + dp[i - 1]) % N;
+            }
         }
-        return dfs(n, k, memo);
-    }
-
-    private int dfs(int n, int k, int[][] memo) {
-        if (n == 1 || k == 0) {
-            return 1;
-        }
-        if (memo[n][k] != -1) {
-            return memo[n][k];
-        }
-        return memo[n][k] = (dfs(n, k - 1, memo) + dfs(n - 1, k, memo)) % N;
+        return dp[n - 1];
     }
 }

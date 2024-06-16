@@ -24,7 +24,7 @@ public class LCR020CountSubstrings {
         return ans;
     }
 
-    public int countSubstrings(String s) {
+    public int countSubstrings1(String s) {
         char[] cs = s.toCharArray();
         int n = cs.length, ans = 0;
         for (int i = 0; i < (n << 1) - 1; i++) {
@@ -34,6 +34,37 @@ public class LCR020CountSubstrings {
                 l--;
                 r++;
             }
+        }
+        return ans;
+    }
+
+    public int countSubstrings(String s) {
+        char[] arr = s.toCharArray();
+        int m = arr.length, n = (m << 1) + 1;
+        char[] cs = new char[n];
+        cs[0] = '#';
+        for (int i = 1, j = 0; i < n; i += 2, j++) {
+            cs[i] = arr[j];
+            cs[i + 1] = '#';
+        }
+        int[] dp = new int[n];
+        int ans = 0, center = 0;
+        dp[0] = 1;
+        for (int i = 1; i < n; i++) {
+            dp[i] = 1;
+            if (i < center + dp[center]) {
+                int j = (center << 1) - i;
+                if (j > 0) {
+                    dp[i] = Math.min(dp[j], center + dp[center] - i);
+                }
+            }
+            while (i - dp[i] >= 0 && i + dp[i] < n && cs[i - dp[i]] == cs[i + dp[i]]) {
+                dp[i]++;
+            }
+            if (i + dp[i] > center + dp[i]) {
+                center = i;
+            }
+            ans += dp[i] >> 1;
         }
         return ans;
     }

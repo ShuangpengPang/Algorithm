@@ -51,13 +51,8 @@ public class LCR020CountSubstrings {
         int ans = 0, center = 0;
         dp[0] = 1;
         for (int i = 1; i < n; i++) {
-            dp[i] = 1;
-            if (i < center + dp[center]) {
-                int j = (center << 1) - i;
-                if (j > 0) {
-                    dp[i] = Math.min(dp[j], center + dp[center] - i);
-                }
-            }
+            int j = (center << 1) - i;
+            dp[i] = i < center + dp[center] && j > 0 ? Math.min(center + dp[center] - i, dp[j]) : 1;
             while (i - dp[i] >= 0 && i + dp[i] < n && cs[i - dp[i]] == cs[i + dp[i]]) {
                 dp[i]++;
             }

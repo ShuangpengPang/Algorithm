@@ -1,6 +1,8 @@
 package com.shuangpeng.lcr;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -11,7 +13,7 @@ import java.util.Set;
  */
 public class LCR016LengthOfLongestSubstring {
 
-    public int lengthOfLongestSubstring(String s) {
+    public int lengthOfLongestSubstring0(String s) {
         Set<Character> set = new HashSet<>();
         char[] cs = s.toCharArray();
         int ans = 0;
@@ -21,6 +23,20 @@ public class LCR016LengthOfLongestSubstring {
             }
             set.add(cs[i]);
             ans = Math.max(ans, i - f + 1);
+        }
+        return ans;
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        char[] cs = s.toCharArray();
+        Map<Character, Integer> map = new HashMap<>();
+        int n = cs.length, ans = 0;
+        for (int i = 0, j = 0; j < n; i++) {
+            while (j < n && map.getOrDefault(cs[j], -1) < i) {
+                map.put(cs[j], j);
+                j++;
+            }
+            ans = Math.max(ans, j - i);
         }
         return ans;
     }

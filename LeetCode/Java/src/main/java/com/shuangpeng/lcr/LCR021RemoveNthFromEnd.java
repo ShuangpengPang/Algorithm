@@ -11,19 +11,16 @@ import com.shuangpeng.common.ListNode;
 public class LCR021RemoveNthFromEnd {
 
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode fast = head;
+        ListNode dummy = new ListNode(0, head);
+        ListNode first = dummy, second = head;
         for (int i = 0; i < n; i++) {
-            fast = fast.next;
+            second = second.next;
         }
-        if (fast == null) {
-            return head.next;
+        while (second != null) {
+            second = second.next;
+            first = first.next;
         }
-        ListNode slow = head;
-        while (fast.next != null) {
-            slow = slow.next;
-            fast = fast.next;
-        }
-        slow.next = slow.next.next;
-        return head;
+        first.next = first.next.next;
+        return dummy.next;
     }
 }

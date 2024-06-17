@@ -34,6 +34,36 @@ public class LCR028Flatten {
     }
 }
 
+class LCR028Flatten0 {
+
+    public Node flatten(Node head) {
+        dfs(head);
+        return head;
+    }
+
+    private Node dfs(Node head) {
+        Node cur = head, last = null;
+        while (cur != null) {
+            if (cur.child != null) {
+                Node childLast = dfs(cur.child), next = cur.next;;
+                cur.next = cur.child;
+                cur.child.prev = cur;
+                cur.child = null;
+                childLast.next = next;
+                if (next != null) {
+                    next.prev = childLast;
+                }
+                last = childLast;
+                cur = next;
+            } else {
+                last = cur;
+                cur = cur.next;
+            }
+        }
+        return last;
+    }
+}
+
 // Definition for a Node.
 class Node {
     public int val;

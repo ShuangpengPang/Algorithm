@@ -52,3 +52,38 @@ public class LCR025AddTwoNumbers {
         return list;
     }
 }
+
+class LCR025AddTwoNumbers0 {
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode node1 = reverse(l1), node2 = reverse(l2);
+        int carry = 0;
+        ListNode ans = null;
+        while (node1 != null || node2 != null || carry != 0) {
+            if (node1 != null) {
+                carry += node1.val;
+                node1 = node1.next;
+            }
+            if (node2 != null) {
+                carry += node2.val;
+                node2 = node2.next;
+            }
+            ListNode node = new ListNode(carry % 10);
+            node.next = ans;
+            ans = node;
+            carry /= 10;
+        }
+        return ans;
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null, node = head;
+        while (node != null) {
+            ListNode next = node.next;
+            node.next = prev;
+            prev = node;
+            node = next;
+        }
+        return prev;
+    }
+}

@@ -22,13 +22,14 @@ public class Problem3186MaximumTotalDamageWithSpellCasting {
         List<Integer> list = new ArrayList<>(map.keySet());
         list.sort(Comparator.comparingInt(e -> e));
         int size = list.size();
-        long[] dp = new long[size];
-        for (int i = 0, j = 0; i < size; i++) {
-            while (list.get(j) < list.get(i) - 2) {
-                j++;
-            }
-            dp[i] = Math.max(i > 0 ? dp[i - 1] : 0, (j > 0 ? dp[j - 1] : 0) + (long) list.get(i) * map.get(list.get(i)));
+        long first = 0, second = 0, third = 0;
+        for (int i = 0; i < size; i++) {
+            int num = list.get(i);
+            long sum = (i > 0 && list.get(i - 1) < num - 2 ? first : (i > 1 && list.get(i - 2) < num - 2 ? second : third)) + (long) num * map.get(num);
+            third = second;
+            second = first;
+            first = Math.max(first, sum);
         }
-        return dp[size - 1];
+        return first;
     }
 }

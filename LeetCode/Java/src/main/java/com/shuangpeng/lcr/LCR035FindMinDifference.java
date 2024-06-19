@@ -12,7 +12,10 @@ import java.util.List;
 public class LCR035FindMinDifference {
 
     public int findMinDifference(List<String> timePoints) {
-        int n = timePoints.size();
+        int n = timePoints.size(), N = 60 * 24;
+        if (n > N) {
+            return 0;
+        }
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
             String time = timePoints.get(i);
@@ -23,7 +26,7 @@ public class LCR035FindMinDifference {
         for (int i = 1; i < n; i++) {
             ans = Math.min(ans, arr[i] - arr[i - 1]);
         }
-        ans = Math.min(ans, arr[0] + 60 * 24 - arr[n - 1]);
+        ans = Math.min(ans, arr[0] + N - arr[n - 1]);
         return ans;
     }
 }

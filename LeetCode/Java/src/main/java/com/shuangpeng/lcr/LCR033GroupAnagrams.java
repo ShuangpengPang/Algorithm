@@ -22,11 +22,6 @@ public class LCR033GroupAnagrams {
             String key = new String(cs);
             map.computeIfAbsent(key, k -> new ArrayList<>()).add(s);
         }
-        int n = map.size();
-        List<List<String>> ans = new ArrayList<>(n);
-        for (List<String> list : map.values()) {
-            ans.add(list);
-        }
-        return ans;
+        return new ArrayList<>(map.values());
     }
 }

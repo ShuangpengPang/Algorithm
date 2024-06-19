@@ -8,8 +8,19 @@ package com.shuangpeng.Problem.p3101_3200;
  */
 public class Problem3178FindTheChildWhoHasTheBallAfterKSeconds {
 
-    public int numberOfChild(int n, int k) {
+    public int numberOfChild0(int n, int k) {
         int m = k % (n - 1 << 1);
         return m < n ? m : n - 1 - (m - n + 1);
+    }
+
+    public int numberOfChild1(int n, int k) {
+        int t = k % (n - 1);
+        return k / (n - 1) % 2 > 0 ? n - t - 1 : t;
+    }
+
+    public int numberOfChild(int n, int k) {
+        int N = n - 1 << 1;
+        k %= N;
+        return Math.min(k, N - k);
     }
 }

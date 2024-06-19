@@ -22,11 +22,10 @@ public class LCR035FindMinDifference {
             arr[i] = Integer.parseInt(time.substring(0, 2)) * 60 + Integer.parseInt(time.substring(3));
         }
         Arrays.sort(arr);
-        int ans = Integer.MAX_VALUE;
+        int ans = arr[0] + N - arr[n - 1];
         for (int i = 1; i < n; i++) {
             ans = Math.min(ans, arr[i] - arr[i - 1]);
         }
-        ans = Math.min(ans, arr[0] + N - arr[n - 1]);
         return ans;
     }
 }

@@ -5,6 +5,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Queue;
 
 /**
  * @author ShuangPengPang
@@ -14,9 +15,26 @@ import java.util.Deque;
  */
 public class LCR045FindBottomLeftValue {
 
+    public int findBottomLeftValue0(TreeNode root) {
+        Queue<TreeNode> q = new ArrayDeque<>();
+        q.offer(root);
+        int ans = 0;
+        while (!q.isEmpty()) {
+            TreeNode node = q.poll();
+            ans = node.val;
+            if (node.right != null) {
+                q.offer(node.right);
+            }
+            if (node.left != null) {
+                q.offer(node.left);
+            }
+        }
+        return ans;
+    }
+
     private int maxLevel = 0, ans = 0;
 
-    public int findBottomLeftValue0(TreeNode root) {
+    public int findBottomLeftValue1(TreeNode root) {
         ans = maxLevel = 0;
         dfs(root, 1);
         return ans;

@@ -1,6 +1,8 @@
 package com.shuangpeng.lcr;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ import java.util.List;
  */
 public class LCR037AsteroidCollision {
 
-    public int[] asteroidCollision(int[] asteroids) {
+    public int[] asteroidCollision0(int[] asteroids) {
         List<Integer> stack = new ArrayList<>();
         for (int a : asteroids) {
             if (a > 0) {
@@ -30,5 +32,22 @@ public class LCR037AsteroidCollision {
             }
         }
         return stack.stream().mapToInt(e -> e).toArray();
+    }
+
+    public int[] asteroidCollision(int[] asteroids) {
+        Deque<Integer> s = new ArrayDeque<>();
+        for (int a : asteroids) {
+            boolean alive = true;
+            while (alive && a < 0 && !s.isEmpty() && s.peekLast() > 0) {
+                alive = s.peekLast() < -a;
+                if (s.peekLast() <= -a) {
+                    s.pollLast();
+                }
+            }
+            if (alive) {
+                s.offerLast(a);
+            }
+        }
+        return s.stream().mapToInt(e -> e).toArray();
     }
 }

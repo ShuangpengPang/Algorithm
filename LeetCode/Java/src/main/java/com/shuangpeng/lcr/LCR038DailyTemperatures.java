@@ -11,7 +11,7 @@ import java.util.Deque;
  */
 public class LCR038DailyTemperatures {
 
-    public int[] dailyTemperatures(int[] temperatures) {
+    public int[] dailyTemperatures0(int[] temperatures) {
         int n = temperatures.length;
         int[] ans = new int[n];
         Deque<Integer> stack = new ArrayDeque<>(n);
@@ -21,6 +21,20 @@ public class LCR038DailyTemperatures {
             }
             ans[i] = !stack.isEmpty() ? stack.peekLast() - i : 0;
             stack.offerLast(i);
+        }
+        return ans;
+    }
+
+    public int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] ans = new int[n];
+        Deque<Integer> s = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            while (!s.isEmpty() && temperatures[s.peekLast()] < temperatures[i]) {
+                int j = s.pollLast();
+                ans[j] = i - j;
+            }
+            s.offerLast(i);
         }
         return ans;
     }

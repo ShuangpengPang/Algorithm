@@ -10,7 +10,7 @@ import com.shuangpeng.common.TreeNode;
  */
 public class LCR053InorderSuccessor {
 
-    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+    public TreeNode inorderSuccessor0(TreeNode root, TreeNode p) {
         if (p.right != null) {
             TreeNode node = p.right;
             while (node.left != null) {
@@ -34,5 +34,25 @@ public class LCR053InorderSuccessor {
         }
         TreeNode ans = dfs(node.left, p);
         return ans == null ? node : ans;
+    }
+
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        if (p.right != null) {
+            TreeNode node = p.right;
+            while (node.left != null) {
+                node = node.left;
+            }
+            return node;
+        }
+        TreeNode ans = null, node = root;
+        while (node != null && node != p) {
+            if (node.val > p.val) {
+                ans = node;
+                node = node.left;
+            } else {
+                node = node.right;
+            }
+        }
+        return ans;
     }
 }

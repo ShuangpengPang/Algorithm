@@ -12,36 +12,32 @@ import java.util.Deque;
  * @date 2024/6/24 6:42 PM
  */
 public class LCR055BSTIterator {
-}
 
-class BSTIterator {
+    class BSTIterator {
 
-    private Deque<TreeNode> s;
+        private Deque<TreeNode> s;
+        private TreeNode cur;
 
-    public BSTIterator(TreeNode root) {
-        s = new ArrayDeque<>();
-        TreeNode node = root;
-        while (node != null) {
-            s.offerLast(node);
-            node = node.left;
+        public BSTIterator(TreeNode root) {
+            s = new ArrayDeque<>();
+            cur = root;
+        }
+
+        public int next() {
+            while (cur != null) {
+                s.offerLast(cur);
+                cur = cur.left;
+            }
+            cur = s.pollLast();
+            int ans = cur.val;
+            cur = cur.right;
+            return ans;
+        }
+
+        public boolean hasNext() {
+            return !s.isEmpty() || cur != null;
         }
     }
-
-    public int next() {
-        TreeNode node = s.pollLast();
-        int ans = node.val;
-        node = node.right;
-        while (node != null) {
-            s.offerLast(node);
-            node = node.left;
-        }
-        return ans;
-    }
-
-    public boolean hasNext() {
-        return !s.isEmpty();
-    }
-}
 
 /**
  * Your BSTIterator object will be instantiated and called as such:
@@ -49,3 +45,39 @@ class BSTIterator {
  * int param_1 = obj.next();
  * boolean param_2 = obj.hasNext();
  */
+}
+
+class LCR055BSTIterator0 {
+
+    class BSTIterator {
+
+        private TreeNode cur;
+
+        public BSTIterator(TreeNode root) {
+            cur = root;
+        }
+
+        public int next() {
+            while (cur.left != null)  {
+                TreeNode node = cur.left;
+                while (node.right != null && node.right != cur) {
+                    node = node.right;
+                }
+                if (node.right == null) {
+                    node.right = cur;
+                    cur = cur.left;
+                } else {
+                    node.right = null;
+                    break;
+                }
+            }
+            int ans = cur.val;
+            cur = cur.right;
+            return ans;
+        }
+
+        public boolean hasNext() {
+            return cur != null;
+        }
+    }
+}

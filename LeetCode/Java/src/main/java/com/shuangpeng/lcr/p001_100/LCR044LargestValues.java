@@ -1,4 +1,4 @@
-package com.shuangpeng.lcr;
+package com.shuangpeng.lcr.p001_100;
 
 import com.shuangpeng.common.TreeNode;
 
@@ -10,12 +10,12 @@ import java.util.Queue;
 /**
  * @author ShuangPengPang
  * @version 1.0
- * @description: LCR046RightSideView（二叉树的右视图）
- * @date 2024/6/22 10:27 AM
+ * @description: LCR044LargestValues（在每个树行中找最大值）
+ * @date 2024/6/21 7:38 PM
  */
-public class LCR046RightSideView {
+public class LCR044LargestValues {
 
-    public List<Integer> rightSideView0(TreeNode root) {
+    public List<Integer> largestValues0(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
         if (root == null) {
             return ans;
@@ -23,10 +23,10 @@ public class LCR046RightSideView {
         Queue<TreeNode> q = new ArrayDeque<>();
         q.offer(root);
         while (!q.isEmpty()) {
-            int val = 0;
+            int max = Integer.MIN_VALUE;
             for (int i = q.size() - 1; i >= 0; i--) {
                 TreeNode node = q.poll();
-                val = node.val;
+                max = Math.max(max, node.val);
                 if (node.left != null) {
                     q.offer(node.left);
                 }
@@ -34,12 +34,12 @@ public class LCR046RightSideView {
                     q.offer(node.right);
                 }
             }
-            ans.add(val);
+            ans.add(max);
         }
         return ans;
     }
 
-    public List<Integer> rightSideView(TreeNode root) {
+    public List<Integer> largestValues(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
         dfs(root, ans, 0);
         return ans;
@@ -51,8 +51,10 @@ public class LCR046RightSideView {
         }
         if (list.size() == level) {
             list.add(root.val);
+        } else {
+            list.set(level, Math.max(list.get(level), root.val));
         }
-        dfs(root.right, list, level + 1);
         dfs(root.left, list, level + 1);
+        dfs(root.right, list, level + 1);
     }
 }

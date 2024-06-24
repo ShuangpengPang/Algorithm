@@ -1,4 +1,4 @@
-package com.shuangpeng.lcr;
+package com.shuangpeng.lcr.p001_100;
 
 import java.util.HashMap;
 import java.util.HashSet;

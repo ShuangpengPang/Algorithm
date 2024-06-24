@@ -10,7 +10,7 @@ import java.util.TreeMap;
  */
 public class LCR057ContainsNearbyAlmostDuplicate {
 
-    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+    public boolean containsNearbyAlmostDuplicate0(int[] nums, int k, int t) {
         TreeMap<Integer, Integer> treeMap = new TreeMap<>();
         for (int n = nums.length, i = 0; i < n; i++) {
             if (i > k) {
@@ -26,6 +26,26 @@ public class LCR057ContainsNearbyAlmostDuplicate {
                 return true;
             }
             treeMap.merge(nums[i], 1, Integer::sum);
+        }
+        return false;
+    }
+
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        TreeMap<Long, Integer> treeMap = new TreeMap<>();
+        for (int n = nums.length, i = 0; i < n; i++) {
+            Long ceiling = treeMap.ceilingKey((long) nums[i] - t);
+            if (ceiling != null && ceiling <= (long) nums[i] + t) {
+                return true;
+            }
+            treeMap.merge((long) nums[i], 1, Integer::sum);
+            if (i >= k) {
+                int cnt = treeMap.get((long) nums[i - k]) - 1;
+                if (cnt == 0) {
+                    treeMap.remove((long) nums[i - k]);
+                } else {
+                    treeMap.put((long) nums[i - k], cnt);
+                }
+            }
         }
         return false;
     }

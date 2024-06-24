@@ -1,5 +1,7 @@
 package com.shuangpeng.lcr.p001_100;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -30,7 +32,7 @@ public class LCR057ContainsNearbyAlmostDuplicate {
         return false;
     }
 
-    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+    public boolean containsNearbyAlmostDuplicate1(int[] nums, int k, int t) {
         TreeMap<Long, Integer> treeMap = new TreeMap<>();
         for (int n = nums.length, i = 0; i < n; i++) {
             Long ceiling = treeMap.ceilingKey((long) nums[i] - t);
@@ -48,5 +50,31 @@ public class LCR057ContainsNearbyAlmostDuplicate {
             }
         }
         return false;
+    }
+
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        Map<Long, Long> map = new HashMap<>();
+        int size = t + 1;
+        for (int n = nums.length, i = 0; i < n; i++) {
+            long id = getId(nums[i], size);
+            if (map.containsKey(id)) {
+                return true;
+            }
+            if (nums[i] - map.getOrDefault(id - 1, Long.MIN_VALUE / 2) <= t) {
+                return true;
+            }
+            if (map.getOrDefault(id + 1, Long.MAX_VALUE / 2) - nums[i] <= t) {
+                return true;
+            }
+            map.put(id, (long) nums[i]);
+            if (i >= k) {
+                map.remove(getId(nums[i - k], size));
+            }
+        }
+        return false;
+    }
+
+    private long getId(int num, int size) {
+        return num >= 0 ? num / size : (num + 1) / size - 1;
     }
 }

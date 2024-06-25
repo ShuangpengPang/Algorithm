@@ -17,13 +17,14 @@ public class LCR061KSmallestPairs {
     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
         int n1 = nums1.length, n2 = nums2.length;
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(e -> e[2]));
-        for (int i = 0; i < n1; i++) {
-            pq.offer(new int[]{i, 0, nums1[i] + nums2[0]});
-        }
+        pq.offer(new int[]{0, 0, nums1[0] + nums2[0]});
         List<List<Integer>> ans = new ArrayList<>();
         for (int i = 0; i < k && !pq.isEmpty(); i++) {
             int[] p = pq.poll();
             ans.add(Arrays.asList(nums1[p[0]], nums2[p[1]]));
+            if (p[1] == 0 && p[0] + 1 < n1) {
+                pq.offer(new int[]{p[0] + 1, 0, nums1[p[0] + 1] + nums2[0]});
+            }
             if (++p[1] < n2) {
                 p[2] = nums1[p[0]] + nums2[p[1]];
                 pq.offer(p);

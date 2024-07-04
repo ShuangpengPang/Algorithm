@@ -29,7 +29,7 @@ public class LCR093LenLongestFibSubseq {
         return ans;
     }
 
-    public int lenLongestFibSubseq(int[] arr) {
+    public int lenLongestFibSubseq1(int[] arr) {
         Map<Integer, Integer> map = new HashMap<>();
         int ans = 0, n = arr.length;
         int[][] dp = new int[n][n];
@@ -42,6 +42,23 @@ public class LCR093LenLongestFibSubseq {
                 }
             }
             map.put(arr[j], j);
+        }
+        return ans;
+    }
+
+    public int lenLongestFibSubseq(int[] arr) {
+        int n = arr.length, ans = 0;
+        int[][] dp = new int[n][n];
+        for (int j = 1; j < n; j++) {
+            for (int i = j - 1, k = 0; i >= 0; i--) {
+                while (k < i && arr[k] < arr[j] - arr[i]) {
+                    k++;
+                }
+                dp[i][j] = k < i && arr[k] + arr[i] == arr[j] ? dp[k][i] + 1 : 2;
+                if (dp[i][j] > 2) {
+                    ans = Math.max(ans, dp[i][j]);
+                }
+            }
         }
         return ans;
     }

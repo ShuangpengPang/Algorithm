@@ -25,7 +25,7 @@ public class LCR092MinFlipsMonoIncr {
         return ans;
     }
 
-    public int minFlipsMonoIncr(String s) {
+    public int minFlipsMonoIncr1(String s) {
         int d0 = 0, d1 = 0;
         for (char c : s.toCharArray()) {
             d1 = Math.min(d0, d1);
@@ -36,5 +36,14 @@ public class LCR092MinFlipsMonoIncr {
             }
         }
         return Math.min(d0, d1);
+    }
+
+    public int minFlipsMonoIncr(String s) {
+        int[] dp = new int[2];
+        for (char c : s.toCharArray()) {
+            dp[0] = Math.min(dp[0], dp[1]);
+            dp[c - '0']++;
+        }
+        return Math.min(dp[0], dp[1]);
     }
 }

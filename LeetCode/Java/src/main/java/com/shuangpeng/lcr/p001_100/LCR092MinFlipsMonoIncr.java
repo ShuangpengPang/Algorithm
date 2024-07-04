@@ -8,18 +8,33 @@ package com.shuangpeng.lcr.p001_100;
  */
 public class LCR092MinFlipsMonoIncr {
 
-    public int minFlipsMonoIncr(String s) {
+    public int minFlipsMonoIncr0(String s) {
         char[] cs = s.toCharArray();
-        int n = cs.length;
-        int[] cnt = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            cnt[i] = cnt[i - 1] + cs[i - 1] - '0';
+        int n = cs.length, ones = 0;
+        for (char c : cs) {
+            ones += c - '0';
         }
-        int ans = cnt[n];
-        for (int i = n - 1, c = 0; i >= 0; i--) {
-            c += '1' - cs[i];
-            ans = Math.min(ans, cnt[i] + c);
+        int ans = ones;
+        for (int i = 0, cnt = 0; i < n; i++) {
+            ans = Math.min(ans, cnt + n - i -ones);
+            if (cs[i] == '1') {
+                cnt++;
+                ones--;
+            }
         }
         return ans;
+    }
+
+    public int minFlipsMonoIncr(String s) {
+        int d0 = 0, d1 = 0;
+        for (char c : s.toCharArray()) {
+            d1 = Math.min(d0, d1);
+            if (c == '0') {
+                d1++;
+            } else {
+                d0++;
+            }
+        }
+        return Math.min(d0, d1);
     }
 }

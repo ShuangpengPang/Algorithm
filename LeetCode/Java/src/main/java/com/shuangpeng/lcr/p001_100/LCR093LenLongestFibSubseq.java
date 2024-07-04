@@ -46,7 +46,7 @@ public class LCR093LenLongestFibSubseq {
         return ans;
     }
 
-    public int lenLongestFibSubseq(int[] arr) {
+    public int lenLongestFibSubseq2(int[] arr) {
         int n = arr.length, ans = 0;
         int[][] dp = new int[n][n];
         for (int j = 1; j < n; j++) {
@@ -56,6 +56,23 @@ public class LCR093LenLongestFibSubseq {
                 }
                 dp[i][j] = k < i && arr[k] + arr[i] == arr[j] ? dp[k][i] + 1 : 2;
                 if (dp[i][j] > 2) {
+                    ans = Math.max(ans, dp[i][j]);
+                }
+            }
+        }
+        return ans;
+    }
+
+    public int lenLongestFibSubseq(int[] arr) {
+        int n = arr.length, ans = 0;
+        int[][] dp = new int[n][n];
+        for (int j = 1; j < n; j++) {
+            for (int i = j - 1, k = 0; k < i; i--)  {
+                while (k < i && arr[k] + arr[i] < arr[j]) {
+                    k++;
+                }
+                if (k < i && arr[k] + arr[i] == arr[j]) {
+                    dp[i][j] = Math.max(dp[k][i] + 1, 3);
                     ans = Math.max(ans, dp[i][j]);
                 }
             }

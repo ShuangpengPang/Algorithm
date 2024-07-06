@@ -59,3 +59,32 @@ class LCR085GenerateParenthesis0 {
         return ans;
     }
 }
+
+class LCR085GenerateParenthesis1 {
+
+    List<String>[] memo;
+
+    public List<String> generateParenthesis(int n) {
+        memo = new List[n + 1];
+        memo[0] = new ArrayList<>(1);
+        memo[0].add("");
+        return dfs(n);
+    }
+
+    private List<String> dfs(int n) {
+        if (memo[n] != null) {
+            return memo[n];
+        }
+        memo[n] = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            for (String left : dfs(i)) {
+                for (String right : dfs(n - i - 1)) {
+                    StringBuilder sb = new StringBuilder(n << 1);
+                    sb.append("(").append(left).append(")").append(right);
+                    memo[n].add(sb.toString());
+                }
+            }
+        }
+        return memo[n];
+    }
+}

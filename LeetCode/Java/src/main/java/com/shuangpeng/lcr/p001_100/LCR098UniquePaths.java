@@ -8,7 +8,7 @@ package com.shuangpeng.lcr.p001_100;
  */
 public class LCR098UniquePaths {
 
-    public int uniquePaths(int m, int n) {
+    public int uniquePaths0(int m, int n) {
         int[] dp = new int[n];
         dp[0] = 1;
         for (int i = 0; i < m; i++) {
@@ -17,5 +17,17 @@ public class LCR098UniquePaths {
             }
         }
         return dp[n - 1];
+    }
+
+    // 杨辉三角和组合数
+    public int uniquePaths(int m, int n) {
+        int[] c = new int[n];
+        c[0] = 1;
+        for (int i = 1; i <= m + n - 2; i++) {
+            for (int j = Math.min(i, n - 1); j > 0; j--) {
+                c[j] += c[j - 1];
+            }
+        }
+        return c[n - 1];
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class LCR100MinimumTotal {
 
-    public int minimumTotal(List<List<Integer>> triangle) {
+    public int minimumTotal0(List<List<Integer>> triangle) {
         int n = triangle.size();
         int[] dp = new int[n];
         Arrays.fill(dp, Integer.MAX_VALUE);
@@ -24,5 +24,15 @@ public class LCR100MinimumTotal {
             dp[0] += list.get(0);
         }
         return Arrays.stream(dp).min().getAsInt();
+    }
+
+    public int minimumTotal(List<List<Integer>> triangle) {
+        for (int i = triangle.size() - 2; i >= 0; i--) {
+            List<Integer> cur = triangle.get(i), next = triangle.get(i + 1);
+            for (int j = 0; j <= i; j++) {
+                cur.set(j, cur.get(j) + Math.min(next.get(j), next.get(j + 1)));
+            }
+        }
+        return triangle.get(0).get(0);
     }
 }

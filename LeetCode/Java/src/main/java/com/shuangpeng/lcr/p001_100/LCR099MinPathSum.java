@@ -1,5 +1,7 @@
 package com.shuangpeng.lcr.p001_100;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -22,5 +24,31 @@ public class LCR099MinPathSum {
             }
         }
         return dp[n - 1];
+    }
+}
+
+class LCR099MinPathSum0 {
+
+    int[][] memo, grid;
+    int m, n;
+    static int N = Integer.MAX_VALUE;
+
+    public int minPathSum(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        memo = new int[m][n];
+        this.grid = grid;
+        for (int i = 0; i < m; i++) {
+            Arrays.fill(memo[i], N);
+        }
+        memo[0][0] = grid[0][0];
+        return dfs(m - 1, n - 1);
+    }
+
+    private int dfs(int i, int j) {
+        if (memo[i][j] != N) {
+            return memo[i][j];
+        }
+        return memo[i][j] = Math.min(j > 0 ? dfs(i, j - 1) : N, i > 0 ? dfs(i - 1, j) : N) + grid[i][j];
     }
 }

@@ -20,7 +20,7 @@ public class LCR098UniquePaths {
     }
 
     // 杨辉三角和组合数
-    public int uniquePaths(int m, int n) {
+    public int uniquePaths1(int m, int n) {
         int[] c = new int[n];
         c[0] = 1;
         for (int i = 1; i <= m + n - 2; i++) {
@@ -29,5 +29,14 @@ public class LCR098UniquePaths {
             }
         }
         return c[n - 1];
+    }
+
+    public int uniquePaths(int m, int n) {
+        int N = m + n - 2;
+        long ans = 1;
+        for (int i = m; i <= N; i++) {
+            ans = ans * i / (i - m + 1);
+        }
+        return (int) ans;
     }
 }

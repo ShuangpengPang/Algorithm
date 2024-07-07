@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class LCR103CoinChange {
 
-    public int coinChange(int[] coins, int amount) {
+    public int coinChange0(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
         int N = Integer.MAX_VALUE >> 1;
         Arrays.fill(dp, N);
@@ -20,6 +20,19 @@ public class LCR103CoinChange {
                 if (i >= c) {
                     dp[i] = Math.min(dp[i], dp[i - c] + 1);
                 }
+            }
+        }
+        return dp[amount] == N ? -1 : dp[amount];
+    }
+
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        int N = Integer.MAX_VALUE >> 1;
+        Arrays.fill(dp, N);
+        dp[0] = 0;
+        for (int c : coins) {
+            for (int i = c; i <= amount; i++) {
+                dp[i] = Math.min(dp[i], dp[i - c] + 1);
             }
         }
         return dp[amount] == N ? -1 : dp[amount];

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Problem3211GenerateBinaryStringsWithoutAdjacentZeros {
 
-    public List<String> validStrings(int n) {
+    public List<String> validStrings0(int n) {
         List<Long> list = new ArrayList<>(1 << n);
         list.add(0L);
         list.add(1L);
@@ -30,5 +30,24 @@ public class Problem3211GenerateBinaryStringsWithoutAdjacentZeros {
             ans.add(String.format("%0" + n + "d", list.get(i)));
         }
         return ans;
+    }
+
+    public List<String> validStrings(int n) {
+        List<String> ans = new ArrayList<>(1 << n);
+        dfs(new char[n], 0, ans);
+        return ans;
+    }
+
+    private void dfs(char[] cs, int pos, List<String> ans) {
+        if (pos == cs.length) {
+            ans.add(new String(cs));
+            return;
+        }
+        if (pos == 0 || cs[pos - 1] == '1') {
+            cs[pos] = '0';
+            dfs(cs, pos + 1, ans);
+        }
+        cs[pos] = '1';
+        dfs(cs, pos + 1, ans);
     }
 }

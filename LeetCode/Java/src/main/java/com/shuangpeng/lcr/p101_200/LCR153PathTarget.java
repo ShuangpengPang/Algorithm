@@ -33,7 +33,6 @@ public class LCR153PathTarget {
             dfs(root.left, list, ans, remain);
             dfs(root.right, list, ans, remain);
         }
-        remain += root.val;
         list.remove(list.size() - 1);
     }
 }

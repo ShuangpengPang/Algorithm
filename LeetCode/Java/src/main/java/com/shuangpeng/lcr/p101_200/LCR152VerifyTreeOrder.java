@@ -1,5 +1,8 @@
 package com.shuangpeng.lcr.p101_200;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -8,7 +11,7 @@ package com.shuangpeng.lcr.p101_200;
  */
 public class LCR152VerifyTreeOrder {
 
-    public boolean verifyTreeOrder(int[] postorder) {
+    public boolean verifyTreeOrder0(int[] postorder) {
         return dfs(postorder, 0, postorder.length - 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
@@ -28,5 +31,20 @@ public class LCR152VerifyTreeOrder {
             i--;
         }
         return dfs(postorder, start, i, min, num) && dfs(postorder, i + 1, end - 1, num, max);
+    }
+
+    public boolean verifyTreeOrder(int[] postorder) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int root = Integer.MAX_VALUE;
+        for (int i = postorder.length - 1; i >= 0; i--) {
+            if (postorder[i] > root) {
+                return false;
+            }
+            while (!stack.isEmpty() && stack.peekLast() > postorder[i]) {
+                root = stack.pollLast();
+            }
+            stack.offerLast(postorder[i]);
+        }
+        return true;
     }
 }

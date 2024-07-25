@@ -14,10 +14,22 @@ public class Problem3223MinimumLengthOfStringAfterOperations {
             cnt[c - 'a']++;
         }
         int ans = 0;
-        for (int i = 0; i < 26; i++) {
-            if (cnt[i] > 0) {
-                ans += 2 - (cnt[i] & 1);
-            }
+        for (int c : cnt) {
+            ans += (c - 1) % 2 + 1;
+        }
+        return ans;
+    }
+}
+
+class Solution {
+    public int minimumLength(String s) {
+        int[] cnt = new int[26];
+        for (char b : s.toCharArray()) {
+            cnt[b - 'a']++;
+        }
+        int ans = 0;
+        for (int c : cnt) {
+            ans += (c - 1) % 2 + 1;
         }
         return ans;
     }

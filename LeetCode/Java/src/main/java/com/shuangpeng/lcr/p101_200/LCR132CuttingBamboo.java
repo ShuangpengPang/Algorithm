@@ -9,11 +9,8 @@ package com.shuangpeng.lcr.p101_200;
 public class LCR132CuttingBamboo {
 
     public int cuttingBamboo(int bamboo_len) {
-        if (bamboo_len == 2) {
-            return 1;
-        }
-        if (bamboo_len == 3) {
-            return 2;
+        if (bamboo_len <= 3) {
+            return bamboo_len - 1;
         }
         int p = (bamboo_len - 2) / 3;
         long ans = 1, N = (long) 1e9 + 7, x = 3;

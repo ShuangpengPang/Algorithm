@@ -14,37 +14,35 @@ public class LCR184Checkout {
 
     class Checkout {
 
-        private Deque<int[]> stack;
+        private Deque<Integer> stack;
         private Queue<Integer> q;
-        private int firstIndex, index;
 
         public Checkout() {
             stack = new ArrayDeque<>();
             q = new ArrayDeque<>();
-            firstIndex = index = 0;
         }
 
         public int get_max() {
-            return stack.isEmpty() ? -1 : stack.peekFirst()[1];
+            return stack.isEmpty() ? -1 : stack.peekFirst();
         }
 
         public void add(int value) {
-            while (!stack.isEmpty() && stack.peekLast()[1] <= value) {
+            while (!stack.isEmpty() && stack.peekLast() < value) {
                 stack.pollLast();
             }
             q.offer(value);
-            stack.offerLast(new int[]{index++, value});
+            stack.offerLast(value);
         }
 
         public int remove() {
             if (q.isEmpty()) {
                 return -1;
             }
-            firstIndex++;
-            while (!stack.isEmpty() && stack.peekFirst()[0] < firstIndex) {
+            int ans = q.poll();
+            if (stack.peekFirst() == ans) {
                 stack.pollFirst();
             }
-            return q.poll();
+            return ans;
         }
     }
 

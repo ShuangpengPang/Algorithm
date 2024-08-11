@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class LCR178TrainingPlan {
 
-    public int trainingPlan(int[] actions) {
+    public int trainingPlan0(int[] actions) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int a : actions) {
             map.merge(a, 1, Integer::sum);
@@ -22,5 +22,14 @@ public class LCR178TrainingPlan {
             }
         }
         return -1;
+    }
+
+    public int trainingPlan(int[] actions) {
+        int ones = 0, twos = 0;
+        for(int action : actions){
+            ones = ones ^ action & ~twos;
+            twos = twos ^ action & ~ones;
+        }
+        return ones;
     }
 }

@@ -1,5 +1,7 @@
 package com.shuangpeng.lcr.p101_200;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -7,6 +9,21 @@ package com.shuangpeng.lcr.p101_200;
  * @date 2024/8/16 12:25 PM
  */
 public class LCR185StatisticsProbability {
+
+    public double[] statisticsProbability0(int num) {
+        double[] dp = new double[6];
+        Arrays.fill(dp, 1.0 / 6.0);
+        for (int i = 2; i <= num; i++) {
+            double[] tmp = new double[5 * i + 1];
+            for (int j = 0; j < dp.length; j++) {
+                for (int k = 0; k < 6; k++) {
+                    tmp[j + k] += dp[j] / 6.0;
+                }
+            }
+            dp = tmp;
+        }
+        return dp;
+    }
 
     public double[] statisticsProbability(int num) {
         int N = num * 6, n = N - num + 1;

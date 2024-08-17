@@ -8,7 +8,7 @@ package com.shuangpeng.lcr.p101_200;
  */
 public class LCR165CrackNumber {
 
-    public int crackNumber(int ciphertext) {
+    public int crackNumber0(int ciphertext) {
         char[] cs = String.valueOf(ciphertext).toCharArray();
         int n = cs.length, a = 1, b = 1;
         for (int i = 1; i < n; i++) {
@@ -19,5 +19,20 @@ public class LCR165CrackNumber {
             a = t;
         }
         return b;
+    }
+
+    public int crackNumber(int ciphertext) {
+        int a = 1, b = 1, next = ciphertext % 10;
+        ciphertext /= 10;
+        while (ciphertext != 0) {
+            int t = a, digit = ciphertext % 10;
+            ciphertext /= 10;
+            if (digit == 1 || digit == 2 && next <= 5) {
+                a += b;
+            }
+            next = digit;
+            b = t;
+        }
+        return a;
     }
 }

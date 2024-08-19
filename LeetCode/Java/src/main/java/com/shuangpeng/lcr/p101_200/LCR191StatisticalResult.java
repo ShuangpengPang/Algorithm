@@ -8,7 +8,7 @@ package com.shuangpeng.lcr.p101_200;
  */
 public class LCR191StatisticalResult {
 
-    public int[] statisticalResult(int[] arrayA) {
+    public int[] statisticalResult0(int[] arrayA) {
         int product = 1, zeros = 0;
         for (int num : arrayA) {
             if (num == 0) {
@@ -27,6 +27,24 @@ public class LCR191StatisticalResult {
             } else {
                 ans[i] = 0;
             }
+        }
+        return ans;
+    }
+
+    public int[] statisticalResult(int[] arrayA) {
+        int n = arrayA.length;
+        int[] ans = new int[n];
+        if (n == 0) {
+            return ans;
+        }
+        ans[0] = 1;
+        for (int i = 1; i < n; i++) {
+            ans[i] = ans[i - 1] * arrayA[i - 1];
+        }
+        int p = 1;
+        for (int i = n - 2; i >= 0; i--) {
+            p *= arrayA[i + 1];
+            ans[i] *= p;
         }
         return ans;
     }

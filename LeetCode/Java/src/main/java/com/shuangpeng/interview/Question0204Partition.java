@@ -10,6 +10,23 @@ import com.shuangpeng.common.ListNode;
  */
 public class Question0204Partition {
 
+    public ListNode partition0(ListNode head, int x) {
+        ListNode dummy1 = new ListNode(), dummy2 = new ListNode();
+        ListNode p1 = dummy1, p2 = dummy2;
+        for (ListNode node = head; node != null; node = node.next) {
+            if (node.val < x) {
+                p1.next = node;
+                p1 = node;
+            } else {
+                p2.next = node;
+                p2 = node;
+            }
+        }
+        p2.next = null;
+        p1.next = dummy2.next;
+        return dummy1.next;
+    }
+
     public ListNode partition(ListNode head, int x) {
         ListNode dummy = new ListNode(0, head);
         ListNode p = dummy;

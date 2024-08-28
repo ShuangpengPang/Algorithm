@@ -39,3 +39,27 @@ public class Question0802PathWithObstacles {
         return memo[x][y] = res;
     }
 }
+
+class Question0802PathWithObstacles0 {
+
+    public List<List<Integer>> pathWithObstacles(int[][] obstacleGrid) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0) {
+            return ans;
+        }
+        dfs(obstacleGrid, obstacleGrid.length - 1, obstacleGrid[0].length - 1, ans, new boolean[obstacleGrid.length][obstacleGrid[0].length]);
+        return ans;
+    }
+
+    private boolean dfs(int[][] obstacleGrid, int x, int y, List<List<Integer>> ans, boolean[][] visited) {
+        if (x < 0 || y < 0 || obstacleGrid[x][y] == 1 || visited[x][y]) {
+            return false;
+        }
+        visited[x][y] = true;
+        if (x == 0 && y == 0 || dfs(obstacleGrid, x - 1, y, ans, visited) || dfs(obstacleGrid, x, y - 1, ans, visited)) {
+            ans.add(Arrays.asList(x, y));
+            return true;
+        }
+        return false;
+    }
+}

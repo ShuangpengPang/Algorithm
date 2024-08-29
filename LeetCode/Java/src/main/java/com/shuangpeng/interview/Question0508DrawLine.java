@@ -8,7 +8,7 @@ package com.shuangpeng.interview;
  */
 public class Question0508DrawLine {
 
-    public int[] drawLine(int length, int w, int x1, int x2, int y) {
+    public int[] drawLine0(int length, int w, int x1, int x2, int y) {
         int[] ans = new int[length];
         int count = w / 32, N = count * (y + 1);
         for (int i = count * y, x = 0; i < length && i < N; i++, x += 32) {
@@ -23,6 +23,25 @@ public class Question0508DrawLine {
         for (int i = low; i <= high; i++) {
             ans += 1 << i;
         }
+        return ans;
+    }
+
+    public int[] drawLine1(int length, int w, int x1, int x2, int y) {
+        int[] ans = new int[length];
+        for (int i = x1, s = w / 32 * y; i <= x2; i++) {
+            ans[s + i / 32] |= 1 << (31 - i % 32);
+        }
+        return ans;
+    }
+
+    public int[] drawLine(int length, int w, int x1, int x2, int y) {
+        int[] ans = new int[length];
+        int low = (w * y + x1) / 32, high = (w * y + x2) / 32;
+        for (int i = low; i <= high; i++) {
+            ans[i] = -1;
+        }
+        ans[low] = -1 >>> (x1 % 32);
+        ans[high] &= Integer.MIN_VALUE >> (x2 % 32);
         return ans;
     }
 }

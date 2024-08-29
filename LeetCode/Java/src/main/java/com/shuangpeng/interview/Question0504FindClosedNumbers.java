@@ -8,7 +8,7 @@ package com.shuangpeng.interview;
  */
 public class Question0504FindClosedNumbers {
 
-    public int[] findClosedNumbers(int num) {
+    public int[] findClosedNumbers0(int num) {
         int[] ans = {-1, -1};
         if (num < Integer.MAX_VALUE) {
             int tmp = num & -num, max = num + tmp, lowBit = max & -max;
@@ -20,5 +20,20 @@ public class Question0504FindClosedNumbers {
             ans[1] = (m ^ b) | (b >> 1) | (bit - 1) << Integer.numberOfTrailingZeros(b) - Integer.numberOfTrailingZeros(bit) - 1;
         }
         return ans;
+    }
+
+    public int[] findClosedNumbers(int num) {
+        if (num == Integer.MAX_VALUE) {
+            return new int[]{-1, -1};
+        } else if (num == 1) {
+            return new int[]{2, -1};
+        }
+        return new int[]{getLarger(num), ~getLarger(~num)};
+    }
+
+    private int getLarger(int num) {
+        int lowBit = num & -num;
+        int max = num + lowBit;
+        return max | (num ^ max) / lowBit >>> 2;
     }
 }

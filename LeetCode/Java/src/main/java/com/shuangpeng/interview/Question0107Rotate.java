@@ -36,7 +36,7 @@ public class Question0107Rotate {
         }
     }
 
-    public void rotate(int[][] matrix) {
+    public void rotate2(int[][] matrix) {
         int n = matrix.length;
         for (int i = 0; i < n >> 1; i++) {
             for (int j = 0; j < n + 1 >> 1; j++) {
@@ -45,6 +45,24 @@ public class Question0107Rotate {
                 matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
                 matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
                 matrix[j][n - i - 1] = t;
+            }
+        }
+    }
+
+    public void rotate(int[][] matrix) {
+        int n = matrix.length, h = n >> 1;
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = matrix[i][j] ^ matrix[n - i - 1][j];
+                matrix[n - i - 1][j] = matrix[i][j] ^ matrix[n - i - 1][j];
+                matrix[i][j] = matrix[i][j] ^ matrix[n - i - 1][j];
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                matrix[i][j] = matrix[i][j] ^ matrix[j][i];
+                matrix[j][i] = matrix[i][j] ^ matrix[j][i];
+                matrix[i][j] = matrix[i][j] ^ matrix[j][i];
             }
         }
     }

@@ -10,7 +10,7 @@ import com.shuangpeng.common.Node;
  */
 public class LCR155TreeToDoublyList {
 
-    public Node treeToDoublyList(Node root) {
+    public Node treeToDoublyList0(Node root) {
         if (root == null) {
             return null;
         }
@@ -41,5 +41,36 @@ public class LCR155TreeToDoublyList {
         last.right = dummy.right;
         dummy.right.left = last;
         return dummy.right;
+    }
+
+    public Node treeToDoublyList(Node root) {
+        if (root == null) {
+            return null;
+        }
+        Node head = null, prev = null, node = root;
+        while (node != null) {
+            if (node.left != null) {
+                Node cur = node.left;
+                while (cur.right != null && cur.right != node) {
+                    cur = cur.right;
+                }
+                if (cur.right == null) {
+                    cur.right = node;
+                    node = node.left;
+                    continue;
+                }
+            }
+            node.left = prev;
+            if (prev == null) {
+                head = node;
+            } else {
+                prev.right = node;
+            }
+            prev = node;
+            node = node.right;
+        }
+        head.left = prev;
+        prev.right = head;
+        return head;
     }
 }

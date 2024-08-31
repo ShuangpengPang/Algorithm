@@ -8,7 +8,7 @@ package com.shuangpeng.interview;
  */
 public class Question0107Rotate {
 
-    public void rotate(int[][] matrix) {
+    public void rotate0(int[][] matrix) {
         int n = matrix.length;
         int[][] ans = new int[n][n];
         for (int i = 0; i < n; i++) {
@@ -19,6 +19,32 @@ public class Question0107Rotate {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 matrix[i][j] = ans[i][j];
+            }
+        }
+    }
+
+    public void rotate1(int[][] matrix) {
+        int n = matrix.length, h = n >> 1;
+        for (int i = 0; i < h; i++) {
+            for (int j = i; j < n - i - 1; j++) {
+                int t = matrix[i][j];
+                matrix[i][j] = matrix[n - j - 1][i];
+                matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
+                matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
+                matrix[j][n - i - 1] = t;
+            }
+        }
+    }
+
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        for (int i = 0; i < n >> 1; i++) {
+            for (int j = 0; j < n + 1 >> 1; j++) {
+                int t = matrix[i][j];
+                matrix[i][j] = matrix[n - j - 1][i];
+                matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
+                matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
+                matrix[j][n - i - 1] = t;
             }
         }
     }

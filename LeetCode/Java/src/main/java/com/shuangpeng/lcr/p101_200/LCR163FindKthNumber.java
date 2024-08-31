@@ -18,7 +18,7 @@ public class LCR163FindKthNumber {
         }
     }
 
-    public int findKthNumber(int k) {
+    public int findKthNumber0(int k) {
         if (k < 10) {
             return k;
         }
@@ -35,5 +35,21 @@ public class LCR163FindKthNumber {
         int num = (int) Math.pow(10, left - 1) + (k + left - 1) / left - 1;
         int m = (k - 1) % left;
         return num / (int) Math.pow(10, left - m - 1) % 10;
+    }
+
+    public int findKthNumber(int k) {
+        if (k == 0) {
+            return 0;
+        }
+        int digit = 1;
+        long start = 1, count = 9;
+        while (k > count) {
+            k -= count;
+            digit++;
+            start *= 10;
+            count = 9 * start * digit;
+        }
+        long num = start + (k - 1) / digit;
+        return Long.toString(num).charAt((k - 1) % digit) - '0';
     }
 }

@@ -13,9 +13,6 @@ public class Question0805Multiply {
     }
 
     private int dfs(int a, int b) {
-        if (b == 0) {
-            return 0;
-        }
-        return (b & 1) == 1 ? a + dfs(a, b ^ 1) : dfs(a << 1, b >> 1);
+        return b == 0 ? 0 : (((b & 1) == 1 ? a : 0) + dfs(a << 1, b >> 1));
     }
 }

@@ -63,3 +63,33 @@ class Question0807Permutation0 {
         }
     }
 }
+
+class Question0807Permutation1 {
+
+    public String[] permutation(String S) {
+        List<String> ans = new ArrayList<>();
+        dfs(S.toCharArray(), 0, ans);
+        return ans.toArray(new String[ans.size()]);
+    }
+
+    private void dfs(char[] cs, int index, List<String> ans) {
+        int n = cs.length;
+        if (index == n) {
+            ans.add(new String(cs));
+            return;
+        }
+        for (int i = index; i < n; i++) {
+            swap(cs, index, i);
+            dfs(cs, index + 1, ans);
+            swap(cs, index, i);
+        }
+    }
+
+    private void swap(char[] cs, int i, int j) {
+        if (i != j) {
+            cs[i] = (char) (cs[i] ^ cs[j]);
+            cs[j] = (char) (cs[i] ^ cs[j]);
+            cs[i] = (char) (cs[i] ^ cs[j]);
+        }
+    }
+}

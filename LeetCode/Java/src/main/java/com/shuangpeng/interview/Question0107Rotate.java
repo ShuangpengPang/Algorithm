@@ -50,20 +50,22 @@ public class Question0107Rotate {
     }
 
     public void rotate(int[][] matrix) {
-        int n = matrix.length, h = n >> 1;
-        for (int i = 0; i < h; i++) {
+        int n = matrix.length;
+        for (int i = 0; i < n >> 1; i++) {
             for (int j = 0; j < n; j++) {
-                matrix[i][j] = matrix[i][j] ^ matrix[n - i - 1][j];
-                matrix[n - i - 1][j] = matrix[i][j] ^ matrix[n - i - 1][j];
-                matrix[i][j] = matrix[i][j] ^ matrix[n - i - 1][j];
+                swap(matrix, i, j, n - i - 1, j);
             }
         }
-        for (int i = 1; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             for (int j = 0; j < i; j++) {
-                matrix[i][j] = matrix[i][j] ^ matrix[j][i];
-                matrix[j][i] = matrix[i][j] ^ matrix[j][i];
-                matrix[i][j] = matrix[i][j] ^ matrix[j][i];
+                swap(matrix, i, j, j, i);
             }
         }
+    }
+
+    private void swap(int[][] matrix, int x1, int y1, int x2, int y2) {
+        matrix[x1][y1] = matrix[x1][y1] ^ matrix[x2][y2];
+        matrix[x2][y2] = matrix[x1][y1] ^ matrix[x2][y2];
+        matrix[x1][y1] = matrix[x1][y1] ^ matrix[x2][y2];
     }
 }

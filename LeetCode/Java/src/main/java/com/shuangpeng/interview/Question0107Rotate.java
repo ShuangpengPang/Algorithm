@@ -49,7 +49,7 @@ public class Question0107Rotate {
         }
     }
 
-    public void rotate(int[][] matrix) {
+    public void rotate3(int[][] matrix) {
         int n = matrix.length;
         for (int i = 0; i < n >> 1; i++) {
             for (int j = 0; j < n; j++) {
@@ -67,5 +67,23 @@ public class Question0107Rotate {
         matrix[x1][y1] = matrix[x1][y1] ^ matrix[x2][y2];
         matrix[x2][y2] = matrix[x1][y1] ^ matrix[x2][y2];
         matrix[x1][y1] = matrix[x1][y1] ^ matrix[x2][y2];
+    }
+
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        int x1 = 0, y1 = 0, x2 = n - 1, y2 = n - 1;
+        while (x1 < x2) {
+            for (int i = 0; i < x2 - x1; i++)  {
+                int t = matrix[x1][y1 + i];
+                matrix[x1][y1 + i] = matrix[x2 - i][y1];
+                matrix[x2 - i][y1] = matrix[x2][y2 - i];
+                matrix[x2][y2 - i] = matrix[x1 + i][y2];
+                matrix[x1 + i][y2] = t;
+            }
+            x1++;
+            y1++;
+            x2--;
+            y2--;
+        }
     }
 }

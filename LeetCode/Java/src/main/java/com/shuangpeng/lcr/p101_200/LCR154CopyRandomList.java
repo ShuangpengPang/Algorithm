@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class LCR154CopyRandomList {
 
-    public Node copyRandomList(Node head) {
+    public Node copyRandomList0(Node head) {
         Node dummy = new Node(0), prev = dummy;
         Map<Node, Node> map = new HashMap<>();
         for (Node node = head; node != null; node = node.next) {
@@ -27,6 +27,37 @@ public class LCR154CopyRandomList {
             copy = copy.next;
         }
         return dummy.next;
+    }
+
+    public Node copyRandomList(Node head) {
+        if (head == null) {
+            return null;
+        }
+        Node node = head;
+        while (node != null) {
+            Node next = node.next;
+            Node copy = new Node(node.val);
+            copy.next = next;
+            node.next = copy;
+            node = next;
+        }
+        node = head;
+        while (node != null) {
+            if (node.random != null) {
+                node.next.random = node.random.next;
+            }
+            node = node.next.next;
+        }
+        Node copyHead = head.next, cur = copyHead;
+        node = head;
+        while (cur.next != null)  {
+            node.next = node.next.next;
+            cur.next = cur.next.next;
+            node = node.next;
+            cur = cur.next;
+        }
+        node.next = null;
+        return copyHead;
     }
 }
 

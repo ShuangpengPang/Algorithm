@@ -74,3 +74,34 @@ public class LCR155TreeToDoublyList {
         return head;
     }
 }
+
+class LCR155TreeToDoublyList0 {
+
+    private Node head, last;
+
+    public Node treeToDoublyList(Node root) {
+        if (root == null) {
+            return null;
+        }
+        head = last = null;
+        dfs(root);
+        head.left = last;
+        last.right = head;
+        return head;
+    }
+
+    private void dfs(Node root) {
+        if (root == null) {
+            return;
+        }
+        dfs(root.left);
+        if (head == null) {
+            head = root;
+        } else {
+            last.right = root;
+            root.left = last;
+        }
+        last = root;
+        dfs(root.right);
+    }
+}

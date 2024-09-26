@@ -47,7 +47,7 @@ public class LCR155TreeToDoublyList {
         if (root == null) {
             return null;
         }
-        Node head = null, prev = null, node = root;
+        Node head = null, last = null, node = root;
         while (node != null) {
             if (node.left != null) {
                 Node cur = node.left;
@@ -60,17 +60,17 @@ public class LCR155TreeToDoublyList {
                     continue;
                 }
             }
-            node.left = prev;
-            if (prev == null) {
+            if (head == null) {
                 head = node;
             } else {
-                prev.right = node;
+                last.right = node;
+                node.left = last;
             }
-            prev = node;
+            last = node;
             node = node.right;
         }
-        head.left = prev;
-        prev.right = head;
+        head.left = last;
+        last.right = head;
         return head;
     }
 }

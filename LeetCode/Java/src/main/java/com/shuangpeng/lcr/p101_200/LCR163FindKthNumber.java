@@ -38,18 +38,13 @@ public class LCR163FindKthNumber {
     }
 
     public int findKthNumber(int k) {
-        if (k == 0) {
-            return 0;
-        }
-        int digit = 1;
-        long start = 1, count = 9;
+        int start = 1, bit = 1;
+        long count = 9;
         while (k > count) {
             k -= count;
-            digit++;
-            start *= 10;
-            count = 9 * start * digit;
+            count = (start *= 10) * 9L * ++bit;
         }
-        long num = start + (k - 1) / digit;
-        return Long.toString(num).charAt((k - 1) % digit) - '0';
+        k--;
+        return Integer.toString(start + k / bit).charAt(k % bit) - '0';
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Problem3234CountTheNumberOfSubstringsWithDominantOnes {
 
-    public int numberOfSubstrings(String s) {
+    public int numberOfSubstrings0(String s) {
         char[] cs = s.toCharArray();
         List<Integer> index = new ArrayList<>();
         index.add(-1);
@@ -43,8 +43,50 @@ public class Problem3234CountTheNumberOfSubstringsWithDominantOnes {
         return (int) ans;
     }
 
-//    public static void main(String[] args) {
-//        Problem3234CountTheNumberOfSubstringsWithDominantOnes a = new Problem3234CountTheNumberOfSubstringsWithDominantOnes();
-//        a.numberOfSubstrings("00011");
-//    }
+    public int numberOfSubstrings1(String s) {
+        char[] cs = s.toCharArray();
+        int n = cs.length;
+        List<Integer> zeros = new ArrayList<>();
+        zeros.add(-1);
+        for (int i = 0; i < n; i++) {
+            if (cs[i] == '0') {
+                zeros.add(i);
+            }
+        }
+        zeros.add(n);
+        int m = (int) Math.min(zeros.size() - 2, Math.sqrt(n));
+        int ans = 0;
+        for (int c = 0; c <= m; c++) {
+            int count = 0, L = (c + 1) * c;
+            for (int i = 0; i < n; i++) {
+                if (cs[i] == '0') {
+                    count++;
+                }
+                if (count >= c) {
+                    ans += c == 0 ? i - zeros.get(count) : Math.max(0, Math.min(zeros.get(count - c + 1), i - L + 1) - zeros.get(count - c));
+                }
+            }
+        }
+        return ans;
+    }
+
+    public int numberOfSubstrings(String s) {
+        char[] cs = s.toCharArray();
+        int n = cs.length;
+        int[] zeros = new int[n + 1];
+        zeros[0] = -1;
+        int cnt0 = 0, cnt1 = 0, ans = 0;
+        for (int i = 0; i <  n; i++) {
+            if (cs[i] == '0') {
+                zeros[++cnt0] = i;
+            } else {
+                ans += i - zeros[cnt0];
+                cnt1++;
+            }
+            for (int j = cnt0, cnt = 1, square = 1; j > 0 && square <= cnt1; j--, cnt++, square = cnt * cnt) {
+                ans += Math.max(0, zeros[j] - zeros[j - 1] - Math.max(0, square - (i - zeros[j] + 1 - cnt)));
+            }
+        }
+        return ans;
+    }
 }

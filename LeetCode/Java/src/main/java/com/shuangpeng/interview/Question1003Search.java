@@ -58,9 +58,63 @@ public class Question1003Search {
     }
 }
 
-//class Question1003Search0 {
-//
-//    public int search(int[] arr, int target) {
-//        int n = arr.length, left = 0, right = n - 1;
-//    }
-//}
+class Question1003Search0 {
+
+    public int search0(int[] arr, int target) {
+        int n = arr.length, left = 0, right = n - 1;
+        while (right >= 0 && arr[right] == arr[0]) {
+            right--;
+        }
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[left] >= arr[0]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        int index = find(arr, 0, left - 1, target);
+        if (index != -1) {
+            return index;
+        }
+        return find(arr, left, n - 1, target);
+    }
+
+    private int find(int[] arr, int start, int end, int target) {
+        int left = start, right = end;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return left <= end &&  arr[left] == target ? left : -1;
+    }
+
+    public int search(int[] arr, int target) {
+        int left = 0, right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left >> 1);
+            if (arr[left] < arr[mid]) {
+                if (arr[left] <= target && target < arr[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid;
+                }
+            } else if (arr[left] > arr[mid]) {
+                if (arr[left] <= target || target < arr[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid;
+                }
+            } else if (arr[left] == target) {
+                return left;
+            } else {
+                left++;
+            }
+        }
+        return -1;
+    }
+}

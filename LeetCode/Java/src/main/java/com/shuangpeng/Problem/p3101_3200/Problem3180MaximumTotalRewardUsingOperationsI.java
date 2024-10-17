@@ -33,7 +33,7 @@ public class Problem3180MaximumTotalRewardUsingOperationsI {
         return ans;
     }
 
-    public int maxTotalReward(int[] rewardValues) {
+    public int maxTotalReward1(int[] rewardValues) {
         int m = 0;
         for (int r : rewardValues) {
             m = Math.max(m, r);
@@ -53,5 +53,44 @@ public class Problem3180MaximumTotalRewardUsingOperationsI {
             b = b.or(b.and(mask).shiftLeft(r));
         }
         return b.bitLength() - 1;
+    }
+
+    public int maxTotalReward(int[] rewardValues) {
+        int max = 0;
+        for (int r : rewardValues) {
+            max = Math.max(max, r);
+        }
+        Set<Integer> set = new HashSet<>();
+        set.add(0);
+        for (int r : rewardValues) {
+            if (r != max - 1 - r && set.contains(max - 1 - r)) {
+                return (max << 1) - 1;
+            }
+            set.add(r);
+        }
+        Arrays.sort(rewardValues);
+        int m = (2 * max + 63) / 64;
+        long[] bits = new long[m + 2];
+        bits[0] = 1;
+        for (int r : rewardValues) {
+            shift(bits, r);
+        }
+        for (int i = m - 1; i >= 0; i--) {
+            if (bits[i] != 0) {
+                return (i + 1) * 64 - Long.numberOfLeadingZeros(bits[i]) - 1;
+            }
+        }
+        return 0;
+    }
+
+    private void shift(long[] bits, int n) {
+        int cnt = n / 64, m = n % 64;
+        for (int i = 0; i < cnt; i++) {
+            bits[i + cnt] |= bits[i] << m;
+            bits[i + cnt + 1] |= bits[i] >>> (63 - m) >>> 1;
+        }
+        long num = bits[cnt] & ((1L << m) - 1);
+        bits[cnt << 1] |= num << m;
+        bits[(cnt << 1) + 1] |= num >>> (63 - m) >>> 1;
     }
 }

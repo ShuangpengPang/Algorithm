@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p3201_3300;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -48,7 +50,7 @@ public class Problem3258CountSubstringsThatSatisfyKConstraintI {
         return true;
     }
 
-    public int countKConstraintSubstrings(String s, int k) {
+    public int countKConstraintSubstrings1(String s, int k) {
         char[] cs = s.toCharArray();
         int n = cs.length, ans = 0, ones = 0;
         for (int i = 0, j = 0; j < n; j++) {
@@ -59,5 +61,23 @@ public class Problem3258CountSubstringsThatSatisfyKConstraintI {
             ans += j - i + 1;
         }
         return ans;
+    }
+
+    public int countKConstraintSubstrings(String s, int k) {
+        char[] cs = s.toCharArray();
+        int n = cs.length;
+        int[] right = new int[n], preSum = new int[n + 1];
+        Arrays.fill(right, n);
+        for (int i = 0, j = 0, ones = 0; j < n; j++) {
+            ones += cs[j] - '0';
+            while (ones > k && j - i - ones + 1 > k) {
+                right[i] = j;
+                ones -= cs[i++] - '0';
+            }
+            preSum[j + 1] = preSum[j] + j - i + 1;
+        }
+        int part1 = (int) ((long) (right[0] - 0 + 1) * (right[0] - 0) / 2);
+        int part2 = preSum[n] - preSum[right[0]];
+        return part1 + part2;
     }
 }

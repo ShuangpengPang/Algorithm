@@ -63,6 +63,20 @@ public class Problem3258CountSubstringsThatSatisfyKConstraintI {
         return ans;
     }
 
+    public int countKConstraintSubstrings2(String s, int k) {
+        char[] cs = s.toCharArray();
+        int n = cs.length, ans = 0;
+        int[] cnt = new int[2];
+        for (int i = 0, j = 0; j < n; j++) {
+            cnt[cs[j] & 1]++;
+            while (cnt[0] > k && cnt[1] > k) {
+                cnt[cs[i++] & 1]--;
+            }
+            ans += j - i + 1;
+        }
+        return ans;
+    }
+
     public int countKConstraintSubstrings(String s, int k) {
         char[] cs = s.toCharArray();
         int n = cs.length;

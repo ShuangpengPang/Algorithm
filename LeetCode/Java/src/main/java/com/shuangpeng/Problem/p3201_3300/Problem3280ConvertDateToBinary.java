@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3201_3300;
  */
 public class Problem3280ConvertDateToBinary {
 
-    public String convertDateToBinary(String date) {
+    public String convertDateToBinary0(String date) {
         int year = Integer.parseInt(date.substring(0, 4));
         int month = Integer.parseInt(date.substring(5, 7));
         int day = Integer.parseInt(date.substring(8));
@@ -26,5 +26,12 @@ public class Problem3280ConvertDateToBinary {
             i >>= 1;
         }
         return new String(cs, index, cs.length - index);
+    }
+
+    public String convertDateToBinary(String date) {
+        int year = Integer.parseInt(date.substring(0, 4));
+        int month = Integer.parseInt(date.substring(5, 7));
+        int day = Integer.parseInt(date.substring(8));
+        return Integer.toBinaryString(year) + "-" + Integer.toBinaryString(month) + "-" + Integer.toBinaryString(day);
     }
 }

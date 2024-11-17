@@ -27,15 +27,13 @@ public class Problem3289TheTwoSneakyNumbersOfDigitville {
         for (int i = 0; i < m; i++) {
             xor ^= nums[i] ^ (i < n ? i : 0);
         }
-        int lowBit = xor & -xor, j = 0;
+        int shift = Integer.numberOfTrailingZeros(xor);
         int[] ans = new int[2];
         for (int i = 0; i < m; i++) {
             if (i < n) {
-                int v = (i & lowBit) / lowBit;
-                ans[v] ^= i;
+                ans[i >> shift & 1] ^= i;
             }
-            int num = (nums[i] & lowBit) / lowBit;
-            ans[num] ^= nums[i];
+            ans[nums[i] >> shift & 1] ^= nums[i];
         }
         return ans;
     }

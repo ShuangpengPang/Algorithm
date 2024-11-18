@@ -1,6 +1,8 @@
 package com.shuangpeng.Problem.p3201_3300;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ShuangPengPang
@@ -10,7 +12,7 @@ import java.util.Arrays;
  */
 public class Problem3265CountAlmostEqualPairsI {
 
-    public int countPairs(int[] nums) {
+    public int countPairs0(int[] nums) {
         Arrays.sort(nums);
         int n = nums.length, ans = 0;
         for (int i = 0; i < n; i++) {
@@ -22,25 +24,67 @@ public class Problem3265CountAlmostEqualPairsI {
     }
 
     private int getCount(int x, int y) {
-        if (x == y) {
-            return 1;
-        }
-        int[] d1 = new int[2], d2 = new int[2];
-        int index = 0;
-        while (x != 0) {
+        int t1 = -1, t2 = -1;
+        while (x != y) {
             int a = x % 10, b = y % 10;
+            x /= 10;
+            y /= 10;
             if (a != b) {
-                if (index < 2) {
-                    d1[index] = a;
-                    d2[index] = b;
-                    index++;
+                if (t1 == -1) {
+                    t1 = a;
+                    t2 = b;
+                } else if (t1 == b && t2 == a && x == y) {
+                    return 1;
                 } else {
                     return 0;
                 }
             }
-            x /= 10;
-            y /= 10;
         }
-        return index == 2 && d1[0] != d1[1] && d1[0] == d2[1] && d1[1] == d2[0] ? 1 : 0;
+        return t1 == -1 ? 1 : 0;
+    }
+
+    public int countPairs(int[] nums) {
+        Arrays.sort(nums);
+        Map<Integer, Integer> map = new HashMap<>();
+        int ans = 0;
+        for (int num : nums) {
+            ans += getCount(map, num);
+            map.merge(num, 1, Integer::sum);
+        }
+        return ans;
+    }
+
+    private int getCount(Map<Integer, Integer> map, int num) {
+        int[] digit = new int[10];
+        int cnt = 0;
+        int ans = map.getOrDefault(num, 0);
+        while (num != 0) {
+            digit[cnt++] = num % 10;
+            num /= 10;
+        }
+        for (int i = 1; i < cnt; i++) {
+            for (int j = 0; j < i; j++) {
+                if (digit[i] != digit[j]) {
+                    swap(digit, i, j);
+                    ans += map.getOrDefault(toNumber(digit, cnt), 0);
+                    swap(digit, i, j);
+                }
+            }
+        }
+        return ans;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        nums[i] = nums[i] ^ nums[j];
+        nums[j] = nums[i] ^ nums[j];
+        nums[i] = nums[i] ^ nums[j];
+    }
+
+    private int toNumber(int[] digit, int n) {
+        int ans = 0;
+        for (int i = 0, j = 1; i < n; i++, j *= 10) {
+            ans += digit[i] * j;
+        }
+        return ans;
     }
 }

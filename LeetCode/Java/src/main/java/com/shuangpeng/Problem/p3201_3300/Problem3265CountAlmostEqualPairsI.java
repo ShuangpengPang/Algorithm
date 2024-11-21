@@ -88,3 +88,33 @@ public class Problem3265CountAlmostEqualPairsI {
         return ans;
     }
 }
+
+class Problem3265CountAlmostEqualPairsI0 {
+
+    private static final int[] pow10 = {1, 10, 100, 1000, 10_000, 100_000, 1_000_000};
+
+    public int countPairs(int[] nums) {
+        Arrays.sort(nums);
+        Map<Integer, Integer> map = new HashMap<>();
+        int[] arr = new int[7];
+        int ans = 0;
+        for (int num : nums) {
+            int size = 0, x = num;
+            while (x != 0) {
+                arr[size++] = x % 10;
+                x /= 10;
+            }
+            ans += map.getOrDefault(num, 0);
+            for (int i = 1; i < size; i++) {
+                for (int j = 0; j < i; j++) {
+                    if (arr[i] != arr[j]) {
+                        int value = num + (arr[j] - arr[i]) * (pow10[i] - pow10[j]);
+                        ans += map.getOrDefault(value, 0);
+                    }
+                }
+            }
+            map.merge(num, 1, Integer::sum);
+        }
+        return ans;
+    }
+}

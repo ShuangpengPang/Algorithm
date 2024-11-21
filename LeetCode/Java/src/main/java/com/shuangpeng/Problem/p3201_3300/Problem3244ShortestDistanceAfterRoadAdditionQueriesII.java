@@ -10,23 +10,50 @@ import java.util.Arrays;
  */
 public class Problem3244ShortestDistanceAfterRoadAdditionQueriesII {
 
-    public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
+    public int[] shortestDistanceAfterQueries0(int n, int[][] queries) {
         int[] next = new int[n];
         Arrays.setAll(next, i -> i + 1);
         int m = queries.length, dis = n - 1;
         int[] ans = new int[m];
         for (int i = 0; i < m; i++) {
             int s = queries[i][0], e = queries[i][1];
-            int j = next[s];
-            while (j < e) {
-                int t = next[j];
-                next[j] = n;
-                j = t;
+            while (next[s] < e) {
+                int t = next[s];
+                next[s] = e;
+                s = t;
                 dis--;
             }
-            next[s] = Math.max(next[s], e);
             ans[i] = dis;
         }
         return ans;
+    }
+
+    public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
+        int[] parent = new int[n - 1];
+        Arrays.setAll(parent, i -> i);
+        int m = queries.length, dis = n - 1;
+        int[] ans = new int[m];
+        for (int i = 0; i < m; i++) {
+            int s = queries[i][0], e = queries[i][1];
+            int p = find(parent, e - 1);
+            for (int j = find(parent, s); j != p; j = find(parent, j + 1)) {
+                parent[j] = p;
+                dis--;
+            }
+            ans[i] = dis;
+        }
+        return ans;
+    }
+
+    private int find(int[] parent, int x) {
+        int p = x;
+        while (parent[p] != p) {
+            p = parent[p];
+        }
+        while (x != p) {
+            parent[x] = p;
+            x = parent[x];
+        }
+        return p;
     }
 }

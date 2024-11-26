@@ -31,3 +31,40 @@ public class Problem2948MakeLexicographicallySmallestArrayBySwappingElements {
         return ans;
     }
 }
+
+class Solution {
+
+    public int[] lexicographicallySmallestArray(int[] nums, int limit) {
+
+        int n = nums.length;
+        int bits = 32 - Integer.numberOfLeadingZeros(n);
+        int mask = (1 << bits) - 1;
+
+        long[] keys = new long[n];
+
+
+        for (int i = 0; i < n; i++)
+            keys[i] = ((long) nums[i] << bits) + i;
+
+        Arrays.sort(keys);
+
+        int groupId = 0;
+        int[] groupBase = new int[n];
+        int[] groups = new int[n];
+
+        for (int i = 1; i < n; i++) {
+            if ((keys[i] >> bits) - (keys[i - 1] >> bits) > limit)
+                groupBase[++groupId] = i;
+            groups[(int) (keys[i] & mask)] = groupId;
+        }
+
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            groupId = groups[i];
+            int index = groupBase[groupId]++;
+            ans[i] = (int) (keys[index] >> bits);
+        }
+
+        return ans;
+    }
+}

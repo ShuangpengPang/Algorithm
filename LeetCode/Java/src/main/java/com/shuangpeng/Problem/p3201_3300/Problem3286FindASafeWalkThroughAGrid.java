@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p3201_3300;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -43,5 +45,40 @@ public class Problem3286FindASafeWalkThroughAGrid {
         }
         grid[x][y] = t;
         return ans;
+    }
+}
+
+class Problem3286FindASafeWalkThroughAGrid0 {
+
+    private int[] dirs = {-1, 0, 1, 0, -1};
+
+    public boolean findSafeWalk(List<List<Integer>> grid, int health) {
+        int m = grid.size(), n = grid.get(0).size(), N = m * n;
+        if (grid.get(0).get(0) >= health) {
+            return false;
+        }
+        Deque<int[]> q = new ArrayDeque<>(N);
+        q.offerLast(new int[]{0, 0, health - grid.get(0).get(0)});
+        grid.get(0).set(0, N);
+        while (!q.isEmpty()) {
+            int[] p = q.pollFirst();
+            int x = p[0], y = p[1], h = p[2];
+            if (x == m - 1 && y == n - 1) {
+                return true;
+            }
+            for (int d = 0; d < 4; d++) {
+                int nx = x + dirs[d], ny = y + dirs[d + 1];
+                if (nx >= 0 && nx < m && ny >= 0 && ny < n && h > grid.get(nx).get(ny)) {
+                    List<Integer> list = grid.get(nx);
+                    if (list.get(ny) == 0) {
+                        q.offerFirst(new int[]{nx, ny, h});
+                    } else {
+                        q.offerLast(new int[]{nx, ny, h - 1});
+                    }
+                    list.set(ny, N);
+                }
+            }
+        }
+        return false;
     }
 }

@@ -12,7 +12,7 @@ public class Problem3281MaximizeScoreOfNumbersInRanges {
 
     public int maxPossibleScore(int[] start, int d) {
         Arrays.sort(start);
-        int left = 0, right = start[1] + d - start[0];
+        int n = start.length, left = 0, right = (start[n - 1] + d - start[0]) / (n - 1);
         while (left <= right) {
             int mid = left + (right - left >> 1);
             if (check(start, d, mid)) {

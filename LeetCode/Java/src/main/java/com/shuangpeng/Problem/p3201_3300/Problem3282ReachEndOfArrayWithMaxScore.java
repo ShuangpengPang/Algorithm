@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Problem3282ReachEndOfArrayWithMaxScore {
 
-    public long findMaximumScore(List<Integer> nums) {
+    public long findMaximumScore0(List<Integer> nums) {
         int n = nums.size();
         long[] dp = new long[n];
         Deque<Integer> q = new ArrayDeque<>(n);
@@ -29,5 +29,28 @@ public class Problem3282ReachEndOfArrayWithMaxScore {
             q.offer(i);
         }
         return dp[n - 1];
+    }
+
+    public long findMaximumScore1(List<Integer> nums) {
+        int n = nums.size(), index = 0;
+        long ans = 0;
+        for (int i = 1; i < n - 1; i++) {
+            int num = nums.get(i);
+            if (num > nums.get(index)) {
+                ans += (long) (i - index) * nums.get(index);
+                index = i;
+            }
+        }
+        return ans + (long) (n - 1 - index) * nums.get(index);
+    }
+
+    public long findMaximumScore(List<Integer> nums) {
+        int n = nums.size(), mx = 0;
+        long ans = 0;
+        for (int i = 0; i < n; i++) {
+            ans += mx;
+            mx = Math.max(mx, nums.get(i));
+        }
+        return ans;
     }
 }

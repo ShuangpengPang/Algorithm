@@ -1,5 +1,7 @@
 package com.shuangpeng.Problem.p3201_3300;
 
+import java.util.Arrays;
+
 /**
  * @author ShuangPengPang
  * @version 1.0
@@ -8,7 +10,7 @@ package com.shuangpeng.Problem.p3201_3300;
  */
 public class Problem3290MaximumMultiplicationScore {
 
-    public long maxScore(int[] a, int[] b) {
+    public long maxScore0(int[] a, int[] b) {
         int n = b.length, m = a.length;
         long[] dp = new long[n];
         for (int i = 0; i < n; i++) {
@@ -27,5 +29,17 @@ public class Problem3290MaximumMultiplicationScore {
             ans = Math.max(ans, dp[i]);
         }
         return ans;
+    }
+
+    public long maxScore(int[] a, int[] b) {
+        int m = a.length, n = b.length;
+        long[] dp = new long[m + 1];
+        Arrays.fill(dp, 1, m + 1, Long.MIN_VALUE >> 1);
+        for (int i = 0; i < n; i++) {
+            for (int j = m; j > 0; j--) {
+                dp[j] = Math.max(dp[j], dp[j - 1] + (long) b[i] * a[j - 1]);
+            }
+        }
+        return dp[m];
     }
 }

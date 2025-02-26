@@ -49,3 +49,46 @@ public class Problem3331FindSubtreeSizesAfterChanges {
         return cnt;
     }
 }
+
+class Problem3331FindSubtreeSizesAfterChanges0 {
+
+    public int[] findSubtreeSizes(int[] parent, String s) {
+        int n = parent.length;
+        List<Integer>[] g = new List[n];
+        Arrays.setAll(g, i -> new ArrayList<>());
+        for (int i = 1; i < n; i++) {
+            g[parent[i]].add(i);
+        }
+        int[] ancestor = new int[26];
+        Arrays.fill(ancestor, -1);
+        rebuild(g, s.toCharArray(), ancestor, 0);
+        int[] size = new int[n];
+        dfs(g, 0, size);
+        return size;
+    }
+
+    private void rebuild(List<Integer>[] g, char[] cs, int[] ancestor, int x) {
+        int c = cs[x] - 'a';
+        int old = ancestor[c];
+        ancestor[c] = x;
+        for (int i = g[x].size() - 1; i >= 0; i--) {
+            int y = g[x].get(i), a = ancestor[cs[y] - 'a'];
+            if (a != -1 && a != x) {
+                g[a].add(y);
+                g[x].set(i, -1);
+            }
+            rebuild(g, cs, ancestor, y);
+        }
+        ancestor[c] = old;
+    }
+
+    private int dfs(List<Integer>[] g, int x, int[] size) {
+        size[x] = 1;
+        for (int y : g[x]) {
+            if (y != -1) {
+                size[x] += dfs(g, y, size);
+            }
+        }
+        return size[x];
+    }
+}

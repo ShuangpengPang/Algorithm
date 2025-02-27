@@ -92,3 +92,33 @@ class Problem3331FindSubtreeSizesAfterChanges0 {
         return size[x];
     }
 }
+
+class Problem3331FindSubtreeSizesAfterChanges1 {
+
+    public int[] findSubtreeSizes(int[] parent, String s) {
+        int n = parent.length;
+        List<Integer>[] g = new List[n];
+        Arrays.setAll(g, i -> new ArrayList<>());
+        for (int i = 1; i < n; i++) {
+            g[parent[i]].add(i);
+        }
+        int[] ancestor = new int[26];
+        Arrays.fill(ancestor, -1);
+        int[] size = new int[n];
+        dfs(g, 0, s.toCharArray(), ancestor, size);
+        return size;
+    }
+
+    private void dfs(List<Integer>[] g, int x, char[] cs, int[] ancestor, int[] size) {
+        int c = cs[x] - 'a';
+        int old = ancestor[c];
+        ancestor[c] = x;
+        size[x] = 1;
+        for (int y : g[x]) {
+            dfs(g, y, cs, ancestor, size);
+            int a = ancestor[cs[y] - 'a'];
+            size[a == -1 ? x : a] += size[y];
+        }
+        ancestor[c] = old;
+    }
+}

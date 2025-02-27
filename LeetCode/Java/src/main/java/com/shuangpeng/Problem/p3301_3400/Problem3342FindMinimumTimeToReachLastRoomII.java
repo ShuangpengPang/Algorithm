@@ -34,9 +34,8 @@ public class Problem3342FindMinimumTimeToReachLastRoomII {
             dis[x][y] = -1;
             for (int d = 0; d < 4; d++) {
                 int nx = x + dirs[d], ny = y + dirs[d + 1];
-                int s = ((nx + ny + 1) & 1) + 1;
                 if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
-                    int nt = Math.max(moveTime[nx][ny] + s, t + s);
+                    int nt = Math.max(moveTime[nx][ny], t) + (x + y & 1) + 1;
                     if (nt < dis[nx][ny]) {
                         dis[nx][ny] = nt;
                         pq.offer(new int[]{nx, ny, nt});

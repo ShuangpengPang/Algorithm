@@ -15,13 +15,10 @@ public class Problem3442MaximumDifferenceBetweenEvenAndOddFrequencyI {
         }
         int n = s.length(), minEven = n, maxOdd = 0;
         for (int c : cnt) {
-            if (c == 0) {
-                continue;
-            }
-            if ((c & 1) == 0) {
-                minEven = Math.min(minEven, c);
-            } else {
+            if ((c & 1) == 1) {
                 maxOdd = Math.max(maxOdd, c);
+            } else if (c != 0) {
+                minEven = Math.min(minEven, c);
             }
         }
         return maxOdd - minEven;

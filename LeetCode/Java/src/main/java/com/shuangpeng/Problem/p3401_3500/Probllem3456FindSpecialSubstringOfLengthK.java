@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3401_3500;
  */
 public class Probllem3456FindSpecialSubstringOfLengthK {
 
-    public boolean hasSpecialSubstring(String s, int k) {
+    public boolean hasSpecialSubstring0(String s, int k) {
         char[] cs = s.toCharArray();
         int n = cs.length;
         int i = 0, j = 0;
@@ -20,6 +20,21 @@ public class Probllem3456FindSpecialSubstringOfLengthK {
                 return true;
             }
             i = j;
+        }
+        return false;
+    }
+
+    public boolean hasSpecialSubstring(String s, int k) {
+        char[] cs = s.toCharArray();
+        int n = cs.length, cnt = 0;
+        for (int i = 0; i < n; i++) {
+            cnt++;
+            if (i == n - 1 || cs[i] != cs[i + 1]) {
+                if (cnt == k) {
+                    return true;
+                }
+                cnt = 0;
+            }
         }
         return false;
     }

@@ -12,14 +12,16 @@ public class Problem3349AdjacentIncreasingSubarraysDetectionI {
 
     public boolean hasIncreasingSubarrays(List<Integer> nums, int k) {
         int n = nums.size();
-        int[] p = new int[n];
-        int cnt = 0;
+        int p = 0, cnt = 0, m = k << 1;
         for (int i = 0; i < n; i++) {
-            cnt = i == 0 || nums.get(i) > nums.get(i - 1) ? cnt + 1 : 1;
-            if (cnt >= k && i >= k && p[i - k] >= k) {
+            cnt++;
+            if (cnt == m || cnt == k && p >= k) {
                 return true;
             }
-            p[i] = cnt;
+            if (i == n - 1 || nums.get(i) >= nums.get(i + 1)) {
+                p = cnt;
+                cnt = 0;
+            }
         }
         return false;
     }

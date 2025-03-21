@@ -88,3 +88,37 @@ public class Problem2612MinimumReverseOperations {
         return ans;
     }
 }
+
+class Problem2612MinimumReverseOperations0 {
+
+    public int[] minReverseOperations(int n, int p, int[] banned, int k) {
+        int[] parent = new int[n + 2];
+        Arrays.setAll(parent, i -> i);
+        for (int b : banned) {
+            parent[b] = b + 2;
+        }
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        ans[p] = 0;
+        parent[p] = p + 2;
+        Queue<Integer> q = new ArrayDeque<>(n);
+        q.offer(p);
+        while (!q.isEmpty()) {
+            int x = q.poll();
+            int mn = Math.max(k - x - 1, x - k + 1);
+            int mx = Math.min((n << 1) - k - x - 1, x + k - 1);
+            int y = find(parent, mn);
+            while (y <= mx) {
+                q.offer(y);
+                ans[y] = ans[x] + 1;
+                parent[y] = y + 2;
+                y = find(parent, y);
+            }
+        }
+        return ans;
+    }
+
+    private int find(int[] parent, int x) {
+        return parent[x] = x == parent[x] ? x : find(parent, parent[x]);
+    }
+}

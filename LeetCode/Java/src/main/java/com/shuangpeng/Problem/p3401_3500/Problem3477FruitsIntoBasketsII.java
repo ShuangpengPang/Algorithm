@@ -102,3 +102,55 @@ public class Problem3477FruitsIntoBasketsII {
         return ans;
     }
 }
+
+class Problem3477FruitsIntoBasketsII0 {
+
+    class SegmentTree {
+        int[] maxValues;
+
+        SegmentTree(int[] a) {
+            int m = a.length;
+            int n = 2 << (32 - Integer.numberOfLeadingZeros(m - 1));
+            maxValues = new int[n];
+            build(a, 0, 0, m - 1);
+        }
+
+        public void build(int[] a, int i, int s, int e) {
+            if (s == e) {
+                maxValues[i] = a[s];
+                return;
+            }
+            int m = s + (e - s >> 1);
+            int l = (i << 1) + 1, r = l + 1;
+            build(a, l, s, m);
+            build(a, r, m + 1, e);
+            maxValues[i] = Math.max(maxValues[l], maxValues[r]);
+        }
+
+        public int findAndUpdate(int i, int s, int e, int x) {
+            if (maxValues[i] < x) {
+                return -1;
+            }
+            if (s == e) {
+                maxValues[i] = -1;
+                return i;
+            }
+            int m = s + (e - s >> 1);
+            int l = (i << 1) + 1, r = l + 1;
+            int ans = maxValues[l] >= x ? findAndUpdate(l, s, m, x) : findAndUpdate(r, m + 1, e, x);
+            maxValues[i] = Math.max(maxValues[l], maxValues[r]);
+            return ans;
+        }
+    }
+
+    public int numOfUnplacedFruits(int[] fruits, int[] baskets) {
+        SegmentTree st = new SegmentTree(baskets);
+        int ans = 0;
+        for (int i = 0, n = fruits.length; i < n; i++) {
+            if (st.findAndUpdate(0, 0, n - 1, fruits[i]) == -1) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+}

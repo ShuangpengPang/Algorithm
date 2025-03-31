@@ -1,9 +1,11 @@
 package com.shuangpeng.Problem.p3401_3500;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author ShuangPengPang
@@ -149,6 +151,44 @@ class Problem3477FruitsIntoBasketsII0 {
         for (int i = 0, n = fruits.length; i < n; i++) {
             if (st.findAndUpdate(0, 0, n - 1, fruits[i]) == -1) {
                 ans++;
+            }
+        }
+        return ans;
+    }
+}
+
+class Problem3477FruitsIntoBasketsII1 {
+
+    public int numOfUnplacedFruits(int[] fruits, int[] baskets) {
+        int n = baskets.length;
+        int blockSize =  (int) Math.sqrt(n), blocks = (n - 1) / blockSize + 1;
+        TreeMap<Integer, Integer>[] maps = new TreeMap[blocks];
+        Arrays.setAll(maps, i -> new TreeMap<>());
+        for (int i = 0; i < n; i++) {
+            maps[i / blockSize].merge(baskets[i], 1, Integer::sum);
+        }
+        int ans = 0;
+        boolean[] used = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            int blockIndex = -1;
+            for (int j = 0; j < blocks && blockIndex == -1; j++) {
+                if (!maps[j].isEmpty() && maps[j].lastKey() >= fruits[i]) {
+                    blockIndex = j;
+                }
+            }
+            if (blockIndex == -1) {
+                ans++;
+                continue;
+            }
+            int start = blockIndex * blockSize, end = Math.min(start + blockSize, n);
+            for (int j = start; j < end; j++) {
+                if (!used[j] && baskets[j] >= fruits[i]) {
+                    used[j] = true;
+                    if (maps[blockIndex].merge(baskets[j], -1, Integer::sum) == 0) {
+                        maps[blockIndex].remove(baskets[j]);
+                    }
+                    break;
+                }
             }
         }
         return ans;

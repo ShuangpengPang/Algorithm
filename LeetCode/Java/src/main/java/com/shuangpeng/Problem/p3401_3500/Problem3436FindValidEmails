@@ -1,4 +1,5 @@
 # Write your MySQL query statement below（查找合法邮箱）
 select *
 from Users
-where email regexp '^\\w*@[a-zA-Z]*\\.com$';
+where email regexp '^\\w*@[a-zA-Z]*\\.com$'
+order by user_id asc;

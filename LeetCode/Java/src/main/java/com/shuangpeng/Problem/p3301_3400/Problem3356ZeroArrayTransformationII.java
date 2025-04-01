@@ -110,3 +110,28 @@ class Problem3356ZeroArrayTransformationII0 {
         return -1;
     }
 }
+
+class Problem3356ZeroArrayTransformationII1 {
+
+    public int minZeroArray(int[] nums, int[][] queries) {
+        int n = nums.length, m = queries.length;
+        int[] diff = new int[n + 1];
+        int j = 0;
+        for (int i = 0, s = 0; i < n; i++) {
+            s += diff[i];
+            while (s < nums[i] && j < m) {
+                int l = queries[j][0], r = queries[j][1], v = queries[j][2];
+                diff[l] += v;
+                diff[r + 1] -= v;
+                if (l <= i && i <= r) {
+                    s += v;
+                }
+                j++;
+            }
+            if (s < nums[i]) {
+                return -1;
+            }
+        }
+        return j;
+    }
+}

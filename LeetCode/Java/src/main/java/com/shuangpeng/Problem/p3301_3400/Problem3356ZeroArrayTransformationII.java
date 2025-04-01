@@ -40,3 +40,73 @@ public class Problem3356ZeroArrayTransformationII {
         return true;
     }
 }
+
+class Problem3356ZeroArrayTransformationII0 {
+
+    class SegmentTree {
+        private int[] a, lazy;
+
+        SegmentTree(int[] nums) {
+            int m = nums.length, n = 2 << (32 - Integer.numberOfLeadingZeros(m - 1));
+            a = new int[n];
+            lazy = new int[n];
+            build(nums, 0, 0, m - 1);
+        }
+
+        private void build(int[] nums, int i, int s, int e) {
+            if (s == e) {
+                a[i] = nums[s];
+                return;
+            }
+            int m = s + (e - s >> 1), l = (i << 1) + 1, r = l + 1;
+            build(nums, l, s, m);
+            build(nums, r, m + 1, e);
+            a[i] = Math.max(a[l], a[r]);
+        }
+
+        private void update(int i, int s, int e, int l, int r, int v) {
+            if (l <= s && e <= r) {
+                lazyUpdate(i, v);
+                return;
+            }
+            spread(i);
+            int m = s + (e - s >> 1);
+            if (l <= m) {
+                update((i << 1) + 1, s, m, l, Math.min(m, r), v);
+            }
+            if (r > m) {
+                update((i << 1) + 2, m + 1, e, Math.max(l, m + 1), r, v);
+            }
+            a[i] = Math.max(a[(i << 1) + 1], a[(i << 1) + 2]);
+        }
+
+        private void lazyUpdate(int i, int v) {
+            a[i] -= v;
+            lazy[i] += v;
+        }
+
+        private void spread(int i) {
+            lazyUpdate((i << 1) + 1, lazy[i]);
+            lazyUpdate((i << 1) + 2, lazy[i]);
+            lazy[i] = 0;
+        }
+
+        private int query() {
+            return a[0];
+        }
+    }
+
+    public int minZeroArray(int[] nums, int[][] queries) {
+        SegmentTree st = new SegmentTree(nums);
+        if (st.query() <= 0) {
+            return 0;
+        }
+        for (int i = 0, n = queries.length; i < n; i++) {
+            st.update(0, 0, nums.length - 1, queries[i][0], queries[i][1], queries[i][2]);
+            if (st.query() <= 0) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+}

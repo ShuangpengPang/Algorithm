@@ -8,7 +8,7 @@ package com.shuangpeng.Problem.p3301_3400;
  */
 public class Problem3361ShiftDistanceBetweenTwoStrings {
 
-    public long shiftDistance(String s, String t, int[] nextCost, int[] previousCost) {
+    public long shiftDistance0(String s, String t, int[] nextCost, int[] previousCost) {
         long[][] next = new long[26][26];
         next[25][0] = nextCost[25];
         for (int i = 1; i < 25; i++) {
@@ -43,6 +43,25 @@ public class Problem3361ShiftDistanceBetweenTwoStrings {
         long ans = 0;
         for (int i = 0; i < n; i++) {
             ans += dis[s.charAt(i) - 'a'][t.charAt(i) - 'a'];
+        }
+        return ans;
+    }
+
+    public long shiftDistance(String s, String t, int[] nextCost, int[] previousCost) {
+        long[] preSumNext = new long[52];
+        for (int i = 1; i < 52; i++) {
+            preSumNext[i] = preSumNext[i - 1] + nextCost[(i - 1) % 26];
+        }
+        long[] preSumPrev = new long[52];
+        for (int i = 1; i < 52; i++) {
+            preSumPrev[i] = preSumPrev[i - 1] + previousCost[i % 26];
+        }
+        int n = s.length();
+        long ans = 0;
+        for (int i = 0; i < n; i++) {
+            int c1 = s.charAt(i) - 'a', c2 = t.charAt(i) - 'a';
+            c2 = c1 <= c2 ? c2 : c2 + 26;
+            ans += Math.min(preSumNext[c2] - preSumNext[c1], preSumPrev[26] - (preSumPrev[c2] - preSumPrev[c1]));
         }
         return ans;
     }

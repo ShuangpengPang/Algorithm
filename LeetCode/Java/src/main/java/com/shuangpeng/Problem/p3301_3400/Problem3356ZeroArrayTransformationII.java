@@ -11,18 +11,8 @@ import java.util.Arrays;
 public class Problem3356ZeroArrayTransformationII {
 
     public int minZeroArray(int[] nums, int[][] queries) {
-        int left = 0, right = queries.length - 1;
+        int left = -1, right = queries.length - 1;
         int n = nums.length;
-        boolean isAllZero = true;
-        for (int num : nums) {
-            if (num != 0) {
-                isAllZero = false;
-                break;
-            }
-        }
-        if (isAllZero) {
-            return 0;
-        }
         int[] diff = new int[n + 1];
         while (left <= right) {
             int mid = left + (right - left >> 1);

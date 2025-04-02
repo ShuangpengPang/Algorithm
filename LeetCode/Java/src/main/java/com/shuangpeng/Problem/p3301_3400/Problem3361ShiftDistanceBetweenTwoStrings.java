@@ -47,7 +47,7 @@ public class Problem3361ShiftDistanceBetweenTwoStrings {
         return ans;
     }
 
-    public long shiftDistance(String s, String t, int[] nextCost, int[] previousCost) {
+    public long shiftDistance1(String s, String t, int[] nextCost, int[] previousCost) {
         long[] preSumNext = new long[52];
         for (int i = 1; i < 52; i++) {
             preSumNext[i] = preSumNext[i - 1] + nextCost[(i - 1) % 26];
@@ -62,6 +62,22 @@ public class Problem3361ShiftDistanceBetweenTwoStrings {
             int c1 = s.charAt(i) - 'a', c2 = t.charAt(i) - 'a';
             c2 = c1 <= c2 ? c2 : c2 + 26;
             ans += Math.min(preSumNext[c2] - preSumNext[c1], preSumPrev[26] - (preSumPrev[c2] - preSumPrev[c1]));
+        }
+        return ans;
+    }
+
+    public long shiftDistance(String s, String t, int[] nextCost, int[] previousCost) {
+        int N = 26;
+        long[] preNext = new long[(N << 1) + 1], prePrev = new long[(N << 1) + 1];
+        for (int i = 0; i < N << 1; i++) {
+            preNext[i + 1] = preNext[i] + nextCost[i % N];
+            prePrev[i + 1] = prePrev[i] + previousCost[i % N];
+        }
+        long ans = 0;
+        for (int i = 0, n = s.length(); i < n; i++) {
+            int c1 = s.charAt(i) - 'a', c2 = t.charAt(i) - 'a';
+            ans += Math.min(preNext[c2 >= c1 ? c2 : c2 + N] - preNext[c1],
+                    prePrev[(c1 >= c2 ? c1 : c1 + N) + 1] - prePrev[c2 + 1]);
         }
         return ans;
     }

@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class Problem3487MaximumUniqueSubarraySumAfterDeletion {
 
-    public int maxSum(int[] nums) {
+    public int maxSum0(int[] nums) {
         Set<Integer> set = new HashSet<>();
         int sum = nums[0];
         set.add(nums[0]);
@@ -21,5 +21,19 @@ public class Problem3487MaximumUniqueSubarraySumAfterDeletion {
             }
         }
         return sum;
+    }
+
+    public int maxSum(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        int mx = Integer.MIN_VALUE;
+        int s = 0;
+        for (int x : nums) {
+            if (x < 0) {
+                mx = Math.max(mx, x);
+            } else if (set.add(x)) {
+                s += x;
+            }
+        }
+        return set.isEmpty() ? mx : s;
     }
 }

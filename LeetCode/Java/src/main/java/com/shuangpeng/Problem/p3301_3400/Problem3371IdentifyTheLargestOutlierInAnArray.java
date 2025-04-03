@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem3371IdentifyTheLargestOutlierInAnArray {
 
-    public int getLargestOutlier(int[] nums) {
+    public int getLargestOutlier0(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         int sum = 0;
         for (int x : nums) {
@@ -26,6 +26,23 @@ public class Problem3371IdentifyTheLargestOutlierInAnArray {
                 if (y != x && c > 0 || c > 1) {
                     ans = Math.max(ans, x);
                 }
+            }
+        }
+        return ans;
+    }
+
+    public int getLargestOutlier(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        for (int x : nums) {
+            sum += x;
+            map.merge(x, 1, Integer::sum);
+        }
+        int ans = Integer.MIN_VALUE;
+        for (int x : nums) {
+            int y = sum - (x << 1), c = map.getOrDefault(y, 0);
+            if (c > 1 || c > 0 && x != y) {
+                ans = Math.max(ans, y);
             }
         }
         return ans;

@@ -22,11 +22,10 @@ public class Problem3371IdentifyTheLargestOutlierInAnArray {
         for (int x : nums) {
             int s = sum - x;
             if ((s & 1) == 0) {
-                map.merge(x, -1, Integer::sum);
-                if (map.getOrDefault(s >> 1, 0) != 0) {
+                int y = s >> 1, c = map.getOrDefault(y, 0);
+                if (y != x && c > 0 || c > 1) {
                     ans = Math.max(ans, x);
                 }
-                map.merge(x, 1, Integer::sum);
             }
         }
         return ans;

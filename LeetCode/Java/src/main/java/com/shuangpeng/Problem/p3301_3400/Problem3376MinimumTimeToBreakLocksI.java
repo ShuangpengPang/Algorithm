@@ -53,3 +53,31 @@ public class Problem3376MinimumTimeToBreakLocksI {
         return ans;
     }
 }
+
+class Problem3376MinimumTimeToBreakLocksI0 {
+
+    private int ans, k;
+
+    public int findMinimumTime(List<Integer> strength, int k) {
+        ans = Integer.MAX_VALUE;
+        this.k = k;
+        dfs(strength.toArray(new Integer[strength.size()]), 0, 0, new boolean[strength.size()]);
+        return ans;
+    }
+
+    private void dfs(Integer[] s, int x, int t, boolean[] used) {
+        int n = s.length;
+        if (x == n || t >= ans) {
+            ans = Math.min(ans, t);
+            return;
+        }
+        int d = x * k + 1;
+        for (int i = 0; i < n; i++) {
+            if (!used[i]) {
+                used[i] = true;
+                dfs(s, x + 1, t + (s[i] + d - 1) / d, used);
+                used[i] = false;
+            }
+        }
+    }
+}

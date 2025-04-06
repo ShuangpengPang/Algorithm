@@ -1,6 +1,7 @@
 package com.shuangpeng.Problem.p3301_3400;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -79,5 +80,24 @@ class Problem3376MinimumTimeToBreakLocksI0 {
                 used[i] = false;
             }
         }
+    }
+}
+
+class Problem3376MinimumTimeToBreakLocksI1 {
+
+    public int findMinimumTime(List<Integer> strength, int k) {
+        int n = strength.size(), N = 1 << n, M = Integer.MAX_VALUE >> 1;
+        Integer[] s = strength.toArray(new Integer[n]);
+        int[] dp = new int[N];
+        Arrays.fill(dp, 1, N, M);
+        for (int i = 1; i < N; i++) {
+            int d = (Integer.bitCount(i) - 1) * k + 1;
+            for (int j = 0; j < n; j++) {
+                if (((i >> j) & 1) == 1) {
+                    dp[i] = Math.min(dp[i], dp[i ^ (1 << j)] + (s[j] + d - 1) / d);
+                }
+            }
+        }
+        return dp[N - 1];
     }
 }

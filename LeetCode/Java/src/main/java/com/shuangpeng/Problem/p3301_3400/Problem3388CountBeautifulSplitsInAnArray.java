@@ -38,3 +38,25 @@ public class Problem3388CountBeautifulSplitsInAnArray {
         }
     }
 }
+
+class Problem3388CountBeautifulSplitsInAnArray0 {
+
+    public int beautifulSplits(int[] nums) {
+        int n = nums.length;
+        int[][] lcp = new int[n + 1][n + 1];
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = n - 1; j > i; j--) {
+                lcp[i][j] = nums[i] == nums[j] ? lcp[i + 1][j + 1] + 1 : 0;
+            }
+        }
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (i << 1 <= j && lcp[0][i] >= i || lcp[i][j] >= j - i) {
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+}

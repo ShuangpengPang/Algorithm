@@ -31,8 +31,11 @@ public class Problem3397MaximumNumberOfDistinctElementsAfterOperations {
     }
 
     public int maxDistinctElements(int[] nums, int k) {
+        if (k * 2 + 1 >= nums.length) {
+            return nums.length;
+        }
         Arrays.sort(nums);
-        int n = nums.length, ans = 0, x = Integer.MIN_VALUE;
+        int ans = 0, x = Integer.MIN_VALUE;
         for (int num : nums) {
             x = Math.max(x, num - k);
             if (x <= num + k) {

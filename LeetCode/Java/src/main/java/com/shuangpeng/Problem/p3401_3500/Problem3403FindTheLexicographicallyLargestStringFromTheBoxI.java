@@ -14,14 +14,8 @@ public class Problem3403FindTheLexicographicallyLargestStringFromTheBoxI {
         }
         String ans = "";
         int n = word.length();
-        for (int i = 0; i < numFriends - 1; i++) {
-            String s = word.substring(i, n - numFriends + i + 1);
-            if (s.compareTo(ans) > 0) {
-                ans = s;
-            }
-        }
-        for (int i = numFriends - 1; i < n; i++) {
-            String s = word.substring(i);
+        for (int i = 0; i < n; i++) {
+            String s = word.substring(i, Math.min(n - numFriends + i + 1, n));
             if (s.compareTo(ans) > 0) {
                 ans = s;
             }

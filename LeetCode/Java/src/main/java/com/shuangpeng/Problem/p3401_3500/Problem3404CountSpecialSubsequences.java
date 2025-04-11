@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Problem3404CountSpecialSubsequences {
 
-    public long numberOfSubsequences(int[] nums) {
+    public long numberOfSubsequences0(int[] nums) {
         int n = nums.length;
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 4; i < n - 2; i++) {
@@ -43,4 +43,57 @@ public class Problem3404CountSpecialSubsequences {
         }
         return a;
     }
+
+    public long numberOfSubsequences1(int[] nums) {
+        int n = nums.length;
+        Map<Double, Integer> map = new HashMap<>();
+        long ans = 0;
+        for (int i = 3; i < n - 2; i++) {
+            for (int j = i + 2; j < n; j++) {
+                ans += map.getOrDefault((double) nums[j] / nums[i], 0);
+            }
+            double b = nums[i - 1];
+            for (int j = 0; j < i - 2; j++) {
+                map.merge(nums[j] / b, 1, Integer::sum);
+            }
+        }
+        return ans;
+    }
+}
+
+class Problem3404CountSpecialSubsequences0 {
+
+    public long numberOfSubsequences(int[] nums) {
+        int n = nums.length;
+        long ans = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 4; i < n - 2; i++) {
+            int b = nums[i - 2];
+            for (int j = i - 4; j >= 0; j--) {
+                int a = nums[j], g = gcd(a, b);
+                map.merge(((a / g) << 16) | b / g, 1, Integer::sum);
+            }
+            int c = nums[i];
+            for (int j = i + 2; j < n; j++) {
+                int d = nums[j], g = gcd(c, d);
+                ans += map.getOrDefault(((d / g) << 16) | c / g, 0);
+            }
+        }
+        return ans;
+    }
+
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int t = a % b;
+            a = b;
+            b = t;
+        }
+        return a;
+    }
+
+//    public static void main(String[] args) {
+//        Problem3404CountSpecialSubsequences0 a = new Problem3404CountSpecialSubsequences0();
+//        int[] nums = {1,2,3,4,3,6,1};
+//        a.numberOfSubsequences(nums);
+//    }
 }

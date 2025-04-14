@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Problem3409LongestSubsequenceWithDecreasingAdjacentDifference {
 
-    public int longestSubsequence(int[] nums) {
+    public int longestSubsequence0(int[] nums) {
         int n = nums.length, mx = 0, mi = Integer.MAX_VALUE;
         for (int num : nums) {
             mx = Math.max(mx, num);
@@ -34,6 +34,31 @@ public class Problem3409LongestSubsequenceWithDecreasingAdjacentDifference {
                 ans = Math.max(ans, dp[i][j]);
             }
             last[x] = i;
+        }
+        return ans;
+    }
+
+    public int longestSubsequence(int[] nums) {
+        int mx = 0, mi = Integer.MAX_VALUE;
+        for (int x : nums) {
+            mx = Math.max(mx, x);
+            mi = Math.min(mi, x);
+        }
+        int maxD = mx - mi;
+        int[][] dp = new int[mx + 1][maxD + 1];
+        int ans = 0;
+        for (int i : nums) {
+            int x = 1;
+            for (int j = maxD; j >= 0; j--) {
+                if (i - j >= 0) {
+                    x = Math.max(x, dp[i - j][j] + 1);
+                }
+                if (i + j <= mx) {
+                    x = Math.max(x, dp[i + j][j] + 1);
+                }
+                dp[i][j] = x;
+                ans = Math.max(ans, x);
+            }
         }
         return ans;
     }

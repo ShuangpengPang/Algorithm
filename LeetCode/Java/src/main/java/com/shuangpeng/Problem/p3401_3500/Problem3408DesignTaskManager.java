@@ -66,3 +66,44 @@ public class Problem3408DesignTaskManager {
  * int param_4 = obj.execTop();
  */
 }
+
+class Problem3408DesignTaskManager0 {
+
+    class TaskManager {
+
+        Map<Integer, int[]> taskMap;
+        PriorityQueue<int[]> pq;
+
+        public TaskManager(List<List<Integer>> tasks) {
+            taskMap = new HashMap<>();
+            pq = new PriorityQueue<>((a, b) -> a[0] != b[0] ? b[0] - a[0] : b[1] - a[1]);
+            for (List<Integer> task : tasks) {
+                add(task.get(0), task.get(1), task.get(2));
+            }
+        }
+
+        public void add(int userId, int taskId, int priority) {
+            taskMap.put(taskId, new int[]{priority, userId});
+            pq.offer(new int[]{priority, taskId});
+        }
+
+        public void edit(int taskId, int newPriority) {
+            add(taskMap.get(taskId)[1], taskId, newPriority);
+        }
+
+        public void rmv(int taskId) {
+            taskMap.get(taskId)[0] = -1;
+        }
+
+        public int execTop() {
+            while (!pq.isEmpty()) {
+                int[] p = pq.poll(), a = taskMap.get(p[1]);
+                if (p[0] == a[0]) {
+                    a[0] = -1;
+                    return a[1];
+                }
+            }
+            return -1;
+        }
+    }
+}

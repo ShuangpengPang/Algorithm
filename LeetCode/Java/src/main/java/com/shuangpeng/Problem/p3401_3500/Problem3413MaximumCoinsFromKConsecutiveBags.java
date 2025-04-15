@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 public class Problem3413MaximumCoinsFromKConsecutiveBags {
 
-    public long maximumCoins(int[][] coins, int k) {
+    public long maximumCoins0(int[][] coins, int k) {
         Arrays.sort(coins, Comparator.comparingInt(a -> a[0]));
         int n = coins.length;
         long ans = 0, s = 0;
@@ -47,6 +47,43 @@ public class Problem3413MaximumCoinsFromKConsecutiveBags {
             } else {
                 i--;
             }
+        }
+        return ans;
+    }
+
+    public long maximumCoins(int[][] coins, int k) {
+        Arrays.sort(coins, Comparator.comparingInt(a -> a[0]));
+        long ans = getMaxCoins(coins, k);
+        int n = coins.length;
+        for (int i = 0, j = n - 1; i <= j; i++, j--) {
+            reverse(coins[i]);
+            if (i != j) {
+                reverse(coins[j]);
+                int[] t = coins[i];
+                coins[i] = coins[j];
+                coins[j] = t;
+            }
+        }
+        return Math.max(ans, getMaxCoins(coins, k));
+    }
+
+    private void reverse(int[] a) {
+        int t = -a[0];
+        a[0] = -a[1];
+        a[1] = t;
+    }
+
+    private long getMaxCoins(int[][] coins, int k) {
+        int n = coins.length;
+        long ans = 0, s = 0;
+        for (int i = 0, j = 0; j < n; j++) {
+            int l = coins[j][0], r = coins[j][1];
+            s += (long) coins[j][2] * (r - l + 1);
+            while (coins[i][1] <= r - k) {
+                s -= (long) coins[i][2] * (coins[i][1] - coins[i][0] + 1);
+                i++;
+            }
+            ans = Math.max(ans, s - Math.max(0, (long) coins[i][2] * (r - k - coins[i][0] + 1)));
         }
         return ans;
     }

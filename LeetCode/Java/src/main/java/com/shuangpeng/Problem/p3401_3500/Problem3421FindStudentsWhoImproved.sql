@@ -18,3 +18,14 @@ from first_exam f
     left join latest_exam l on l.student_id = f.student_id and l.subject = f.subject
 where l.score > f.score
 order by f.student_id, f.subject;
+
+
+with rk as (
+    select *, rank() over(partition by student_id,subject order by exam_date) r1,
+        rank() over(partition by student_id,subject order by exam_date desc) r2
+    from Scores
+)
+select a.student_id, a.subject, a.score first_score, b.score latest_score
+from rk a join rk b on
+    a.student_id=b.student_id and a.subject=b.subject and
+    a.r1=1 and b.r2=1 and a.r1!=a.r2 and a.score<b.score

@@ -2,7 +2,9 @@ package com.shuangpeng.Problem.p3401_3500;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author ShuangPengPang
@@ -12,7 +14,7 @@ import java.util.List;
  */
 public class Problem3419MinimizeTheMaximumEdgeWeightOfGraph {
 
-    public int minMaxWeight(int n, int[][] edges, int threshold) {
+    public int minMaxWeight0(int n, int[][] edges, int threshold) {
         List<int[]>[] g = new List[n];
         Arrays.setAll(g, i -> new ArrayList<>());
         int left = Integer.MAX_VALUE, mx = Integer.MIN_VALUE;
@@ -44,5 +46,34 @@ public class Problem3419MinimizeTheMaximumEdgeWeightOfGraph {
             }
         }
         return cnt;
+    }
+
+    public int minMaxWeight(int n, int[][] edges, int threshold) {
+        List<int[]>[] g = new List[n];
+        Arrays.setAll(g, i -> new ArrayList<>());
+        for (int[] edge : edges) {
+            g[edge[1]].add(new int[]{edge[0], edge[2]});
+        }
+        int mx = Integer.MIN_VALUE, cnt = 0;
+        boolean[] visited = new boolean[n];
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        pq.offer(new int[]{Integer.MIN_VALUE, 0});
+        while (!pq.isEmpty()) {
+            int[] p = pq.poll();
+            int x = p[1];
+            if (visited[x]) {
+                continue;
+            }
+            visited[x] = true;
+            mx = Math.max(mx, p[0]);
+            cnt++;
+            for (int[] e : g[x]) {
+                int y = e[0], w = e[1];
+                if (!visited[y]) {
+                    pq.offer(new int[]{w, y});
+                }
+            }
+        }
+        return cnt == n ? mx : -1;
     }
 }

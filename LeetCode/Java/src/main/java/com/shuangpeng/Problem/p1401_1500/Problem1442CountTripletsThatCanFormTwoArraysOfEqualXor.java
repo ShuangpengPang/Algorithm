@@ -28,17 +28,15 @@ public class Problem1442CountTripletsThatCanFormTwoArraysOfEqualXor {
 
     public int countTriplets(int[] arr) {
         Map<Integer, Integer> cnt = new HashMap<>(), total = new HashMap<>();
-        cnt.put(0, 1);
-        total.put(0, 0);
         int n = arr.length, s = 0, ans = 0;
-        for (int i = 1; i < n; i++) {
-            s ^= arr[i - 1];
+        for (int i = 0; i < n; i++) {
             int sum = s ^ arr[i];
             if (cnt.containsKey(sum)) {
                 ans += cnt.get(sum) * i - total.get(sum);
             }
             cnt.merge(s, 1, Integer::sum);
             total.merge(s, i, Integer::sum);
+            s = sum;
         }
         return ans;
     }

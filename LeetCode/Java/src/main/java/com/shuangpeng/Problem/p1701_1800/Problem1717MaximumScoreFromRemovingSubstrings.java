@@ -31,7 +31,8 @@ public class Problem1717MaximumScoreFromRemovingSubstrings {
                 } else {
                     cntB++;
                 }
-            } else {
+            }
+            if (cs[i] != a && cs[i] != b || i == n - 1){
                 ans += y * Math.min(cntA, cntB);
                 cntA = cntB = 0;
             }

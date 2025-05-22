@@ -11,7 +11,7 @@ import java.util.Arrays;
  **/
 public class Problem2787WaysToExpressAnIntegerAsSumOfPowers {
 
-    public int numberOfWays(int n, int x) {
+    public int numberOfWays0(int n, int x) {
         int N = (int) 1e9 + 7;
         int m = Math.min(n, (int) Math.pow(n + 1, 1.0 / x));
         int[][] dp = new int[n + 1][m + 1];
@@ -26,5 +26,17 @@ public class Problem2787WaysToExpressAnIntegerAsSumOfPowers {
             }
         }
         return dp[n][m];
+    }
+
+    public int numberOfWays(int n, int x) {
+        int N = (int) 1e9 + 7;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 1, p = 1; p <= n; i++, p = (int) Math.pow(i, x)) {
+            for (int j = n; j >= p; j--) {
+                dp[j] = (dp[j] + dp[j - p]) % N;
+            }
+        }
+        return dp[n];
     }
 }

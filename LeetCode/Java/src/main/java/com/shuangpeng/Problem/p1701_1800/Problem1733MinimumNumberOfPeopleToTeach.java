@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class Problem1733MinimumNumberOfPeopleToTeach {
 
-    public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
+    public int minimumTeachings0(int n, int[][] languages, int[][] friendships) {
         Set<Integer>[] peopleSet = new Set[n];
         Arrays.setAll(peopleSet, i -> new HashSet<>());
         int m = languages.length;
@@ -47,5 +47,40 @@ public class Problem1733MinimumNumberOfPeopleToTeach {
             }
         }
         return total - maxCount;
+    }
+
+    public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
+        int m = languages.length;
+        boolean[][] known = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j : languages[i]) {
+                known[i][j - 1] = true;
+            }
+        }
+        boolean[] needTeach = new boolean[m];
+        for (int[] f : friendships) {
+            int i = f[0] - 1, j = f[1] - 1;
+            boolean common = false;
+            for (int l : languages[j]) {
+                if (known[i][l - 1]) {
+                    common = true;
+                    break;
+                }
+            }
+            if (!common) {
+                needTeach[i] = needTeach[j] = true;
+            }
+        }
+        int[] cnt = new int[n];
+        int maxCnt = 0, total = 0;
+        for (int i = 0; i < m; i++) {
+            if (needTeach[i]) {
+                total++;
+                for (int l : languages[i]) {
+                    maxCnt = Math.max(maxCnt, ++cnt[l - 1]);
+                }
+            }
+        }
+        return total - maxCnt;
     }
 }

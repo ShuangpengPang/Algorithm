@@ -14,6 +14,7 @@ public class Problem0950RevealCardsInIncreasingOrder {
 
     // java语音特点：单面分解垃圾，跨高网多动健安
     // 简单性、面向对象、分布式、解释型、垃圾回收、跨平台、高性能、支持网络编程、多线程、动态性、健壮性、安全性
+    // 开接一单，里迪合
 
     public int[] deckRevealedIncreasing0(int[] deck) {
         Arrays.sort(deck);
